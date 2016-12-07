@@ -12,7 +12,7 @@ namespace CodeStrikeBot
 {
     public abstract class Screen
     {
-        public string PROCESSNAME = "";
+        public static string PROCESSNAME;
         public int WINDOW_TITLEBAR_H = 0;
         public int WINDOW_MARGIN_L = 0;
         public int WINDOW_MARGIN_R = 0;
@@ -57,6 +57,31 @@ namespace CodeStrikeBot
                 case EmulatorType.Leapdroid:
                     s = new LeapdroidScreen(emulator);
                     break;
+                case EmulatorType.MEmu:
+                    s = new MEmuScreen(emulator);
+                    break;
+            }
+
+            return s;
+        }
+
+        public static Screen CreateScreen(Process process)
+        {
+            Screen s = null;
+            switch (process.ProcessName)
+            {
+                case "Droid4x":
+                    s = new Droid4XScreen(Controller.FindOrCreateEmulatorInstance(process));
+                    break;
+                case "Nox":
+                    s = new NoxScreen(Controller.FindOrCreateEmulatorInstance(process));
+                    break;
+                case "LeapdroidVM":
+                    s = new LeapdroidScreen(Controller.FindOrCreateEmulatorInstance(process));
+                    break;
+                case "MEmu":
+                    s = new MEmuScreen(Controller.FindOrCreateEmulatorInstance(process));
+                    break;
             }
 
             return s;
@@ -77,6 +102,8 @@ namespace CodeStrikeBot
 
             return s;
         }
+
+        public abstract string ProcessName { get; }
 
         public abstract void ClickBack(int timeout);
 
@@ -338,13 +365,15 @@ namespace CodeStrikeBot
 
             if (text != "")
             {
+                System.IO.Directory.CreateDirectory(Controller.Instance.GetFullScreenshotDir());
+
                 if (text == "map")
                 {
-                    Controller.CaptureApplication(this, 0, 32, 394, 648).Save(@"C:\Users\codemann8\Pictures\msdump\ss\map.bmp", ImageFormat.Bmp);
+                    Controller.CaptureApplication(this, 0, 32, 394, 648).Save(String.Format("{0}\\map.bmp", Controller.Instance.GetFullScreenshotDir()), ImageFormat.Bmp);
                 }
                 else
                 {
-                    SuperBitmap.Bitmap.Save(@"C:\Users\codemann8\Pictures\msdump\ss\" + text + ".bmp", ImageFormat.Bmp);
+                    SuperBitmap.Bitmap.Save(String.Format("{0}\\{1}.bmp", Controller.Instance.GetFullScreenshotDir(), text), ImageFormat.Bmp);
                 }
             }
 
@@ -1882,8 +1911,8 @@ namespace CodeStrikeBot
                         //click Add VIP Button
                         if (ScreenState.CurrentArea == Area.Menus.VIP)
                         {
-                            chksum = ScreenState.GetScreenChecksum(SuperBitmap, 185, 137, 20);
-                            if (chksum != 0x43bb)
+                            chksum = ScreenState.GetScreenChecksum(SuperBitmap, 160, 490, 20);
+                            if (chksum != 0xdfd5)
                             {
                                 //TODO: Revisit if this should just add the VIP time regardless
                                 success = true;
@@ -1923,15 +1952,14 @@ namespace CodeStrikeBot
                                             break;
                                     }
 
-                                    Controller.SendClick(this, 300, 153 + 116 * offset, 1500); //Click on item
+                                    Controller.SendClick(this, 300, 190 + 116 * offset, 1500); //Click on item
                                     Controller.CaptureApplication(this);
 
                                     this.ClickBack(500);
 
                                     //check if active, success true
-                                    Controller.CaptureApplication(this);
-                                    chksum = ScreenState.GetScreenChecksum(SuperBitmap, 185, 137, 20);
-                                    if (ScreenState.CurrentArea == Area.Menus.VIP && chksum != 0x43bb)
+                                    chksum = ScreenState.GetScreenChecksum(SuperBitmap, 160, 490, 20);
+                                    if (chksum != 0xdfd5)
                                     {
                                         success = true;
                                     }
@@ -2111,7 +2139,7 @@ namespace CodeStrikeBot
                         }
                         else
                         {
-                            //Controller.Instance.SendPushover(String.Format("Activate {0} Boost Fail", Enum.GetName(typeof(ScheduleType), type)), 1);
+                            Controller.Instance.SendPushover(String.Format("Activate {0} Boost Fail", Enum.GetName(typeof(ScheduleType), type)), 1);
                         }
                     }
 
@@ -2434,11 +2462,11 @@ namespace CodeStrikeBot
 
                     bool done = false;
 
-                    /*for (int p = 15; p < 100; p++)
+                    for (int p = 15; p < 100; p++)
                     {
                         Color c = SuperBitmap.GetPixel(p, 455);
                         if (!c.Equals(0, 0, 0))
-                        {code.mann8@gmail.com
+                        {
                             Controller.SendClick(this, 40, 680, 300); //Click Base
                             done = true;
                             break;
@@ -2448,13 +2476,6 @@ namespace CodeStrikeBot
                     if (!done)
                     {
                         Controller.SendClick(this, 200, 200, 4000); //Shoot
-                    }*/
-                    Controller.SendClick(this, 200, 200, 4000); //Shoot
-                    Controller.CaptureApplication(this);
-                    if (ScreenState.CurrentArea == Area.Menus.ShootingRanges.Main)
-                    {
-                        this.ClickBack(500);
-                        this.ClickBack(500);
                     }
                 }
                 else if (ScreenState.CurrentArea == Area.Menus.ShootingRanges.NormalCrate)
@@ -2463,7 +2484,7 @@ namespace CodeStrikeBot
 
                     ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 185, 225, 10);
                     //if (chksum == 0x24a6)//pick a crate
-                    if (chksum == 0x66b5 || chksum == 0xb40e || chksum == 0x0aad) //nox and nox new
+                    if (chksum == 0x66b5 || chksum == 0xb40e) //nox and nox new
                     {
                         int r = new Random().Next(0, 2);
                         Controller.SendClick(this, 100 + 98 * r, 305, 1500); //click Crate

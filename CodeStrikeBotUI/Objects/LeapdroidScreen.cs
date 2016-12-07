@@ -12,9 +12,10 @@ namespace CodeStrikeBot
 {
     public class LeapdroidScreen : Screen
     {
+        public static new string PROCESSNAME = "LeapdroidVM";
+
         public LeapdroidScreen(EmulatorInstance emulator) : base(emulator)
         {
-            PROCESSNAME = "LeapdroidVM";
             WINDOW_TITLEBAR_H = 30;
             WINDOW_MARGIN_L = 8;
             WINDOW_MARGIN_R = 69;
@@ -99,6 +100,11 @@ namespace CodeStrikeBot
             //bmp2 = new Bitmap(Controller.SCREEN_W, Controller.SCREEN_H, PixelFormat.Format16bppRgb565);
 
             SuperBitmap = new SuperBitmap(Controller.SCREEN_W, Controller.SCREEN_H);
+        }
+
+        public override string ProcessName
+        {
+            get { return LeapdroidScreen.PROCESSNAME; }
         }
 
         public override void ClickBack(int timeout)

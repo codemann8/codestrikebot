@@ -12,6 +12,8 @@ namespace CodeStrikeBot
 {
     public class NoxScreen : Screen
     {
+        public static new string PROCESSNAME = "Nox";
+
         public NoxScreen(EmulatorInstance emulator) : base(emulator)
         {
             PROCESSNAME = "Nox";
@@ -89,6 +91,11 @@ namespace CodeStrikeBot
             //bmp2 = new Bitmap(Controller.SCREEN_W, Controller.SCREEN_H, PixelFormat.Format16bppRgb565);
 
             SuperBitmap = new SuperBitmap(Controller.SCREEN_W, Controller.SCREEN_H);
+        }
+
+        public override string ProcessName
+        {
+            get { return NoxScreen.PROCESSNAME; }
         }
 
         public override void ClickBack(int timeout)

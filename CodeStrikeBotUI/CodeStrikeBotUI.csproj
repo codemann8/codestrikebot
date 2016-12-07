@@ -122,6 +122,7 @@
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
     <Compile Include="Objects\Controller.cs" />
+    <Compile Include="Objects\MEmuScreen.cs" />
     <Compile Include="Objects\LeapdroidScreen.cs" />
     <Compile Include="Objects\NoxScreen.cs" />
     <Compile Include="Objects\Droid4XScreen.cs" />

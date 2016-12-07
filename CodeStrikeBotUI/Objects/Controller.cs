@@ -12,7 +12,7 @@ namespace CodeStrikeBot
 {
     class Controller
     {
-        private const int FORM_X = 65;
+        private const int FORM_X = 5;
         private const int FORM_Y = 5;
         //private const int BLUESTACKS_TITLEBAR_H = 37;
         //public const int DROID4X_TITLEBAR_H = 38;
@@ -52,6 +52,8 @@ namespace CodeStrikeBot
         [DllImport("user32.dll")]
         private static extern int SendMessage(IntPtr hWnd, UInt32 message, UInt32 wParam, Int64 lParam);
         //LRESULT WINAPI SendMessage(HWND hWnd, UINT Msg, UINT_PTR wParam, LONG_PTR lParam);
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        internal static extern IntPtr SendMessage(IntPtr hWnd, UInt32 uMsg, IntPtr wParam, ref TITLEBARINFOEX lParam);
 
         [return: MarshalAs(UnmanagedType.Bool)]
         [DllImport("user32.dll")]
@@ -88,7 +90,7 @@ namespace CodeStrikeBot
 
         private Semaphore semaphore;
 
-        private const string PUSHOVER_API_KEY = "a2b1iuppun9c6ug86mnfgs67tsbrg6"; //"a21rq15nvc2rkce11f9ezzk1qwxvd6";
+        private const string PUSHOVER_API_KEY = "a21rq15nvc2rkce11f9ezzk1qwxvd6";
         private const string PUSHOVER_USER_KEY = "updvgeodcquxs41gsr8cdo2uj5vuhr";
 
         public BotDatabase Database;
@@ -223,6 +225,18 @@ namespace CodeStrikeBot
             return emulators;
         }
 
+        public string GetFullScreenshotDir()
+        {
+            string dir = Database.ScreenshotDir;
+            
+            if (!dir.Contains(':'))
+            {
+                dir = String.Format("{0}\\{1}", System.Windows.Forms.Application.StartupPath, Database.ScreenshotDir);
+            }
+
+            return dir;
+        }
+
         public void BeginTask(int delay = 0)
         {
             semaphore.WaitOne();
@@ -248,32 +262,25 @@ namespace CodeStrikeBot
 
             foreach (Screen s in sc)
             {
-                if (s != null)
+                if (s.Emulator.LastKnownAccount != null)
                 {
-                    if (s.Emulator.LastKnownAccount != null)
-                    {
-                        message += String.Format("{0}: ", s.Emulator.LastKnownAccount.Name);
-                    }
-                    else
-                    {
-                        message += String.Format("{0}: ", "<empty>");
-                    }
-
-                    if (s.EmulatorProcess == null)
-                    {
-                        message += "Offline";
-                    }
-                    else
-                    {
-                        Controller.CaptureApplication(s);
-                        ScreenState state = s.ScreenState;
-
-                        message += state;
-                    }
+                    message += String.Format("{0}: ", s.Emulator.LastKnownAccount.Name);
                 }
                 else
                 {
+                    message += String.Format("{0}: ", "<empty>");
+                }
+
+                if (s.EmulatorProcess == null)
+                {
                     message += "Offline";
+                }
+                else
+                {
+                    Controller.CaptureApplication(s);
+                    ScreenState state = s.ScreenState;
+
+                    message += state;
                 }
 
                 message += "\n";
@@ -316,7 +323,7 @@ namespace CodeStrikeBot
 
             foreach (Screen s in sc)
             {
-                if (s != null && !s.IsFucked && s.EmulatorProcess != null && s.Emulator.LastKnownAccount != null && s.Emulator.LastKnownAccount.Id == account.Id)
+                if (s != null && !s.PreventFromOpening && !s.IsFucked && s.EmulatorProcess != null && s.Emulator.LastKnownAccount != null && s.Emulator.LastKnownAccount.Id == account.Id)
                 {
                     screen = s;
                     break;
@@ -400,26 +407,11 @@ namespace CodeStrikeBot
                 {
                     tmrRun.Start();
 
-                    if (screen.Emulator.LastKnownAccount != null && screen.Emulator.LastKnownAccount.Id == task.Account.Id && screen.PreventFromOpening)
-                    {
-                        screen.PreventFromOpening = false;
-                        screen.Emulator.LastKnownAccount = null;
-                    }
-
                     while ((screen.Emulator.LastKnownAccount == null || screen.Emulator.LastKnownAccount.Id != task.Account.Id) && tmrRun.ElapsedMilliseconds < 70000)
                     {
                         Logout(screen);
                         StartApp(screen);
-                        CaptureApplication(screen);
-                        if (screen.ScreenState.CurrentArea == Area.Others.Login)
-                        {
-                            Login(screen, task.Account);
-                        }
-                        else
-                        {
-                            screen.Emulator.LastKnownAccount = task.Account;
-                            screen.Emulator.Save();
-                        }
+                        Login(screen, task.Account);
                     }
 
                     if (screen.Emulator.LastKnownAccount != null && screen.Emulator.LastKnownAccount.Id == task.Account.Id)
@@ -489,21 +481,18 @@ namespace CodeStrikeBot
 
         public void KillEmulator(Screen s, bool restart = true)
         {
-            if (s != null)
+            Stopwatch tmrRun = new Stopwatch();
+
+            if (s.EmulatorProcess != null && !s.EmulatorProcess.HasExited)
             {
-                Stopwatch tmrRun = new Stopwatch();
+                s.EmulatorProcess.Kill();
+                s.EmulatorProcess.WaitForExit();
+            }
+            s.TimeoutFactor = 1.0;
 
-                if (s.EmulatorProcess != null && !s.EmulatorProcess.HasExited)
-                {
-                    s.EmulatorProcess.Kill();
-                    s.EmulatorProcess.WaitForExit();
-                }
-                s.TimeoutFactor = 1.0;
-
-                if (restart)
-                {
-                    Program.RestartApp();
-                }
+            if (restart)
+            {
+                Program.RestartApp();
             }
         }
 
@@ -524,7 +513,7 @@ namespace CodeStrikeBot
                 }
                 System.Diagnostics.Process.Start(prog, args);
                 System.Threading.Thread.Sleep(6000);
-                foreach (Process p in Process.GetProcessesByName(s.PROCESSNAME))
+                foreach (Process p in Process.GetProcessesByName(s.ProcessName))
                 {
                     if (p.MainWindowTitle.StartsWith(s.Emulator.WindowName))
                     {
@@ -848,7 +837,7 @@ namespace CodeStrikeBot
         {
             if (s != null && s.EmulatorProcess != null && !s.EmulatorProcess.HasExited && s.ScreenState.CurrentArea != Area.Emulators.Loading)
             {
-                if (s.Emulator.Type == EmulatorType.Leapdroid)
+                if (s.Emulator.Type == EmulatorType.Leapdroid || s.Emulator.Type == EmulatorType.MEmu)
                 {
                     SendClickRaw(s, x, y, hold);
                 }
@@ -1629,7 +1618,11 @@ namespace CodeStrikeBot
                     {
                         using (Graphics g = Graphics.FromImage(s.SuperBitmap.Bitmap))
                         {
-                            g.CopyFromScreen(s.WindowRect.left + s.WINDOW_MARGIN_L, s.WindowRect.top + s.WINDOW_TITLEBAR_H, 0, 0, new Size(SCREEN_W, SCREEN_H), CopyPixelOperation.SourceCopy);
+                            int taskbarLeftOffset = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Left;
+                            int taskbarTopOffset = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Top;
+
+                            Size sz = System.Windows.Forms.SystemInformation.BorderSize;
+                            g.CopyFromScreen(taskbarLeftOffset + s.WindowRect.left + sz.Width + s.WINDOW_MARGIN_L, s.WindowRect.top + sz.Height + s.WINDOW_TITLEBAR_H, 0, 0, new Size(SCREEN_W, SCREEN_H), CopyPixelOperation.SourceCopy);
                         }
 
                         ScreenState.GetScreenState(s);
@@ -1681,7 +1674,15 @@ namespace CodeStrikeBot
         public static List<Process> GetRunningEmulators()
         {
             List<Process> emulators = new List<Process>();
-            foreach (Process p in Process.GetProcessesByName("LeapdroidVM"))
+            foreach (Process p in Process.GetProcessesByName(LeapdroidScreen.PROCESSNAME))
+            {
+                emulators.Add(p);
+            }
+            foreach (Process p in Process.GetProcessesByName(NoxScreen.PROCESSNAME))
+            {
+                emulators.Add(p);
+            }
+            foreach (Process p in Process.GetProcessesByName(MEmuScreen.PROCESSNAME))
             {
                 emulators.Add(p);
             }
@@ -1700,11 +1701,13 @@ namespace CodeStrikeBot
                     }
                     else
                     {
+                        int taskbarLeftOffset = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Left;
+                        int taskbarTopOffset = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Top;
                         Rect r = new Rect();
                         SetForegroundWindow(sc[s].EmulatorProcess.MainWindowHandle);
                         ShowWindow(sc[s].EmulatorProcess.MainWindowHandle, SW_RESTORE);
                         GetWindowRect(sc[s].EmulatorProcess.MainWindowHandle, ref r);
-                        MoveWindow(sc[s].EmulatorProcess.MainWindowHandle, FORM_X + (s * (SCREEN_W + sc[s].WINDOW_MARGIN_L + sc[s].WINDOW_MARGIN_R + 5)), FORM_Y, r.right - r.left, r.bottom - r.top, true);
+                        MoveWindow(sc[s].EmulatorProcess.MainWindowHandle, FORM_X + taskbarLeftOffset + (s * (SCREEN_W + sc[s].WINDOW_MARGIN_L + sc[s].WINDOW_MARGIN_R + 5)), FORM_Y + taskbarTopOffset, r.right - r.left, r.bottom - r.top, true);
                         Thread.Sleep(TIMEOUT_SCRCAP);
                     }
                 }
@@ -1722,6 +1725,93 @@ namespace CodeStrikeBot
                     s.WindowRect = r;
                 }
             }
+        }
+
+        public static EmulatorInstance FindOrCreateEmulatorInstance(Process p)
+        {
+            EmulatorType type = EmulatorType.Leapdroid;
+            string command = "";
+
+            string wmiQuery = String.Format("select CommandLine, ProcessId from Win32_Process where Name='{0}.exe' and ProcessId={1}", p.ProcessName, p.Id);
+            System.Management.ManagementObjectSearcher searcher = new System.Management.ManagementObjectSearcher(wmiQuery);
+            switch (p.ProcessName)
+            {
+                case "Nox":
+                    type = EmulatorType.Nox;
+                    foreach (System.Management.ManagementObject retObject in searcher.Get())
+                    {
+                        command = retObject["CommandLine"].ToString().Replace("Nox ", "\"C:\\Program Files (x86)\\Nox\\bin\\Nox.exe\"");
+                        break;
+                    }
+                    break;
+                case "LeapdroidVM":
+                    type = EmulatorType.Leapdroid;
+                    foreach (System.Management.ManagementObject retObject in searcher.Get())
+                    {
+                        command = retObject["CommandLine"].ToString();
+                        break;
+                    }
+                    break;
+                case "MEmu":
+                    type = EmulatorType.MEmu;
+                    foreach (System.Management.ManagementObject retObject in searcher.Get())
+                    {
+                        command = retObject["CommandLine"].ToString();
+                        break;
+                    }
+                    break;
+            }
+
+            foreach (EmulatorInstance ei in Controller.Instance.emulators)
+            {
+                if (ei.Type == type && ei.Command == command)
+                {
+                    return ei;
+                }
+            }
+
+            EmulatorInstance emulator = new EmulatorInstance(0, type, (p.MainWindowTitle.Contains(' ') ? p.MainWindowTitle.Substring(0, p.MainWindowTitle.IndexOf(' ')) : p.MainWindowTitle), command, new Account(0));
+            emulator.Save();
+
+            return emulator;
+        }
+
+        public void GetAndSetEmulatorProcess(int window)
+        {
+            Process process = ReplaceThisPrompt.ShowDialog("Select an emulator process", "Running emulators", Controller.GetRunningEmulators());
+            if (process != null)
+            {
+                if (sc[window] == null)
+                {
+                    sc[window] = Screen.CreateScreen(process);
+                }
+                else
+                {
+                    sc[window].EmulatorProcess = process;
+                    sc[window].Emulator = Controller.FindOrCreateEmulatorInstance(process);
+                }
+
+                Database.UpdateSettings(new EmulatorInstance[4] { (sc[0] != null ? sc[0].Emulator : null), (sc[1] != null ? sc[1].Emulator : null), (sc[2] != null ? sc[2].Emulator : null), (sc[3] != null ? sc[3].Emulator : null) }, Database.ScreenshotDir, Database.MapDir);
+            }
+        }
+
+        public int GetWindowWidth(IntPtr hWnd)
+        {
+            TITLEBARINFOEX info = GetTitleBarInfoEx(hWnd);
+            return info.rcTitleBar.Height;
+        }
+
+        private TITLEBARINFOEX GetTitleBarInfoEx(IntPtr hWnd)
+        {
+            // Create and initialize the structure
+            TITLEBARINFOEX tbi = new TITLEBARINFOEX();
+            tbi.cbSize = Marshal.SizeOf(typeof(TITLEBARINFOEX));
+
+            // Send the WM_GETTITLEBARINFOEX message
+            SendMessage(hWnd, (uint)MESSAGEF.WM_GETTITLEBARINFOEX, IntPtr.Zero, ref tbi);
+
+            // Return the filled-in structure
+            return tbi;
         }
 
         public static KeyStateInfo GetKeyState(System.Windows.Forms.Keys key)
@@ -1914,6 +2004,17 @@ namespace CodeStrikeBot
     }
 
     [StructLayout(LayoutKind.Sequential)]
+    public struct TITLEBARINFOEX
+    {
+        public int cbSize;
+        public Rectangle rcTitleBar;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5 + 1)]
+        public int[] rgstate;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5 + 1)]
+        public Rectangle[] rgrect;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
     public struct Rect
     {
         public int left;
@@ -1996,7 +2097,8 @@ namespace CodeStrikeBot
         WM_MOUSEMOVE = 0x200,
         WM_LBUTTONDOWN = 0x201,
         WM_LBUTTONUP = 0x202,
-        WM_MOUSEWHEEL = 0x20a
+        WM_MOUSEWHEEL = 0x20a,
+        WM_GETTITLEBARINFOEX = 0x33f
     }
 
     [StructLayout(LayoutKind.Sequential)]

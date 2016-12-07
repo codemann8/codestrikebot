@@ -47,9 +47,6 @@ namespace CodeStrikeBot
             priorityGridViewComboBoxColumn.DataSource = System.Enum.GetValues(typeof(AccountPriority));
 
             CurrentForm = this;
-
-            //MessageBox.Show(String.Format("{0}", SystemInformation.FrameBorderSize));
-            //MessageBox.Show(String.Format("{0}", System.Windows.SystemParameters.ResizeFrameVerticalBorderWidth));
         }
 
         private void Main_Load(object sender, EventArgs e)
@@ -80,6 +77,12 @@ namespace CodeStrikeBot
             tmrLateSchedule.Start();
 
             ctrl = new Controller();
+
+
+            //MessageBox.Show(String.Format("{0}", System.Windows.SystemParameters.WindowCaptionHeight + System.Windows.SystemParameters.ResizeFrameHorizontalBorderHeight));
+            //MessageBox.Show(String.Format("{0}", System.Windows.SystemParameters.ResizeFrameVerticalBorderWidth + System.Windows.SystemParameters.FixedFrameVerticalBorderWidth));
+            //MessageBox.Show(String.Format("{0}", ctrl.GetWindowWidth(ctrl.sc[0].EmulatorProcess.MainWindowHandle)));
+            //MessageBox.Show(String.Format("{0}", System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width - System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width));
 
             bool restart = true;
             foreach (Screen s in ctrl.sc)
@@ -274,15 +277,7 @@ namespace CodeStrikeBot
                 //sc.Logout();
                 //sc.Login(
             }*/
-            //TODO: Vacation mode
-            ctrl.SendPushover("Bot offline", 0);
-
-            foreach (Screen s in ctrl.sc)
-            {
-                ctrl.KillEmulator(s, false);
-            }
-
-            Program.RestartApp();
+            ctrl.SendPushover("Bot offline", 1);
         }
 
         #region ScreenState
@@ -838,14 +833,7 @@ namespace CodeStrikeBot
                                 {
                                     if (a.Name == warMessage.DefenderName)
                                     {
-                                        if (warMessage.RallyTime == 60)
-                                        {
-                                            ctrl.SendPushover(String.Format("1-Minute Rally on {0}{1}", warMessage.DefenderAlliance, warMessage.DefenderName), 1);
-                                        }
-                                        else
-                                        {
-                                            ctrl.SendPushover(String.Format("ACTION! Rally on {0}{1}", warMessage.DefenderAlliance, warMessage.DefenderName), 1);
-                                        }
+                                        ctrl.SendPushover(String.Format("ACTION! Rally on {0}{1}", warMessage.DefenderAlliance, warMessage.DefenderName), 1);
                                         sent = true;
                                         break;
                                     }
@@ -853,14 +841,7 @@ namespace CodeStrikeBot
                                 //high
                                 if (!sent)
                                 {
-                                    if (warMessage.RallyTime == 60)
-                                    {
-                                        ctrl.SendPushover(String.Format("1-Minute Rally on {0}{1}", warMessage.DefenderAlliance, warMessage.DefenderName), 1);
-                                    }
-                                    else
-                                    {
-                                        ctrl.SendPushover(String.Format("Help! Rally on {0}{1}", warMessage.DefenderAlliance, warMessage.DefenderName), 1);
-                                    }
+                                    ctrl.SendPushover(String.Format("Help! Rally on {0}{1}", warMessage.DefenderAlliance, warMessage.DefenderName), 1);
                                 }
                             }
                             else
@@ -1041,7 +1022,10 @@ namespace CodeStrikeBot
 
                                 foreach (Screen s in ctrl.sc)
                                 {
-                                    ctrl.KillEmulator(s, false);
+                                    if (s != null)
+                                    {
+                                        ctrl.KillEmulator(s, false);
+                                    }
                                 }
 
                                 Program.RestartApp();
@@ -1327,15 +1311,7 @@ namespace CodeStrikeBot
                         {
                             if (DateTime.Now.Subtract(task.NextAction).Minutes > 15)
                             {
-                                //TODO: Vacation mode, revert back to priority alert
-                                //ctrl.SendPushover("Scheduled tasks are past due", 0);
-
-                                foreach (Screen s in ctrl.sc)
-                                {
-                                    ctrl.KillEmulator(s, false);
-                                }
-
-                                Program.RestartApp();
+                                ctrl.SendPushover("Scheduled tasks are past due", 1);
                             }
 
                             if (DateTime.Now.Subtract(task.NextAction).Minutes > 10)
@@ -1684,11 +1660,7 @@ namespace CodeStrikeBot
         {
             if (e.Button == System.Windows.Forms.MouseButtons.Right)
             {
-                object process = ReplaceThisPrompt.ShowDialog("Select an emulator process", "Running emulators", Controller.GetRunningEmulators());
-                if (process != null)
-                {
-                    process = process;
-                }
+                ctrl.GetAndSetEmulatorProcess(0);
             }
         }
     }
