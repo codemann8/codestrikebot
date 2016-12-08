@@ -90,7 +90,7 @@ namespace CodeStrikeBot
 
         private Semaphore semaphore;
 
-        private const string PUSHOVER_API_KEY = "a21rq15nvc2rkce11f9ezzk1qwxvd6";
+        private const string PUSHOVER_API_KEY = "a2b1iuppun9c6ug86mnfgs67tsbrg6"; //"a21rq15nvc2rkce11f9ezzk1qwxvd6";
         private const string PUSHOVER_USER_KEY = "updvgeodcquxs41gsr8cdo2uj5vuhr";
 
         public BotDatabase Database;
@@ -262,25 +262,32 @@ namespace CodeStrikeBot
 
             foreach (Screen s in sc)
             {
-                if (s.Emulator.LastKnownAccount != null)
+                if (s != null)
                 {
-                    message += String.Format("{0}: ", s.Emulator.LastKnownAccount.Name);
+                    if (s.Emulator.LastKnownAccount != null)
+                    {
+                        message += String.Format("{0}: ", s.Emulator.LastKnownAccount.Name);
+                    }
+                    else
+                    {
+                        message += String.Format("{0}: ", "<empty>");
+                    }
+
+                    if (s.EmulatorProcess == null)
+                    {
+                        message += "Offline";
+                    }
+                    else
+                    {
+                        Controller.CaptureApplication(s);
+                        ScreenState state = s.ScreenState;
+
+                        message += state;
+                    }
                 }
                 else
-                {
-                    message += String.Format("{0}: ", "<empty>");
-                }
-
-                if (s.EmulatorProcess == null)
                 {
                     message += "Offline";
-                }
-                else
-                {
-                    Controller.CaptureApplication(s);
-                    ScreenState state = s.ScreenState;
-
-                    message += state;
                 }
 
                 message += "\n";
@@ -323,7 +330,7 @@ namespace CodeStrikeBot
 
             foreach (Screen s in sc)
             {
-                if (s != null && !s.PreventFromOpening && !s.IsFucked && s.EmulatorProcess != null && s.Emulator.LastKnownAccount != null && s.Emulator.LastKnownAccount.Id == account.Id)
+                if (s != null && !s.IsFucked && s.EmulatorProcess != null && s.Emulator.LastKnownAccount != null && s.Emulator.LastKnownAccount.Id == account.Id)
                 {
                     screen = s;
                     break;
@@ -407,11 +414,26 @@ namespace CodeStrikeBot
                 {
                     tmrRun.Start();
 
+                    if (screen.Emulator.LastKnownAccount != null && screen.Emulator.LastKnownAccount.Id == task.Account.Id && screen.PreventFromOpening)		
+                    {		
+                        screen.PreventFromOpening = false;		
+                        screen.Emulator.LastKnownAccount = null;		
+                    }
+
                     while ((screen.Emulator.LastKnownAccount == null || screen.Emulator.LastKnownAccount.Id != task.Account.Id) && tmrRun.ElapsedMilliseconds < 70000)
                     {
                         Logout(screen);
                         StartApp(screen);
-                        Login(screen, task.Account);
+                        CaptureApplication(screen);
+                        if (screen.ScreenState.CurrentArea == Area.Others.Login)		
+                        {		
+                            Login(screen, task.Account);		
+                        }		
+                        else		
+                        {		
+                            screen.Emulator.LastKnownAccount = task.Account;		
+                            screen.Emulator.Save();		
+                        }
                     }
 
                     if (screen.Emulator.LastKnownAccount != null && screen.Emulator.LastKnownAccount.Id == task.Account.Id)
@@ -481,18 +503,21 @@ namespace CodeStrikeBot
 
         public void KillEmulator(Screen s, bool restart = true)
         {
-            Stopwatch tmrRun = new Stopwatch();
-
-            if (s.EmulatorProcess != null && !s.EmulatorProcess.HasExited)
+            if (s != null)
             {
-                s.EmulatorProcess.Kill();
-                s.EmulatorProcess.WaitForExit();
-            }
-            s.TimeoutFactor = 1.0;
+                Stopwatch tmrRun = new Stopwatch();
 
-            if (restart)
-            {
-                Program.RestartApp();
+                if (s.EmulatorProcess != null && !s.EmulatorProcess.HasExited)
+                {
+                    s.EmulatorProcess.Kill();
+                    s.EmulatorProcess.WaitForExit();
+                }
+                s.TimeoutFactor = 1.0;
+
+                if (restart)
+                {
+                    Program.RestartApp();
+                }
             }
         }
 

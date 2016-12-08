@@ -345,14 +345,17 @@ namespace CodeStrikeBot
                                 break;
                             case 0x996d:
                             case 0xa138: //nox
+                            case 0x9ee3: //nox new
                                 state.CurrentArea = Area.Menus.Missions.ActivateVIP;
                                 break;
                             case 0x2670:
                             case 0xb55a: //nox
+                            case 0xe02e: //nox new
                                 state.CurrentArea = Area.Menus.Missions.VIPStreak;
                                 break;
                             case 0x5d85:
                             case 0xc459: //nox
+                            case 0xf52c: //nox new
                                 state.CurrentArea = Area.Menus.Mail;
                                 break;
                             case 0x2186:
@@ -375,11 +378,16 @@ namespace CodeStrikeBot
                                 state.CurrentArea = Area.Menus.ResourceHelp;
                                 break;
                             case 0x6c9f: //nox
+                            case 0x7ef5: //now new
                                 state.CurrentArea = Area.Menus.Resources;
                                 break;
                             case 0x7b13:
                             case 0x0359: //nox
+                            case 0xb69b: //nox new
                                 state.CurrentArea = Area.Menus.VIP;
+                                break;
+                            case 0x8f1e: //nox new		
+                                state.CurrentArea = Area.Menus.VIPSubscriptions;		
                                 break;
                             case 0x6eae:
                             case 0x8993: //nox
@@ -410,6 +418,7 @@ namespace CodeStrikeBot
                                 state.CurrentArea = Area.Menus.RewardCrate;
                                 break;
                             case 0xfab0:
+                            case 0xee9d:
                                 chksum = ScreenState.GetScreenChecksum(s.SuperBitmap, 110, 440, 20);
                                 switch (chksum)
                                 {
@@ -511,8 +520,8 @@ namespace CodeStrikeBot
                                                 state.CurrentArea = Area.MainBases.SilverCrateCollect;
                                                 break;
                                             default:
-                                                chksum = ScreenState.GetScreenChecksum(s.SuperBitmap, 180, 180, 10);
-                                                if (chksum == 0x4c29 || chksum == 0x0a22)
+                                                chksum = ScreenState.GetScreenChecksum(s.SuperBitmap, 180, 190, 10);
+                                                if (chksum == 0x4c29)// || chksum == 0x0a22)
                                                 {
                                                     state.CurrentArea = Area.Others.Quit;
                                                 }
@@ -556,11 +565,39 @@ namespace CodeStrikeBot
                                                     state.CurrentArea = Area.StateMaps.Main;
                                                 }
                                             }
+                                            else if (c.Equals(16, 44, 57))		
+                                            {		
+                                                //world map modal		
+                                                chksum = ScreenState.GetScreenChecksum(s.SuperBitmap, 180, 190, 10);		
+                                                if (chksum == 0x4c29)		
+                                                {		
+                                                    state.CurrentArea = Area.Others.Quit;		
+                                                }		
+                                                else		
+                                                {		
+                                                    c = s.SuperBitmap.GetPixel(178, 183);		
+		
+                                                    if (c.Equals(239, 239, 239) || c.Equals(247, 255, 255))		
+                                                    {		
+                                                        //world map coordinate		
+                                                        c = s.SuperBitmap.GetPixel(269, 265);		
+		
+                                                        if (c.R > 5 && c.G > 40 && c.B > 50)		
+                                                        {		
+                                                            state.CurrentArea = Area.StateMaps.Coordinate;		
+                                                        }		
+                                                        else		
+                                                        {		
+                                                            state.CurrentArea = Area.StateMaps.CoordinateError;		
+                                                        }		
+                                                    }		
+                                                }		
+                                            }
                                             else
                                             {
                                                 c = s.SuperBitmap.GetPixel(178, 183);
 
-                                                if (c.Equals(239, 239, 239))
+                                                if (c.Equals(239, 239, 239) || c.Equals(247, 255, 255))
                                                 {
                                                     //world map coordinate
                                                     c = s.SuperBitmap.GetPixel(269, 265);

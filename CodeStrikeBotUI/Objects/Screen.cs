@@ -1911,8 +1911,8 @@ namespace CodeStrikeBot
                         //click Add VIP Button
                         if (ScreenState.CurrentArea == Area.Menus.VIP)
                         {
-                            chksum = ScreenState.GetScreenChecksum(SuperBitmap, 160, 490, 20);
-                            if (chksum != 0xdfd5)
+                            chksum = ScreenState.GetScreenChecksum(SuperBitmap, 185, 137, 20);
+                            if (chksum != 0x43bb)
                             {
                                 //TODO: Revisit if this should just add the VIP time regardless
                                 success = true;
@@ -1952,14 +1952,16 @@ namespace CodeStrikeBot
                                             break;
                                     }
 
-                                    Controller.SendClick(this, 300, 190 + 116 * offset, 1500); //Click on item
+                                    Controller.SendClick(this, 300, 153 + 116 * offset, 1500); //Click on item
                                     Controller.CaptureApplication(this);
 
                                     this.ClickBack(500);
 
                                     //check if active, success true
-                                    chksum = ScreenState.GetScreenChecksum(SuperBitmap, 160, 490, 20);
-                                    if (chksum != 0xdfd5)
+                                    Controller.CaptureApplication(this);
+
+                                    chksum = ScreenState.GetScreenChecksum(SuperBitmap, 185, 137, 20);
+                                    if (ScreenState.CurrentArea == Area.Menus.VIP && chksum != 0x43bb)
                                     {
                                         success = true;
                                     }
@@ -2139,7 +2141,7 @@ namespace CodeStrikeBot
                         }
                         else
                         {
-                            Controller.Instance.SendPushover(String.Format("Activate {0} Boost Fail", Enum.GetName(typeof(ScheduleType), type)), 1);
+                            //Controller.Instance.SendPushover(String.Format("Activate {0} Boost Fail", Enum.GetName(typeof(ScheduleType), type)), 1);
                         }
                     }
 
@@ -2460,7 +2462,7 @@ namespace CodeStrikeBot
                 {
                     tasksLeft = true;
 
-                    bool done = false;
+                    /*bool done = false;
 
                     for (int p = 15; p < 100; p++)
                     {
@@ -2476,6 +2478,13 @@ namespace CodeStrikeBot
                     if (!done)
                     {
                         Controller.SendClick(this, 200, 200, 4000); //Shoot
+                    }*/
+                    Controller.SendClick(this, 200, 200, 4000); //Shoot		
+                    Controller.CaptureApplication(this);		
+                    if (ScreenState.CurrentArea == Area.Menus.ShootingRanges.Main)		
+                    {		
+                        this.ClickBack(500);		
+                        this.ClickBack(500);		
                     }
                 }
                 else if (ScreenState.CurrentArea == Area.Menus.ShootingRanges.NormalCrate)
@@ -2484,7 +2493,7 @@ namespace CodeStrikeBot
 
                     ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 185, 225, 10);
                     //if (chksum == 0x24a6)//pick a crate
-                    if (chksum == 0x66b5 || chksum == 0xb40e) //nox and nox new
+                    if (chksum == 0x66b5 || chksum == 0xb40e || chksum == 0x0aad) //nox and nox new
                     {
                         int r = new Random().Next(0, 2);
                         Controller.SendClick(this, 100 + 98 * r, 305, 1500); //click Crate

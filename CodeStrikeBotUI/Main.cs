@@ -47,6 +47,9 @@ namespace CodeStrikeBot
             priorityGridViewComboBoxColumn.DataSource = System.Enum.GetValues(typeof(AccountPriority));
 
             CurrentForm = this;
+
+            //MessageBox.Show(String.Format("{0}", SystemInformation.FrameBorderSize));		
+            //MessageBox.Show(String.Format("{0}", System.Windows.SystemParameters.ResizeFrameVerticalBorderWidth));
         }
 
         private void Main_Load(object sender, EventArgs e)
@@ -277,7 +280,15 @@ namespace CodeStrikeBot
                 //sc.Logout();
                 //sc.Login(
             }*/
-            ctrl.SendPushover("Bot offline", 1);
+            //TODO: Vacation mode
+            ctrl.SendPushover("Bot offline", 0);		
+		
+            foreach (Screen s in ctrl.sc)		
+            {		
+                ctrl.KillEmulator(s, false);		
+            }		
+		
+            Program.RestartApp();
         }
 
         #region ScreenState
@@ -833,15 +844,27 @@ namespace CodeStrikeBot
                                 {
                                     if (a.Name == warMessage.DefenderName)
                                     {
-                                        ctrl.SendPushover(String.Format("ACTION! Rally on {0}{1}", warMessage.DefenderAlliance, warMessage.DefenderName), 1);
-                                        sent = true;
-                                        break;
+                                        if (warMessage.RallyTime == 60)
+                                        {		
+                                            ctrl.SendPushover(String.Format("1-Minute Rally on {0}{1}", warMessage.DefenderAlliance, warMessage.DefenderName), 1);		
+                                        }		
+                                        else		
+                                        {		
+                                            ctrl.SendPushover(String.Format("ACTION! Rally on {0}{1}", warMessage.DefenderAlliance, warMessage.DefenderName), 1);		
+                                        }
                                     }
                                 }
                                 //high
                                 if (!sent)
                                 {
-                                    ctrl.SendPushover(String.Format("Help! Rally on {0}{1}", warMessage.DefenderAlliance, warMessage.DefenderName), 1);
+                                    if (warMessage.RallyTime == 60)
+                                    {		
+                                        ctrl.SendPushover(String.Format("1-Minute Rally on {0}{1}", warMessage.DefenderAlliance, warMessage.DefenderName), 1);		
+                                    }		
+                                    else		
+                                    {		
+                                        ctrl.SendPushover(String.Format("Help! Rally on {0}{1}", warMessage.DefenderAlliance, warMessage.DefenderName), 1);		
+                                    }
                                 }
                             }
                             else
@@ -1311,7 +1334,15 @@ namespace CodeStrikeBot
                         {
                             if (DateTime.Now.Subtract(task.NextAction).Minutes > 15)
                             {
-                                ctrl.SendPushover("Scheduled tasks are past due", 1);
+                                //TODO: Vacation mode, revert back to priority alert
+                                ctrl.SendPushover("Scheduled tasks are past due", 0);		
+		
+                                foreach (Screen s in ctrl.sc)		
+                                {		
+                                    ctrl.KillEmulator(s, false);		
+                                }		
+		
+                                Program.RestartApp();
                             }
 
                             if (DateTime.Now.Subtract(task.NextAction).Minutes > 10)
