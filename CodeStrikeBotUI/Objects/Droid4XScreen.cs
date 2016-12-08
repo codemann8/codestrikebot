@@ -12,7 +12,14 @@ namespace CodeStrikeBot
 {
     public class Droid4XScreen : Screen
     {
+        public static new string PROCESSNAME = "Droid4X"; 
+
         public Droid4XScreen(EmulatorInstance emulator) : base(emulator) { }
+
+        public override string ProcessName
+        {
+            get { return Droid4XScreen.PROCESSNAME; }
+        }
 
         public override void ClickBack(int timeout)
         {

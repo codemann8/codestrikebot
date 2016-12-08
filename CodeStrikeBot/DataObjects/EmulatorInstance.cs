@@ -69,6 +69,7 @@ namespace CodeStrikeBot
     {
         Droid4X = 0,
         Nox = 1,
-        Leapdroid = 2
+        Leapdroid = 2,
+        MEmu = 3
     }
 }

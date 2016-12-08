@@ -10,15 +10,15 @@ using System.Threading;
 
 namespace CodeStrikeBot
 {
-    public class LeapdroidScreen : Screen
+    public class MEmuScreen : Screen
     {
-        public static new string PROCESSNAME = "LeapdroidVM";
+        public static new string PROCESSNAME = "MEmu";
 
-        public LeapdroidScreen(EmulatorInstance emulator) : base(emulator)
+        public MEmuScreen(EmulatorInstance emulator) : base(emulator)
         {
-            WINDOW_TITLEBAR_H = 30;
-            WINDOW_MARGIN_L = 8;
-            WINDOW_MARGIN_R = 69;
+            WINDOW_TITLEBAR_H = 44;
+            WINDOW_MARGIN_L = 4;
+            WINDOW_MARGIN_R = 52;
 
             Emulator = emulator;
             ClipboardFailed = false;
@@ -63,7 +63,7 @@ namespace CodeStrikeBot
             SuperBitmap = new SuperBitmap(Controller.SCREEN_W, Controller.SCREEN_H);
         }
 
-        public LeapdroidScreen(string windowName)
+        public MEmuScreen(string windowName)
             : base(windowName)
         {
             //Emulator = emulator;
@@ -73,9 +73,9 @@ namespace CodeStrikeBot
             TimeSinceChecksumChanged = DateTime.Now;
 
             PROCESSNAME = "LeapdroidVM";
-            WINDOW_TITLEBAR_H = 30;
-            WINDOW_MARGIN_L = 8;
-            WINDOW_MARGIN_R = 69;
+            WINDOW_TITLEBAR_H = 44;
+            WINDOW_MARGIN_L = 4;
+            WINDOW_MARGIN_R = 52;
 
             Process[] procs = Process.GetProcessesByName(PROCESSNAME);
 
@@ -104,17 +104,17 @@ namespace CodeStrikeBot
 
         public override string ProcessName
         {
-            get { return LeapdroidScreen.PROCESSNAME; }
+            get { return MEmuScreen.PROCESSNAME; }
         }
 
         public override void ClickBack(int timeout)
         {
-            Controller.SendClick(this, 150, 750, timeout);
+            Controller.SendClick(this, 420, 545, timeout);
         }
 
         public override void ClickHome(int timeout)
         {
-            Controller.SendClick(this, 320, 750, timeout);
+            Controller.SendClick(this, 420, 585, timeout);
         }
 
         public override bool KillApp()
@@ -150,7 +150,7 @@ namespace CodeStrikeBot
 
                 while (ScreenState.CurrentArea == Area.Emulators.Android && tmrRun.ElapsedMilliseconds < 5000)
                 {
-                    Controller.SendClick(this, 115, 225, 2000); //click app
+                    Controller.SendClick(this, 50, 200, 2000); //click app
 
                     Controller.CaptureApplication(this);
                 }

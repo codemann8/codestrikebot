@@ -12,7 +12,7 @@ namespace CodeStrikeBot
 {
     public abstract class Screen
     {
-        public string PROCESSNAME = "";
+        public static string PROCESSNAME;
         public int WINDOW_TITLEBAR_H = 0;
         public int WINDOW_MARGIN_L = 0;
         public int WINDOW_MARGIN_R = 0;
@@ -57,6 +57,31 @@ namespace CodeStrikeBot
                 case EmulatorType.Leapdroid:
                     s = new LeapdroidScreen(emulator);
                     break;
+                case EmulatorType.MEmu:
+                    s = new MEmuScreen(emulator);
+                    break;
+            }
+
+            return s;
+        }
+
+        public static Screen CreateScreen(Process process)
+        {
+            Screen s = null;
+            switch (process.ProcessName)
+            {
+                case "Droid4x":
+                    s = new Droid4XScreen(Controller.FindOrCreateEmulatorInstance(process));
+                    break;
+                case "Nox":
+                    s = new NoxScreen(Controller.FindOrCreateEmulatorInstance(process));
+                    break;
+                case "LeapdroidVM":
+                    s = new LeapdroidScreen(Controller.FindOrCreateEmulatorInstance(process));
+                    break;
+                case "MEmu":
+                    s = new MEmuScreen(Controller.FindOrCreateEmulatorInstance(process));
+                    break;
             }
 
             return s;
@@ -77,6 +102,8 @@ namespace CodeStrikeBot
 
             return s;
         }
+
+        public abstract string ProcessName { get; }
 
         public abstract void ClickBack(int timeout);
 
@@ -338,13 +365,15 @@ namespace CodeStrikeBot
 
             if (text != "")
             {
+                System.IO.Directory.CreateDirectory(Controller.Instance.GetFullScreenshotDir());
+
                 if (text == "map")
                 {
-                    Controller.CaptureApplication(this, 0, 32, 394, 648).Save(@"C:\Users\codemann8\Pictures\msdump\ss\map.bmp", ImageFormat.Bmp);
+                    Controller.CaptureApplication(this, 0, 32, 394, 648).Save(String.Format("{0}\\map.bmp", Controller.Instance.GetFullScreenshotDir()), ImageFormat.Bmp);
                 }
                 else
                 {
-                    SuperBitmap.Bitmap.Save(@"C:\Users\codemann8\Pictures\msdump\ss\" + text + ".bmp", ImageFormat.Bmp);
+                    SuperBitmap.Bitmap.Save(String.Format("{0}\\{1}.bmp", Controller.Instance.GetFullScreenshotDir(), text), ImageFormat.Bmp);
                 }
             }
 
@@ -1930,6 +1959,7 @@ namespace CodeStrikeBot
 
                                     //check if active, success true
                                     Controller.CaptureApplication(this);
+
                                     chksum = ScreenState.GetScreenChecksum(SuperBitmap, 185, 137, 20);
                                     if (ScreenState.CurrentArea == Area.Menus.VIP && chksum != 0x43bb)
                                     {
@@ -2432,13 +2462,13 @@ namespace CodeStrikeBot
                 {
                     tasksLeft = true;
 
-                    bool done = false;
+                    /*bool done = false;
 
-                    /*for (int p = 15; p < 100; p++)
+                    for (int p = 15; p < 100; p++)
                     {
                         Color c = SuperBitmap.GetPixel(p, 455);
                         if (!c.Equals(0, 0, 0))
-                        {code.mann8@gmail.com
+                        {
                             Controller.SendClick(this, 40, 680, 300); //Click Base
                             done = true;
                             break;
@@ -2449,12 +2479,12 @@ namespace CodeStrikeBot
                     {
                         Controller.SendClick(this, 200, 200, 4000); //Shoot
                     }*/
-                    Controller.SendClick(this, 200, 200, 4000); //Shoot
-                    Controller.CaptureApplication(this);
-                    if (ScreenState.CurrentArea == Area.Menus.ShootingRanges.Main)
-                    {
-                        this.ClickBack(500);
-                        this.ClickBack(500);
+                    Controller.SendClick(this, 200, 200, 4000); //Shoot		
+                    Controller.CaptureApplication(this);		
+                    if (ScreenState.CurrentArea == Area.Menus.ShootingRanges.Main)		
+                    {		
+                        this.ClickBack(500);		
+                        this.ClickBack(500);		
                     }
                 }
                 else if (ScreenState.CurrentArea == Area.Menus.ShootingRanges.NormalCrate)
