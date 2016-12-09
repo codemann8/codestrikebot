@@ -19,11 +19,8 @@ namespace CodeStrikeBot
     public partial class Main : Form
     {
         Controller ctrl;
-        
-        ScreenState state;
 
         System.Timers.Timer tmrTimeout, tmrSniffer;
-
         System.Diagnostics.Stopwatch tmrSupressAction, tmrAttackNotify, tmrHeartBeat, tmrLateSchedule;
 
         Bitmap bmpCheck;
@@ -47,9 +44,6 @@ namespace CodeStrikeBot
             priorityGridViewComboBoxColumn.DataSource = System.Enum.GetValues(typeof(AccountPriority));
 
             CurrentForm = this;
-
-            //MessageBox.Show(String.Format("{0}", SystemInformation.FrameBorderSize));		
-            //MessageBox.Show(String.Format("{0}", System.Windows.SystemParameters.ResizeFrameVerticalBorderWidth));
         }
 
         private void Main_Load(object sender, EventArgs e)
@@ -81,11 +75,21 @@ namespace CodeStrikeBot
 
             ctrl = new Controller();
 
+            //debug windowing info
+            string infoText = String.Format("FrameBorder={0}", SystemInformation.FrameBorderSize);
+            infoText += String.Format("\nResizeFrameVerticalBorderWidth={0}", System.Windows.SystemParameters.ResizeFrameVerticalBorderWidth);
+            infoText += String.Format("\nResizeFrameHorizBorderHeight={0}", System.Windows.SystemParameters.ResizeFrameHorizontalBorderHeight);
+            infoText += String.Format("\nFixedFrameVerticalBorderWidth={0}", System.Windows.SystemParameters.FixedFrameVerticalBorderWidth);
+            infoText += String.Format("\nFixedFrameHorizBorderHeight={0}", System.Windows.SystemParameters.FixedFrameHorizontalBorderHeight);
+            infoText += String.Format("\nWindowResizeBorderThickness={0}", System.Windows.SystemParameters.WindowResizeBorderThickness);
+            infoText += String.Format("\nWindowCaptionHeight={0}", System.Windows.SystemParameters.WindowCaptionHeight);
+            infoText += String.Format("\nBorderSize={0}", System.Windows.Forms.SystemInformation.BorderSize);
+            infoText += String.Format("\nGetWindowWidth={0}", ctrl.GetWindowWidth(ctrl.sc[0].EmulatorProcess.MainWindowHandle));
+            infoText += String.Format("\nPrimaryScreen={0}", System.Windows.Forms.Screen.PrimaryScreen.Bounds);
+            infoText += String.Format("\nWorkingArea={0}", System.Windows.Forms.Screen.PrimaryScreen.WorkingArea);
 
-            //MessageBox.Show(String.Format("{0}", System.Windows.SystemParameters.WindowCaptionHeight + System.Windows.SystemParameters.ResizeFrameHorizontalBorderHeight));
-            //MessageBox.Show(String.Format("{0}", System.Windows.SystemParameters.ResizeFrameVerticalBorderWidth + System.Windows.SystemParameters.FixedFrameVerticalBorderWidth));
-            //MessageBox.Show(String.Format("{0}", ctrl.GetWindowWidth(ctrl.sc[0].EmulatorProcess.MainWindowHandle)));
-            //MessageBox.Show(String.Format("{0}", System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width - System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width));
+            System.IO.Directory.CreateDirectory(String.Format("{0}\\debug", Controller.Instance.GetFullScreenshotDir().Replace("\\ss", "")));
+            System.IO.File.WriteAllText(String.Format("{0}\\debug\\info.txt", Controller.Instance.GetFullScreenshotDir().Replace("\\ss", "")), infoText);
 
             bool restart = true;
             foreach (Screen s in ctrl.sc)
@@ -1016,7 +1020,8 @@ namespace CodeStrikeBot
                                             g.CopyFromScreen(System.Windows.Forms.Screen.PrimaryScreen.Bounds.X, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Y, 0, 0, bmpScreenCapture.Size, CopyPixelOperation.SourceCopy);
                                         }
 
-                                        bmpScreenCapture.Save(String.Format("{0}{1}\\ss{2}.bmp", AppDomain.CurrentDomain.BaseDirectory, ctrl.Database.ScreenshotDir, bmpScreenCapture.Checksum().ToString("X4")), ImageFormat.Bmp);
+                                        System.IO.Directory.CreateDirectory(String.Format("{0}\\auto", Controller.Instance.GetFullScreenshotDir()));
+                                        bmpScreenCapture.Save(String.Format("{0}\\auto\\ss{1}.bmp", ctrl.GetFullScreenshotDir(), bmpScreenCapture.Checksum().ToString("X4")), ImageFormat.Bmp);
                                     }
                                 }
                                 catch (Exception ex) { }
@@ -1523,7 +1528,8 @@ namespace CodeStrikeBot
                                     && DateTime.Now.Subtract(s.TimeSinceChecksumChanged).Seconds > 30))
                                     {
                                         BotDatabase.InsertLog(2, String.Format("Emulator frozen: {0}", s.Emulator.WindowName), s.LastChecksum.ToString("X4"), new byte[1] { 0x0 });
-                                        s.SuperBitmap.Bitmap.Save(String.Format("{0}{1}crash{2}.bmp", AppDomain.CurrentDomain.BaseDirectory, ctrl.Database.ScreenshotDir, s.LastChecksum.ToString("X4")), ImageFormat.Bmp);
+                                        System.IO.Directory.CreateDirectory(String.Format("{0}\\auto", Controller.Instance.GetFullScreenshotDir()));
+                                        s.SuperBitmap.Bitmap.Save(String.Format("{0}\\crash{1}.bmp", ctrl.GetFullScreenshotDir(), s.LastChecksum.ToString("X4")), ImageFormat.Bmp);
                                         ctrl.RestartEmulator(s);
                                         ctrl.Login(s, s.Emulator.LastKnownAccount);
                                     }
