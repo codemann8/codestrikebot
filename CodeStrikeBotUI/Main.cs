@@ -53,7 +53,7 @@ namespace CodeStrikeBot
 
             IsViewPayload = true;
 
-            this.Left = 65;
+            this.Left = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Left + 5;
             this.Top = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Bottom - this.Height - 5;
 
             tmrTimeout = new System.Timers.Timer(3000);
@@ -84,9 +84,16 @@ namespace CodeStrikeBot
             infoText += String.Format("\nWindowResizeBorderThickness={0}", System.Windows.SystemParameters.WindowResizeBorderThickness);
             infoText += String.Format("\nWindowCaptionHeight={0}", System.Windows.SystemParameters.WindowCaptionHeight);
             infoText += String.Format("\nBorderSize={0}", System.Windows.Forms.SystemInformation.BorderSize);
-            infoText += String.Format("\nGetWindowWidth={0}", ctrl.GetWindowWidth(ctrl.sc[0].EmulatorProcess.MainWindowHandle));
             infoText += String.Format("\nPrimaryScreen={0}", System.Windows.Forms.Screen.PrimaryScreen.Bounds);
             infoText += String.Format("\nWorkingArea={0}", System.Windows.Forms.Screen.PrimaryScreen.WorkingArea);
+            infoText += "\nGetWindowWidth=";
+            for (int s = 0; s < ctrl.sc.Length; s++)
+            {
+                if (ctrl.sc[s] != null && ctrl.sc[s].EmulatorProcess != null && !ctrl.sc[s].EmulatorProcess.HasExited)
+                {
+                    infoText += String.Format("{0}({1});", s, ctrl.GetWindowWidth(ctrl.sc[s].EmulatorProcess.MainWindowHandle));
+                }
+            }
 
             System.IO.Directory.CreateDirectory(String.Format("{0}\\debug", Controller.Instance.GetFullScreenshotDir().Replace("\\ss", "")));
             System.IO.File.WriteAllText(String.Format("{0}\\debug\\info.txt", Controller.Instance.GetFullScreenshotDir().Replace("\\ss", "")), infoText);
@@ -1708,6 +1715,30 @@ namespace CodeStrikeBot
             if (e.Button == System.Windows.Forms.MouseButtons.Right)
             {
                 ctrl.GetAndSetEmulatorProcess(0);
+            }
+        }
+
+        private void rdoWindow2_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == System.Windows.Forms.MouseButtons.Right)
+            {
+                ctrl.GetAndSetEmulatorProcess(1);
+            }
+        }
+
+        private void rdoWindow3_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == System.Windows.Forms.MouseButtons.Right)
+            {
+                ctrl.GetAndSetEmulatorProcess(2);
+            }
+        }
+
+        private void rdoWindow4_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == System.Windows.Forms.MouseButtons.Right)
+            {
+                ctrl.GetAndSetEmulatorProcess(3);
             }
         }
     }
