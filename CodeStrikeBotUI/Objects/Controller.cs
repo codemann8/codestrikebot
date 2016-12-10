@@ -2046,6 +2046,11 @@ namespace CodeStrikeBot
         public int top;
         public int right;
         public int bottom;
+
+        public override string ToString()
+        {
+            return String.Format("{{L={0}, T={1}, R={2}, B={3}}}", left, top, right, bottom);
+        }
     }
 
     [StructLayout(LayoutKind.Sequential)]

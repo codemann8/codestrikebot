@@ -94,6 +94,14 @@ namespace CodeStrikeBot
                     infoText += String.Format("{0}({1});", s, ctrl.GetWindowWidth(ctrl.sc[s].EmulatorProcess.MainWindowHandle));
                 }
             }
+            infoText += "\nWindowRect=";
+            for (int s = 0; s < ctrl.sc.Length; s++)
+            {
+                if (ctrl.sc[s] != null && ctrl.sc[s].EmulatorProcess != null && !ctrl.sc[s].EmulatorProcess.HasExited)
+                {
+                    infoText += String.Format("{0}({1});", s, ctrl.sc[s].WindowRect);
+                }
+            }
 
             System.IO.Directory.CreateDirectory(String.Format("{0}\\debug", Controller.Instance.GetFullScreenshotDir().Replace("\\ss", "")));
             System.IO.File.WriteAllText(String.Format("{0}\\debug\\info.txt", Controller.Instance.GetFullScreenshotDir().Replace("\\ss", "")), infoText);
