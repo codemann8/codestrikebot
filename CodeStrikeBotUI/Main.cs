@@ -91,6 +91,16 @@ namespace CodeStrikeBot
             System.IO.Directory.CreateDirectory(String.Format("{0}\\debug", Controller.Instance.GetFullScreenshotDir().Replace("\\ss", "")));
             System.IO.File.WriteAllText(String.Format("{0}\\debug\\info.txt", Controller.Instance.GetFullScreenshotDir().Replace("\\ss", "")), infoText);
 
+            using (Bitmap bmp = new Bitmap(System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height))
+            {
+                using (Graphics g = Graphics.FromImage(bmp))
+                {
+                    g.CopyFromScreen(System.Windows.Forms.Screen.PrimaryScreen.Bounds.X, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Y, 0, 0, bmp.Size, CopyPixelOperation.SourceCopy);
+                }
+
+                bmp.Save(String.Format("{0}\\debug\\info.bmp", Controller.Instance.GetFullScreenshotDir().Replace("\\ss", "")), ImageFormat.Bmp);
+            }
+
             bool restart = true;
             foreach (Screen s in ctrl.sc)
             {
