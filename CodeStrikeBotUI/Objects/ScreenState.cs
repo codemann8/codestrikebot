@@ -806,7 +806,7 @@ namespace CodeStrikeBot
             }
             while (failure > 0);
 
-            if (s.ScreenState.CurrentArea != state.CurrentArea)
+            if (s.ScreenState != null && s.ScreenState.CurrentArea != state.CurrentArea)
             {
                 s.TimeSinceAreaChanged = DateTime.Now;
             }
