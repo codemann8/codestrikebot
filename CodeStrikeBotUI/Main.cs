@@ -1567,6 +1567,15 @@ namespace CodeStrikeBot
                                     }
                                 }
 
+                                if (s.ScreenState.CurrentArea == Area.Menus.RewardCrate && DateTime.Now.Subtract(s.TimeSinceAreaChanged).Seconds > 30)
+                                {
+                                    BotDatabase.InsertLog(2, String.Format("Emulator frozen: {0}", s.Emulator.WindowName), s.LastChecksum.ToString("X4"), new byte[1] { 0x0 });
+                                    System.IO.Directory.CreateDirectory(String.Format("{0}\\auto", Controller.Instance.GetFullScreenshotDir()));
+                                    s.SuperBitmap.Bitmap.Save(String.Format("{0}\\crash{1}.bmp", ctrl.GetFullScreenshotDir(), s.LastChecksum.ToString("X4")), ImageFormat.Bmp);
+                                    ctrl.RestartEmulator(s);
+                                    ctrl.Login(s, s.Emulator.LastKnownAccount);
+                                }
+
                                 if (s.TimeoutFactor > 3.0)
                                 {
                                     BotDatabase.InsertLog(2, String.Format("Emulator slow: {0}", s.Emulator.WindowName), s.LastChecksum.ToString("X4"), new byte[1] { 0x0 });

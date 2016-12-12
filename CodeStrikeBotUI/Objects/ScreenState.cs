@@ -806,6 +806,11 @@ namespace CodeStrikeBot
             }
             while (failure > 0);
 
+            if (s.ScreenState.CurrentArea != state.CurrentArea)
+            {
+                s.TimeSinceAreaChanged = DateTime.Now;
+            }
+
             s.ScreenState = state;
         }
 

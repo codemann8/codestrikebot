@@ -30,6 +30,7 @@ namespace CodeStrikeBot
         public bool PreventFromOpening;
         public ushort LastChecksum { get; set; }
         public DateTime TimeSinceChecksumChanged { get; set; }
+        public DateTime TimeSinceAreaChanged { get; set; }
 
         public bool skipMissions, skipRewards, skipVault;
 
