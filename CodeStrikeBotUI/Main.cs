@@ -1541,7 +1541,7 @@ namespace CodeStrikeBot
                                 DateTime lastChange = s.TimeSinceChecksumChanged;
                                 int diff = DateTime.Now.Subtract(s.TimeSinceChecksumChanged).Seconds;
 
-                                if (s.IsFucked || (s.ScreenState.CurrentArea != Area.StateMaps.FullScreen && s.ScreenState.CurrentArea != Area.Emulators.Android && s.ScreenState.CurrentArea != Area.Others.Login && s.ScreenState.CurrentArea != Area.Others.Chat && s.ScreenState.CurrentArea != Area.Others.SessionTimeout
+                                if (s.IsFucked || (s.ScreenState.CurrentArea != Area.StateMaps.FullScreen && s.ScreenState.CurrentArea != Area.Others.Login && s.ScreenState.CurrentArea != Area.Others.Chat
                                     && DateTime.Now.Subtract(s.TimeSinceChecksumChanged).Seconds > 30))
                                 {
                                     //ctrl.RefreshWindows();
@@ -1549,14 +1549,21 @@ namespace CodeStrikeBot
                                     System.Threading.Thread.Sleep(1000);
                                     Controller.CaptureApplication(s);
 
-                                    if (s.IsFucked || (s.ScreenState.CurrentArea != Area.StateMaps.FullScreen && s.ScreenState.CurrentArea != Area.Emulators.Android && s.ScreenState.CurrentArea != Area.Others.Login && s.ScreenState.CurrentArea != Area.Others.Chat && s.ScreenState.CurrentArea != Area.Others.SessionTimeout
-                                    && DateTime.Now.Subtract(s.TimeSinceChecksumChanged).Seconds > 30))
+                                    if (s.IsFucked || (s.ScreenState.CurrentArea != Area.StateMaps.FullScreen && s.ScreenState.CurrentArea != Area.Others.Login && s.ScreenState.CurrentArea != Area.Others.Chat
+                                        && DateTime.Now.Subtract(s.TimeSinceChecksumChanged).Seconds > 30))
                                     {
-                                        BotDatabase.InsertLog(2, String.Format("Emulator frozen: {0}", s.Emulator.WindowName), s.LastChecksum.ToString("X4"), new byte[1] { 0x0 });
-                                        System.IO.Directory.CreateDirectory(String.Format("{0}\\auto", Controller.Instance.GetFullScreenshotDir()));
-                                        s.SuperBitmap.Bitmap.Save(String.Format("{0}\\crash{1}.bmp", ctrl.GetFullScreenshotDir(), s.LastChecksum.ToString("X4")), ImageFormat.Bmp);
-                                        ctrl.RestartEmulator(s);
-                                        ctrl.Login(s, s.Emulator.LastKnownAccount);
+                                        if (s.ScreenState.CurrentArea != Area.Emulators.Android)
+                                        {
+                                            BotDatabase.InsertLog(2, String.Format("Emulator frozen: {0}", s.Emulator.WindowName), s.LastChecksum.ToString("X4"), new byte[1] { 0x0 });
+                                            System.IO.Directory.CreateDirectory(String.Format("{0}\\auto", Controller.Instance.GetFullScreenshotDir()));
+                                            s.SuperBitmap.Bitmap.Save(String.Format("{0}\\crash{1}.bmp", ctrl.GetFullScreenshotDir(), s.LastChecksum.ToString("X4")), ImageFormat.Bmp);
+                                            ctrl.RestartEmulator(s);
+                                            ctrl.Login(s, s.Emulator.LastKnownAccount);
+                                        }
+                                        else
+                                        {
+                                            s.ClickHome(5000);
+                                        }
                                     }
                                 }
 

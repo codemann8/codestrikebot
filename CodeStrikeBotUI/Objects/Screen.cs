@@ -105,9 +105,9 @@ namespace CodeStrikeBot
 
         public abstract string ProcessName { get; }
 
-        public abstract void ClickBack(int timeout);
+        public abstract void ClickBack(int timeout = 0);
 
-        public abstract void ClickHome(int timeout);
+        public abstract void ClickHome(int timeout = 0);
 
         public abstract bool KillApp();
 
