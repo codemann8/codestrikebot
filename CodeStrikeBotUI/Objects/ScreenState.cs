@@ -396,6 +396,8 @@ namespace CodeStrikeBot
                                 break;
                             case 0x1cea:
                             case 0x0a36: //nox
+                            case 0x68e7: //nox Special Winter Shooting Range modal
+                            case 0x3554: //nox Special Winter Shooting Range
                                 chksum = ScreenState.GetScreenChecksum(s.SuperBitmap, 300, 70, 10);
                                 if (chksum == 0xd714)
                                 {

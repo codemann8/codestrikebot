@@ -1594,7 +1594,7 @@ namespace CodeStrikeBot
                                 {
                                     if (!s.PreventFromOpening && s.ScreenState.CurrentArea == Area.Emulators.Android)
                                     {
-                                        ctrl.StartApp(s);
+                                        //ctrl.StartApp(s);
                                     }
                                     //TODO: Fix, this keeps stealing sessions from existing emulators
                                     /*else if (s.Emulator.LastKnownAccount != null && s.Emulator.LastKnownAccount.Id != 0 && !s.PreventFromOpening && s.ScreenState.CurrentArea == Area.Others.Login)
@@ -1603,8 +1603,8 @@ namespace CodeStrikeBot
                                     }*/
                                     else if (s.ScreenState.CurrentArea == Area.Others.SessionTimeout)
                                     {
-                                        Controller.SendClick(s, 200, 205, 300); //click
                                         s.PreventFromOpening = true;
+                                        Controller.SendClick(s, 200, 205, 300); //click
                                     }
                                     else if (s.ScreenState.CurrentArea == Area.Others.Quit)
                                     {

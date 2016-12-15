@@ -142,7 +142,7 @@ namespace CodeStrikeBot
 
             Stopwatch tmrRun = new Stopwatch();
 
-            if (EmulatorProcess != null)
+            if (EmulatorProcess != null && !PreventFromOpening)
             {
                 Controller.CaptureApplication(this);
 
