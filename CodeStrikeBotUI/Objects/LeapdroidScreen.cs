@@ -18,7 +18,8 @@ namespace CodeStrikeBot
         {
             WINDOW_TITLEBAR_H = 30;
             WINDOW_MARGIN_L = 8;
-            WINDOW_MARGIN_R = 69;
+            WINDOW_MARGIN_R = 0;
+            WINDOW_WIDGET_R = 69;
 
             Emulator = emulator;
             ClipboardFailed = false;

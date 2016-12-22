@@ -1647,7 +1647,8 @@ namespace CodeStrikeBot
                             int taskbarTopOffset = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Top;
 
                             Size sz = System.Windows.Forms.SystemInformation.BorderSize;
-                            g.CopyFromScreen(s.WindowRect.left + s.WINDOW_MARGIN_L, s.WindowRect.top + s.WINDOW_TITLEBAR_H, 0, 0, new Size(SCREEN_W, SCREEN_H), CopyPixelOperation.SourceCopy);
+                            int left = ((s.WindowRect.right - s.WindowRect.left) - SCREEN_W - s.WINDOW_MARGIN_R) / 2;
+                            g.CopyFromScreen(s.WindowRect.left + left, s.WindowRect.top + s.WINDOW_TITLEBAR_H, 0, 0, new Size(SCREEN_W, SCREEN_H), CopyPixelOperation.SourceCopy);
                         }
 
                         ScreenState.GetScreenState(s);

@@ -16,6 +16,7 @@ namespace CodeStrikeBot
         public int WINDOW_TITLEBAR_H = 0;
         public int WINDOW_MARGIN_L = 0;
         public int WINDOW_MARGIN_R = 0;
+        public int WINDOW_WIDGET_R = 0;
 
         public Process EmulatorProcess { get; set; }
         public Rect WindowRect { get; set; }
