@@ -775,10 +775,11 @@ namespace CodeStrikeBot
                         }
 
                         chksum = ScreenState.GetScreenChecksum(s.SuperBitmap, 352, 457, 8);
-                        switch (chksum)
+                        /*switch (chksum)
                         {
                             case 0x7d6a:
                                 state.Overlays.Add(Overlay.Incomings.Rally);
+                                s.SuperBitmap.Bitmap.Save(Controller.Instance.GetFullScreenshotDir() + "rally.bmp", System.Drawing.Imaging.ImageFormat.Bmp);
                                 break;
                             case 0x6de0:
                                 state.Overlays.Add(Overlay.Incomings.Attack);
@@ -792,7 +793,7 @@ namespace CodeStrikeBot
                             case 0xe405:
                                 state.Overlays.Add(Overlay.Incomings.Reinforcement);
                                 break;
-                        }
+                        }*/
                     }
 
                     failure = 0;

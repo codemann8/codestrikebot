@@ -16,7 +16,7 @@ namespace CodeStrikeBot
 
         public MEmuScreen(EmulatorInstance emulator) : base(emulator)
         {
-            WINDOW_TITLEBAR_H = 44;
+            WINDOW_TITLEBAR_H = 34;
             WINDOW_MARGIN_L = 4;
             WINDOW_MARGIN_R = 52;
 
@@ -34,19 +34,15 @@ namespace CodeStrikeBot
                 {
                     if (p.MainWindowTitle.StartsWith(emulator.WindowName))
                     {
-                        string wmiQuery = String.Format("select CommandLine, ProcessId from Win32_Process where Name='{0}.exe' and ProcessId={1}", PROCESSNAME, p.Id);
-                        System.Management.ManagementObjectSearcher searcher = new System.Management.ManagementObjectSearcher(wmiQuery);
                         bool found = false;
-                        foreach (System.Management.ManagementObject retObject in searcher.Get())
+                        
+                        if (p.CommandLineArgs(EmulatorType.MEmu) == emulator.Command)
                         {
-                            string res = retObject["CommandLine"].ToString();
-                            if (retObject["CommandLine"].ToString() == emulator.Command)
-                            {
-                                EmulatorProcess = p;
-                                found = true;
-                                break;
-                            }
+                            EmulatorProcess = p;
+                            found = true;
+                            break;
                         }
+
                         if (found)
                         {
                             break;
@@ -72,7 +68,6 @@ namespace CodeStrikeBot
             TimeoutFactor = 1.0;
             TimeSinceChecksumChanged = DateTime.Now;
 
-            PROCESSNAME = "LeapdroidVM";
             WINDOW_TITLEBAR_H = 44;
             WINDOW_MARGIN_L = 4;
             WINDOW_MARGIN_R = 52;
@@ -84,12 +79,7 @@ namespace CodeStrikeBot
                 if (p.MainWindowTitle.StartsWith(windowName))
                 {
                     EmulatorProcess = p;
-                    string wmiQuery = String.Format("select CommandLine, ProcessId from Win32_Process where Name='{0}.exe' and ProcessId={1}", PROCESSNAME, p.Id);
-                    System.Management.ManagementObjectSearcher searcher = new System.Management.ManagementObjectSearcher(wmiQuery);
-                    foreach (System.Management.ManagementObject retObject in searcher.Get())
-                    {
-                        Emulator = new EmulatorInstance(0, EmulatorType.Leapdroid, windowName, retObject["CommandLine"].ToString(), new Account(0));
-                    }
+                    Emulator = new EmulatorInstance(0, EmulatorType.Leapdroid, windowName, p.CommandLineArgs(EmulatorType.MEmu), new Account(0));
                     break;
                 }
             }
@@ -109,12 +99,12 @@ namespace CodeStrikeBot
 
         public override void ClickBack(int timeout)
         {
-            Controller.SendClick(this, 420, 545, timeout);
+            Controller.SendClick(this, 420, 582, timeout);
         }
 
         public override void ClickHome(int timeout)
         {
-            Controller.SendClick(this, 420, 585, timeout);
+            Controller.SendClick(this, 420, 616, timeout);
         }
 
         public override bool KillApp()
@@ -148,7 +138,7 @@ namespace CodeStrikeBot
 
                 tmrRun.Start();
 
-                while (ScreenState.CurrentArea == Area.Emulators.Android && tmrRun.ElapsedMilliseconds < 5000)
+                while (ScreenState.CurrentArea == Area.Emulators.Android && tmrRun.ElapsedMilliseconds < 8000)
                 {
                     Controller.SendClick(this, 50, 200, 2000); //click app
 
@@ -160,7 +150,7 @@ namespace CodeStrikeBot
                     tmrRun.Restart();
 
                     //wait for login/ad screen
-                    while (CheckPause() && !(ScreenState.CurrentArea == Area.Others.Login || ScreenState.CurrentArea == Area.Others.Ad) && tmrRun.ElapsedMilliseconds < 15000)
+                    while (CheckPause() && !(ScreenState.CurrentArea == Area.Others.Login || ScreenState.CurrentArea == Area.Others.Ad || ScreenState.CurrentArea == Area.MainBases.Main) && tmrRun.ElapsedMilliseconds < 15000)
                     {
                         Thread.Sleep(500);
 

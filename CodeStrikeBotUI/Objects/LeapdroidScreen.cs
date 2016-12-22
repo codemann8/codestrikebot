@@ -34,19 +34,15 @@ namespace CodeStrikeBot
                 {
                     if (p.MainWindowTitle.StartsWith(emulator.WindowName))
                     {
-                        string wmiQuery = String.Format("select CommandLine, ProcessId from Win32_Process where Name='{0}.exe' and ProcessId={1}", PROCESSNAME, p.Id);
-                        System.Management.ManagementObjectSearcher searcher = new System.Management.ManagementObjectSearcher(wmiQuery);
                         bool found = false;
-                        foreach (System.Management.ManagementObject retObject in searcher.Get())
+
+                        if (p.CommandLineArgs(EmulatorType.Leapdroid) == emulator.Command)
                         {
-                            string res = retObject["CommandLine"].ToString();
-                            if (retObject["CommandLine"].ToString() == emulator.Command)
-                            {
-                                EmulatorProcess = p;
-                                found = true;
-                                break;
-                            }
+                            EmulatorProcess = p;
+                            found = true;
+                            break;
                         }
+
                         if (found)
                         {
                             break;
@@ -83,12 +79,7 @@ namespace CodeStrikeBot
                 if (p.MainWindowTitle.StartsWith(windowName))
                 {
                     EmulatorProcess = p;
-                    string wmiQuery = String.Format("select CommandLine, ProcessId from Win32_Process where Name='{0}.exe' and ProcessId={1}", PROCESSNAME, p.Id);
-                    System.Management.ManagementObjectSearcher searcher = new System.Management.ManagementObjectSearcher(wmiQuery);
-                    foreach (System.Management.ManagementObject retObject in searcher.Get())
-                    {
-                        Emulator = new EmulatorInstance(0, EmulatorType.Leapdroid, windowName, retObject["CommandLine"].ToString(), new Account(0));
-                    }
+                    Emulator = new EmulatorInstance(0, EmulatorType.Leapdroid, windowName, p.CommandLineArgs(EmulatorType.Leapdroid), new Account(0));
                     break;
                 }
             }

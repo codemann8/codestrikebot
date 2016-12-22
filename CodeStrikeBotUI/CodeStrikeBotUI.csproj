@@ -102,7 +102,6 @@
       <HintPath>..\..\_External\SQLite\2012\bin\System.Data.SQLite.dll</HintPath>
     </Reference>
     <Reference Include="System.Design" />
-    <Reference Include="System.Management" />
     <Reference Include="System.Windows" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />

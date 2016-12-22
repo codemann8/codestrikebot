@@ -16,7 +16,6 @@ namespace CodeStrikeBot
 
         public NoxScreen(EmulatorInstance emulator) : base(emulator)
         {
-            PROCESSNAME = "Nox";
             WINDOW_TITLEBAR_H = 36;
             WINDOW_MARGIN_L = 2;
             WINDOW_MARGIN_R = 36;
@@ -36,12 +35,7 @@ namespace CodeStrikeBot
                     if (p.MainWindowTitle.StartsWith(emulator.WindowName))
                     {
                         EmulatorProcess = p;
-                        string wmiQuery = String.Format("select CommandLine, ProcessId from Win32_Process where Name='{0}.exe' and ProcessId={1}", PROCESSNAME, p.Id);
-                        System.Management.ManagementObjectSearcher searcher = new System.Management.ManagementObjectSearcher(wmiQuery);
-                        foreach (System.Management.ManagementObject retObject in searcher.Get())
-                        {
-                            emulator.Command = retObject["CommandLine"].ToString();
-                        }
+                        emulator.Command = p.CommandLineArgs(EmulatorType.Nox);
                         break;
                     }
                 }
@@ -63,7 +57,6 @@ namespace CodeStrikeBot
             TimeoutFactor = 1.0;
             TimeSinceChecksumChanged = DateTime.Now;
 
-            PROCESSNAME = "Nox";
             WINDOW_TITLEBAR_H = 36;
             WINDOW_MARGIN_L = 2;
             WINDOW_MARGIN_R = 36;
@@ -75,12 +68,7 @@ namespace CodeStrikeBot
                 if (p.MainWindowTitle.StartsWith(windowName))
                 {
                     EmulatorProcess = p;
-                    string wmiQuery = String.Format("select CommandLine, ProcessId from Win32_Process where Name='{0}.exe' and ProcessId={1}", PROCESSNAME, p.Id);
-                    System.Management.ManagementObjectSearcher searcher = new System.Management.ManagementObjectSearcher(wmiQuery);
-                    foreach (System.Management.ManagementObject retObject in searcher.Get())
-                    {
-                        Emulator = new EmulatorInstance(0, EmulatorType.Nox, windowName, retObject["CommandLine"].ToString().Replace("Nox", "C:\\Program Files (x86)\\Nox\\bin\\Nox.exe"), new Account(0));
-                    }
+                    Emulator = new EmulatorInstance(0, EmulatorType.Nox, windowName, p.CommandLineArgs(EmulatorType.Nox), new Account(0));
                     break;
                 }
             }

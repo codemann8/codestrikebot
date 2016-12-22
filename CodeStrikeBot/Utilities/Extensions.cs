@@ -2,6 +2,7 @@
 using System.Reflection;
 using PacketDotNet;
 using System.Drawing;
+using System.Diagnostics;
 
 namespace CodeStrikeBot
 {
@@ -72,6 +73,23 @@ namespace CodeStrikeBot
             {
                 bf.Serialize(ms, obj);
                 ret = ms.ToArray();
+            }
+
+            return ret;
+        }
+
+        public static string CommandLineArgs(this Process p, EmulatorType type)
+        {
+            string ret = "";
+            string wmiQuery = String.Format("select CommandLine, ProcessId from Win32_Process where Name='{0}.exe' and ProcessId={1}", p.ProcessName, p.Id);
+            System.Management.ManagementObjectSearcher searcher = new System.Management.ManagementObjectSearcher(wmiQuery);
+            foreach (System.Management.ManagementObject retObject in searcher.Get())
+            {
+                ret = retObject["CommandLine"].ToString();
+                if (type == EmulatorType.Nox)
+                {
+                    ret = ret.Replace("Nox", "C:\\Program Files (x86)\\Nox\\bin\\Nox.exe");
+                }
             }
 
             return ret;

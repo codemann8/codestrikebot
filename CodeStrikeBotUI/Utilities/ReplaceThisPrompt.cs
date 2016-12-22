@@ -17,8 +17,14 @@ namespace CodeStrikeBot
             prompt.Text = caption;
             Label textLabel = new Label() { Left = 10, Top = 20, Text = text };
             ListBox listBox = new ListBox() { Left = 10, Top = 50, Width = 400, Height = 200 };
+            //TextBox txtBox = new TextBox() { Left = 10, Top = 270, Width = 200 };
+            //listBox.SelectedIndexChanged += new System.EventHandler(ReplaceThisPrompt.listBox_SelectedIndexChanged);
+            listBox.DisplayMember = "MainWindowTitle";
             foreach (T o in items)
             {
+                //ListViewItem item = new ListViewItem();
+                //item.Tag = o;
+                //item.Text = ((System.Diagnostics.Process)(object)o).MainWindowTitle;
                 listBox.Items.Add(o);
             }
             Button confirmation = new Button() { Text = "OK", Left = 310, Width = 100, Top = 270 };
@@ -39,6 +45,8 @@ namespace CodeStrikeBot
             prompt.ShowDialog();
             if (prompt.DialogResult == DialogResult.OK)
             {
+                //ListViewItem item = (ListViewItem)(listBox.SelectedItem);
+                //return (T)(item.Tag);
                 return (T)listBox.SelectedItem;
             }
             else

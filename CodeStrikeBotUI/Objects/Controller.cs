@@ -128,7 +128,7 @@ namespace CodeStrikeBot
                             {
                                 StartEmulator(sc[i]);
                                 Login(sc[i], sc[i].Emulator.LastKnownAccount);
-                                restart = true;
+                                //restart = true;
                             }
                         }
                         break;
@@ -512,6 +512,7 @@ namespace CodeStrikeBot
                     s.EmulatorProcess.Kill();
                     s.EmulatorProcess.WaitForExit();
                 }
+                Thread.Sleep(2000);
                 s.TimeoutFactor = 1.0;
 
                 if (restart)
@@ -540,7 +541,7 @@ namespace CodeStrikeBot
                 System.Threading.Thread.Sleep(6000);
                 foreach (Process p in Process.GetProcessesByName(s.ProcessName))
                 {
-                    if (p.MainWindowTitle.StartsWith(s.Emulator.WindowName))
+                    if (p.CommandLineArgs(s.Emulator.Type) == s.Emulator.Command)
                     {
                         s.EmulatorProcess = p;
                         break;
@@ -862,7 +863,7 @@ namespace CodeStrikeBot
         {
             if (s != null && s.EmulatorProcess != null && !s.EmulatorProcess.HasExited && s.ScreenState.CurrentArea != Area.Emulators.Loading)
             {
-                if (s.Emulator.Type == EmulatorType.Leapdroid || s.Emulator.Type == EmulatorType.MEmu)
+                if (s.Emulator.Type == EmulatorType.Leapdroid)
                 {
                     SendClickRaw(s, x, y, hold);
                 }
@@ -872,6 +873,10 @@ namespace CodeStrikeBot
                 }
 
                 Thread.Sleep((int)(timeout * s.TimeoutFactor));
+            }
+            else if (s == null)
+            {
+                SendClickRaw(s, x, y, hold);
             }
             //SendClickTest(s, x, y, hold);
         }
@@ -905,8 +910,11 @@ namespace CodeStrikeBot
             
             Point curPosition = System.Windows.Forms.Cursor.Position;
             Thread.Sleep(5);
-            x = s.WindowRect.left + s.WINDOW_MARGIN_L + x;
-            y = s.WindowRect.top + s.WINDOW_TITLEBAR_H + y;
+            if (s != null)
+            {
+                x = s.WindowRect.left + s.WINDOW_MARGIN_L + x;
+                y = s.WindowRect.top + s.WINDOW_TITLEBAR_H + y;
+            }
             SetCursorPos(x, y);
             mouse_event((uint)MOUSEEVENTF.LEFTDOWN, (uint)x, (uint)y, 0, 0);
             Thread.Sleep(10 + hold);
@@ -1754,38 +1762,25 @@ namespace CodeStrikeBot
 
         public static EmulatorInstance FindOrCreateEmulatorInstance(Process p)
         {
-            EmulatorType type = EmulatorType.Leapdroid;
-            string command = "";
-
-            string wmiQuery = String.Format("select CommandLine, ProcessId from Win32_Process where Name='{0}.exe' and ProcessId={1}", p.ProcessName, p.Id);
-            System.Management.ManagementObjectSearcher searcher = new System.Management.ManagementObjectSearcher(wmiQuery);
+            EmulatorType type = EmulatorType.MEmu;
+            
             switch (p.ProcessName)
             {
+                case "Droid4X":
+                    type = EmulatorType.Droid4X;
+                    break;
                 case "Nox":
                     type = EmulatorType.Nox;
-                    foreach (System.Management.ManagementObject retObject in searcher.Get())
-                    {
-                        command = retObject["CommandLine"].ToString().Replace("Nox ", "\"C:\\Program Files (x86)\\Nox\\bin\\Nox.exe\"");
-                        break;
-                    }
                     break;
                 case "LeapdroidVM":
                     type = EmulatorType.Leapdroid;
-                    foreach (System.Management.ManagementObject retObject in searcher.Get())
-                    {
-                        command = retObject["CommandLine"].ToString();
-                        break;
-                    }
                     break;
                 case "MEmu":
                     type = EmulatorType.MEmu;
-                    foreach (System.Management.ManagementObject retObject in searcher.Get())
-                    {
-                        command = retObject["CommandLine"].ToString();
-                        break;
-                    }
                     break;
             }
+
+            string command = p.CommandLineArgs(type);
 
             foreach (EmulatorInstance ei in Controller.Instance.emulators)
             {

@@ -339,7 +339,7 @@ namespace CodeStrikeBot
                     screenLocal = String.Format("{0}: ", s);
                     if (ctrl.sc[s] != null && ctrl.sc[s].EmulatorProcess != null)
                     {
-                        screenLocal += ctrl.sc[s].EmulatorProcess.MainWindowTitle;
+                        screenLocal += ctrl.sc[s];
                     }
                     screens += screenLocal + "\r\n";
                 }
@@ -1551,11 +1551,11 @@ namespace CodeStrikeBot
                     {
                         if (s != null)
                         {
-                            if (s.EmulatorProcess.HasExited)
+                            if (s.EmulatorProcess != null && s.EmulatorProcess.HasExited)
                             {
-                                Controller.Instance.RestartEmulator(s);
+                                Controller.Instance.RestartEmulator(s, false);
                             }
-                            else if (s != null)
+                            else
                             {
                                 Controller.CaptureApplication(s);
 

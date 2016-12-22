@@ -97,11 +97,29 @@ namespace CodeStrikeBot
                     //s = new Droid4XScreen(emulator);
                     //break;
                 //case EmulatorType.Nox:
-                    s = new LeapdroidScreen(windowName);
+                    //s = new LeapdroidScreen(windowName);
+                s = new MEmuScreen(windowName);
                     //break;
             }
 
             return s;
+        }
+
+        public static string ProcessNameFromType(EmulatorType type)
+        {
+            switch (type)
+            {
+                case EmulatorType.Droid4X:
+                    return Droid4XScreen.PROCESSNAME;
+                case EmulatorType.Leapdroid:
+                    return LeapdroidScreen.PROCESSNAME;
+                case EmulatorType.MEmu:
+                    return MEmuScreen.PROCESSNAME;
+                case EmulatorType.Nox:
+                    return NoxScreen.PROCESSNAME;
+                default:
+                    return "";
+            }
         }
 
         public abstract string ProcessName { get; }
@@ -113,6 +131,22 @@ namespace CodeStrikeBot
         public abstract bool KillApp();
 
         public abstract bool StartApp();
+
+        public override string ToString()
+        {
+            string ret = "";
+
+            if (EmulatorProcess != null)
+            {
+                ret = EmulatorProcess.MainWindowTitle;
+            }
+            if (Emulator != null && Emulator.LastKnownAccount != null)
+            {
+                ret += String.Format("[{0}]", Emulator.LastKnownAccount.Name);
+            }
+
+            return ret;
+        }
 
         public double CompareBitmaps(Bitmap b1, Bitmap b2)
         {
