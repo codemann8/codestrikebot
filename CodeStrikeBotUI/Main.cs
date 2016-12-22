@@ -1492,6 +1492,9 @@ namespace CodeStrikeBot
                             g.CopyFromScreen(System.Windows.Forms.Screen.PrimaryScreen.Bounds.X, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Y, 0, 0, bmpScreenCapture.Size, CopyPixelOperation.SourceCopy);
                         }
 
+                        ushort chksum;
+
+                        //check Droid4X is booting message
                         bool shouldContinue = true;
 
                         for (int y = 0; y < bmpScreenCapture.Height - 20 && shouldContinue; y += 20)
@@ -1512,7 +1515,7 @@ namespace CodeStrikeBot
 
                                     for (x = 0; x < bmpScreenCapture.Width - 50 && shouldContinue; x++)
                                     {
-                                        ushort chksum = bmpScreenCapture.Checksum(x, y + 6, 20, 20);
+                                        chksum = bmpScreenCapture.Checksum(x, y + 6, 20, 20);
 
                                         if (chksum == 0x94f9 || chksum == 0xa5de)
                                         {
@@ -1522,6 +1525,13 @@ namespace CodeStrikeBot
                                     }
                                 }
                             }
+                        }
+
+                        //check MEmu failed to start
+                        chksum = bmpScreenCapture.Checksum(510, 442, 20, 20);
+                        if (chksum == 0x0474)
+                        {
+                            Controller.SendClick(null, 980, 620, 1000);
                         }
                     }
 
@@ -1557,7 +1567,7 @@ namespace CodeStrikeBot
                                             BotDatabase.InsertLog(2, String.Format("Emulator frozen: {0}", s.Emulator.WindowName), s.LastChecksum.ToString("X4"), new byte[1] { 0x0 });
                                             System.IO.Directory.CreateDirectory(String.Format("{0}\\auto", Controller.Instance.GetFullScreenshotDir()));
                                             s.SuperBitmap.Bitmap.Save(String.Format("{0}\\crash{1}.bmp", ctrl.GetFullScreenshotDir(), s.LastChecksum.ToString("X4")), ImageFormat.Bmp);
-                                            ctrl.RestartEmulator(s);
+                                            ctrl.RestartEmulator(s, false);
                                             ctrl.Login(s, s.Emulator.LastKnownAccount);
                                         }
                                         else
@@ -1572,14 +1582,14 @@ namespace CodeStrikeBot
                                     BotDatabase.InsertLog(2, String.Format("Emulator frozen: {0}", s.Emulator.WindowName), s.LastChecksum.ToString("X4"), new byte[1] { 0x0 });
                                     System.IO.Directory.CreateDirectory(String.Format("{0}\\auto", Controller.Instance.GetFullScreenshotDir()));
                                     s.SuperBitmap.Bitmap.Save(String.Format("{0}\\crash{1}.bmp", ctrl.GetFullScreenshotDir(), s.LastChecksum.ToString("X4")), ImageFormat.Bmp);
-                                    ctrl.RestartEmulator(s);
+                                    ctrl.RestartEmulator(s, false);
                                     ctrl.Login(s, s.Emulator.LastKnownAccount);
                                 }
 
                                 if (s.TimeoutFactor > 3.0)
                                 {
                                     BotDatabase.InsertLog(2, String.Format("Emulator slow: {0}", s.Emulator.WindowName), s.LastChecksum.ToString("X4"), new byte[1] { 0x0 });
-                                    ctrl.RestartEmulator(s);
+                                    ctrl.RestartEmulator(s, false);
                                     ctrl.Login(s, s.Emulator.LastKnownAccount);
                                 }
 
@@ -1594,13 +1604,13 @@ namespace CodeStrikeBot
                                 {
                                     if (!s.PreventFromOpening && s.ScreenState.CurrentArea == Area.Emulators.Android)
                                     {
-                                        //ctrl.StartApp(s);
+                                        ctrl.StartApp(s);
                                     }
-                                    //TODO: Fix, this keeps stealing sessions from existing emulators
-                                    /*else if (s.Emulator.LastKnownAccount != null && s.Emulator.LastKnownAccount.Id != 0 && !s.PreventFromOpening && s.ScreenState.CurrentArea == Area.Others.Login)
+                                    //TODO: Fix, this keeps stealing sessions from existing emulators, probably just a leapdroid issue
+                                    else if (s.Emulator.LastKnownAccount != null && s.Emulator.LastKnownAccount.Id != 0 && !s.PreventFromOpening && s.ScreenState.CurrentArea == Area.Others.Login)
                                     {
                                         ctrl.Login(s.Emulator.LastKnownAccount);
-                                    }*/
+                                    }
                                     else if (s.ScreenState.CurrentArea == Area.Others.SessionTimeout)
                                     {
                                         s.PreventFromOpening = true;
@@ -1617,7 +1627,7 @@ namespace CodeStrikeBot
 
                                         if (s.ScreenState.CurrentArea == Area.Emulators.Crash)
                                         {
-                                            ctrl.RestartEmulator(s);
+                                            ctrl.RestartEmulator(s, false);
                                             ctrl.Login(s.Emulator.LastKnownAccount);
                                         }
                                     }

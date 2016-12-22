@@ -18,7 +18,7 @@ namespace CodeStrikeBot
         {
             WINDOW_TITLEBAR_H = 30;
             WINDOW_MARGIN_L = 8;
-            WINDOW_MARGIN_R = 69;
+            WINDOW_MARGIN_R = 79;
 
             Emulator = emulator;
             ClipboardFailed = false;
@@ -72,10 +72,9 @@ namespace CodeStrikeBot
             TimeoutFactor = 1.0;
             TimeSinceChecksumChanged = DateTime.Now;
 
-            PROCESSNAME = "LeapdroidVM";
             WINDOW_TITLEBAR_H = 30;
             WINDOW_MARGIN_L = 8;
-            WINDOW_MARGIN_R = 69;
+            WINDOW_MARGIN_R = 79;
 
             Process[] procs = Process.GetProcessesByName(PROCESSNAME);
 
