@@ -639,7 +639,7 @@ namespace CodeStrikeBot
                 while (ScreenState.CurrentArea == Area.Others.Login && tries < 6)
                 {
                     uint chksum = ScreenState.GetScreenChecksum(SuperBitmap, 88, 247, 20);
-                    if (chksum != 0xfeed) //nox, if email has been previously entered
+                    if (chksum != 0x9fa7) //nox, if email has been previously entered
                     {
                         while (!KillApp()) { }
                         {
@@ -649,7 +649,7 @@ namespace CodeStrikeBot
                     }
 
                     chksum = ScreenState.GetScreenChecksum(SuperBitmap, 88, 297, 20);
-                    if (chksum != 0xfeed) //nox, if password has been previously entered
+                    if (chksum != 0x9fa7) //nox, if password has been previously entered
                     {
                         while (!KillApp()) { }
                         {

@@ -333,6 +333,18 @@ namespace CodeStrikeBot
                 ctrl.StartScreenState = DateTime.Now;
                 ctrl.UpdateWindowInfo();
 
+                string screens = "", screenLocal;
+                for (int s = 0; s < ctrl.sc.Length; s++)
+                {
+                    screenLocal = String.Format("{0}: ", s);
+                    if (ctrl.sc[s] != null && ctrl.sc[s].EmulatorProcess != null)
+                    {
+                        screenLocal += ctrl.sc[s].EmulatorProcess.MainWindowTitle;
+                    }
+                    screens += screenLocal + "\r\n";
+                }
+                txtScreenOrder.Text = screens;
+
                 foreach (Screen s in ctrl.sc)
                 {
                     if (s != null)
