@@ -375,10 +375,12 @@ namespace CodeStrikeBot
                             case 0x3ad6: //grayed out (confirmation/max limit)
                             case 0x055b: //nox
                             case 0x6229: //nox grayed out
+                            case 0x8d70: //memu
+                            case 0xc22d: //memu modal
                                 state.CurrentArea = Area.Menus.ResourceHelp;
                                 break;
                             case 0x6c9f: //nox
-                            case 0x7ef5: //now new
+                            case 0x7ef5: //nox new
                                 state.CurrentArea = Area.Menus.Resources;
                                 break;
                             case 0x7b13:
@@ -567,7 +569,7 @@ namespace CodeStrikeBot
                                                     state.CurrentArea = Area.StateMaps.Main;
                                                 }
                                             }
-                                            else if (c.Equals(16, 44, 57))		
+                                            else if (c.Equals(16, 44, 57))
                                             {		
                                                 //world map modal		
                                                 chksum = ScreenState.GetScreenChecksum(s.SuperBitmap, 180, 190, 10);		
