@@ -1646,9 +1646,9 @@ namespace CodeStrikeBot
                                 Controller.CaptureApplication(this);
                                 chksum = ScreenState.GetScreenChecksum(SuperBitmap, 37, 90, 20);
                             }
-                            while (chksum != 0x30b4 && watch.ElapsedMilliseconds < 2000);
+                            while (chksum != 0x961c && watch.ElapsedMilliseconds < 2000);
 
-                            if (chksum == 0x30b4)
+                            if (chksum == 0x961c)
                             {
                                 for (int i = 250; i < 335; i++)
                                 {
@@ -1659,7 +1659,8 @@ namespace CodeStrikeBot
                                         chksum = ScreenState.GetScreenChecksum(SuperBitmap, 195, i - 20, 20);
 
                                         //if (chksum == 0x9148)
-                                        if (chksum == 0xf74a || chksum == 0x4682) //nox
+                                        //if (chksum == 0xf74a || chksum == 0x4682) //nox
+                                        if (chksum == 0x8b84) //memu
                                         {
                                             targetSelected = true;
                                         }
@@ -1697,7 +1698,7 @@ namespace CodeStrikeBot
                             int p = 0;
 
                             //Color coinColor = Color.FromArgb(206, 207, 198); //coin color
-                            Color foodColor = Color.FromArgb(198, 125, 8);
+                            Color foodColor = Color.FromArgb(198, 125, 16);
 
                             watch.Restart();
 
@@ -1718,10 +1719,10 @@ namespace CodeStrikeBot
                                         p = 350;
                                         break;
                                     case ScheduleType.FoodTransfer:
-                                        Controller.SendClickDrag(this, 30, 400, 20, 340, 100, false, 900);
+                                        Controller.SendClickDrag(this, 20, 400, 20, 340, 100, false, 1200);
                                         Controller.CaptureApplication(this);
 
-                                        for (p = 105; p < 420; p++)
+                                        for (p = 300; p < 420; p++)
                                         {
                                             c = SuperBitmap.GetPixel(40, p);
 
@@ -1765,7 +1766,7 @@ namespace CodeStrikeBot
                                                     {
                                                         Controller.CaptureApplication(this);
 
-                                                        for (p = 105; p < 420; p++)
+                                                        for (p = 105; p < 420; p++) 
                                                         {
                                                             c = SuperBitmap.GetPixel(40, p);
 
@@ -1779,16 +1780,18 @@ namespace CodeStrikeBot
                                                     Controller.SendClick(this, 285, p, 100); //click white box
 
                                                     Controller.CaptureApplication(this);
-                                                    c = SuperBitmap.GetPixel(230, 750);
+                                                    c = SuperBitmap.GetPixel(230, 675);
                                                 }
-                                                while (!c.Equals(239, 239, 239) && watch.ElapsedMilliseconds < 7000);
+                                                while (!c.Equals(247, 255, 255) && watch.ElapsedMilliseconds < 7000);
 
-                                                if (watch.ElapsedMilliseconds < 7000)
+                                                if (c.Equals(247, 255, 255))
                                                 {
+                                                    watch.Restart();
+
                                                     tries = 0;
                                                     do
                                                     {
-                                                        Controller.SendClick(this, 280, 675, 450);
+                                                        //Controller.SendClick(this, 280, 675, 650);
                                                         Controller.SendKey(this, amount.ToString());
                                                         Thread.Sleep((int)((450 + (350 * tries)) * TimeoutFactor));
 
@@ -1798,14 +1801,14 @@ namespace CodeStrikeBot
                                                         chksum = ScreenState.GetScreenChecksum(SuperBitmap, 14, 661, 20);
                                                     }
                                                     //while ((chksum == 0x3c40 || chksum == 0x3412 || chksum == 0x6154) && watch.ElapsedMilliseconds < 7000);
-                                                    while ((chksum == 0x8c80 || chksum == 0x356d || chksum == 0x6154) && watch.ElapsedMilliseconds < 7000); //nox
+                                                    while ((chksum == 0x4b5b || chksum == 0x3641 || chksum == 0xa5df) && watch.ElapsedMilliseconds < 7000); //nox
 
                                                     Thread.Sleep((int)(600 * TimeoutFactor));
 
                                                     Controller.CaptureApplication(this);
                                                     chksum = ScreenState.GetScreenChecksum(SuperBitmap, 38, 661, 20);
 
-                                                    if (chksum == 0x6154) //less than 10k rss
+                                                    if (chksum == 0xa5df) //less than 10k rss
                                                     {
                                                         SuperBitmap.Bitmap.Save(String.Format("{0}{1}\\rss{2}.bmp", AppDomain.CurrentDomain.BaseDirectory, "output\\ss", LastChecksum.ToString("X4")), ImageFormat.Bmp);
                                                         Controller.SendClick(this, 345, 680, 400); //click Done
