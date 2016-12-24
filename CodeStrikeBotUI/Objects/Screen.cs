@@ -1739,8 +1739,6 @@ namespace CodeStrikeBot
 
                     if (targetSelected)
                     {
-                        Controller.CaptureApplication(this);
-
                         int offset = 0;
                         c = SuperBitmap.GetPixel(60, 130);
                         while (c.R <= 8 && offset < 600)
@@ -2474,7 +2472,7 @@ namespace CodeStrikeBot
                         Controller.SendClick(this, 210, 558, 1200); //click Free Attack
                     }
                     /*else if (state.Overlays.Contains(Overlay.Widgets.SilverCrate))
-                    {pathheroadmin@gmail.com
+                    {
                         tasksLeft = true;
 
                         this.SendClick(40, 465, 200); //click Silver Crate
