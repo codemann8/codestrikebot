@@ -148,6 +148,81 @@ namespace CodeStrikeBot
             return ret;
         }
 
+        public bool ClickUntil(int x, int y, ID area, int clickDelay = 0, int timeout = 60000)
+        {
+            bool success = false;
+
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
+
+            do
+            {
+                Controller.SendClick(this, x, y, clickDelay);
+
+                Controller.CaptureApplication(this);
+            }
+            while (ScreenState.CurrentArea != area && watch.ElapsedMilliseconds < timeout);
+
+            if (ScreenState.CurrentArea == area)
+            {
+                success = true;
+            }
+
+            return success;
+        }
+
+        public bool ClickUntil(int x, int y, int chkX, int chkY, int chkSize, ushort chkValue, int clickDelay = 0, int timeout = 60000)
+        {
+            bool success = false;
+
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
+
+            ushort chksum;
+
+            do
+            {
+                Controller.SendClick(this, x, y, clickDelay);
+
+                Controller.CaptureApplication(this);
+                chksum = ScreenState.GetScreenChecksum(SuperBitmap, chkX, chkY, chkSize);
+            }
+            while (chksum != chkValue && watch.ElapsedMilliseconds < timeout);
+
+            if (chksum == chkValue)
+            {
+                success = true;
+            }
+
+            return success;
+        }
+
+        public bool ClickUntil(int x, int y, int chkX, int chkY, Color color, int clickDelay = 0, int timeout = 60000)
+        {
+            bool success = false;
+
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
+
+            Color c;
+
+            do
+            {
+                Controller.SendClick(this, x, y, clickDelay);
+
+                Controller.CaptureApplication(this);
+                c = SuperBitmap.GetPixel(chkX, chkY);
+            }
+            while (!c.Equals(color.R, color.G, color.B) && watch.ElapsedMilliseconds < timeout);
+
+            if (c.Equals(color.R, color.G, color.B))
+            {
+                success = true;
+            }
+
+            return success;
+        }
+
         public double CompareBitmaps(Bitmap b1, Bitmap b2)
         {
             double identical = 0, near = 0, drastic = 0;
@@ -1011,8 +1086,6 @@ namespace CodeStrikeBot
             }
         }
 
-
-
         public void Map(int sXStartAt, int sYStartAt, int rowStartAt)
         {
             if (EmulatorProcess != null)
@@ -1604,10 +1677,9 @@ namespace CodeStrikeBot
 
                 watch.Restart();
 
-                while (ScreenState.CurrentArea == Area.MainBases.Main && watch.ElapsedMilliseconds < 2000)
+                while (ScreenState.CurrentArea == Area.MainBases.Main && watch.ElapsedMilliseconds < 2600)
                 {
                     Controller.SendClick(this, 20, 680, 1200);
-
                     Controller.CaptureApplication(this);
                 }
 
@@ -1639,16 +1711,7 @@ namespace CodeStrikeBot
 
                             watch.Restart();
 
-                            do
-                            {
-                                Controller.SendClick(this, 196, 382, 1000); //click on destination base
-
-                                Controller.CaptureApplication(this);
-                                chksum = ScreenState.GetScreenChecksum(SuperBitmap, 37, 90, 20);
-                            }
-                            while (chksum != 0x961c && watch.ElapsedMilliseconds < 2000);
-
-                            if (chksum == 0x961c)
+                            if (ClickUntil(196, 382, 37, 90, 20, 0x961c, 1000, 2500)) //click on destination base
                             {
                                 for (int i = 250; i < 335; i++)
                                 {
@@ -1676,24 +1739,17 @@ namespace CodeStrikeBot
 
                     if (targetSelected)
                     {
-                        watch.Restart();
+                        Controller.CaptureApplication(this);
 
-                        do
+                        int offset = 0;
+                        c = SuperBitmap.GetPixel(60, 130);
+                        while (c.R <= 8 && offset < 600)
                         {
-                            int offset = 0;
-                            c = SuperBitmap.GetPixel(60, 130);
-                            while (c.R <= 8)
-                            {
-                                offset++;
-                                c = SuperBitmap.GetPixel(60, 130 + offset);
-                            }
-
-                            Controller.SendClick(this, 50, 280 + offset, 400); //click on rss help
-                            Controller.CaptureApplication(this);
+                            offset++;
+                            c = SuperBitmap.GetPixel(60, 130 + offset);
                         }
-                        while (ScreenState.CurrentArea != Area.Menus.ResourceHelp && watch.ElapsedMilliseconds < 2000);
 
-                        if (ScreenState.CurrentArea == Area.Menus.ResourceHelp)
+                        if (ClickUntil(50, 280 + offset, Area.Menus.ResourceHelp, 400, 2000)) //click on rss help
                         {
                             int p = 0;
 
@@ -1798,17 +1854,23 @@ namespace CodeStrikeBot
                                                         tries++;
 
                                                         Controller.CaptureApplication(this);
-                                                        chksum = ScreenState.GetScreenChecksum(SuperBitmap, 14, 661, 20);
+                                                        chksum = ScreenState.GetScreenChecksum(SuperBitmap, 14, 662, 20);
                                                     }
-                                                    //while ((chksum == 0x3c40 || chksum == 0x3412 || chksum == 0x6154) && watch.ElapsedMilliseconds < 7000);
-                                                    while ((chksum == 0x4b5b || chksum == 0x3641 || chksum == 0xa5df) && watch.ElapsedMilliseconds < 7000); //nox
+                                                    while ((chksum == 0x58c8 || chksum == 0xbd90 || chksum == 0x174f) && watch.ElapsedMilliseconds < 7000); //memu
 
                                                     Thread.Sleep((int)(600 * TimeoutFactor));
 
                                                     Controller.CaptureApplication(this);
-                                                    chksum = ScreenState.GetScreenChecksum(SuperBitmap, 38, 661, 20);
+                                                    if (type == ScheduleType.CoinTransfer)
+                                                    {
+                                                        chksum = ScreenState.GetScreenChecksum(SuperBitmap, 38, 662, 20); //38 = <10k  43 = <100k  48 = <1m
+                                                    }
+                                                    else
+                                                    {
+                                                        chksum = ScreenState.GetScreenChecksum(SuperBitmap, 48, 662, 20); //38 = <10k  43 = <100k  48 = <1m
+                                                    }
 
-                                                    if (chksum == 0xa5df) //less than 10k rss
+                                                    if (chksum == 0x174f) //less than 10k rss
                                                     {
                                                         SuperBitmap.Bitmap.Save(String.Format("{0}{1}\\rss{2}.bmp", AppDomain.CurrentDomain.BaseDirectory, "output\\ss", LastChecksum.ToString("X4")), ImageFormat.Bmp);
                                                         Controller.SendClick(this, 345, 680, 400); //click Done
@@ -2412,7 +2474,7 @@ namespace CodeStrikeBot
                         Controller.SendClick(this, 210, 558, 1200); //click Free Attack
                     }
                     /*else if (state.Overlays.Contains(Overlay.Widgets.SilverCrate))
-                    {
+                    {pathheroadmin@gmail.com
                         tasksLeft = true;
 
                         this.SendClick(40, 465, 200); //click Silver Crate
@@ -2478,7 +2540,7 @@ namespace CodeStrikeBot
                 else if (ScreenState.CurrentArea == Area.MainBases.SilverCrateCollect)
                 {
                     tasksLeft = true;
-                    Controller.SendClick(this, 140, 415, 500); //click Collect
+                    Controller.SendClick(this, 140, 425, 500); //click Collect
                 }
                 else if (ScreenState.CurrentArea == Area.Menus.RewardCrate)
                 {

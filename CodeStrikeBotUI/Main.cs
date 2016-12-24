@@ -1377,11 +1377,11 @@ namespace CodeStrikeBot
                             if (DateTime.Now.Subtract(task.NextAction).Minutes > 15)
                             {
                                 //TODO: Vacation mode, revert back to priority alert
-                                ctrl.SendPushover("Scheduled tasks are past due", 0);		
+                                ctrl.SendPushover("Scheduled tasks are past due", 1);		
 		
-                                foreach (Screen s in ctrl.sc)		
+                                foreach (Screen s in ctrl.sc)
                                 {		
-                                    ctrl.KillEmulator(s, false);		
+                                    //ctrl.KillEmulator(s, false);		
                                 }		
 		
                                 Program.RestartApp();
