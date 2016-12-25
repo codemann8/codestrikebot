@@ -887,11 +887,11 @@ namespace CodeStrikeBot
                                     {
                                         if (warMessage.RallyTime == 60)
                                         {		
-                                            ctrl.SendPushover(String.Format("1-Minute Rally on {0}{1}", warMessage.DefenderAlliance, warMessage.DefenderName), 1);		
+                                            ctrl.SendPushover(String.Format("1-Minute Rally on {0}{1} by {2}{3}", warMessage.DefenderAlliance, warMessage.DefenderName, warMessage.AttackerAlliance, warMessage.AttackerName), 1);		
                                         }		
                                         else		
-                                        {		
-                                            ctrl.SendPushover(String.Format("ACTION! Rally on {0}{1}", warMessage.DefenderAlliance, warMessage.DefenderName), 1);		
+                                        {
+                                            ctrl.SendPushover(String.Format("ACTION! Rally on {0}{1} by {2}{3}", warMessage.DefenderAlliance, warMessage.DefenderName, warMessage.AttackerAlliance, warMessage.AttackerName), 1);		
                                         }
                                     }
                                 }
@@ -899,19 +899,19 @@ namespace CodeStrikeBot
                                 if (!sent)
                                 {
                                     if (warMessage.RallyTime == 60)
-                                    {		
-                                        ctrl.SendPushover(String.Format("1-Minute Rally on {0}{1}", warMessage.DefenderAlliance, warMessage.DefenderName), 1);		
+                                    {
+                                        ctrl.SendPushover(String.Format("1-Minute Rally on {0}{1} by {2}{3}", warMessage.DefenderAlliance, warMessage.DefenderName, warMessage.AttackerAlliance, warMessage.AttackerName), 1);		
                                     }		
                                     else		
-                                    {		
-                                        ctrl.SendPushover(String.Format("Help! Rally on {0}{1}", warMessage.DefenderAlliance, warMessage.DefenderName), 1);		
+                                    {
+                                        ctrl.SendPushover(String.Format("Help! Rally on {0}{1} by {2}{3}", warMessage.DefenderAlliance, warMessage.DefenderName, warMessage.AttackerAlliance, warMessage.AttackerName), 1);		
                                     }
                                 }
                             }
                             else
                             {
                                 //normal
-                                ctrl.SendPushover(String.Format("Rally call for {0}{1}", warMessage.DefenderAlliance, warMessage.DefenderName), 1);
+                                ctrl.SendPushover(String.Format("Rally call for {0}{1} by {2}{3}", warMessage.DefenderAlliance, warMessage.DefenderName, warMessage.AttackerAlliance, warMessage.AttackerName), 1);
                             }
 
                             tmrSupressAction.Restart();
