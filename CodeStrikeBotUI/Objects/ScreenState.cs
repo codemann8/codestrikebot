@@ -228,8 +228,33 @@ namespace CodeStrikeBot
                             case 0x8759: //now new modal
                                 state.CurrentArea = Area.Menus.Gifts;
                                 break;
+                            case 0x3b42: //memu main menu
+                            case 0x4c18: //memu store
+                            case 0x1a87: //memu catalog
+                                state.CurrentArea = Area.Menus.AllianceStore;
+                                break;
+                            case 0xc88e:
+                            case 0x08eb: //nox
+                            case 0xa240: //nox new
+                                state.CurrentArea = Area.Menus.AllianceHelp;
+                                break;
+                            case 0x6f55: //"Unknown" glitch on Alliance Help
+                                if (!s.Logout())
+                                {
+                                    if (!s.KillApp())
+                                    {
+                                        Controller.Instance.RestartEmulator(s);
+                                    }
+                                }
+                                break;
+                            case 0x26e5: //memu
+                                state.CurrentArea = Area.Menus.AllianceWar;
+                                break;
                             case 0x6ff2:
                                 state.CurrentArea = Area.Menus.Challenge;
+                                break;
+                            case 0xfddf:
+                                state.CurrentArea = Area.Menus.Deployment;
                                 break;
                             case 0x4e34:
                             case 0xe9f1: //nox
@@ -241,13 +266,13 @@ namespace CodeStrikeBot
                             case 0x2498: //nox new
                                 state.CurrentArea = Area.Menus.Boosts.PeaceShield;
                                 break;
-                            case 0x1f2a:
+                            case 0x994f: //memu
                                 state.CurrentArea = Area.Menus.Boosts.Attack;
                                 break;
-                            case 0x682d:
+                            case 0x46b7: //memu
                                 state.CurrentArea = Area.Menus.Boosts.Health;
                                 break;
-                            case 0xfebd:
+                            case 0xb253: //memu
                                 state.CurrentArea = Area.Menus.Boosts.Defense;
                                 break;
                             case 0xd58f:
@@ -256,7 +281,7 @@ namespace CodeStrikeBot
                             case 0xde1e:
                                 state.CurrentArea = Area.Menus.Boosts.CommanderXP;
                                 break;
-                            case 0x9384:
+                            case 0x7623:
                                 state.CurrentArea = Area.Menus.Boosts.UpkeepReduction;
                                 break;
                             case 0x6253:
@@ -294,33 +319,15 @@ namespace CodeStrikeBot
                             case 0x6d81:
                                 state.CurrentArea = Area.Menus.Boosts.TrainingStimulant;
                                 break;
-                            case 0x3fb2:
+                            case 0xdd70: //memu
                                 state.CurrentArea = Area.Menus.Boosts.SetBonus;
                                 break;
                             case 0x9138:
                                 state.CurrentArea = Area.Menus.Boosts.AttackStimulant;
                                 break;
-                            case 0xe3c1:
-                                //alliancehelperror
-                                //bmp.Save(@"C:\Users\codemann8\Pictures\msdump\-save.bmp", System.Drawing.Imaging.ImageFormat.Bmp);
-
-                                break;
-                            case 0xc88e:
-                            case 0x08eb: //nox
-                            case 0xa240: //nox new
-                                state.CurrentArea = Area.Menus.AllianceHelp;
-                                break;
-                            case 0x6f55: //"Unknown" glitch on Alliance Help
-                                if (!s.Logout())
-                                {
-                                    if (!s.KillApp())
-                                    {
-                                        Controller.Instance.RestartEmulator(s);
-                                    }
-                                }
-                                break;
                             case 0x0d52:
                             case 0x775c: //nox
+                            case 0xcbf5: //memu
                                 state.CurrentArea = Area.Menus.Items;
                                 break;
                             case 0x217e:
@@ -358,6 +365,9 @@ namespace CodeStrikeBot
                             case 0xf52c: //nox new
                                 state.CurrentArea = Area.Menus.Mail;
                                 break;
+                            case 0xb12c: //memu
+                                state.CurrentArea = Area.Menus.MailCompose;
+                                break;
                             case 0x2186:
                             case 0x653b: //nox
                             case 0xf278: //nox new
@@ -382,6 +392,16 @@ namespace CodeStrikeBot
                             case 0x6c9f: //nox
                             case 0x7ef5: //nox new
                                 state.CurrentArea = Area.Menus.Resources;
+                                break;
+                            case 0x4e3e: //memu
+                                state.CurrentArea = Area.Menus.Commander;
+                                break;
+                            case 0xf40e: //memu weapon
+                            case 0x29d0: //memu helmet
+                            case 0xfc5a: //memu armor
+                            case 0x466d: //memu footwear
+                            case 0x0e0b: //memu accessory
+                                state.CurrentArea = Area.Menus.Gear;
                                 break;
                             case 0x7b13:
                             case 0x0359: //nox
@@ -477,11 +497,106 @@ namespace CodeStrikeBot
                             case 0xc794: //nox new loading
                                 state.CurrentArea = Area.Others.Login;
                                 break;
-                            case 0x135e:
-                            case 0x41b4: //nox
+                            case 0x0f50: //memu
+                                state.CurrentArea = Area.Menus.BuildingList;
+                                break;
+                            case 0x4491: //memu
                                 state.CurrentArea = Area.Menus.Buildings.HQ;
                                 break;
+                            case 0xfdea: //memu
+                                state.CurrentArea = Area.Menus.Buildings.Wall;
+                                break;
+                            case 0x0aa6: //memu
+                                state.CurrentArea = Area.Menus.Buildings.Memorial;
+                                break;
+                            case 0x4bf0: //memu
+                                state.CurrentArea = Area.Menus.Buildings.Warehouse;
+                                break;
+                            case 0xe7c6: //memu
+                                state.CurrentArea = Area.Menus.Buildings.Radar;
+                                break;
+                            case 0x96c1: //memu
+                                state.CurrentArea = Area.Menus.Buildings.TradingPost;
+                                break;
+                            case 0xc5e2: //memu
+                                state.CurrentArea = Area.Menus.Buildings.HallOfHeroes;
+                                break;
+                            case 0xdf29: //memu
+                                state.CurrentArea = Area.Menus.Buildings.Hospital;
+                                break;
+                            case 0x0316: //memu
+                                state.CurrentArea = Area.Menus.Buildings.TrainingGrounds;
+                                break;
+                            case 0xe980: //memu
+                                state.CurrentArea = Area.Menus.Buildings.Bank;
+                                break;
+                            case 0xe810: //memu research
+                            case 0x2671: //memu economics
+                            case 0xe157: //memu combat
+                            case 0x3f17: //memu traps
+                            case 0x4d3e: //memu commander
+                            case 0x618e: //memu adv combat
+                            case 0x09d1: //memu adv traps
+                            case 0x8ce4: //memu manufacturing
+                            case 0x2b70: //memu battle tactics
+                            case 0x9d3c: //memu set bonus
+                            case 0x2b6d: //memu mod set bonus
+                            case 0xf8a7: //memu building development
+                            case 0xcb06: //memu mercenary combat
+                            case 0xcf59: //memu augments
+                                state.CurrentArea = Area.Menus.Buildings.Research;
+                                break;
+                            case 0xc1fe: //memu
+                                state.CurrentArea = Area.Menus.Buildings.Embassy;
+                                break;
+                            case 0xf4d6: //memu
+                                state.CurrentArea = Area.Menus.Buildings.WarRoom;
+                                break;
+                            case 0x36a2: //memu
+                                state.CurrentArea = Area.Menus.Buildings.Prison;
+                                break;
+                            case 0x8b1e: //memu
+                                state.CurrentArea = Area.Menus.Buildings.DeathRow;
+                                break;
+                            case 0x3c43: //memu
+                                state.CurrentArea = Area.Menus.Buildings.Farm;
+                                break;
+                            case 0x9046: //memu
+                                state.CurrentArea = Area.Menus.Buildings.Quarry;
+                                break;
+                            case 0x007e: //memu
+                                state.CurrentArea = Area.Menus.Buildings.IronMine;
+                                break;
+                            case 0x582a: //memu
+                                state.CurrentArea = Area.Menus.Buildings.OilWell;
+                                break;
+                            case 0x39bb: //memu
+                                state.CurrentArea = Area.Menus.Buildings.Vault;
+                                break;
+                            case 0xfcbb: //memu
+                                state.CurrentArea = Area.Menus.Buildings.Monument;
+                                break;
+                            case 0x8b9e: //memu
+                                state.CurrentArea = Area.Menus.Buildings.SpeedUpFactory;
+                                break;
+                            case 0x7d41: //memu
+                                state.CurrentArea = Area.Menus.Buildings.CombatLab;
+                                break;
+                            case 0xcb14: //memu
+                                state.CurrentArea = Area.Menus.Buildings.TroopAcademy;
+                                break;
+                            case 0x6e5b: //memu
+                                state.CurrentArea = Area.Menus.Buildings.CovertOpsCenter;
+                                break;
+                            case 0x9be4: //memu alliance chat
+                            case 0x9d42: //memu state/alliance transition
+                            case 0x658b: //memu state chat
+                            case 0x1cbd: //memu custom chat
+                            case 0x0169: //memu contact list
+                                state.CurrentArea = Area.Others.Chat;
+                                break;
                             case 0x3436:
+                            case 0x6716: //memu get gold
                                 state.CurrentArea = Area.Others.Ad;
                                 break;
                             default:
@@ -547,105 +662,97 @@ namespace CodeStrikeBot
                                         }
                                         break;
                                     default:
-                                        chksum = ScreenState.GetScreenChecksum(s.SuperBitmap, 25, 10, 10);
-                                        if (chksum == 0x6fe2)
+                                        c = s.SuperBitmap.GetPixel(112, 17);
+                                        c2 = s.SuperBitmap.GetPixel(285, 28);
+                                        if (c.Equals(41, 113, 156))
                                         {
-                                            state.CurrentArea = Area.Others.Chat;
-                                        }
-                                        else
-                                        {
-                                            c = s.SuperBitmap.GetPixel(112, 17);
-                                            c2 = s.SuperBitmap.GetPixel(285, 28);
-                                            if (c.Equals(41, 113, 156))
-                                            {
-                                                //world map
-                                                c = s.SuperBitmap.GetPixel(372, 12);
+                                            //world map
+                                            c = s.SuperBitmap.GetPixel(372, 12);
 
-                                                if (c.R > 30 && c.G > 30 && c.B > 35)
-                                                {
-                                                    state.CurrentArea = Area.StateMaps.FullScreen;
-                                                }
-                                                else
-                                                {
-                                                    state.CurrentArea = Area.StateMaps.Main;
-                                                }
-                                            }
-                                            else if (c.Equals(16, 44, 57))
-                                            {		
-                                                //world map modal		
-                                                chksum = ScreenState.GetScreenChecksum(s.SuperBitmap, 180, 190, 10);		
-                                                if (chksum == 0x4c29)		
-                                                {		
-                                                    state.CurrentArea = Area.Others.Quit;		
-                                                }		
-                                                else		
-                                                {		
-                                                    c = s.SuperBitmap.GetPixel(178, 183);		
-		
-                                                    if (c.Equals(239, 239, 239) || c.Equals(247, 255, 255))		
-                                                    {		
-                                                        //world map coordinate		
-                                                        c = s.SuperBitmap.GetPixel(269, 265);		
-		
-                                                        if (c.R > 5 && c.G > 40 && c.B > 50)		
-                                                        {		
-                                                            state.CurrentArea = Area.StateMaps.Coordinate;		
-                                                        }		
-                                                        else		
-                                                        {		
-                                                            state.CurrentArea = Area.StateMaps.CoordinateError;		
-                                                        }		
-                                                    }		
-                                                }		
+                                            if (c.R > 30 && c.G > 30 && c.B > 35)
+                                            {
+                                                state.CurrentArea = Area.StateMaps.FullScreen;
                                             }
                                             else
                                             {
-                                                c = s.SuperBitmap.GetPixel(178, 183);
+                                                state.CurrentArea = Area.StateMaps.Main;
+                                            }
+                                        }
+                                        else if (c.Equals(16, 44, 57))
+                                        {		
+                                            //world map modal		
+                                            chksum = ScreenState.GetScreenChecksum(s.SuperBitmap, 180, 190, 10);		
+                                            if (chksum == 0x4c29)		
+                                            {		
+                                                state.CurrentArea = Area.Others.Quit;		
+                                            }		
+                                            else		
+                                            {		
+                                                c = s.SuperBitmap.GetPixel(178, 183);		
+		
+                                                if (c.Equals(239, 239, 239) || c.Equals(247, 255, 255))		
+                                                {		
+                                                    //world map coordinate		
+                                                    c = s.SuperBitmap.GetPixel(269, 265);		
+		
+                                                    if (c.R > 5 && c.G > 40 && c.B > 50)		
+                                                    {		
+                                                        state.CurrentArea = Area.StateMaps.Coordinate;		
+                                                    }		
+                                                    else		
+                                                    {		
+                                                        state.CurrentArea = Area.StateMaps.CoordinateError;		
+                                                    }		
+                                                }		
+                                            }		
+                                        }
+                                        else
+                                        {
+                                            c = s.SuperBitmap.GetPixel(178, 183);
 
-                                                if (c.Equals(239, 239, 239) || c.Equals(247, 255, 255))
+                                            if (c.Equals(239, 239, 239) || c.Equals(247, 255, 255))
+                                            {
+                                                //world map coordinate
+                                                c = s.SuperBitmap.GetPixel(269, 265);
+
+                                                if (c.R > 5 && c.G > 40 && c.B > 50)
                                                 {
-                                                    //world map coordinate
-                                                    c = s.SuperBitmap.GetPixel(269, 265);
+                                                    state.CurrentArea = Area.StateMaps.Coordinate;
+                                                }
+                                                else
+                                                {
+                                                    state.CurrentArea = Area.StateMaps.CoordinateError;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                c = s.SuperBitmap.GetPixel(20, 20);
 
-                                                    if (c.R > 5 && c.G > 40 && c.B > 50)
+                                                if (!c.Equals(140, 211, 239))
+                                                {
+                                                    c = s.SuperBitmap.GetPixel(50, 350);
+                                                    c2 = s.SuperBitmap.GetPixel(325, 550);
+                                                    c3 = s.SuperBitmap.GetPixel(200, 500);
+                                                    if (!c.Equals(0, 0, 0) || !c2.Equals(0, 0, 0))
                                                     {
-                                                        state.CurrentArea = Area.StateMaps.Coordinate;
-                                                    }
-                                                    else
-                                                    {
-                                                        state.CurrentArea = Area.StateMaps.CoordinateError;
+                                                        c = s.SuperBitmap.GetPixel(378, 20);
+                                                        c2 = s.SuperBitmap.GetPixel(135, 665);
+                                                        c3 = s.SuperBitmap.GetPixel(135, 535);
+                                                        if ((c.Equals(239, 239, 239) && (c2.Equals(222, 130, 0) || c2.Equals(33, 158, 90)))
+                                                            || (c.Equals(247, 247, 247) && c3.Equals(222, 130, 0))
+                                                            || c.Equals(239, 235, 231)) //&& c3.Equals(222, 130, 0)))
+                                                        {
+                                                            state.CurrentArea = Area.Others.Ad;
+                                                        }
+                                                        else
+                                                        {
+                                                            c = c;
+                                                        }
                                                     }
                                                 }
                                                 else
                                                 {
-                                                    c = s.SuperBitmap.GetPixel(20, 20);
-
-                                                    if (!c.Equals(140, 211, 239))
-                                                    {
-                                                        c = s.SuperBitmap.GetPixel(50, 350);
-                                                        c2 = s.SuperBitmap.GetPixel(325, 550);
-                                                        c3 = s.SuperBitmap.GetPixel(200, 500);
-                                                        if (!c.Equals(0, 0, 0) || !c2.Equals(0, 0, 0))
-                                                        {
-                                                            c = s.SuperBitmap.GetPixel(378, 20);
-                                                            c2 = s.SuperBitmap.GetPixel(135, 665);
-                                                            c3 = s.SuperBitmap.GetPixel(135, 535);
-                                                            if ((c.Equals(239, 239, 239) && (c2.Equals(222, 130, 0) || c2.Equals(33, 158, 90)))
-                                                                || (c.Equals(247, 247, 247) && c3.Equals(222, 130, 0))
-                                                                || c.Equals(239, 235, 231)) //&& c3.Equals(222, 130, 0)))
-                                                            {
-                                                                state.CurrentArea = Area.Others.Ad;
-                                                            }
-                                                            else
-                                                            {
-                                                                c = c;
-                                                            }
-                                                        }
-                                                    }
-                                                    else
-                                                    {
-                                                        c = c;
-                                                    }
+                                                    c = c;
                                                 }
                                             }
                                         }
@@ -656,6 +763,9 @@ namespace CodeStrikeBot
 
                         if (state.CurrentArea == Area.Unknown)
                         {
+                            chksum = ScreenState.GetScreenChecksum(s.SuperBitmap, 160, 12, 20);
+                            s.SuperBitmap.Bitmap.Save(String.Format("C:\\Program Files\\CodeStrikeBot\\output\\ss\\unknown{0}.bmp", chksum.ToString("X4")), System.Drawing.Imaging.ImageFormat.Bmp);
+                            
                             if (state.CurrentArea == Area.Menu)
                             {
                                 s.SuperBitmap.Bitmap.Save(@"C:\Users\codemann8\Pictures\msdump\-save.bmp", System.Drawing.Imaging.ImageFormat.Bmp);
@@ -968,24 +1078,31 @@ namespace CodeStrikeBot
                 public static readonly ID HQ = Building[0];
                 public static readonly ID Wall = Building[1];
                 public static readonly ID ShootingRange = Building[2];
-                public static readonly ID WarRoom = Building[3];
-                public static readonly ID Prison = Building[4];
-                public static readonly ID DeathRow = Building[5];
-                public static readonly ID Warehouse = Building[6];
-                public static readonly ID Research = Building[7];
-                public static readonly ID Radar = Building[8];
+                public static readonly ID Memorial = Building[3];
+                public static readonly ID Radar = Building[4];
+                public static readonly ID Warehouse = Building[5];
+                public static readonly ID TradingPost = Building[6];
+                public static readonly ID Armory = Building[7];
+                public static readonly ID Research = Building[8];
                 public static readonly ID HallOfHeroes = Building[9];
-                public static readonly ID Armory = Building[10];
-                public static readonly ID Embassy = Building[11];
-                public static readonly ID TradingPost = Building[12];
-                public static readonly ID TrainingGround = Building[13];
-                public static readonly ID Hospital = Building[14];
-                public static readonly ID Bank = Building[15];
-                public static readonly ID Farm = Building[16];
-                public static readonly ID OilWell = Building[17];
-                public static readonly ID Quarry = Building[18];
-                public static readonly ID IronMine = Building[19];
-                public static readonly ID GoldMine = Building[20];
+                public static readonly ID Hospital = Building[10];
+                public static readonly ID TrainingGrounds = Building[11];
+                public static readonly ID Bank = Building[12];
+                public static readonly ID Embassy = Building[13];
+                public static readonly ID WarRoom = Building[14];
+                public static readonly ID Prison = Building[15];
+                public static readonly ID DeathRow = Building[16];
+                public static readonly ID Farm = Building[17];
+                public static readonly ID OilWell = Building[18];
+                public static readonly ID Quarry = Building[19];
+                public static readonly ID IronMine = Building[20];
+                public static readonly ID GoldMine = Building[21];
+                public static readonly ID Vault = Building[22];
+                public static readonly ID Monument = Building[23];
+                public static readonly ID SpeedUpFactory = Building[24];
+                public static readonly ID CombatLab = Building[25];
+                public static readonly ID TroopAcademy = Building[26];
+                public static readonly ID CovertOpsCenter = Building[27];
             }
             public static readonly ID BuildingList = Menu[11];
             public static readonly ID Boost = Menu[12];
@@ -1029,6 +1146,11 @@ namespace CodeStrikeBot
             public static readonly ID ResourceHelp = Menu[22];
             public static readonly ID Resources = Menu[23];
             public static readonly ID VIPSubscriptions = Menu[24];
+            public static readonly ID MailCompose = Menu[25];
+            public static readonly ID AllianceStore = Menu[26];
+            public static readonly ID AllianceWar = Menu[27];
+            public static readonly ID Gear = Menu[28];
+            public static readonly ID Deployment = Menu[29];
         }
 
         public static readonly ID Emulator = 98;
