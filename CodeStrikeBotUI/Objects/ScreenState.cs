@@ -458,6 +458,7 @@ namespace CodeStrikeBot
                                 state.CurrentArea = Area.Emulators.Android;
                                 break;
                             case 0xa43d:
+                            case 0xd521: //memu
                                 state.CurrentArea = Area.Emulators.Loading;
                                 break;
                             case 0x59b7:
