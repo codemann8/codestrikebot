@@ -524,48 +524,72 @@ namespace CodeStrikeBot
 
         public void StartEmulator(Screen s)
         {
-            if (s != null && s.Emulator != null)
-            {
-                string prog, args;
-                if (s.Emulator.Command.StartsWith("\""))
-                {
-                    prog = s.Emulator.Command.Substring(1, s.Emulator.Command.IndexOf("\"", 1) - 1);
-                    args = s.Emulator.Command.Substring(prog.Length + 2).Trim();
-                }
-                else
-                {
-                    prog = s.Emulator.Command.Substring(0, s.Emulator.Command.IndexOf(" ", 0));
-                    args = s.Emulator.Command.Substring(prog.Length).Trim();
-                }
-                System.Diagnostics.Process.Start(prog, args);
-                System.Threading.Thread.Sleep(6000);
-                foreach (Process p in Process.GetProcessesByName(s.ProcessName))
-                {
-                    if (p.CommandLineArgs(s.Emulator.Type) == s.Emulator.Command)
-                    {
-                        s.EmulatorProcess = p;
-                        break;
-                    }
-                }
-                RefreshWindows();
-                UpdateWindowInfo();
-                Controller.CaptureApplication(s);
-                if (s.ScreenState != null)
-                {
-                    while (s.ScreenState.CurrentArea == Area.Emulators.Loading)
-                    {
-                        Thread.Sleep(500);
-                        Controller.CaptureApplication(s);
-                    }
+            bool success = false;
 
-                    if (s.ScreenState.CurrentArea == Area.Emulators.Android)
-                    {
-                        s.IsFucked = false;
-                    }
-                }
-                else
+            while (!success)
+            {
+                success = true;
+
+                if (s != null && s.Emulator != null)
                 {
-                    Program.RestartApp();
+                    string prog, args;
+                    if (s.Emulator.Command.StartsWith("\""))
+                    {
+                        prog = s.Emulator.Command.Substring(1, s.Emulator.Command.IndexOf("\"", 1) - 1);
+                        args = s.Emulator.Command.Substring(prog.Length + 2).Trim();
+                    }
+                    else
+                    {
+                        prog = s.Emulator.Command.Substring(0, s.Emulator.Command.IndexOf(" ", 0));
+                        args = s.Emulator.Command.Substring(prog.Length).Trim();
+                    }
+                    System.Diagnostics.Process.Start(prog, args);
+                    System.Threading.Thread.Sleep(6000);
+                    foreach (Process p in Process.GetProcessesByName(s.ProcessName))
+                    {
+                        if (p.CommandLineArgs(s.Emulator.Type) == s.Emulator.Command)
+                        {
+                            s.EmulatorProcess = p;
+                            break;
+                        }
+                    }
+                    RefreshWindows();
+                    UpdateWindowInfo();
+                    Controller.CaptureApplication(s);
+                    if (s.ScreenState != null)
+                    {
+                        using (Bitmap bmpScreenCapture = new Bitmap(System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height))
+                        {
+                            ushort chksum = 0;
+
+                            while (s.ScreenState.CurrentArea == Area.Emulators.Loading || chksum == 0x0474)
+                            {
+                                Thread.Sleep(500);
+                                Controller.CaptureApplication(s);
+
+                                using (Graphics g = Graphics.FromImage(bmpScreenCapture))
+                                {
+                                    g.CopyFromScreen(System.Windows.Forms.Screen.PrimaryScreen.Bounds.X, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Y, 0, 0, bmpScreenCapture.Size, CopyPixelOperation.SourceCopy);
+                                }
+
+                                chksum = bmpScreenCapture.Checksum(510, 442, 20, 20);
+                                if (chksum == 0x0474)
+                                {
+                                    Controller.SendClick(null, 980, 620, 1000);
+                                    success = false;
+                                }
+                            }
+                        }
+
+                        if (s.ScreenState.CurrentArea == Area.Emulators.Android)
+                        {
+                            s.IsFucked = false;
+                        }
+                    }
+                    else
+                    {
+                        Program.RestartApp();
+                    }
                 }
             }
         }

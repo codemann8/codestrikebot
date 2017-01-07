@@ -2160,7 +2160,7 @@ namespace CodeStrikeBot
 
                             if (!found)
                             {
-                                Controller.SendClickDrag(this, 44, 400, 44, 318, 600, false, 500); //Scroll down
+                                Controller.SendClickDrag(this, 44, 400, 44, 118, 800, false, 500); //Scroll down
                             }
 
                             tries++;

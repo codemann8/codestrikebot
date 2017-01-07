@@ -370,7 +370,10 @@ namespace CodeStrikeBot
             if (e.UserState != null)
             {
                 Screen s = (Screen)e.UserState;
-                SetScreenStateText(String.Format("{0} {1}", s.TimeoutFactor.ToString(), s.ScreenState.ToString()));
+                if (s.ScreenState != null)
+                {
+                    SetScreenStateText(String.Format("{0} {1}", s.TimeoutFactor.ToString(), s.ScreenState.ToString()));
+                }
 
                 Point p = Cursor.Position;
                 Rect r = ctrl.ActiveScreen.WindowRect;
@@ -1370,7 +1373,7 @@ namespace CodeStrikeBot
             {
                 try
                 {
-                    if (tmrLateSchedule.ElapsedMilliseconds > 300000 && chkScheduler.Checked)
+                    if (tmrLateSchedule.ElapsedMilliseconds > 1800000 && chkScheduler.Checked)
                     {
                         foreach (ScheduleTask task in BotDatabase.GetObjects<ScheduleTask>())
                         {
@@ -1381,7 +1384,7 @@ namespace CodeStrikeBot
 		
                                 foreach (Screen s in ctrl.sc)
                                 {		
-                                    //ctrl.KillEmulator(s, false);		
+                                    ctrl.KillEmulator(s, false);
                                 }		
 		
                                 Program.RestartApp();
@@ -1621,7 +1624,7 @@ namespace CodeStrikeBot
                                     //TODO: Fix, this keeps stealing sessions from existing emulators, probably just a leapdroid issue
                                     else if (s.Emulator.LastKnownAccount != null && s.Emulator.LastKnownAccount.Id != 0 && !s.PreventFromOpening && s.ScreenState.CurrentArea == Area.Others.Login)
                                     {
-                                        ctrl.Login(s.Emulator.LastKnownAccount);
+                                        ctrl.Login(s, s.Emulator.LastKnownAccount);
                                     }
                                     else if (s.ScreenState.CurrentArea == Area.Others.SessionTimeout)
                                     {
