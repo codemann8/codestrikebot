@@ -2146,7 +2146,7 @@ namespace CodeStrikeBot
                         do
                         {
                             Controller.CaptureApplication(this);
-                            for (y = 90; y < 580; y++)
+                            for (y = 90; y < 455; y++)
                             {
                                 chksum = ScreenState.GetScreenChecksum(SuperBitmap, 44, y, 2);
                                 Main.CurrentForm.UpdateBmpChk(SuperBitmap, 44, y, 2);
@@ -2168,7 +2168,11 @@ namespace CodeStrikeBot
                         while (!found && tries < 20);
                     }
 
-                    if (found)
+                    if (found && ScreenState.CurrentArea == Area.Menus.Boost && SuperBitmap.GetPixel(312, y + 20).Within(49, 117, 148, 15))
+                    {
+                        success = true;
+                    }
+                    else if (found)
                     {
                         Controller.SendClick(this, 44, y, 800); //Click the specific Boost
                         Controller.CaptureApplication(this);
@@ -2230,7 +2234,7 @@ namespace CodeStrikeBot
                             Controller.SendClick(this, 275, 220, 300); //Click Yes
                         }
 
-                        Thread.Sleep((int)(3000 * TimeoutFactor));
+                        Thread.Sleep((int)(3500 * TimeoutFactor));
                         Controller.CaptureApplication(this);
 
                         if (ScreenState.CurrentArea == Area.Menus.Boost && SuperBitmap.GetPixel(312, y + 20).Within(49, 117, 148, 15))
