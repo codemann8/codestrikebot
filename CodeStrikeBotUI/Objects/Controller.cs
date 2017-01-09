@@ -1639,11 +1639,11 @@ namespace CodeStrikeBot
 
                             g.ReleaseHdc(hdcBitmap);
 
-                            bmp.Save("C:\\file.bmp", ImageFormat.Bmp);
+                            bmp.Save(String.Format("{0}\\file.bmp", Controller.Instance.GetFullScreenshotDir()), ImageFormat.Bmp);
                         }
                         failure = 0;
                         /*bmp = Direct3DCapture.CaptureRegionDirect3D(s.proc.MainWindowHandle, new Rectangle(new Point(s.procWindow.left + Screen.DROID4X_LEFTMARGIN, s.procWindow.top + Screen.DROID4X_TITLEBAR_H), new Size(Screen.SCREEN_W, Screen.SCREEN_H)));
-                        bmp.Save("C:\\file.bmp", ImageFormat.Bmp);
+                        bmp.Save(String.Format("{0}\\file.bmp", Controller.Instance.GetFullScreenshotDir()), ImageFormat.Bmp);
                         failure = 0;*/
                     }
                     //catch (ArgumentException e) { failure--; }

@@ -209,7 +209,7 @@ namespace CodeStrikeBot
                         //bmp.SetPixel(117, 7, Color.FromArgb(255,255,255));
                         if (true)
                         {
-                            //bmp.Save(@"C:\Users\codemann8\Pictures\msdump\-save.bmp", System.Drawing.Imaging.ImageFormat.Bmp);
+                            //bmp.Save(String.Format("{0}\\-save.bmp", Controller.Instance.GetFullScreenshotDir()), System.Drawing.Imaging.ImageFormat.Bmp);
                         }
 
                         ushort chksum = ScreenState.GetScreenChecksum(s.SuperBitmap, 160, 12, 20);
@@ -654,7 +654,7 @@ namespace CodeStrikeBot
                                                 {
                                                     try
                                                     {
-                                                        s.SuperBitmap.Bitmap.Save(@"C:\Users\codemann8\Pictures\msdump\-save.bmp", System.Drawing.Imaging.ImageFormat.Bmp);
+                                                        s.SuperBitmap.Bitmap.Save(String.Format("{0}\\-save.bmp", Controller.Instance.GetFullScreenshotDir()), System.Drawing.Imaging.ImageFormat.Bmp);
                                                     }
                                                     catch (System.Runtime.InteropServices.ExternalException e) { }
                                                 }
@@ -764,11 +764,11 @@ namespace CodeStrikeBot
                         if (state.CurrentArea == Area.Unknown)
                         {
                             chksum = ScreenState.GetScreenChecksum(s.SuperBitmap, 160, 12, 20);
-                            s.SuperBitmap.Bitmap.Save(String.Format("C:\\Program Files\\CodeStrikeBot\\output\\ss\\unknown{0}.bmp", chksum.ToString("X4")), System.Drawing.Imaging.ImageFormat.Bmp);
+                            s.SuperBitmap.Bitmap.Save(String.Format("{0}\\unknown{1}.bmp", Controller.Instance.GetFullScreenshotDir(), chksum.ToString("X4")), System.Drawing.Imaging.ImageFormat.Bmp);
                             
                             if (state.CurrentArea == Area.Menu)
                             {
-                                s.SuperBitmap.Bitmap.Save(@"C:\Users\codemann8\Pictures\msdump\-save.bmp", System.Drawing.Imaging.ImageFormat.Bmp);
+                                s.SuperBitmap.Bitmap.Save(String.Format("{0}\\-save.bmp", Controller.Instance.GetFullScreenshotDir()), System.Drawing.Imaging.ImageFormat.Bmp);
                             }
                             state = state;
                         }

@@ -335,9 +335,9 @@ namespace CodeStrikeBot
 
             if (false)
             {
-                SuperBitmap.Bitmap.Save(@"C:\Users\codemann8\Pictures\msdump\loading.bmp", ImageFormat.Bmp);
+                SuperBitmap.Bitmap.Save(String.Format("{0}\\loading.bmp", Controller.Instance.GetFullScreenshotDir()), ImageFormat.Bmp);
             }
-            //bmp = new Bitmap(@"C:\Users\codemann8\Pictures\msdump\ss\title.bmp");
+            //bmp = new Bitmap(String.Format("{0}\\title.bmp", Controller.Instance.GetFullScreenshotDir()));
             int count = 0;
 
             //check if loading
@@ -969,7 +969,7 @@ namespace CodeStrikeBot
         {
             try
             {
-                //this.CaptureApplication().Save(@"C:\Users\codemann8\Pictures\msdump\file.bmp", ImageFormat.Bmp);
+                //this.CaptureApplication().Save(String.Format("{0}\\file.bmp", Controller.Instance.GetFullScreenshotDir()), ImageFormat.Bmp);
 
                 do
                 {
@@ -1033,7 +1033,7 @@ namespace CodeStrikeBot
 
                                     for (int line = 0; line <= 18; line++)
                                     {
-                                        SuperBitmap.Bitmap.Save(@"C:\Users\codemann8\Pictures\msdump\file.bmp", ImageFormat.Bmp);
+                                        SuperBitmap.Bitmap.Save(String.Format("{0}\\file.bmp", Controller.Instance.GetFullScreenshotDir()), ImageFormat.Bmp);
                                         int firstX = 0, lastX = 0;
                                         int pY = Convert.ToInt32(line * 33.35 + 77);
 
@@ -1091,7 +1091,7 @@ namespace CodeStrikeBot
             if (EmulatorProcess != null)
             {
                 Controller.CaptureApplication(this);
-                SuperBitmap.Bitmap.Save(@"C:\Users\codemann8\Pictures\msdump\file.bmp", ImageFormat.Bmp);
+                SuperBitmap.Bitmap.Save(String.Format("{0}\\file.bmp", Controller.Instance.GetFullScreenshotDir()), ImageFormat.Bmp);
 
                 do
                 {
@@ -1159,9 +1159,9 @@ namespace CodeStrikeBot
 
                             Bitmap worldMap;
 
-                            if (System.IO.File.Exists(@"C:\Users\codemann8\Pictures\msdump\finish\" + filename + ".jpg"))
+                            if (System.IO.File.Exists(String.Format("{0}\\{1}.jpg", Controller.Instance.GetFullScreenshotDir(), filename)))
                             {
-                                worldMap = this.LoadBitmapUnlocked(@"C:\Users\codemann8\Pictures\msdump\finish\" + filename + ".jpg");
+                                worldMap = this.LoadBitmapUnlocked(String.Format("{0}\\{1}.jpg", Controller.Instance.GetFullScreenshotDir(), filename));
                             }
                             else
                             {
@@ -1200,8 +1200,8 @@ namespace CodeStrikeBot
 
                                                     if (this.CompareBitmaps(bmp, bmp2) < 94)
                                                     {
-                                                        bmp.Save(@"C:\Users\codemann8\Pictures\msdump\finish\pic1.jpg", ImageFormat.Jpeg);
-                                                        bmp2.Save(@"C:\Users\codemann8\Pictures\msdump\finish\pic2.jpg", ImageFormat.Jpeg);
+                                                        bmp.Save(String.Format("{0}\\pic1.jpg", Controller.Instance.GetFullScreenshotDir()), ImageFormat.Jpeg);
+                                                        bmp2.Save(String.Format("{0}\\pic2.jpg", Controller.Instance.GetFullScreenshotDir()), ImageFormat.Jpeg);
                                                     }
                                                 }
                                                 while (this.CompareBitmaps(bmp, bmp2) < 94 && true);
@@ -1233,7 +1233,7 @@ namespace CodeStrikeBot
                                             graphics.DrawLine(new Pen(Color.Black, (gridX % 100 == 0 ? 5 : 1)), new Point(gridX * 1665 / 25 + 65, (((y + sY * (numY / numSlicesY)) * 19) % (1024 / numSlicesY)) * 602 / 18), new Point(gridX * 1665 / 25 + 65, (((y + sY * (numY / numSlicesY)) * 19) % (1024 / numSlicesY)) * 602 / 18 + 682));
                                         }
 
-                                        worldMap.Save(@"C:\Users\codemann8\Pictures\msdump\finish\" + filename + ".jpg", ImageFormat.Jpeg);
+                                        worldMap.Save(String.Format("{0}\\worldMap{1}.jpg", Controller.Instance.GetFullScreenshotDir(), filename), ImageFormat.Jpeg);
                                     }
                                 }
                             }
@@ -1478,7 +1478,7 @@ namespace CodeStrikeBot
                 }
                 else if (ScreenState.CurrentArea == Area.Menus.Alliance || ScreenState.CurrentArea == Area.Menus.Gifts)
                 {
-                    SuperBitmap.Bitmap.Save(@"C:\Users\codemann8\Pictures\msdump\-save.bmp", System.Drawing.Imaging.ImageFormat.Bmp);
+                    SuperBitmap.Bitmap.Save(String.Format("{0}\\-save.bmp", Controller.Instance.GetFullScreenshotDir()), System.Drawing.Imaging.ImageFormat.Bmp);
 
                     if (ScreenState.CurrentArea == Area.Menus.Gifts && SuperBitmap.GetPixel(335, 175).Equals(57, 134, 165)) //clear gifts button is available
                     {
@@ -1608,7 +1608,7 @@ namespace CodeStrikeBot
                                 }
                                 else
                                 {
-                                    SuperBitmap.Bitmap.Save(String.Format(@"C:\Users\codemann8\Pictures\msdump\{0}.bmp", c.Name.Replace("#", "")), System.Drawing.Imaging.ImageFormat.Bmp);
+                                    SuperBitmap.Bitmap.Save(String.Format("{0}\\{1}.bmp", Controller.Instance.GetFullScreenshotDir(), c.Name.Replace("#", "")), System.Drawing.Imaging.ImageFormat.Bmp);
                                 }
 
                                 Controller.SendClick(this, 300, m, 400);
