@@ -112,7 +112,13 @@ namespace CodeStrikeBot
                 version++;
             }
 
-            SQLiteCommand command2 = new SQLiteCommand("SELECT id, accountId, type, interval, amount, count, x, y, lastAction FROM schedules ORDER BY id", Connection2);
+            command = new SqlCeCommand("UPDATE settings SET emulatorId1 = 5, emulatorId2 = 6, emulatorId3 = 7, emulatorId4 = 8", Connection);
+            command.ExecuteNonQuery();
+
+            command = new SqlCeCommand("UPDATE schedules SET accountId = accountId - 1 WHERE accountId > 15", Connection);
+            command.ExecuteNonQuery();
+
+            /*SQLiteCommand command2 = new SQLiteCommand("SELECT id, accountId, type, interval, amount, count, x, y, lastAction FROM schedules ORDER BY id", Connection2);
             SQLiteDataReader reader2 = command2.ExecuteReader();
 
             while (reader2.Read())
@@ -144,7 +150,7 @@ namespace CodeStrikeBot
                 command.Parameters.AddWithValue("@email", account.Email);
                 command.Parameters.AddWithValue("@pass", account.Password);
                 command.Parameters.AddWithValue("@priority", (int)account.Priority);
-                command.Parameters.AddWithValue("@food", account.FoodNegativeAmount);
+                command.Parameters.AddWithValue("@food", account.FooegativeAmount);
                 command.Parameters.AddWithValue("@login", account.LastLogin);
                 command.Parameters.AddWithValue("@logout", account.LastLogout);
                 command.ExecuteNonQuery();
@@ -213,7 +219,7 @@ namespace CodeStrikeBot
                 reader2.Dispose();
 
                 version++;
-            }
+            }*/
         }
 
         private void LoadSettings2()
