@@ -112,9 +112,62 @@ namespace CodeStrikeBot
                 version++;
             }
 
-            SQLiteCommand command2 = new SQLiteCommand("SELECT name FROM sqlite_master WHERE type='table' AND name='settings'", Connection2);
-            //SQLiteCommand command = new SQLiteCommand("SELECT version FROM settings", Connection);
+            SQLiteCommand command2 = new SQLiteCommand("SELECT id, accountId, type, interval, amount, count, x, y, lastAction FROM schedules ORDER BY id", Connection2);
             SQLiteDataReader reader2 = command2.ExecuteReader();
+
+            while (reader2.Read())
+            {
+                ScheduleTask task = new ScheduleTask(reader2.GetInt32(0), new Account(reader2.GetInt32(1)), (ScheduleType)reader2.GetInt32(2), reader2.GetInt32(3), reader2.GetInt32(4), reader2.GetInt32(5), reader2.GetInt32(6), reader2.GetInt32(7), reader2.GetDateTime(8));
+                command = new SqlCeCommand("INSERT schedules (accountId, type, interval, amount, count, x, y, lastAction) VALUES (@account, @type, @interval, @amount, @count, @x, @y, @date)", Connection);
+                
+                command.Parameters.AddWithValue("@account", task.Account.Id);
+                command.Parameters.AddWithValue("@type", (int)task.Type);
+                command.Parameters.AddWithValue("@interval", task.Interval);
+                command.Parameters.AddWithValue("@amount", task.Amount);
+                command.Parameters.AddWithValue("@count", task.Count);
+                command.Parameters.AddWithValue("@x", task.X);
+                command.Parameters.AddWithValue("@y", task.Y);
+                command.Parameters.AddWithValue("@date", task.LastAction);
+                command.ExecuteNonQuery();
+            }
+
+            command2 = new SQLiteCommand("SELECT id, name, username, email, password, priority, foodNegativeAmt, lastLogin, lastLogout FROM accounts ORDER BY id", Connection2);
+            reader2 = command2.ExecuteReader();
+
+            while (reader2.Read())
+            {
+                Account account = new Account(reader2.GetInt32(0), reader2.GetString(1), reader2.GetString(2), reader2.GetString(3), reader2.GetString(4), (AccountPriority)reader2.GetInt32(5), reader2.GetInt32(6), reader2.GetDateTime(7), reader2.GetDateTime(8));
+                command = new SqlCeCommand("INSERT accounts (name, username, email, password, priority, foodNegativeAmt, lastLogin, lastLogout) VALUES (@name, @user, @email, @pass, @priority, @food, @login, @logout)", Connection);
+
+                command.Parameters.AddWithValue("@name", account.Name);
+                command.Parameters.AddWithValue("@user", account.UserName);
+                command.Parameters.AddWithValue("@email", account.Email);
+                command.Parameters.AddWithValue("@pass", account.Password);
+                command.Parameters.AddWithValue("@priority", (int)account.Priority);
+                command.Parameters.AddWithValue("@food", account.FoodNegativeAmount);
+                command.Parameters.AddWithValue("@login", account.LastLogin);
+                command.Parameters.AddWithValue("@logout", account.LastLogout);
+                command.ExecuteNonQuery();
+            }
+
+            command2 = new SQLiteCommand("SELECT id, type, windowName, command, lastKnownAccountId FROM emulators ORDER BY id", Connection2);
+            reader2 = command2.ExecuteReader();
+
+            while (reader2.Read())
+            {
+                EmulatorInstance emulator = new EmulatorInstance(reader2.GetInt32(0), (EmulatorType)reader2.GetInt32(1), reader2.GetString(2), reader2.GetString(3), new Account(reader2.GetInt32(4)));
+                command = new SqlCeCommand("INSERT emulators (type, windowName, command, lastKnownAccountId) VALUES (@type, @window, @cmd, @account)", Connection);
+
+                command.Parameters.AddWithValue("@type", (int)emulator.Type);
+                command.Parameters.AddWithValue("@window", emulator.WindowName);
+                command.Parameters.AddWithValue("@cmd", emulator.Command);
+                command.Parameters.AddWithValue("@account", emulator.LastKnownAccount.Id);
+                command.ExecuteNonQuery();
+            }
+
+            command2 = new SQLiteCommand("SELECT name FROM sqlite_master WHERE type='table' AND name='settings'", Connection2);
+            //SQLiteCommand command = new SQLiteCommand("SELECT version FROM settings", Connection);
+            reader2 = command2.ExecuteReader();
 
             if (!reader2.Read()) //database is not built
             {
@@ -163,7 +216,7 @@ namespace CodeStrikeBot
             }
         }
 
-        private void LoadSettings()
+        private void LoadSettings2()
         {
             SQLiteCommand command = new SQLiteCommand("SELECT emulatorId1, emulatorId2, emulatorId3, emulatorId4, screenshotDir, mapDir FROM settings", Connection2);
             SQLiteDataReader reader = command.ExecuteReader();
@@ -178,7 +231,22 @@ namespace CodeStrikeBot
             reader.Dispose();
         }
 
-        public void UpdateSettings(EmulatorInstance[] emulators, string ssPath, string mapPath)
+        private void LoadSettings()
+        {
+            SqlCeCommand command = new SqlCeCommand("SELECT emulatorId1, emulatorId2, emulatorId3, emulatorId4, screenshotDir, mapDir FROM settings", Connection);
+            SqlCeDataReader reader = command.ExecuteReader();
+            reader.Read();
+            this.ActiveEmulators[0] = reader.GetInt32(0);
+            this.ActiveEmulators[1] = reader.GetInt32(1);
+            this.ActiveEmulators[2] = reader.GetInt32(2);
+            this.ActiveEmulators[3] = reader.GetInt32(3);
+            this.ScreenshotDir = reader.GetString(4);
+            this.MapDir = reader.GetString(5);
+            command.Dispose();
+            reader.Dispose();
+        }
+
+        public void UpdateSettings2(EmulatorInstance[] emulators, string ssPath, string mapPath)
         {
             if (emulators[0] != null)
             {
@@ -220,7 +288,49 @@ namespace CodeStrikeBot
             command.Dispose();
         }
 
-        public static DataObject SaveObject(DataObject obj)
+        public void UpdateSettings(EmulatorInstance[] emulators, string ssPath, string mapPath)
+        {
+            if (emulators[0] != null)
+            {
+                this.ActiveEmulators[0] = emulators[0].Id;
+            }
+            else
+            {
+                this.ActiveEmulators[0] = 0;
+            }
+            if (emulators[1] != null)
+            {
+                this.ActiveEmulators[1] = emulators[1].Id;
+            }
+            else
+            {
+                this.ActiveEmulators[1] = 0;
+            }
+            if (emulators[2] != null)
+            {
+                this.ActiveEmulators[2] = emulators[2].Id;
+            }
+            else
+            {
+                this.ActiveEmulators[2] = 0;
+            }
+            if (emulators[3] != null)
+            {
+                this.ActiveEmulators[3] = emulators[3].Id;
+            }
+            else
+            {
+                this.ActiveEmulators[3] = 0;
+            }
+            this.ScreenshotDir = ssPath;
+            this.MapDir = mapPath;
+
+            SqlCeCommand command = new SqlCeCommand(String.Format("UPDATE settings SET emulatorId1 = {0}, emulatorId2 = {1}, emulatorId3 = {2}, emulatorId4 = {3}, screenshotDir = '{4}', mapDir = '{5}'", ActiveEmulators[0], ActiveEmulators[1], ActiveEmulators[2], ActiveEmulators[3], ScreenshotDir, MapDir), Connection);
+            command.ExecuteNonQuery();
+            command.Dispose();
+        }
+
+        public static DataObject SaveObject2(DataObject obj)
         {
             SQLiteConnection con = GetNewConnection2();
             con.Open();
@@ -304,7 +414,7 @@ namespace CodeStrikeBot
                     {
                         emulator = emulator;
                     }
-                    
+
                     if (emulator.Id == 0)
                     {
                         command = new SQLiteCommand("INSERT INTO emulators (type, windowName, command, lastKnownAccountId) VALUES (@type, @windowName, @command, @accountId)", con);
@@ -347,7 +457,134 @@ namespace CodeStrikeBot
             return obj;
         }
 
-        public static void DeleteObject(DataObject obj)
+        public static DataObject SaveObject(DataObject obj)
+        {
+            SqlCeConnection con = GetNewConnection();
+            con.Open();
+
+            SqlCeCommand command = null;
+
+            try
+            {
+                if (obj is Account)
+                {
+                    Account account = (Account)obj;
+
+                    if (account.Id == 0)
+                    {
+                        command = new SqlCeCommand("INSERT INTO accounts (name, username, email, password, priority, foodNegativeAmt, lastLogin, lastLogout) VALUES (@name, @username, @email, @password, @priority, @foodNegAmt, @lastLogin, @lastLogout)", con);
+                        command.Parameters.AddWithValue("@lastLogin", new DateTime());
+                        command.Parameters.AddWithValue("@lastLogout", new DateTime());
+                    }
+                    else
+                    {
+                        command = new SqlCeCommand("UPDATE accounts SET name = @name, username = @username, email = @email, password = @password, priority = @priority, foodNegativeAmt = @foodNegAmt, lastLogin = @lastLogin, lastLogout = @lastLogout WHERE id = @id", con);
+                        command.Parameters.AddWithValue("@lastLogin", account.LastLogin);
+                        command.Parameters.AddWithValue("@lastLogout", account.LastLogout);
+                        command.Parameters.AddWithValue("@id", account.Id);
+                    }
+
+                    command.Parameters.AddWithValue("@name", account.Name);
+                    command.Parameters.AddWithValue("@username", account.UserName);
+                    command.Parameters.AddWithValue("@email", account.Email);
+                    command.Parameters.AddWithValue("@password", account.Password);
+                    command.Parameters.AddWithValue("@priority", (int)account.Priority);
+                    command.Parameters.AddWithValue("@foodNegAmt", account.FoodNegativeAmount);
+                    command.ExecuteNonQuery();
+
+                    if (account.Id == 0)
+                    {
+                        command = new SqlCeCommand("SELECT last_insert_rowid()", con);
+                        account.Id = Convert.ToInt32(command.ExecuteScalar());
+                    }
+
+                    obj = account;
+                }
+                else if (obj is ScheduleTask)
+                {
+                    ScheduleTask task = (ScheduleTask)obj;
+
+                    if (task.Id == 0)
+                    {
+                        command = new SqlCeCommand("INSERT INTO schedules (accountId, type, interval, amount, count, x, y, lastAction) VALUES (@accountId, @type, @interval, @amt, @count, @x, @y, @lastAction)", con);
+                        command.Parameters.AddWithValue("@lastAction", new DateTime());
+                    }
+                    else
+                    {
+                        command = new SqlCeCommand("UPDATE schedules SET accountId = @accountId, type = @type, interval = @interval, amount = @amt, count = @count, x = @x, y = @y, lastAction = @lastAction WHERE id = @id", con);
+                        command.Parameters.AddWithValue("@lastAction", task.LastAction);
+                        command.Parameters.AddWithValue("@id", task.Id);
+                    }
+
+                    command.Parameters.AddWithValue("@accountId", task.Account.Id);
+                    command.Parameters.AddWithValue("@type", (int)task.Type);
+                    command.Parameters.AddWithValue("@interval", task.Interval);
+                    command.Parameters.AddWithValue("@amt", task.Amount);
+                    command.Parameters.AddWithValue("@count", task.Count);
+                    command.Parameters.AddWithValue("@x", task.X);
+                    command.Parameters.AddWithValue("@y", task.Y);
+                    command.ExecuteNonQuery();
+
+                    if (task.Id == 0)
+                    {
+                        command = new SqlCeCommand("SELECT last_insert_rowid()", con);
+                        task.Id = Convert.ToInt32(command.ExecuteScalar());
+                    }
+
+                    obj = task;
+                }
+                else if (obj is EmulatorInstance)
+                {
+                    EmulatorInstance emulator = (EmulatorInstance)obj;
+
+                    if (emulator == null)
+                    {
+                        emulator = emulator;
+                    }
+
+                    if (emulator.Id == 0)
+                    {
+                        command = new SqlCeCommand("INSERT INTO emulators (type, windowName, command, lastKnownAccountId) VALUES (@type, @windowName, @command, @accountId)", con);
+                    }
+                    else
+                    {
+                        command = new SqlCeCommand("UPDATE emulators SET type = @type, windowName = @windowName, command = @command, lastKnownAccountId = @accountId WHERE id = @id", con);
+                        command.Parameters.AddWithValue("@id", emulator.Id);
+                    }
+
+                    command.Parameters.AddWithValue("@type", (int)emulator.Type);
+                    command.Parameters.AddWithValue("@windowName", emulator.WindowName);
+                    command.Parameters.AddWithValue("@command", emulator.Command);
+                    command.Parameters.AddWithValue("@accountId", emulator.LastKnownAccount == null ? 0 : emulator.LastKnownAccount.Id);
+                    command.ExecuteNonQuery();
+
+                    if (emulator.Id == 0)
+                    {
+                        command = new SqlCeCommand("SELECT last_insert_rowid()", con);
+                        emulator.Id = Convert.ToInt32(command.ExecuteScalar());
+                    }
+
+                    obj = emulator;
+                }
+            }
+            catch (SqlCeException e)
+            {
+                /*if (e.ErrorCode == SQLiteErrorCode.Constraint_Check)
+                {
+                    //name already in use
+                }*/
+            }
+            finally
+            {
+                command.Dispose();
+            }
+
+            con.Close();
+
+            return obj;
+        }
+
+        public static void DeleteObject2(DataObject obj)
         {
             if (obj.Id > 0)
             {
@@ -387,13 +624,59 @@ namespace CodeStrikeBot
                 {
 
                 }
-                
+
                 command.Dispose();
                 con.Close();
             }
         }
 
-        public static void InsertLog(int type, string desc, string detail, byte[] data)
+        public static void DeleteObject(DataObject obj)
+        {
+            if (obj.Id > 0)
+            {
+                SqlCeConnection con = GetNewConnection();
+                con.Open();
+
+                SqlCeCommand command = null;
+
+                try
+                {
+                    if (obj is Account)
+                    {
+                        Account account = (Account)obj;
+
+                        command = new SqlCeCommand("DELETE FROM accounts WHERE id = @id", con);
+                        command.Parameters.AddWithValue("@id", account.Id);
+                        command.ExecuteNonQuery();
+                    }
+                    else if (obj is ScheduleTask)
+                    {
+                        ScheduleTask task = (ScheduleTask)obj;
+
+                        command = new SqlCeCommand("DELETE FROM schedules WHERE id = @id", con);
+                        command.Parameters.AddWithValue("@id", task.Id);
+                        command.ExecuteNonQuery();
+                    }
+                    else if (obj is EmulatorInstance)
+                    {
+                        EmulatorInstance emulator = (EmulatorInstance)obj;
+
+                        command = new SqlCeCommand("DELETE FROM emulators WHERE id = @id", con);
+                        command.Parameters.AddWithValue("@id", emulator.Id);
+                        command.ExecuteNonQuery();
+                    }
+                }
+                catch (SqlCeException e)
+                {
+
+                }
+
+                command.Dispose();
+                con.Close();
+            }
+        }
+
+        public static void InsertLog2(int type, string desc, string detail, byte[] data)
         {
             SQLiteConnection con = GetNewConnection2();
             con.Open();
@@ -417,7 +700,31 @@ namespace CodeStrikeBot
             con.Close();
         }
 
-        public static List<DataObject> GetObjects<T>()
+        public static void InsertLog(int type, string desc, string detail, byte[] data)
+        {
+            SqlCeConnection con = GetNewConnection();
+            con.Open();
+
+            using (SqlCeCommand command = new SqlCeCommand("INSERT INTO log (type, desc, detail, data) VALUES (@type, @desc, @detail, @data)", con))
+            {
+                try
+                {
+                    command.Parameters.AddWithValue("@type", type);
+                    command.Parameters.AddWithValue("@desc", desc);
+                    command.Parameters.AddWithValue("@detail", detail);
+                    command.Parameters.AddWithValue("@data", data);
+                    command.ExecuteNonQuery();
+                }
+                catch (SqlCeException e)
+                {
+                    e = e;
+                }
+            }
+
+            con.Close();
+        }
+
+        public static List<DataObject> GetObjects2<T>()
         {
             List<DataObject> list = new List<DataObject>();
 
@@ -489,6 +796,78 @@ namespace CodeStrikeBot
             return list;
         }
 
+        public static List<DataObject> GetObjects<T>()
+        {
+            List<DataObject> list = new List<DataObject>();
+
+            SqlCeConnection con = GetNewConnection();
+            con.Open();
+
+            SqlCeCommand command = null;
+            SqlCeDataReader reader = null;
+
+            try
+            {
+                if (typeof(T) == typeof(ScheduleTask))
+                {
+                    command = new SqlCeCommand("SELECT id, accountId, type, interval, amount, count, x, y, lastAction FROM schedules", con);
+                    reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        ScheduleTask task = new ScheduleTask(reader.GetInt32(0), new Account(reader.GetInt32(1)), (ScheduleType)reader.GetInt32(2), reader.GetInt32(3), reader.GetInt32(4), reader.GetInt32(5), reader.GetInt32(6), reader.GetInt32(7), reader.GetDateTime(8));
+                        list.Add(task);
+                    }
+                }
+                else if (typeof(T) == typeof(Account))
+                {
+                    command = new SqlCeCommand("SELECT id, name, username, email, password, priority, foodNegativeAmt, lastLogin, lastLogout FROM accounts", con);
+                    reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        Account account = new Account(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), (AccountPriority)reader.GetInt32(5), reader.GetInt32(6), reader.GetDateTime(7), reader.GetDateTime(8));
+                        list.Add(account);
+                    }
+                }
+                else if (typeof(T) == typeof(EmulatorInstance))
+                {
+                    command = new SqlCeCommand("SELECT id, type, windowName, command, lastKnownAccountId FROM emulators", con);
+                    reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        EmulatorInstance emulator = new EmulatorInstance(reader.GetInt32(0), (EmulatorType)reader.GetInt32(1), reader.GetString(2), reader.GetString(3), new Account(reader.GetInt32(4)));
+                        list.Add(emulator);
+                    }
+                }
+            }
+            catch (SqlCeException e)
+            {
+                /*if (e.ErrorCode == Constraint_Check)
+                {
+                    //name already in use
+                }*/
+            }
+            catch (Exception e)
+            {
+                e = e;
+            }
+            finally
+            {
+                command.Dispose();
+
+                if (reader != null)
+                {
+                    reader.Dispose();
+                }
+            }
+
+            con.Close();
+
+            return list;
+        }
+
         /*public AccountInfo LoadAccounts(int id)
         {
             AccountInfo account;
@@ -504,7 +883,7 @@ namespace CodeStrikeBot
             return accounts;
         }*/
 
-        public List<Account> GetAccounts()
+        public List<Account> GetAccounts2()
         {
             List<Account> accounts = new List<Account>();
 
@@ -519,11 +898,36 @@ namespace CodeStrikeBot
             return accounts;
         }
 
-        public void InsertLog(int logType, byte[] data)
+        public List<Account> GetAccounts()
+        {
+            List<Account> accounts = new List<Account>();
+
+            SqlCeCommand command = new SqlCeCommand("SELECT id, name, username, email, password, priority, foodNegativeAmt, lastLogin, lastLogout FROM accounts", Connection);
+            SqlCeDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                accounts.Add(new Account(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), (AccountPriority)reader.GetInt32(5), reader.GetInt32(6), reader.GetDateTime(7), reader.GetDateTime(8)));
+            }
+
+            return accounts;
+        }
+
+        public void InsertLog2(int logType, byte[] data)
         {
             SQLiteCommand command = new SQLiteCommand("INSERT INTO log (type, data) VALUES (?, ?)", Connection2);
             command.Parameters.Add(logType);
             command.Parameters.Add(String.Format("X'{0}'", BitConverter.ToString(data).Replace("-", "")));
+            command.ExecuteNonQuery();
+
+            command.Dispose();
+        }
+
+        public void InsertLog(int logType, byte[] data)
+        {
+            SqlCeCommand command = new SqlCeCommand("INSERT INTO log (type, data) VALUES (@type, @data)", Connection);
+            command.Parameters.AddWithValue("@type", logType);
+            command.Parameters.AddWithValue("@data", String.Format("X'{0}'", BitConverter.ToString(data).Replace("-", "")));
             command.ExecuteNonQuery();
 
             command.Dispose();

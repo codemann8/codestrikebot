@@ -13,7 +13,7 @@ namespace CodeStrikeBot
         //[Column(Name = "name")]
         public Account Account { get; set; }
         [Column(Name = "accountId")]
-        public Account AccountId { get; set; }
+        public int AccountId { get; set; }
         [Column(Name = "type")]
         public ScheduleType Type { get; set; }
         [Column(Name = "interval")]
