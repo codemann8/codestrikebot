@@ -135,6 +135,11 @@ namespace CodeStrikeBot
 
             ReloadAccountList();
 
+            if (ctrl.accounts.Count == 0)
+            {
+                ctrl.SendPushover("Bot is null", 1);
+            }
+
             foreach (Screen s in ctrl.sc)
             {
                 if (s != null)
