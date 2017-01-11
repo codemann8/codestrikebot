@@ -60,24 +60,29 @@ namespace CodeStrikeBot
                 reader = command.ExecuteReader();
 
                 reader.Read();
+
+                switch ((int)reader["version"])
                 {
-                    switch ((int)reader["version"])
-                    {
-                        case 0:
-                            command = new SqlCeCommand("CREATE TABLE accounts (id INTEGER PRIMARY KEY IDENTITY, name NVARCHAR(20) NOT NULL, username NVARCHAR(30) NOT NULL, email NVARCHAR(60) NOT NULL, password NVARCHAR(30) NOT NULL, priority INT DEFAULT 0, foodNegativeAmt INT DEFAULT 0, lastLogin DATETIME DEFAULT 0, lastLogout DATETIME DEFAULT 0)", Connection);
-                            command.ExecuteNonQuery();
-                            command = new SqlCeCommand("CREATE TABLE log (id INTEGER PRIMARY KEY IDENTITY, type INT NOT NULL, description NVARCHAR(100), detail NVARCHAR(255), data IMAGE, timestamp DATETIME DEFAULT GETDATE() NOT NULL)", Connection);
-                            command.ExecuteNonQuery();
-                            command = new SqlCeCommand("CREATE TABLE schedules (id INTEGER PRIMARY KEY IDENTITY, accountId INT NOT NULL, type INT NOT NULL, interval INT NOT NULL, amount INT NOT NULL, count INT DEFAULT 1, x INT, y INT, lastAction DATETIME DEFAULT 0)", Connection);
-                            command.ExecuteNonQuery();
-                            command = new SqlCeCommand("CREATE UNIQUE INDEX NameIdx ON accounts (name)", Connection);
-                            command.ExecuteNonQuery();
-                            command = new SqlCeCommand("UPDATE settings SET version = 1, emulatorId1 = 0, emulatorId2 = 0, emulatorId3 = 0, emulatorId4 = 0, screenshotDir = 'output\\ss', mapDir = 'output\\map'", Connection);
-                            command.ExecuteNonQuery();
-                            command = new SqlCeCommand("CREATE TABLE emulators (id INTEGER PRIMARY KEY IDENTITY, type INT NOT NULL, command NVARCHAR(100), windowName NVARCHAR(60), lastKnownAccountId INT NOT NULL)", Connection);
-                            command.ExecuteNonQuery();
-                            break;
-                    }
+                    case 0:
+                        command = new SqlCeCommand("CREATE TABLE accounts (id INTEGER PRIMARY KEY IDENTITY, name NVARCHAR(20) NOT NULL, username NVARCHAR(30) NOT NULL, email NVARCHAR(60) NOT NULL, password NVARCHAR(30) NOT NULL, priority INT DEFAULT 0, foodNegativeAmt INT DEFAULT 0, lastLogin DATETIME DEFAULT 0, lastLogout DATETIME DEFAULT 0)", Connection);
+                        command.ExecuteNonQuery();
+                        command = new SqlCeCommand("CREATE TABLE log (id INTEGER PRIMARY KEY IDENTITY, type INT NOT NULL, description NVARCHAR(100), detail NVARCHAR(255), data IMAGE, timestamp DATETIME DEFAULT GETDATE() NOT NULL)", Connection);
+                        command.ExecuteNonQuery();
+                        command = new SqlCeCommand("CREATE TABLE schedules (id INTEGER PRIMARY KEY IDENTITY, accountId INT NOT NULL, type INT NOT NULL, interval INT NOT NULL, amount INT NOT NULL, count INT DEFAULT 1, x INT, y INT, lastAction DATETIME DEFAULT 0)", Connection);
+                        command.ExecuteNonQuery();
+                        command = new SqlCeCommand("CREATE UNIQUE INDEX NameIdx ON accounts (name)", Connection);
+                        command.ExecuteNonQuery();
+                        command = new SqlCeCommand("CREATE TABLE emulators (id INTEGER PRIMARY KEY IDENTITY, type INT NOT NULL, command NVARCHAR(100), windowName NVARCHAR(60), lastKnownAccountId INT NOT NULL)", Connection);
+                        command.ExecuteNonQuery();
+                        command = new SqlCeCommand("UPDATE settings SET version = 1, emulatorId1 = 0, emulatorId2 = 0, emulatorId3 = 0, emulatorId4 = 0, screenshotDir = 'output\\ss', mapDir = 'output\\map'", Connection);
+                        command.ExecuteNonQuery();
+                        break;
+                    case 1:
+                        command = new SqlCeCommand("ALTER TABLE schedules ADD backupX INTEGER DEFAULT 0, backupY INTEGER DEFAULT 0", Connection);
+                        command.ExecuteNonQuery();
+                        command = new SqlCeCommand("UPDATE settings SET version = 2", Connection);
+                        command.ExecuteNonQuery();
+                        break;
                 }
 
                 command.Dispose();
@@ -193,12 +198,12 @@ namespace CodeStrikeBot
 
                     if (task.Id == 0)
                     {
-                        command = new SqlCeCommand("INSERT INTO schedules (accountId, type, interval, amount, count, x, y, lastAction) VALUES (@accountId, @type, @interval, @amt, @count, @x, @y, @lastAction)", con);
+                        command = new SqlCeCommand("INSERT INTO schedules (accountId, type, interval, amount, count, x, y, backupX, backupY, lastAction) VALUES (@accountId, @type, @interval, @amt, @count, @x, @y, @altX, @altY, @lastAction)", con);
                         command.Parameters.AddWithValue("@lastAction", new DateTime());
                     }
                     else
                     {
-                        command = new SqlCeCommand("UPDATE schedules SET accountId = @accountId, type = @type, interval = @interval, amount = @amt, count = @count, x = @x, y = @y, lastAction = @lastAction WHERE id = @id", con);
+                        command = new SqlCeCommand("UPDATE schedules SET accountId = @accountId, type = @type, interval = @interval, amount = @amt, count = @count, x = @x, y = @y, backupX = @altX, backupY = @altY, lastAction = @lastAction WHERE id = @id", con);
                         command.Parameters.AddWithValue("@lastAction", task.LastAction);
                         command.Parameters.AddWithValue("@id", task.Id);
                     }
@@ -210,6 +215,8 @@ namespace CodeStrikeBot
                     command.Parameters.AddWithValue("@count", task.Count);
                     command.Parameters.AddWithValue("@x", task.X);
                     command.Parameters.AddWithValue("@y", task.Y);
+                    command.Parameters.AddWithValue("@altX", task.BackupX);
+                    command.Parameters.AddWithValue("@altY", task.BackupY);
                     command.ExecuteNonQuery();
 
                     if (task.Id == 0)
@@ -355,12 +362,12 @@ namespace CodeStrikeBot
             {
                 if (typeof(T) == typeof(ScheduleTask))
                 {
-                    command = new SqlCeCommand("SELECT id, accountId, type, interval, amount, count, x, y, lastAction FROM schedules", con);
+                    command = new SqlCeCommand("SELECT id, accountId, type, interval, amount, count, x, y, backupX, backupY, lastAction FROM schedules", con);
                     reader = command.ExecuteReader();
 
                     while (reader.Read())
                     {
-                        ScheduleTask task = new ScheduleTask(reader.GetInt32(0), new Account(reader.GetInt32(1)), (ScheduleType)reader.GetInt32(2), reader.GetInt32(3), reader.GetInt32(4), reader.GetInt32(5), reader.GetInt32(6), reader.GetInt32(7), reader.GetDateTime(8));
+                        ScheduleTask task = new ScheduleTask(reader.GetInt32(0), new Account(reader.GetInt32(1)), (ScheduleType)reader.GetInt32(2), reader.GetInt32(3), reader.GetInt32(4), reader.GetInt32(5), reader.GetInt32(6), reader.GetInt32(7), reader.GetInt32(8), reader.GetInt32(9), reader.GetDateTime(10));
                         list.Add(task);
                     }
                 }

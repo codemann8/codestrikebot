@@ -1364,7 +1364,7 @@ namespace CodeStrikeBot
                 }
             }
 
-            bsScheduleTask.Add(new ScheduleTask(0, (Account)lstAccounts.SelectedItem, 0, 0, 0, 0, 0, 0, new DateTime()));
+            bsScheduleTask.Add(new ScheduleTask(0, (Account)lstAccounts.SelectedItem, 0, 0, 0, 0, 0, 0, 0, 0, new DateTime()));
         }
 
         private void bckKeepAlive_DoWork(object sender, DoWorkEventArgs e)

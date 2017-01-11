@@ -26,14 +26,14 @@ namespace CodeStrikeBot
         public int X { get; set; }
         [Column(Name = "y")]
         public int Y { get; set; }
-        //[Column(Name = "name")]
+        [Column(Name = "backupX")]
         public int BackupX { get; set; }
-        //[Column(Name = "name")]
+        [Column(Name = "backupY")]
         public int BackupY { get; set; }
         [Column(Name = "lastAction")]
         public DateTime LastAction { get; set; }
 
-        public ScheduleTask(int id, Account account, ScheduleType type, int interval, int amount, int count, int x, int y, DateTime lastAction)
+        public ScheduleTask(int id, Account account, ScheduleType type, int interval, int amount, int count, int x, int y, int backupX, int backupY, DateTime lastAction)
         {
             Id = id;
             Account = account;
@@ -43,6 +43,8 @@ namespace CodeStrikeBot
             Count = count;
             X = x;
             Y = y;
+            BackupX = backupX;
+            BackupY = backupY;
             LastAction = lastAction;
         }
 
