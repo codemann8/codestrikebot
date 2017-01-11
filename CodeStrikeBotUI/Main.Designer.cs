@@ -31,9 +31,9 @@ namespace CodeStrikeBot
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btnMap = new System.Windows.Forms.Button();
             this.btnTest = new System.Windows.Forms.Button();
             this.btnScreen = new System.Windows.Forms.Button();
@@ -692,7 +692,7 @@ namespace CodeStrikeBot
             this.tabAccounts.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.tabAccounts.Name = "tabAccounts";
             this.tabAccounts.Padding = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.tabAccounts.Size = new System.Drawing.Size(1900, 340);
+            this.tabAccounts.Size = new System.Drawing.Size(1900, 345);
             this.tabAccounts.TabIndex = 4;
             this.tabAccounts.Text = "Accounts";
             this.tabAccounts.UseVisualStyleBackColor = true;
@@ -805,7 +805,7 @@ namespace CodeStrikeBot
             this.tabActivity.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.tabActivity.Name = "tabActivity";
             this.tabActivity.Padding = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.tabActivity.Size = new System.Drawing.Size(1900, 340);
+            this.tabActivity.Size = new System.Drawing.Size(1900, 345);
             this.tabActivity.TabIndex = 2;
             this.tabActivity.Text = "Activity";
             this.tabActivity.UseVisualStyleBackColor = true;
@@ -825,7 +825,7 @@ namespace CodeStrikeBot
             // contActivity.Panel2
             // 
             this.contActivity.Panel2.Controls.Add(this.splitContainer2);
-            this.contActivity.Size = new System.Drawing.Size(1892, 328);
+            this.contActivity.Size = new System.Drawing.Size(1892, 333);
             this.contActivity.SplitterDistance = 270;
             this.contActivity.SplitterWidth = 8;
             this.contActivity.TabIndex = 20;
@@ -835,14 +835,14 @@ namespace CodeStrikeBot
             this.gridPacket.AccessibleRole = System.Windows.Forms.AccessibleRole.TitleBar;
             this.gridPacket.AllowDrop = true;
             this.gridPacket.AutoGenerateColumns = false;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gridPacket.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridPacket.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.gridPacket.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gridPacket.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.timestampDataGridViewTextBoxColumn,
@@ -850,27 +850,27 @@ namespace CodeStrikeBot
             this.lengthDataGridViewTextBoxColumn,
             this.Ack});
             this.gridPacket.DataSource = this.bsPacket;
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.gridPacket.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.gridPacket.DefaultCellStyle = dataGridViewCellStyle2;
             this.gridPacket.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridPacket.Location = new System.Drawing.Point(0, 0);
             this.gridPacket.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.gridPacket.Name = "gridPacket";
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gridPacket.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
-            this.gridPacket.Size = new System.Drawing.Size(270, 328);
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridPacket.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            this.gridPacket.Size = new System.Drawing.Size(270, 333);
             this.gridPacket.TabIndex = 17;
             // 
             // timestampDataGridViewTextBoxColumn
@@ -924,7 +924,7 @@ namespace CodeStrikeBot
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.splitContainer1);
-            this.splitContainer2.Size = new System.Drawing.Size(1614, 328);
+            this.splitContainer2.Size = new System.Drawing.Size(1614, 333);
             this.splitContainer2.SplitterDistance = 30;
             this.splitContainer2.SplitterWidth = 8;
             this.splitContainer2.TabIndex = 20;
@@ -991,8 +991,8 @@ namespace CodeStrikeBot
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.treeXml);
-            this.splitContainer1.Size = new System.Drawing.Size(1614, 290);
-            this.splitContainer1.SplitterDistance = 141;
+            this.splitContainer1.Size = new System.Drawing.Size(1614, 295);
+            this.splitContainer1.SplitterDistance = 143;
             this.splitContainer1.SplitterWidth = 8;
             this.splitContainer1.TabIndex = 19;
             // 
@@ -1000,6 +1000,7 @@ namespace CodeStrikeBot
             // 
             this.hexData.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Inset;
             this.hexData.ColumnCount = 1;
+            this.hexData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -1087,7 +1088,8 @@ namespace CodeStrikeBot
             this.hexData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.hexData.Size = new System.Drawing.Size(1614, 141);
+            this.hexData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.hexData.Size = new System.Drawing.Size(1614, 143);
             this.hexData.TabIndex = 18;
             // 
             // treeXml
@@ -1096,7 +1098,7 @@ namespace CodeStrikeBot
             this.treeXml.Location = new System.Drawing.Point(0, 0);
             this.treeXml.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.treeXml.Name = "treeXml";
-            this.treeXml.Size = new System.Drawing.Size(1614, 141);
+            this.treeXml.Size = new System.Drawing.Size(1614, 144);
             this.treeXml.TabIndex = 0;
             // 
             // tabDebug
@@ -1115,7 +1117,7 @@ namespace CodeStrikeBot
             this.tabDebug.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.tabDebug.Name = "tabDebug";
             this.tabDebug.Padding = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.tabDebug.Size = new System.Drawing.Size(1900, 340);
+            this.tabDebug.Size = new System.Drawing.Size(1900, 345);
             this.tabDebug.TabIndex = 3;
             this.tabDebug.Text = "Debug";
             this.tabDebug.UseVisualStyleBackColor = true;
@@ -1123,7 +1125,7 @@ namespace CodeStrikeBot
             // txtScreenOrder
             // 
             this.txtScreenOrder.Location = new System.Drawing.Point(148, 77);
-            this.txtScreenOrder.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.txtScreenOrder.Margin = new System.Windows.Forms.Padding(6);
             this.txtScreenOrder.Multiline = true;
             this.txtScreenOrder.Name = "txtScreenOrder";
             this.txtScreenOrder.Size = new System.Drawing.Size(196, 166);
@@ -1266,11 +1268,12 @@ namespace CodeStrikeBot
             // 
             // countDataGridViewTextBoxColumn
             // 
+            this.countDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.countDataGridViewTextBoxColumn.DataPropertyName = "Count";
             this.countDataGridViewTextBoxColumn.HeaderText = "Count";
             this.countDataGridViewTextBoxColumn.MaxInputLength = 9;
             this.countDataGridViewTextBoxColumn.Name = "countDataGridViewTextBoxColumn";
-            this.countDataGridViewTextBoxColumn.Width = 114;
+            this.countDataGridViewTextBoxColumn.Width = 35;
             // 
             // xDataGridViewTextBoxColumn
             // 
@@ -1279,7 +1282,7 @@ namespace CodeStrikeBot
             this.xDataGridViewTextBoxColumn.HeaderText = "X";
             this.xDataGridViewTextBoxColumn.MaxInputLength = 4;
             this.xDataGridViewTextBoxColumn.Name = "xDataGridViewTextBoxColumn";
-            this.xDataGridViewTextBoxColumn.Width = 70;
+            this.xDataGridViewTextBoxColumn.Width = 35;
             // 
             // yDataGridViewTextBoxColumn
             // 
@@ -1288,7 +1291,7 @@ namespace CodeStrikeBot
             this.yDataGridViewTextBoxColumn.HeaderText = "Y";
             this.yDataGridViewTextBoxColumn.MaxInputLength = 4;
             this.yDataGridViewTextBoxColumn.Name = "yDataGridViewTextBoxColumn";
-            this.yDataGridViewTextBoxColumn.Width = 70;
+            this.yDataGridViewTextBoxColumn.Width = 35;
             // 
             // BackupX
             // 
@@ -1297,7 +1300,7 @@ namespace CodeStrikeBot
             this.BackupX.HeaderText = "BackupX";
             this.BackupX.MaxInputLength = 4;
             this.BackupX.Name = "BackupX";
-            this.BackupX.Width = 98;
+            this.BackupX.Width = 60;
             // 
             // BackupY
             // 
@@ -1306,7 +1309,7 @@ namespace CodeStrikeBot
             this.BackupY.HeaderText = "BackupY";
             this.BackupY.MaxInputLength = 4;
             this.BackupY.Name = "BackupY";
-            this.BackupY.Width = 98;
+            this.BackupY.Width = 60;
             // 
             // lastActionDataGridViewTextBoxColumn
             // 
