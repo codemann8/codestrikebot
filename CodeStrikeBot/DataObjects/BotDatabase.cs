@@ -439,7 +439,8 @@ namespace CodeStrikeBot
         {
             SqlCeCommand command = new SqlCeCommand("INSERT INTO log (type, data) VALUES (@type, @data)", Connection);
             command.Parameters.AddWithValue("@type", logType);
-            command.Parameters.AddWithValue("@data", String.Format("X'{0}'", BitConverter.ToString(data).Replace("-", "")));
+            //command.Parameters.AddWithValue("@data", String.Format("X'{0}'", BitConverter.ToString(data).Replace("-", "")));
+            command.Parameters.AddWithValue("@data", data);
             command.ExecuteNonQuery();
 
             command.Dispose();
