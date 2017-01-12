@@ -16,8 +16,16 @@ namespace CodeStrikeBot.Messages
             this.Type = MessageType.Chat;
 
             System.Xml.XmlNode node = this.Document.DocumentElement.SelectSingleNode("/message");
-            this.Id = UInt64.Parse(node.Attributes["id"].Value);
-                
+
+            try
+            {
+                this.Id = UInt64.Parse(node.Attributes["id"].Value);
+            }
+            catch (FormatException e)
+            {
+                e = e;
+            }
+
             node = this.Document.DocumentElement.SelectSingleNode("/message/body");
 
             if (node.FirstChild != null) //regular text
