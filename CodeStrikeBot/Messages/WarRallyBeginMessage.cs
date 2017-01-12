@@ -19,6 +19,8 @@ namespace CodeStrikeBot.Messages
         public WarRallyBeginMessage(JsonMessage message)
             : base(message)
         {
+            this.Type = MessageType.Rally;
+
             System.Xml.XmlNode node = this.Document.DocumentElement.SelectSingleNode("//*[local-name()='payload']");
             string json = node.InnerText;
 

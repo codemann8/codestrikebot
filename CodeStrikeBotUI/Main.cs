@@ -754,7 +754,7 @@ namespace CodeStrikeBot
             {
                 if (dev is SharpPcap.WinPcap.WinPcapDevice)
                 {
-                    if (((SharpPcap.WinPcap.WinPcapDevice)dev).Interface.FriendlyName == "Local Area Connection")
+                    if (((SharpPcap.WinPcap.WinPcapDevice)dev).Interface.GatewayAddress != null)
                     {
                         device = (SharpPcap.WinPcap.WinPcapDevice)dev;
                         break;
@@ -869,259 +869,280 @@ namespace CodeStrikeBot
 
                 if (!(message is Messages.EmptyMessage))
                 {
-                    messages.Add(message);
+                    found = false;
 
-                    if (message is Messages.Message)
+                    foreach (Messages.Message m in messages)
                     {
-                        bsPacket.Add(message);
-                    }
-                    else
-                    {
-                        BotDatabase.InsertLog(1, "Not a message", "", message.PayloadData);
-                    }
-
-                    if (message is Messages.WarRallyBeginMessage)
-                    {
-                        Messages.WarRallyBeginMessage warMessage = (Messages.WarRallyBeginMessage)message;
-                        if (warMessage.RallyTime <= 900 && tmrSupressAction.ElapsedMilliseconds > 1000)
+                        if (m.Complete && m.Id == message.Id)
                         {
-                            if (warMessage.DefenderAlliance == "(#TU)" || warMessage.DefenderAlliance == "(OSW.)")
+                            if (m.Length == message.Length)
                             {
-                                bool sent = false;
-
-                                foreach (Account a in ctrl.accounts)
-                                {
-                                    if (a.Name == warMessage.DefenderName)
-                                    {
-                                        if (warMessage.RallyTime == 60)
-                                        {		
-                                            ctrl.SendPushover(String.Format("1-Minute Rally on {0}{1} by {2}{3}", warMessage.DefenderAlliance, warMessage.DefenderName, warMessage.AttackerAlliance, warMessage.AttackerName), 1);		
-                                        }		
-                                        else		
-                                        {
-                                            ctrl.SendPushover(String.Format("ACTION! Rally on {0}{1} by {2}{3}", warMessage.DefenderAlliance, warMessage.DefenderName, warMessage.AttackerAlliance, warMessage.AttackerName), 1);		
-                                        }
-                                    }
-                                }
-                                //high
-                                if (!sent)
-                                {
-                                    if (warMessage.RallyTime == 60)
-                                    {
-                                        ctrl.SendPushover(String.Format("1-Minute Rally on {0}{1} by {2}{3}", warMessage.DefenderAlliance, warMessage.DefenderName, warMessage.AttackerAlliance, warMessage.AttackerName), 1);		
-                                    }		
-                                    else		
-                                    {
-                                        ctrl.SendPushover(String.Format("Help! Rally on {0}{1} by {2}{3}", warMessage.DefenderAlliance, warMessage.DefenderName, warMessage.AttackerAlliance, warMessage.AttackerName), 1);		
-                                    }
-                                }
+                                found = true;
+                                break;
                             }
                             else
                             {
-                                //normal
-                                ctrl.SendPushover(String.Format("Rally call for {0}{1} by {2}{3}", warMessage.DefenderAlliance, warMessage.DefenderName, warMessage.AttackerAlliance, warMessage.AttackerName), 1);
+                                ctrl.Database.InsertLog(0, message.PayloadData);
                             }
-
-                            tmrSupressAction.Restart();
                         }
                     }
-                    else if (message is Messages.ChatMessage)
+
+                    if (!found)
                     {
-                        Messages.ChatMessage chatMessage = (Messages.ChatMessage)message;
+                        messages.Add(message);
 
-                        if (chatMessage.Message.StartsWith("codebot") && tmrSupressAction.ElapsedMilliseconds > 5000)
+                        if (message is Messages.Message)
                         {
-                            tmrSupressAction.Restart();
+                            bsPacket.Add(message);
+                        }
+                        else
+                        {
+                            BotDatabase.InsertLog(1, "Not a message", "", message.PayloadData);
+                        }
 
-                            string command = chatMessage.Message.Substring(7).Trim();
-
-                            if (command.StartsWith("restart"))
+                        if (message is Messages.WarRallyBeginMessage)
+                        {
+                            Messages.WarRallyBeginMessage warMessage = (Messages.WarRallyBeginMessage)message;
+                            if (warMessage.RallyTime <= 900 && tmrSupressAction.ElapsedMilliseconds > 1000)
                             {
-                                Program.RestartApp();
-                            }
-                            else if (command.StartsWith("status"))
-                            {
-                                //while (ctrl.IdleLevel > 0)
+                                if (warMessage.DefenderAlliance == "(#TU)" || warMessage.DefenderAlliance == "(OSW.)")
                                 {
-                                    System.Threading.Thread.Sleep(1000);
-                                }
+                                    bool sent = false;
 
-                                command = command.Substring(6).Trim();
-
-                                if (command == "chat")
-                                {
-                                    ctrl.BeginTask();
-                                    Screen s = ctrl.GetFirstAbleWindow();
-                                    if (s != null)
+                                    foreach (Account a in ctrl.accounts)
                                     {
-                                        s.SendChat(ctrl.GetStatusMessage(), 1);
+                                        if (a.Name == warMessage.DefenderName)
+                                        {
+                                            if (warMessage.RallyTime == 60)
+                                            {
+                                                ctrl.SendPushover(String.Format("1-Minute Rally on {0}{1} by {2}{3}", warMessage.DefenderAlliance, warMessage.DefenderName, warMessage.AttackerAlliance, warMessage.AttackerName), 1);
+                                            }
+                                            else
+                                            {
+                                                ctrl.SendPushover(String.Format("ACTION! Rally on {0}{1} by {2}{3}", warMessage.DefenderAlliance, warMessage.DefenderName, warMessage.AttackerAlliance, warMessage.AttackerName), 1);
+                                            }
+                                        }
                                     }
-                                    ctrl.EndTask();
+                                    //high
+                                    if (!sent)
+                                    {
+                                        if (warMessage.RallyTime == 60)
+                                        {
+                                            ctrl.SendPushover(String.Format("1-Minute Rally on {0}{1} by {2}{3}", warMessage.DefenderAlliance, warMessage.DefenderName, warMessage.AttackerAlliance, warMessage.AttackerName), 1);
+                                        }
+                                        else
+                                        {
+                                            ctrl.SendPushover(String.Format("Help! Rally on {0}{1} by {2}{3}", warMessage.DefenderAlliance, warMessage.DefenderName, warMessage.AttackerAlliance, warMessage.AttackerName), 1);
+                                        }
+                                    }
                                 }
                                 else
                                 {
-                                    ctrl.SendPushover(ctrl.GetStatusMessage());
+                                    //normal
+                                    ctrl.SendPushover(String.Format("Rally call for {0}{1} by {2}{3}", warMessage.DefenderAlliance, warMessage.DefenderName, warMessage.AttackerAlliance, warMessage.AttackerName), 1);
                                 }
+
+                                tmrSupressAction.Restart();
                             }
-                            else if (command.StartsWith("rss"))
+                        }
+                        else if (message is Messages.ChatMessage)
+                        {
+                            Messages.ChatMessage chatMessage = (Messages.ChatMessage)message;
+
+                            if (chatMessage.Message.StartsWith("codebot") && tmrSupressAction.ElapsedMilliseconds > 5000)
                             {
-                                //while (ctrl.IdleLevel > 0)
+                                tmrSupressAction.Restart();
+
+                                string command = chatMessage.Message.Substring(7).Trim();
+
+                                if (command.StartsWith("restart"))
                                 {
-                                    System.Threading.Thread.Sleep(1000);
+                                    Program.RestartApp();
                                 }
-
-                                command = command.Substring(4);
-
-                                int window = Int32.Parse(command.Substring(0, 1)) - 1;
-
-                                command = command.Substring(2);
-
-                                int x = Int32.Parse(command.Substring(0, command.IndexOf(' ')));
-
-                                command = command.Substring(command.IndexOf(' ') + 1);
-
-                                int y = Int32.Parse(command.Substring(0, command.IndexOf(' ')));
-
-                                command = command.Substring(command.IndexOf(' ') + 1);
-
-                                int type = Int32.Parse(command.Substring(0, 1));
-
-                                command = command.Substring(2);
-
-                                int deployments = Int32.Parse(command);
-
-                                /*ctrl.semaphore.WaitOne();
-
-                                ctrl..ResourceTransferx, y, type, deployments);
-
-                                ctrl.semaphore.Release();*/
-                            }
-                            else if (command.StartsWith("login"))
-                            {
-                                //while (ctrl.IdleLevel > 0)
+                                else if (command.StartsWith("status"))
                                 {
-                                    //System.Threading.Thread.Sleep(1000);
-                                }
+                                    //while (ctrl.IdleLevel > 0)
+                                    {
+                                        System.Threading.Thread.Sleep(1000);
+                                    }
 
-                                command = command.Substring(6);
+                                    command = command.Substring(6).Trim();
 
-                                int screenNum = Int32.Parse(command.Substring(0, 1)) - 1;
-
-                                command = command.Substring(2);
-
-                                Account acc = ctrl.FindAccount(command);
-
-                                if (acc != null && screenNum >= 0 && screenNum < ctrl.sc.Length && ctrl.sc[screenNum] != null && ctrl.sc[screenNum].EmulatorProcess != null)
-                                {
-                                    ctrl.BeginTask();
-                                    ctrl.Logout(ctrl.sc[screenNum]);
-                                    ctrl.StartApp(ctrl.sc[screenNum]);
-                                    ctrl.Login(ctrl.sc[screenNum], acc);
-                                    ctrl.EndTask();
-                                }
-                            }
-                            else if (command.StartsWith("shield"))
-                            {
-                                command = command.Substring(7).Trim();
-
-                                Account a = ctrl.FindAccount(command);
-
-                                bool success = false;
-
-                                if (a != null)
-                                {
-                                    Screen s = ctrl.GetNextWindow(a);
-
-                                    if (s != null)
+                                    if (command == "chat")
                                     {
                                         ctrl.BeginTask();
-                                        while (s.Emulator.LastKnownAccount == null || s.Emulator.LastKnownAccount.Id != a.Id)
+                                        Screen s = ctrl.GetFirstAbleWindow();
+                                        if (s != null)
                                         {
-                                            ctrl.Logout(s);
-                                            ctrl.StartApp(s);
-                                            ctrl.Login(s, a);
-                                        }
-                                        if (s.Emulator.LastKnownAccount != null && s.Emulator.LastKnownAccount.Id == a.Id)
-                                        {
-                                            success = s.ActivateBoost(ScheduleType.Shield, 3);
+                                            s.SendChat(ctrl.GetStatusMessage(), 1);
                                         }
                                         ctrl.EndTask();
                                     }
-
-                                    if (!success)
+                                    else
                                     {
-                                        ctrl.SendPushover(String.Format("Failed to activate {0} on {1}", ScheduleType.Shield.ToString(), a.ToString()));
+                                        ctrl.SendPushover(ctrl.GetStatusMessage());
                                     }
                                 }
-                            }
-                            else if (command.StartsWith("ss"))
-                            {
-                                try
+                                else if (command.StartsWith("rss"))
                                 {
-                                    using (Bitmap bmpScreenCapture = new Bitmap(System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height))
+                                    //while (ctrl.IdleLevel > 0)
                                     {
-                                        using (Graphics g = Graphics.FromImage(bmpScreenCapture))
+                                        System.Threading.Thread.Sleep(1000);
+                                    }
+
+                                    command = command.Substring(4);
+
+                                    int window = Int32.Parse(command.Substring(0, 1)) - 1;
+
+                                    command = command.Substring(2);
+
+                                    int x = Int32.Parse(command.Substring(0, command.IndexOf(' ')));
+
+                                    command = command.Substring(command.IndexOf(' ') + 1);
+
+                                    int y = Int32.Parse(command.Substring(0, command.IndexOf(' ')));
+
+                                    command = command.Substring(command.IndexOf(' ') + 1);
+
+                                    int type = Int32.Parse(command.Substring(0, 1));
+
+                                    command = command.Substring(2);
+
+                                    int deployments = Int32.Parse(command);
+
+                                    /*ctrl.semaphore.WaitOne();
+
+                                    ctrl..ResourceTransferx, y, type, deployments);
+
+                                    ctrl.semaphore.Release();*/
+                                }
+                                else if (command.StartsWith("login"))
+                                {
+                                    //while (ctrl.IdleLevel > 0)
+                                    {
+                                        //System.Threading.Thread.Sleep(1000);
+                                    }
+
+                                    command = command.Substring(6);
+
+                                    int screenNum = Int32.Parse(command.Substring(0, 1)) - 1;
+
+                                    command = command.Substring(2);
+
+                                    Account acc = ctrl.FindAccount(command);
+
+                                    if (acc != null && screenNum >= 0 && screenNum < ctrl.sc.Length && ctrl.sc[screenNum] != null && ctrl.sc[screenNum].EmulatorProcess != null)
+                                    {
+                                        ctrl.BeginTask();
+                                        ctrl.Logout(ctrl.sc[screenNum]);
+                                        ctrl.StartApp(ctrl.sc[screenNum]);
+                                        ctrl.Login(ctrl.sc[screenNum], acc);
+                                        ctrl.EndTask();
+                                    }
+                                }
+                                else if (command.StartsWith("shield"))
+                                {
+                                    command = command.Substring(7).Trim();
+
+                                    Account a = ctrl.FindAccount(command);
+
+                                    bool success = false;
+
+                                    if (a != null)
+                                    {
+                                        Screen s = ctrl.GetNextWindow(a);
+
+                                        if (s != null)
                                         {
-                                            g.CopyFromScreen(System.Windows.Forms.Screen.PrimaryScreen.Bounds.X, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Y, 0, 0, bmpScreenCapture.Size, CopyPixelOperation.SourceCopy);
+                                            ctrl.BeginTask();
+                                            while (s.Emulator.LastKnownAccount == null || s.Emulator.LastKnownAccount.Id != a.Id)
+                                            {
+                                                ctrl.Logout(s);
+                                                ctrl.StartApp(s);
+                                                ctrl.Login(s, a);
+                                            }
+                                            if (s.Emulator.LastKnownAccount != null && s.Emulator.LastKnownAccount.Id == a.Id)
+                                            {
+                                                success = s.ActivateBoost(ScheduleType.Shield, 3);
+                                            }
+                                            ctrl.EndTask();
                                         }
 
-                                        System.IO.Directory.CreateDirectory(String.Format("{0}\\auto", Controller.Instance.GetFullScreenshotDir()));
-                                        bmpScreenCapture.Save(String.Format("{0}\\auto\\ss{1}.bmp", ctrl.GetFullScreenshotDir(), bmpScreenCapture.Checksum().ToString("X4")), ImageFormat.Bmp);
+                                        if (!success)
+                                        {
+                                            ctrl.SendPushover(String.Format("Failed to activate {0} on {1}", ScheduleType.Shield.ToString(), a.ToString()));
+                                        }
                                     }
                                 }
-                                catch (Exception ex) { }
-                            }
-                            else if (command.StartsWith("job"))
-                            {
-                                command = command.Substring(3).Trim();
-
-                                string job = command.Substring(0, command.IndexOf(' '));
-
-                                command = command.Substring(command.IndexOf(' ') + 1).Trim();
-
-                                switch (job)
+                                else if (command.StartsWith("ss"))
                                 {
-                                    case "scheduler":
-                                        chkScheduler.Checked = command == "on";
-                                        break;
-                                    case "tasks":
-                                        chkTasks.Checked = command == "on";
-                                        break;
-                                }
-                            }
-                            else if (command.StartsWith("kill"))
-                            {
-                                command = command.Substring(4).Trim();
-
-                                foreach (Screen s in ctrl.sc)
-                                {
-                                    if (s != null)
+                                    try
                                     {
-                                        ctrl.KillEmulator(s, false);
+                                        using (Bitmap bmpScreenCapture = new Bitmap(System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height))
+                                        {
+                                            using (Graphics g = Graphics.FromImage(bmpScreenCapture))
+                                            {
+                                                g.CopyFromScreen(System.Windows.Forms.Screen.PrimaryScreen.Bounds.X, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Y, 0, 0, bmpScreenCapture.Size, CopyPixelOperation.SourceCopy);
+                                            }
+
+                                            System.IO.Directory.CreateDirectory(String.Format("{0}\\auto", Controller.Instance.GetFullScreenshotDir()));
+                                            bmpScreenCapture.Save(String.Format("{0}\\auto\\ss{1}.bmp", ctrl.GetFullScreenshotDir(), bmpScreenCapture.Checksum().ToString("X4")), ImageFormat.Bmp);
+                                        }
+                                    }
+                                    catch (Exception ex) { }
+                                }
+                                else if (command.StartsWith("job"))
+                                {
+                                    command = command.Substring(3).Trim();
+
+                                    string job = command.Substring(0, command.IndexOf(' '));
+
+                                    command = command.Substring(command.IndexOf(' ') + 1).Trim();
+
+                                    switch (job)
+                                    {
+                                        case "scheduler":
+                                            chkScheduler.Checked = command == "on";
+                                            break;
+                                        case "tasks":
+                                            chkTasks.Checked = command == "on";
+                                            break;
                                     }
                                 }
-
-                                Program.RestartApp();
-                            }
-                            else
-                            {
-                                //while (ctrl.IdleLevel > 0)
+                                else if (command.StartsWith("kill"))
                                 {
-                                    System.Threading.Thread.Sleep(1000);
+                                    command = command.Substring(4).Trim();
+
+                                    foreach (Screen s in ctrl.sc)
+                                    {
+                                        if (s != null)
+                                        {
+                                            ctrl.KillEmulator(s, false);
+                                        }
+                                    }
+
+                                    Program.RestartApp();
+                                }
+                                else
+                                {
+                                    //while (ctrl.IdleLevel > 0)
+                                    {
+                                        System.Threading.Thread.Sleep(1000);
+                                    }
+
+                                    ctrl.BeginTask();
+                                    ctrl.GetFirstAbleWindow().SendChat("Invalid command", 1);
+                                    ctrl.EndTask();
                                 }
 
-                                ctrl.BeginTask();
-                                ctrl.GetFirstAbleWindow().SendChat("Invalid command", 1);
-                                ctrl.EndTask();
+                                tmrSupressAction.Restart();
                             }
+                            else if (chatMessage.Message.StartsWith("A new Alliance Gift Tile has appeared at") && tmrSupressAction.ElapsedMilliseconds > 5000)
+                            {
+                                tmrSupressAction.Restart();
 
-                            tmrSupressAction.Restart();
-                        }
-                        else if (chatMessage.Message.StartsWith("A new Alliance Gift Tile has appeared at") && tmrSupressAction.ElapsedMilliseconds > 5000)
-                        {
-                            tmrSupressAction.Restart();
-
-                            ctrl.SendPushover("Alliance tile appeared");
+                                ctrl.SendPushover("Alliance tile appeared");
+                            }
                         }
                     }
                 }

@@ -10,6 +10,7 @@ namespace CodeStrikeBot.Messages
         private List<PacketDotNet.TcpPacket> packets;
         public ushort CheckSum;
         public uint Ack { get; set; }
+        public ulong Id { get; set; }
 
         public bool Complete { get; set; }
 
@@ -104,6 +105,9 @@ namespace CodeStrikeBot.Messages
     {
         Unknown = 0,
         Blank = 1,
-        Chat = 2
+        Chat = 2,
+        March = 3,
+        Rally = 4,
+        TileUpdate = 5
     }
 }

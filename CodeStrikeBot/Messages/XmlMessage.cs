@@ -33,20 +33,21 @@ namespace CodeStrikeBot.Messages
             try
             {
                 ret.LoadXml();
-
                 System.Xml.XmlNode node = ret.Document.DocumentElement.SelectSingleNode("/message/body");
 
                 if (node != null)
                 {
                     ret = new ChatMessage(ret);
                 }
-
-                ret.LoadXml();
-                node = ret.Document.DocumentElement.SelectSingleNode("//*[local-name()='payload']");
-
-                if (node != null)
+                else
                 {
-                    ret = JsonMessage.Parse(ret);
+                    ret.LoadXml();
+                    node = ret.Document.DocumentElement.SelectSingleNode("//*[local-name()='payload']");
+
+                    if (node != null)
+                    {
+                        ret = JsonMessage.Parse(ret);
+                    }
                 }
             }
             catch (System.Xml.XmlException ex) {

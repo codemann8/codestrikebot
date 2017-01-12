@@ -39,6 +39,8 @@ namespace CodeStrikeBot.Messages
 
                 if (node != null && node.Name == "items")
                 {
+                    ret.Id = UInt64.Parse(node.FirstChild.Attributes["id"].Value, System.Globalization.NumberStyles.HexNumber);
+
                     switch (node.Attributes["node"].Value)
                     {
                         case "EVENT_WAR_RALLY_BEGAN": //rally defense
