@@ -20,7 +20,7 @@ namespace CodeStrikeBot
         {
             if (!File.Exists("data.sdf"))
             {
-                SqlCeEngine en = new SqlCeEngine("DataSource=\"data.sdf\";Password='codestrikebot'");
+                SqlCeEngine en = new SqlCeEngine("DataSource=\"data.sdf\";Password='codestrikebot';Max Database Size=1024");
                 en.CreateDatabase();
             }
 
@@ -36,7 +36,7 @@ namespace CodeStrikeBot
 
         private static SqlCeConnection GetNewConnection()
         {
-            return new SqlCeConnection("DataSource=\"data.sdf\";Password='codestrikebot'");
+            return new SqlCeConnection("DataSource=\"data.sdf\";Password='codestrikebot';Max Database Size=1024");
         }
 
         private void UpdateDatabase()
