@@ -1825,7 +1825,7 @@ namespace CodeStrikeBot
 
             while (ctrl.ActiveScreen.ScreenState.CurrentArea == Area.Menus.BuildingBoost && chksum != 0xed29)
             {
-                Controller.SendClick(ctrl.ActiveScreen, 250, 550, 100);
+                Controller.SendClick(ctrl.ActiveScreen, 250, 566, 100);
 
                 Controller.CaptureApplication(ctrl.ActiveScreen);
                 chksum = ScreenState.GetScreenChecksum(ctrl.ActiveScreen.SuperBitmap, 110, 188, 20);
