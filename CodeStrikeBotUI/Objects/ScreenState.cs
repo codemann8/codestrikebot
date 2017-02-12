@@ -588,6 +588,9 @@ namespace CodeStrikeBot
                             case 0x6e5b: //memu
                                 state.CurrentArea = Area.Menus.Buildings.CovertOpsCenter;
                                 break;
+                            case 0x30ac:
+                                state.CurrentArea = Area.Menus.BuildingBoost;
+                                break;
                             case 0x9be4: //memu alliance chat
                             case 0x9d42: //memu state/alliance transition
                             case 0x658b: //memu state chat
@@ -1151,6 +1154,7 @@ namespace CodeStrikeBot
             public static readonly ID AllianceWar = Menu[27];
             public static readonly ID Gear = Menu[28];
             public static readonly ID Deployment = Menu[29];
+            public static readonly ID BuildingBoost = Menu[30];
         }
 
         public static readonly ID Emulator = 98;

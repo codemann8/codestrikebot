@@ -103,6 +103,10 @@ namespace CodeStrikeBot
             this.tabActivity = new System.Windows.Forms.TabPage();
             this.contActivity = new System.Windows.Forms.SplitContainer();
             this.gridPacket = new System.Windows.Forms.DataGridView();
+            this.timestampDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.typeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.lengthDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Id = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.bsPacket = new System.Windows.Forms.BindingSource(this.components);
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.btnCopyText = new System.Windows.Forms.Button();
@@ -129,10 +133,7 @@ namespace CodeStrikeBot
             this.bckKeepAlive = new System.ComponentModel.BackgroundWorker();
             this.bckAutoActions = new System.ComponentModel.BackgroundWorker();
             this.dataGridViewComboBoxColumn1 = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.timestampDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.typeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.lengthDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Id = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnBoostModifier = new System.Windows.Forms.Button();
             this.stsStrip.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -172,10 +173,10 @@ namespace CodeStrikeBot
             // 
             // btnMap
             // 
-            this.btnMap.Location = new System.Drawing.Point(6, 48);
-            this.btnMap.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.btnMap.Location = new System.Drawing.Point(12, 92);
+            this.btnMap.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnMap.Name = "btnMap";
-            this.btnMap.Size = new System.Drawing.Size(74, 23);
+            this.btnMap.Size = new System.Drawing.Size(148, 44);
             this.btnMap.TabIndex = 0;
             this.btnMap.Text = "Map";
             this.btnMap.UseVisualStyleBackColor = true;
@@ -183,10 +184,10 @@ namespace CodeStrikeBot
             // 
             // btnTest
             // 
-            this.btnTest.Location = new System.Drawing.Point(66, 19);
-            this.btnTest.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.btnTest.Location = new System.Drawing.Point(132, 37);
+            this.btnTest.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnTest.Name = "btnTest";
-            this.btnTest.Size = new System.Drawing.Size(42, 23);
+            this.btnTest.Size = new System.Drawing.Size(84, 44);
             this.btnTest.TabIndex = 1;
             this.btnTest.Text = "Test";
             this.btnTest.UseVisualStyleBackColor = true;
@@ -194,10 +195,10 @@ namespace CodeStrikeBot
             // 
             // btnScreen
             // 
-            this.btnScreen.Location = new System.Drawing.Point(6, 19);
-            this.btnScreen.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.btnScreen.Location = new System.Drawing.Point(12, 37);
+            this.btnScreen.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnScreen.Name = "btnScreen";
-            this.btnScreen.Size = new System.Drawing.Size(74, 23);
+            this.btnScreen.Size = new System.Drawing.Size(148, 44);
             this.btnScreen.TabIndex = 2;
             this.btnScreen.Text = "Screen";
             this.btnScreen.UseVisualStyleBackColor = true;
@@ -205,36 +206,36 @@ namespace CodeStrikeBot
             // 
             // txtScreen
             // 
-            this.txtScreen.Location = new System.Drawing.Point(86, 21);
-            this.txtScreen.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.txtScreen.Location = new System.Drawing.Point(172, 40);
+            this.txtScreen.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.txtScreen.Name = "txtScreen";
-            this.txtScreen.Size = new System.Drawing.Size(100, 20);
+            this.txtScreen.Size = new System.Drawing.Size(196, 31);
             this.txtScreen.TabIndex = 3;
             // 
             // txtSliceStartX
             // 
-            this.txtSliceStartX.Location = new System.Drawing.Point(168, 53);
-            this.txtSliceStartX.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.txtSliceStartX.Location = new System.Drawing.Point(336, 102);
+            this.txtSliceStartX.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.txtSliceStartX.Name = "txtSliceStartX";
-            this.txtSliceStartX.Size = new System.Drawing.Size(42, 20);
+            this.txtSliceStartX.Size = new System.Drawing.Size(80, 31);
             this.txtSliceStartX.TabIndex = 4;
             this.txtSliceStartX.Text = "0";
             // 
             // txtSliceStartY
             // 
-            this.txtSliceStartY.Location = new System.Drawing.Point(214, 53);
-            this.txtSliceStartY.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.txtSliceStartY.Location = new System.Drawing.Point(428, 102);
+            this.txtSliceStartY.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.txtSliceStartY.Name = "txtSliceStartY";
-            this.txtSliceStartY.Size = new System.Drawing.Size(42, 20);
+            this.txtSliceStartY.Size = new System.Drawing.Size(80, 31);
             this.txtSliceStartY.TabIndex = 5;
             this.txtSliceStartY.Text = "0";
             // 
             // txtRowStart
             // 
-            this.txtRowStart.Location = new System.Drawing.Point(262, 53);
-            this.txtRowStart.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.txtRowStart.Location = new System.Drawing.Point(524, 102);
+            this.txtRowStart.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.txtRowStart.Name = "txtRowStart";
-            this.txtRowStart.Size = new System.Drawing.Size(42, 20);
+            this.txtRowStart.Size = new System.Drawing.Size(80, 31);
             this.txtRowStart.TabIndex = 6;
             this.txtRowStart.Text = "0";
             // 
@@ -245,37 +246,37 @@ namespace CodeStrikeBot
             this.stsStatus,
             this.stsSpacer,
             this.stsState});
-            this.stsStrip.Location = new System.Drawing.Point(0, 201);
+            this.stsStrip.Location = new System.Drawing.Point(0, 392);
             this.stsStrip.Name = "stsStrip";
-            this.stsStrip.Padding = new System.Windows.Forms.Padding(2, 0, 14, 0);
-            this.stsStrip.Size = new System.Drawing.Size(958, 22);
+            this.stsStrip.Padding = new System.Windows.Forms.Padding(4, 0, 28, 0);
+            this.stsStrip.Size = new System.Drawing.Size(1916, 37);
             this.stsStrip.TabIndex = 7;
             // 
             // stsStatus
             // 
             this.stsStatus.Name = "stsStatus";
-            this.stsStatus.Size = new System.Drawing.Size(0, 17);
+            this.stsStatus.Size = new System.Drawing.Size(0, 32);
             this.stsStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // stsSpacer
             // 
             this.stsSpacer.Name = "stsSpacer";
-            this.stsSpacer.Size = new System.Drawing.Size(909, 17);
+            this.stsSpacer.Size = new System.Drawing.Size(1816, 32);
             this.stsSpacer.Spring = true;
             // 
             // stsState
             // 
             this.stsState.Name = "stsState";
-            this.stsState.Size = new System.Drawing.Size(33, 17);
+            this.stsState.Size = new System.Drawing.Size(68, 32);
             this.stsState.Text = "State";
             this.stsState.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // btnGrowXP
             // 
-            this.btnGrowXP.Location = new System.Drawing.Point(6, 19);
-            this.btnGrowXP.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.btnGrowXP.Location = new System.Drawing.Point(12, 37);
+            this.btnGrowXP.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnGrowXP.Name = "btnGrowXP";
-            this.btnGrowXP.Size = new System.Drawing.Size(54, 23);
+            this.btnGrowXP.Size = new System.Drawing.Size(108, 44);
             this.btnGrowXP.TabIndex = 8;
             this.btnGrowXP.Text = "Mine XP";
             this.btnGrowXP.UseVisualStyleBackColor = true;
@@ -290,10 +291,10 @@ namespace CodeStrikeBot
             // 
             // btnSearchEnemy
             // 
-            this.btnSearchEnemy.Location = new System.Drawing.Point(86, 48);
-            this.btnSearchEnemy.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.btnSearchEnemy.Location = new System.Drawing.Point(172, 92);
+            this.btnSearchEnemy.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnSearchEnemy.Name = "btnSearchEnemy";
-            this.btnSearchEnemy.Size = new System.Drawing.Size(74, 23);
+            this.btnSearchEnemy.Size = new System.Drawing.Size(148, 44);
             this.btnSearchEnemy.TabIndex = 9;
             this.btnSearchEnemy.Text = "Enemy";
             this.btnSearchEnemy.UseVisualStyleBackColor = true;
@@ -314,19 +315,20 @@ namespace CodeStrikeBot
             // lstAccounts
             // 
             this.lstAccounts.FormattingEnabled = true;
-            this.lstAccounts.Location = new System.Drawing.Point(6, 19);
-            this.lstAccounts.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.lstAccounts.ItemHeight = 25;
+            this.lstAccounts.Location = new System.Drawing.Point(12, 37);
+            this.lstAccounts.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.lstAccounts.Name = "lstAccounts";
-            this.lstAccounts.Size = new System.Drawing.Size(108, 108);
+            this.lstAccounts.Size = new System.Drawing.Size(212, 204);
             this.lstAccounts.TabIndex = 10;
             this.lstAccounts.SelectedIndexChanged += new System.EventHandler(this.lstAccounts_SelectedIndexChanged);
             // 
             // btnSwitch
             // 
-            this.btnSwitch.Location = new System.Drawing.Point(6, 134);
-            this.btnSwitch.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.btnSwitch.Location = new System.Drawing.Point(12, 258);
+            this.btnSwitch.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnSwitch.Name = "btnSwitch";
-            this.btnSwitch.Size = new System.Drawing.Size(74, 23);
+            this.btnSwitch.Size = new System.Drawing.Size(148, 44);
             this.btnSwitch.TabIndex = 11;
             this.btnSwitch.Text = "Switch";
             this.btnSwitch.UseVisualStyleBackColor = true;
@@ -336,28 +338,29 @@ namespace CodeStrikeBot
             // 
             this.groupBox1.Controls.Add(this.btnScreen);
             this.groupBox1.Controls.Add(this.txtScreen);
-            this.groupBox1.Location = new System.Drawing.Point(6, 6);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.groupBox1.Location = new System.Drawing.Point(12, 12);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.groupBox1.Size = new System.Drawing.Size(318, 81);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.groupBox1.Size = new System.Drawing.Size(636, 156);
             this.groupBox1.TabIndex = 12;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Mapping";
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.btnBoostModifier);
             this.groupBox2.Controls.Add(this.chkScheduler);
             this.groupBox2.Controls.Add(this.btnScheduler);
             this.groupBox2.Controls.Add(this.btnMissions);
             this.groupBox2.Controls.Add(this.chkTasks);
             this.groupBox2.Controls.Add(this.btnTasks);
             this.groupBox2.Controls.Add(this.btnClearGifts);
-            this.groupBox2.Location = new System.Drawing.Point(6, 93);
-            this.groupBox2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.groupBox2.Location = new System.Drawing.Point(12, 179);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.groupBox2.Size = new System.Drawing.Size(318, 75);
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.groupBox2.Size = new System.Drawing.Size(636, 144);
             this.groupBox2.TabIndex = 13;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Routines";
@@ -367,10 +370,10 @@ namespace CodeStrikeBot
             this.chkScheduler.AutoSize = true;
             this.chkScheduler.Checked = true;
             this.chkScheduler.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkScheduler.Location = new System.Drawing.Point(60, 48);
-            this.chkScheduler.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.chkScheduler.Location = new System.Drawing.Point(120, 92);
+            this.chkScheduler.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.chkScheduler.Name = "chkScheduler";
-            this.chkScheduler.Size = new System.Drawing.Size(74, 17);
+            this.chkScheduler.Size = new System.Drawing.Size(141, 29);
             this.chkScheduler.TabIndex = 15;
             this.chkScheduler.Text = "Scheduler";
             this.chkScheduler.UseVisualStyleBackColor = true;
@@ -378,10 +381,10 @@ namespace CodeStrikeBot
             // 
             // btnScheduler
             // 
-            this.btnScheduler.Location = new System.Drawing.Point(174, 19);
-            this.btnScheduler.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.btnScheduler.Location = new System.Drawing.Point(348, 37);
+            this.btnScheduler.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnScheduler.Name = "btnScheduler";
-            this.btnScheduler.Size = new System.Drawing.Size(62, 23);
+            this.btnScheduler.Size = new System.Drawing.Size(124, 44);
             this.btnScheduler.TabIndex = 14;
             this.btnScheduler.Text = "Scheduler";
             this.btnScheduler.UseVisualStyleBackColor = true;
@@ -389,10 +392,10 @@ namespace CodeStrikeBot
             // 
             // btnMissions
             // 
-            this.btnMissions.Location = new System.Drawing.Point(110, 19);
-            this.btnMissions.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.btnMissions.Location = new System.Drawing.Point(220, 37);
+            this.btnMissions.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnMissions.Name = "btnMissions";
-            this.btnMissions.Size = new System.Drawing.Size(58, 23);
+            this.btnMissions.Size = new System.Drawing.Size(116, 44);
             this.btnMissions.TabIndex = 13;
             this.btnMissions.Text = "Missions";
             this.btnMissions.UseVisualStyleBackColor = true;
@@ -403,10 +406,10 @@ namespace CodeStrikeBot
             this.chkTasks.AutoSize = true;
             this.chkTasks.Checked = true;
             this.chkTasks.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkTasks.Location = new System.Drawing.Point(6, 48);
-            this.chkTasks.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.chkTasks.Location = new System.Drawing.Point(12, 92);
+            this.chkTasks.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.chkTasks.Name = "chkTasks";
-            this.chkTasks.Size = new System.Drawing.Size(55, 17);
+            this.chkTasks.Size = new System.Drawing.Size(102, 29);
             this.chkTasks.TabIndex = 12;
             this.chkTasks.Text = "Tasks";
             this.chkTasks.UseVisualStyleBackColor = true;
@@ -414,10 +417,10 @@ namespace CodeStrikeBot
             // 
             // btnTasks
             // 
-            this.btnTasks.Location = new System.Drawing.Point(6, 19);
-            this.btnTasks.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.btnTasks.Location = new System.Drawing.Point(12, 37);
+            this.btnTasks.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnTasks.Name = "btnTasks";
-            this.btnTasks.Size = new System.Drawing.Size(48, 23);
+            this.btnTasks.Size = new System.Drawing.Size(96, 44);
             this.btnTasks.TabIndex = 11;
             this.btnTasks.Text = "Tasks";
             this.btnTasks.UseVisualStyleBackColor = true;
@@ -425,10 +428,10 @@ namespace CodeStrikeBot
             // 
             // btnClearGifts
             // 
-            this.btnClearGifts.Location = new System.Drawing.Point(60, 19);
-            this.btnClearGifts.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.btnClearGifts.Location = new System.Drawing.Point(120, 37);
+            this.btnClearGifts.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnClearGifts.Name = "btnClearGifts";
-            this.btnClearGifts.Size = new System.Drawing.Size(46, 23);
+            this.btnClearGifts.Size = new System.Drawing.Size(92, 44);
             this.btnClearGifts.TabIndex = 9;
             this.btnClearGifts.Text = "Gifts";
             this.btnClearGifts.UseVisualStyleBackColor = true;
@@ -436,10 +439,10 @@ namespace CodeStrikeBot
             // 
             // btnMissionXP
             // 
-            this.btnMissionXP.Location = new System.Drawing.Point(116, 19);
-            this.btnMissionXP.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.btnMissionXP.Location = new System.Drawing.Point(232, 37);
+            this.btnMissionXP.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnMissionXP.Name = "btnMissionXP";
-            this.btnMissionXP.Size = new System.Drawing.Size(66, 23);
+            this.btnMissionXP.Size = new System.Drawing.Size(132, 44);
             this.btnMissionXP.TabIndex = 10;
             this.btnMissionXP.Text = "Mission XP";
             this.btnMissionXP.UseVisualStyleBackColor = true;
@@ -449,11 +452,11 @@ namespace CodeStrikeBot
             // 
             this.groupBox3.Controls.Add(this.lstAccounts);
             this.groupBox3.Controls.Add(this.btnSwitch);
-            this.groupBox3.Location = new System.Drawing.Point(140, 6);
-            this.groupBox3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.groupBox3.Location = new System.Drawing.Point(280, 12);
+            this.groupBox3.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.groupBox3.Size = new System.Drawing.Size(120, 165);
+            this.groupBox3.Padding = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.groupBox3.Size = new System.Drawing.Size(240, 317);
             this.groupBox3.TabIndex = 14;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Active Session";
@@ -464,11 +467,11 @@ namespace CodeStrikeBot
             this.groupBox4.Controls.Add(this.rdoWindow3);
             this.groupBox4.Controls.Add(this.rdoWindow2);
             this.groupBox4.Controls.Add(this.rdoWindow1);
-            this.groupBox4.Location = new System.Drawing.Point(6, 6);
-            this.groupBox4.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.groupBox4.Location = new System.Drawing.Point(12, 12);
+            this.groupBox4.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.groupBox4.Size = new System.Drawing.Size(128, 53);
+            this.groupBox4.Padding = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.groupBox4.Size = new System.Drawing.Size(256, 102);
             this.groupBox4.TabIndex = 15;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Active Window";
@@ -477,10 +480,10 @@ namespace CodeStrikeBot
             // 
             this.rdoWindow4.Appearance = System.Windows.Forms.Appearance.Button;
             this.rdoWindow4.AutoSize = true;
-            this.rdoWindow4.Location = new System.Drawing.Point(94, 19);
-            this.rdoWindow4.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.rdoWindow4.Location = new System.Drawing.Point(188, 37);
+            this.rdoWindow4.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.rdoWindow4.Name = "rdoWindow4";
-            this.rdoWindow4.Size = new System.Drawing.Size(23, 23);
+            this.rdoWindow4.Size = new System.Drawing.Size(34, 35);
             this.rdoWindow4.TabIndex = 22;
             this.rdoWindow4.TabStop = true;
             this.rdoWindow4.Text = "4";
@@ -492,10 +495,10 @@ namespace CodeStrikeBot
             // 
             this.rdoWindow3.Appearance = System.Windows.Forms.Appearance.Button;
             this.rdoWindow3.AutoSize = true;
-            this.rdoWindow3.Location = new System.Drawing.Point(64, 19);
-            this.rdoWindow3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.rdoWindow3.Location = new System.Drawing.Point(128, 37);
+            this.rdoWindow3.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.rdoWindow3.Name = "rdoWindow3";
-            this.rdoWindow3.Size = new System.Drawing.Size(23, 23);
+            this.rdoWindow3.Size = new System.Drawing.Size(34, 35);
             this.rdoWindow3.TabIndex = 21;
             this.rdoWindow3.TabStop = true;
             this.rdoWindow3.Text = "3";
@@ -507,10 +510,10 @@ namespace CodeStrikeBot
             // 
             this.rdoWindow2.Appearance = System.Windows.Forms.Appearance.Button;
             this.rdoWindow2.AutoSize = true;
-            this.rdoWindow2.Location = new System.Drawing.Point(34, 19);
-            this.rdoWindow2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.rdoWindow2.Location = new System.Drawing.Point(68, 37);
+            this.rdoWindow2.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.rdoWindow2.Name = "rdoWindow2";
-            this.rdoWindow2.Size = new System.Drawing.Size(23, 23);
+            this.rdoWindow2.Size = new System.Drawing.Size(34, 35);
             this.rdoWindow2.TabIndex = 20;
             this.rdoWindow2.TabStop = true;
             this.rdoWindow2.Text = "2";
@@ -523,10 +526,10 @@ namespace CodeStrikeBot
             this.rdoWindow1.Appearance = System.Windows.Forms.Appearance.Button;
             this.rdoWindow1.AutoSize = true;
             this.rdoWindow1.Checked = true;
-            this.rdoWindow1.Location = new System.Drawing.Point(6, 19);
-            this.rdoWindow1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.rdoWindow1.Location = new System.Drawing.Point(12, 37);
+            this.rdoWindow1.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.rdoWindow1.Name = "rdoWindow1";
-            this.rdoWindow1.Size = new System.Drawing.Size(23, 23);
+            this.rdoWindow1.Size = new System.Drawing.Size(34, 35);
             this.rdoWindow1.TabIndex = 16;
             this.rdoWindow1.TabStop = true;
             this.rdoWindow1.Text = "1";
@@ -543,10 +546,10 @@ namespace CodeStrikeBot
             this.tabControl1.Controls.Add(this.tabDebug);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
-            this.tabControl1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.tabControl1.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(958, 201);
+            this.tabControl1.Size = new System.Drawing.Size(1916, 392);
             this.tabControl1.TabIndex = 16;
             // 
             // tabTasks
@@ -554,11 +557,11 @@ namespace CodeStrikeBot
             this.tabTasks.Controls.Add(this.groupBox6);
             this.tabTasks.Controls.Add(this.groupBox1);
             this.tabTasks.Controls.Add(this.groupBox2);
-            this.tabTasks.Location = new System.Drawing.Point(4, 22);
-            this.tabTasks.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.tabTasks.Location = new System.Drawing.Point(8, 39);
+            this.tabTasks.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.tabTasks.Name = "tabTasks";
-            this.tabTasks.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.tabTasks.Size = new System.Drawing.Size(950, 175);
+            this.tabTasks.Padding = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.tabTasks.Size = new System.Drawing.Size(1900, 345);
             this.tabTasks.TabIndex = 0;
             this.tabTasks.Text = "Tasks";
             this.tabTasks.UseVisualStyleBackColor = true;
@@ -574,21 +577,21 @@ namespace CodeStrikeBot
             this.groupBox6.Controls.Add(this.txtSliceStartX);
             this.groupBox6.Controls.Add(this.txtSliceStartY);
             this.groupBox6.Controls.Add(this.txtRowStart);
-            this.groupBox6.Location = new System.Drawing.Point(330, 6);
-            this.groupBox6.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.groupBox6.Location = new System.Drawing.Point(660, 12);
+            this.groupBox6.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.groupBox6.Size = new System.Drawing.Size(320, 81);
+            this.groupBox6.Padding = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.groupBox6.Size = new System.Drawing.Size(640, 156);
             this.groupBox6.TabIndex = 14;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Debug";
             // 
             // btnRestart
             // 
-            this.btnRestart.Location = new System.Drawing.Point(190, 19);
-            this.btnRestart.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.btnRestart.Location = new System.Drawing.Point(380, 37);
+            this.btnRestart.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnRestart.Name = "btnRestart";
-            this.btnRestart.Size = new System.Drawing.Size(50, 23);
+            this.btnRestart.Size = new System.Drawing.Size(100, 44);
             this.btnRestart.TabIndex = 11;
             this.btnRestart.Text = "Restart";
             this.btnRestart.UseVisualStyleBackColor = true;
@@ -600,11 +603,11 @@ namespace CodeStrikeBot
             this.tabScreens.Controls.Add(this.groupBox5);
             this.tabScreens.Controls.Add(this.groupBox3);
             this.tabScreens.Controls.Add(this.groupBox4);
-            this.tabScreens.Location = new System.Drawing.Point(4, 22);
-            this.tabScreens.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.tabScreens.Location = new System.Drawing.Point(8, 39);
+            this.tabScreens.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.tabScreens.Name = "tabScreens";
-            this.tabScreens.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.tabScreens.Size = new System.Drawing.Size(950, 178);
+            this.tabScreens.Padding = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.tabScreens.Size = new System.Drawing.Size(1900, 340);
             this.tabScreens.TabIndex = 1;
             this.tabScreens.Text = "Session";
             this.tabScreens.UseVisualStyleBackColor = true;
@@ -613,21 +616,21 @@ namespace CodeStrikeBot
             // 
             this.groupBox7.Controls.Add(this.btnScheduleRun);
             this.groupBox7.Controls.Add(this.gridSchedules);
-            this.groupBox7.Location = new System.Drawing.Point(266, 7);
-            this.groupBox7.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.groupBox7.Location = new System.Drawing.Point(532, 13);
+            this.groupBox7.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.groupBox7.Size = new System.Drawing.Size(678, 164);
+            this.groupBox7.Padding = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.groupBox7.Size = new System.Drawing.Size(1356, 315);
             this.groupBox7.TabIndex = 17;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Schedules";
             // 
             // btnScheduleRun
             // 
-            this.btnScheduleRun.Location = new System.Drawing.Point(6, 133);
-            this.btnScheduleRun.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.btnScheduleRun.Location = new System.Drawing.Point(12, 256);
+            this.btnScheduleRun.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnScheduleRun.Name = "btnScheduleRun";
-            this.btnScheduleRun.Size = new System.Drawing.Size(74, 23);
+            this.btnScheduleRun.Size = new System.Drawing.Size(148, 44);
             this.btnScheduleRun.TabIndex = 1;
             this.btnScheduleRun.Text = "Manual Run";
             this.btnScheduleRun.UseVisualStyleBackColor = true;
@@ -650,10 +653,10 @@ namespace CodeStrikeBot
             this.lastActionDataGridViewTextBoxColumn,
             this.nextActionDataGridViewTextBoxColumn});
             this.gridSchedules.DataSource = this.bsScheduleTask;
-            this.gridSchedules.Location = new System.Drawing.Point(6, 19);
-            this.gridSchedules.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.gridSchedules.Location = new System.Drawing.Point(12, 37);
+            this.gridSchedules.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.gridSchedules.Name = "gridSchedules";
-            this.gridSchedules.Size = new System.Drawing.Size(666, 107);
+            this.gridSchedules.Size = new System.Drawing.Size(1332, 206);
             this.gridSchedules.TabIndex = 0;
             this.gridSchedules.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridSchedules_CellLeave);
             this.gridSchedules.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.gridSchedules_UserDeletingRow);
@@ -663,7 +666,7 @@ namespace CodeStrikeBot
             this.typeDataGridViewComboBoxColumn.DataPropertyName = "Type";
             this.typeDataGridViewComboBoxColumn.HeaderText = "Type";
             this.typeDataGridViewComboBoxColumn.Name = "typeDataGridViewComboBoxColumn";
-            this.typeDataGridViewComboBoxColumn.Width = 37;
+            this.typeDataGridViewComboBoxColumn.Width = 66;
             // 
             // intervalDataGridViewTextBoxColumn
             // 
@@ -671,7 +674,7 @@ namespace CodeStrikeBot
             this.intervalDataGridViewTextBoxColumn.HeaderText = "Interval";
             this.intervalDataGridViewTextBoxColumn.MaxInputLength = 9;
             this.intervalDataGridViewTextBoxColumn.Name = "intervalDataGridViewTextBoxColumn";
-            this.intervalDataGridViewTextBoxColumn.Width = 67;
+            this.intervalDataGridViewTextBoxColumn.Width = 127;
             // 
             // amountDataGridViewTextBoxColumn
             // 
@@ -679,7 +682,7 @@ namespace CodeStrikeBot
             this.amountDataGridViewTextBoxColumn.HeaderText = "Amount";
             this.amountDataGridViewTextBoxColumn.MaxInputLength = 9;
             this.amountDataGridViewTextBoxColumn.Name = "amountDataGridViewTextBoxColumn";
-            this.amountDataGridViewTextBoxColumn.Width = 68;
+            this.amountDataGridViewTextBoxColumn.Width = 130;
             // 
             // countDataGridViewTextBoxColumn
             // 
@@ -731,7 +734,7 @@ namespace CodeStrikeBot
             this.lastActionDataGridViewTextBoxColumn.DataPropertyName = "LastAction";
             this.lastActionDataGridViewTextBoxColumn.HeaderText = "LastAction";
             this.lastActionDataGridViewTextBoxColumn.Name = "lastActionDataGridViewTextBoxColumn";
-            this.lastActionDataGridViewTextBoxColumn.Width = 82;
+            this.lastActionDataGridViewTextBoxColumn.Width = 158;
             // 
             // nextActionDataGridViewTextBoxColumn
             // 
@@ -739,7 +742,7 @@ namespace CodeStrikeBot
             this.nextActionDataGridViewTextBoxColumn.HeaderText = "NextAction";
             this.nextActionDataGridViewTextBoxColumn.Name = "nextActionDataGridViewTextBoxColumn";
             this.nextActionDataGridViewTextBoxColumn.ReadOnly = true;
-            this.nextActionDataGridViewTextBoxColumn.Width = 84;
+            this.nextActionDataGridViewTextBoxColumn.Width = 161;
             // 
             // bsScheduleTask
             // 
@@ -748,21 +751,21 @@ namespace CodeStrikeBot
             // groupBox5
             // 
             this.groupBox5.Controls.Add(this.btnResize);
-            this.groupBox5.Location = new System.Drawing.Point(6, 67);
-            this.groupBox5.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.groupBox5.Location = new System.Drawing.Point(12, 129);
+            this.groupBox5.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.groupBox5.Size = new System.Drawing.Size(126, 105);
+            this.groupBox5.Padding = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.groupBox5.Size = new System.Drawing.Size(252, 202);
             this.groupBox5.TabIndex = 16;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Windows Tasks";
             // 
             // btnResize
             // 
-            this.btnResize.Location = new System.Drawing.Point(6, 20);
-            this.btnResize.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.btnResize.Location = new System.Drawing.Point(12, 38);
+            this.btnResize.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnResize.Name = "btnResize";
-            this.btnResize.Size = new System.Drawing.Size(74, 23);
+            this.btnResize.Size = new System.Drawing.Size(148, 44);
             this.btnResize.TabIndex = 0;
             this.btnResize.Text = "Resize";
             this.btnResize.UseVisualStyleBackColor = true;
@@ -771,11 +774,11 @@ namespace CodeStrikeBot
             // tabAccounts
             // 
             this.tabAccounts.Controls.Add(this.groupBox8);
-            this.tabAccounts.Location = new System.Drawing.Point(4, 22);
-            this.tabAccounts.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.tabAccounts.Location = new System.Drawing.Point(8, 39);
+            this.tabAccounts.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.tabAccounts.Name = "tabAccounts";
-            this.tabAccounts.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.tabAccounts.Size = new System.Drawing.Size(950, 178);
+            this.tabAccounts.Padding = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.tabAccounts.Size = new System.Drawing.Size(1900, 340);
             this.tabAccounts.TabIndex = 4;
             this.tabAccounts.Text = "Accounts";
             this.tabAccounts.UseVisualStyleBackColor = true;
@@ -783,11 +786,11 @@ namespace CodeStrikeBot
             // groupBox8
             // 
             this.groupBox8.Controls.Add(this.gridAccounts);
-            this.groupBox8.Location = new System.Drawing.Point(8, 4);
-            this.groupBox8.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.groupBox8.Location = new System.Drawing.Point(16, 8);
+            this.groupBox8.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.groupBox8.Size = new System.Drawing.Size(936, 164);
+            this.groupBox8.Padding = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.groupBox8.Size = new System.Drawing.Size(1872, 315);
             this.groupBox8.TabIndex = 18;
             this.groupBox8.TabStop = false;
             this.groupBox8.Text = "Setup";
@@ -807,10 +810,10 @@ namespace CodeStrikeBot
             this.lastLoginDataGridViewTextBoxColumn,
             this.lastLogoutDataGridViewTextBoxColumn});
             this.gridAccounts.DataSource = this.bsAccount;
-            this.gridAccounts.Location = new System.Drawing.Point(6, 19);
-            this.gridAccounts.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.gridAccounts.Location = new System.Drawing.Point(12, 37);
+            this.gridAccounts.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.gridAccounts.Name = "gridAccounts";
-            this.gridAccounts.Size = new System.Drawing.Size(924, 139);
+            this.gridAccounts.Size = new System.Drawing.Size(1848, 267);
             this.gridAccounts.TabIndex = 0;
             this.gridAccounts.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.gridAccounts_CellFormatting);
             this.gridAccounts.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridAccounts_CellLeave);
@@ -822,28 +825,28 @@ namespace CodeStrikeBot
             this.nameDataGridViewTextBoxColumn.DataPropertyName = "Name";
             this.nameDataGridViewTextBoxColumn.HeaderText = "Name";
             this.nameDataGridViewTextBoxColumn.Name = "nameDataGridViewTextBoxColumn";
-            this.nameDataGridViewTextBoxColumn.Width = 60;
+            this.nameDataGridViewTextBoxColumn.Width = 113;
             // 
             // userNameDataGridViewTextBoxColumn
             // 
             this.userNameDataGridViewTextBoxColumn.DataPropertyName = "UserName";
             this.userNameDataGridViewTextBoxColumn.HeaderText = "UserName";
             this.userNameDataGridViewTextBoxColumn.Name = "userNameDataGridViewTextBoxColumn";
-            this.userNameDataGridViewTextBoxColumn.Width = 82;
+            this.userNameDataGridViewTextBoxColumn.Width = 158;
             // 
             // emailDataGridViewTextBoxColumn
             // 
             this.emailDataGridViewTextBoxColumn.DataPropertyName = "Email";
             this.emailDataGridViewTextBoxColumn.HeaderText = "Email";
             this.emailDataGridViewTextBoxColumn.Name = "emailDataGridViewTextBoxColumn";
-            this.emailDataGridViewTextBoxColumn.Width = 57;
+            this.emailDataGridViewTextBoxColumn.Width = 110;
             // 
             // passwordDataGridViewTextBoxColumn
             // 
             this.passwordDataGridViewTextBoxColumn.DataPropertyName = "Password";
             this.passwordDataGridViewTextBoxColumn.HeaderText = "Password";
             this.passwordDataGridViewTextBoxColumn.Name = "passwordDataGridViewTextBoxColumn";
-            this.passwordDataGridViewTextBoxColumn.Width = 78;
+            this.passwordDataGridViewTextBoxColumn.Width = 151;
             // 
             // priorityGridViewComboBoxColumn
             // 
@@ -852,14 +855,14 @@ namespace CodeStrikeBot
             this.priorityGridViewComboBoxColumn.Name = "priorityGridViewComboBoxColumn";
             this.priorityGridViewComboBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.priorityGridViewComboBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.priorityGridViewComboBoxColumn.Width = 63;
+            this.priorityGridViewComboBoxColumn.Width = 124;
             // 
             // foodNegativeAmountDataGridViewTextBoxColumn
             // 
             this.foodNegativeAmountDataGridViewTextBoxColumn.DataPropertyName = "FoodNegativeAmount";
             this.foodNegativeAmountDataGridViewTextBoxColumn.HeaderText = "FoodNegativeAmount";
             this.foodNegativeAmountDataGridViewTextBoxColumn.Name = "foodNegativeAmountDataGridViewTextBoxColumn";
-            this.foodNegativeAmountDataGridViewTextBoxColumn.Width = 135;
+            this.foodNegativeAmountDataGridViewTextBoxColumn.Width = 264;
             // 
             // lastLoginDataGridViewTextBoxColumn
             // 
@@ -867,7 +870,7 @@ namespace CodeStrikeBot
             this.lastLoginDataGridViewTextBoxColumn.HeaderText = "LastLogin";
             this.lastLoginDataGridViewTextBoxColumn.Name = "lastLoginDataGridViewTextBoxColumn";
             this.lastLoginDataGridViewTextBoxColumn.ReadOnly = true;
-            this.lastLoginDataGridViewTextBoxColumn.Width = 78;
+            this.lastLoginDataGridViewTextBoxColumn.Width = 151;
             // 
             // lastLogoutDataGridViewTextBoxColumn
             // 
@@ -875,7 +878,7 @@ namespace CodeStrikeBot
             this.lastLogoutDataGridViewTextBoxColumn.HeaderText = "LastLogout";
             this.lastLogoutDataGridViewTextBoxColumn.Name = "lastLogoutDataGridViewTextBoxColumn";
             this.lastLogoutDataGridViewTextBoxColumn.ReadOnly = true;
-            this.lastLogoutDataGridViewTextBoxColumn.Width = 85;
+            this.lastLogoutDataGridViewTextBoxColumn.Width = 164;
             // 
             // bsAccount
             // 
@@ -884,11 +887,11 @@ namespace CodeStrikeBot
             // tabActivity
             // 
             this.tabActivity.Controls.Add(this.contActivity);
-            this.tabActivity.Location = new System.Drawing.Point(4, 22);
-            this.tabActivity.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.tabActivity.Location = new System.Drawing.Point(8, 39);
+            this.tabActivity.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.tabActivity.Name = "tabActivity";
-            this.tabActivity.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.tabActivity.Size = new System.Drawing.Size(950, 175);
+            this.tabActivity.Padding = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.tabActivity.Size = new System.Drawing.Size(1900, 340);
             this.tabActivity.TabIndex = 2;
             this.tabActivity.Text = "Activity";
             this.tabActivity.UseVisualStyleBackColor = true;
@@ -897,8 +900,8 @@ namespace CodeStrikeBot
             // 
             this.contActivity.Dock = System.Windows.Forms.DockStyle.Fill;
             this.contActivity.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
-            this.contActivity.Location = new System.Drawing.Point(2, 3);
-            this.contActivity.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.contActivity.Location = new System.Drawing.Point(4, 6);
+            this.contActivity.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.contActivity.Name = "contActivity";
             // 
             // contActivity.Panel1
@@ -908,8 +911,9 @@ namespace CodeStrikeBot
             // contActivity.Panel2
             // 
             this.contActivity.Panel2.Controls.Add(this.splitContainer2);
-            this.contActivity.Size = new System.Drawing.Size(946, 169);
+            this.contActivity.Size = new System.Drawing.Size(1892, 328);
             this.contActivity.SplitterDistance = 270;
+            this.contActivity.SplitterWidth = 8;
             this.contActivity.TabIndex = 20;
             // 
             // gridPacket
@@ -942,7 +946,7 @@ namespace CodeStrikeBot
             this.gridPacket.DefaultCellStyle = dataGridViewCellStyle2;
             this.gridPacket.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridPacket.Location = new System.Drawing.Point(0, 0);
-            this.gridPacket.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.gridPacket.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.gridPacket.Name = "gridPacket";
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
@@ -952,8 +956,34 @@ namespace CodeStrikeBot
             dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.gridPacket.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
-            this.gridPacket.Size = new System.Drawing.Size(270, 169);
+            this.gridPacket.Size = new System.Drawing.Size(270, 328);
             this.gridPacket.TabIndex = 17;
+            // 
+            // timestampDataGridViewTextBoxColumn
+            // 
+            this.timestampDataGridViewTextBoxColumn.DataPropertyName = "Timestamp";
+            this.timestampDataGridViewTextBoxColumn.HeaderText = "Timestamp";
+            this.timestampDataGridViewTextBoxColumn.Name = "timestampDataGridViewTextBoxColumn";
+            // 
+            // typeDataGridViewTextBoxColumn
+            // 
+            this.typeDataGridViewTextBoxColumn.DataPropertyName = "Type";
+            this.typeDataGridViewTextBoxColumn.HeaderText = "Type";
+            this.typeDataGridViewTextBoxColumn.Name = "typeDataGridViewTextBoxColumn";
+            this.typeDataGridViewTextBoxColumn.Width = 60;
+            // 
+            // lengthDataGridViewTextBoxColumn
+            // 
+            this.lengthDataGridViewTextBoxColumn.DataPropertyName = "Length";
+            this.lengthDataGridViewTextBoxColumn.HeaderText = "Length";
+            this.lengthDataGridViewTextBoxColumn.Name = "lengthDataGridViewTextBoxColumn";
+            this.lengthDataGridViewTextBoxColumn.Width = 50;
+            // 
+            // Id
+            // 
+            this.Id.DataPropertyName = "Id";
+            this.Id.HeaderText = "Id";
+            this.Id.Name = "Id";
             // 
             // bsPacket
             // 
@@ -966,7 +996,7 @@ namespace CodeStrikeBot
             this.splitContainer2.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
             this.splitContainer2.IsSplitterFixed = true;
             this.splitContainer2.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.splitContainer2.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.splitContainer2.Name = "splitContainer2";
             this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -980,16 +1010,17 @@ namespace CodeStrikeBot
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.splitContainer1);
-            this.splitContainer2.Size = new System.Drawing.Size(672, 169);
+            this.splitContainer2.Size = new System.Drawing.Size(1614, 328);
             this.splitContainer2.SplitterDistance = 30;
+            this.splitContainer2.SplitterWidth = 8;
             this.splitContainer2.TabIndex = 20;
             // 
             // btnCopyText
             // 
-            this.btnCopyText.Location = new System.Drawing.Point(208, 4);
-            this.btnCopyText.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.btnCopyText.Location = new System.Drawing.Point(416, 8);
+            this.btnCopyText.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnCopyText.Name = "btnCopyText";
-            this.btnCopyText.Size = new System.Drawing.Size(74, 23);
+            this.btnCopyText.Size = new System.Drawing.Size(148, 44);
             this.btnCopyText.TabIndex = 3;
             this.btnCopyText.Text = "Copy Text";
             this.btnCopyText.UseVisualStyleBackColor = true;
@@ -997,10 +1028,10 @@ namespace CodeStrikeBot
             // 
             // btnExport
             // 
-            this.btnExport.Location = new System.Drawing.Point(126, 4);
-            this.btnExport.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.btnExport.Location = new System.Drawing.Point(252, 8);
+            this.btnExport.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnExport.Name = "btnExport";
-            this.btnExport.Size = new System.Drawing.Size(74, 23);
+            this.btnExport.Size = new System.Drawing.Size(148, 44);
             this.btnExport.TabIndex = 2;
             this.btnExport.Text = "Export";
             this.btnExport.UseVisualStyleBackColor = true;
@@ -1008,10 +1039,10 @@ namespace CodeStrikeBot
             // rdoRaw
             // 
             this.rdoRaw.AutoSize = true;
-            this.rdoRaw.Location = new System.Drawing.Point(74, 7);
-            this.rdoRaw.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.rdoRaw.Location = new System.Drawing.Point(148, 13);
+            this.rdoRaw.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.rdoRaw.Name = "rdoRaw";
-            this.rdoRaw.Size = new System.Drawing.Size(47, 17);
+            this.rdoRaw.Size = new System.Drawing.Size(85, 29);
             this.rdoRaw.TabIndex = 1;
             this.rdoRaw.Text = "Raw";
             this.rdoRaw.UseVisualStyleBackColor = true;
@@ -1021,10 +1052,10 @@ namespace CodeStrikeBot
             // 
             this.rdoPayload.AutoSize = true;
             this.rdoPayload.Checked = true;
-            this.rdoPayload.Location = new System.Drawing.Point(4, 7);
-            this.rdoPayload.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.rdoPayload.Location = new System.Drawing.Point(8, 13);
+            this.rdoPayload.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.rdoPayload.Name = "rdoPayload";
-            this.rdoPayload.Size = new System.Drawing.Size(63, 17);
+            this.rdoPayload.Size = new System.Drawing.Size(121, 29);
             this.rdoPayload.TabIndex = 0;
             this.rdoPayload.TabStop = true;
             this.rdoPayload.Text = "Payload";
@@ -1035,7 +1066,7 @@ namespace CodeStrikeBot
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer1.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.splitContainer1.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.splitContainer1.Name = "splitContainer1";
             this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -1046,8 +1077,9 @@ namespace CodeStrikeBot
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.treeXml);
-            this.splitContainer1.Size = new System.Drawing.Size(672, 135);
-            this.splitContainer1.SplitterDistance = 65;
+            this.splitContainer1.Size = new System.Drawing.Size(1614, 290);
+            this.splitContainer1.SplitterDistance = 139;
+            this.splitContainer1.SplitterWidth = 8;
             this.splitContainer1.TabIndex = 19;
             // 
             // hexData
@@ -1097,9 +1129,10 @@ namespace CodeStrikeBot
             this.hexData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.hexData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.Dock = System.Windows.Forms.DockStyle.Fill;
             this.hexData.Location = new System.Drawing.Point(0, 0);
-            this.hexData.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.hexData.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.hexData.Name = "hexData";
             this.hexData.RowCount = 1;
             this.hexData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -1145,16 +1178,17 @@ namespace CodeStrikeBot
             this.hexData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.hexData.Size = new System.Drawing.Size(672, 65);
+            this.hexData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.hexData.Size = new System.Drawing.Size(1614, 139);
             this.hexData.TabIndex = 18;
             // 
             // treeXml
             // 
             this.treeXml.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeXml.Location = new System.Drawing.Point(0, 0);
-            this.treeXml.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.treeXml.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.treeXml.Name = "treeXml";
-            this.treeXml.Size = new System.Drawing.Size(672, 66);
+            this.treeXml.Size = new System.Drawing.Size(1614, 143);
             this.treeXml.TabIndex = 0;
             // 
             // tabDebug
@@ -1169,57 +1203,58 @@ namespace CodeStrikeBot
             this.tabDebug.Controls.Add(this.txt);
             this.tabDebug.Controls.Add(this.txtCustomY);
             this.tabDebug.Controls.Add(this.txtCustomX);
-            this.tabDebug.Location = new System.Drawing.Point(4, 22);
-            this.tabDebug.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.tabDebug.Location = new System.Drawing.Point(8, 39);
+            this.tabDebug.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.tabDebug.Name = "tabDebug";
-            this.tabDebug.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.tabDebug.Size = new System.Drawing.Size(950, 178);
+            this.tabDebug.Padding = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.tabDebug.Size = new System.Drawing.Size(1900, 340);
             this.tabDebug.TabIndex = 3;
             this.tabDebug.Text = "Debug";
             this.tabDebug.UseVisualStyleBackColor = true;
             // 
             // txtScreenOrder
             // 
-            this.txtScreenOrder.Location = new System.Drawing.Point(74, 40);
+            this.txtScreenOrder.Location = new System.Drawing.Point(148, 77);
+            this.txtScreenOrder.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.txtScreenOrder.Multiline = true;
             this.txtScreenOrder.Name = "txtScreenOrder";
-            this.txtScreenOrder.Size = new System.Drawing.Size(100, 88);
+            this.txtScreenOrder.Size = new System.Drawing.Size(196, 166);
             this.txtScreenOrder.TabIndex = 29;
             // 
             // lblBmpChecksum
             // 
             this.lblBmpChecksum.AutoSize = true;
-            this.lblBmpChecksum.Location = new System.Drawing.Point(210, 10);
-            this.lblBmpChecksum.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblBmpChecksum.Location = new System.Drawing.Point(420, 19);
+            this.lblBmpChecksum.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblBmpChecksum.Name = "lblBmpChecksum";
-            this.lblBmpChecksum.Size = new System.Drawing.Size(0, 13);
+            this.lblBmpChecksum.Size = new System.Drawing.Size(0, 25);
             this.lblBmpChecksum.TabIndex = 28;
             // 
             // picCheck
             // 
-            this.picCheck.Location = new System.Drawing.Point(182, 7);
-            this.picCheck.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.picCheck.Location = new System.Drawing.Point(364, 13);
+            this.picCheck.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.picCheck.Name = "picCheck";
-            this.picCheck.Size = new System.Drawing.Size(20, 20);
+            this.picCheck.Size = new System.Drawing.Size(40, 38);
             this.picCheck.TabIndex = 27;
             this.picCheck.TabStop = false;
             // 
             // txtBmpSize
             // 
-            this.txtBmpSize.Location = new System.Drawing.Point(122, 6);
-            this.txtBmpSize.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.txtBmpSize.Location = new System.Drawing.Point(244, 12);
+            this.txtBmpSize.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.txtBmpSize.Name = "txtBmpSize";
-            this.txtBmpSize.Size = new System.Drawing.Size(44, 20);
+            this.txtBmpSize.Size = new System.Drawing.Size(84, 31);
             this.txtBmpSize.TabIndex = 26;
             this.txtBmpSize.Text = "20";
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(12, 40);
-            this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label6.Location = new System.Drawing.Point(24, 77);
+            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(42, 13);
+            this.label6.Size = new System.Drawing.Size(85, 25);
             this.label6.TabIndex = 25;
             this.label6.Text = "Custom";
             // 
@@ -1227,10 +1262,10 @@ namespace CodeStrikeBot
             // 
             this.textBox18.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsColorCustom, "B", true));
             this.textBox18.Enabled = false;
-            this.textBox18.Location = new System.Drawing.Point(10, 108);
-            this.textBox18.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.textBox18.Location = new System.Drawing.Point(20, 208);
+            this.textBox18.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.textBox18.Name = "textBox18";
-            this.textBox18.Size = new System.Drawing.Size(44, 20);
+            this.textBox18.Size = new System.Drawing.Size(84, 31);
             this.textBox18.TabIndex = 19;
             // 
             // bsColorCustom
@@ -1241,37 +1276,37 @@ namespace CodeStrikeBot
             // 
             this.textBox19.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsColorCustom, "G", true));
             this.textBox19.Enabled = false;
-            this.textBox19.Location = new System.Drawing.Point(10, 82);
-            this.textBox19.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.textBox19.Location = new System.Drawing.Point(20, 158);
+            this.textBox19.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.textBox19.Name = "textBox19";
-            this.textBox19.Size = new System.Drawing.Size(44, 20);
+            this.textBox19.Size = new System.Drawing.Size(84, 31);
             this.textBox19.TabIndex = 18;
             // 
             // txt
             // 
             this.txt.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsColorCustom, "R", true));
             this.txt.Enabled = false;
-            this.txt.Location = new System.Drawing.Point(10, 56);
-            this.txt.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.txt.Location = new System.Drawing.Point(20, 108);
+            this.txt.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.txt.Name = "txt";
-            this.txt.Size = new System.Drawing.Size(44, 20);
+            this.txt.Size = new System.Drawing.Size(84, 31);
             this.txt.TabIndex = 17;
             // 
             // txtCustomY
             // 
-            this.txtCustomY.Location = new System.Drawing.Point(58, 7);
-            this.txtCustomY.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.txtCustomY.Location = new System.Drawing.Point(116, 13);
+            this.txtCustomY.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.txtCustomY.Name = "txtCustomY";
-            this.txtCustomY.Size = new System.Drawing.Size(44, 20);
+            this.txtCustomY.Size = new System.Drawing.Size(84, 31);
             this.txtCustomY.TabIndex = 1;
             this.txtCustomY.Text = "0";
             // 
             // txtCustomX
             // 
-            this.txtCustomX.Location = new System.Drawing.Point(10, 7);
-            this.txtCustomX.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.txtCustomX.Location = new System.Drawing.Point(20, 13);
+            this.txtCustomX.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.txtCustomX.Name = "txtCustomX";
-            this.txtCustomX.Size = new System.Drawing.Size(44, 20);
+            this.txtCustomX.Size = new System.Drawing.Size(84, 31);
             this.txtCustomX.TabIndex = 0;
             this.txtCustomX.Text = "0";
             // 
@@ -1305,40 +1340,25 @@ namespace CodeStrikeBot
             this.dataGridViewComboBoxColumn1.Name = "dataGridViewComboBoxColumn1";
             this.dataGridViewComboBoxColumn1.Width = 68;
             // 
-            // timestampDataGridViewTextBoxColumn
+            // btnBoostModifier
             // 
-            this.timestampDataGridViewTextBoxColumn.DataPropertyName = "Timestamp";
-            this.timestampDataGridViewTextBoxColumn.HeaderText = "Timestamp";
-            this.timestampDataGridViewTextBoxColumn.Name = "timestampDataGridViewTextBoxColumn";
-            // 
-            // typeDataGridViewTextBoxColumn
-            // 
-            this.typeDataGridViewTextBoxColumn.DataPropertyName = "Type";
-            this.typeDataGridViewTextBoxColumn.HeaderText = "Type";
-            this.typeDataGridViewTextBoxColumn.Name = "typeDataGridViewTextBoxColumn";
-            this.typeDataGridViewTextBoxColumn.Width = 60;
-            // 
-            // lengthDataGridViewTextBoxColumn
-            // 
-            this.lengthDataGridViewTextBoxColumn.DataPropertyName = "Length";
-            this.lengthDataGridViewTextBoxColumn.HeaderText = "Length";
-            this.lengthDataGridViewTextBoxColumn.Name = "lengthDataGridViewTextBoxColumn";
-            this.lengthDataGridViewTextBoxColumn.Width = 50;
-            // 
-            // Id
-            // 
-            this.Id.DataPropertyName = "Id";
-            this.Id.HeaderText = "Id";
-            this.Id.Name = "Id";
+            this.btnBoostModifier.Location = new System.Drawing.Point(480, 37);
+            this.btnBoostModifier.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btnBoostModifier.Name = "btnBoostModifier";
+            this.btnBoostModifier.Size = new System.Drawing.Size(124, 44);
+            this.btnBoostModifier.TabIndex = 16;
+            this.btnBoostModifier.Text = "Boost";
+            this.btnBoostModifier.UseVisualStyleBackColor = true;
+            this.btnBoostModifier.Click += new System.EventHandler(this.btnBoostModifier_Click);
             // 
             // Main
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(958, 223);
+            this.ClientSize = new System.Drawing.Size(1916, 429);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.stsStrip);
-            this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.Name = "Main";
             this.Text = "CodeStrikeBot";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Main_FormClosed);
@@ -1492,6 +1512,7 @@ namespace CodeStrikeBot
         private System.Windows.Forms.DataGridViewTextBoxColumn typeDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn lengthDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn Id;
+        private System.Windows.Forms.Button btnBoostModifier;
     }
 }
 

@@ -1817,5 +1817,19 @@ namespace CodeStrikeBot
                 ctrl.GetAndSetEmulatorProcess(3);
             }
         }
+
+        private void btnBoostModifier_Click(object sender, EventArgs e)
+        {
+            Controller.CaptureApplication(ctrl.ActiveScreen);
+            uint chksum = ScreenState.GetScreenChecksum(ctrl.ActiveScreen.SuperBitmap, 110, 188, 20);
+
+            while (ctrl.ActiveScreen.ScreenState.CurrentArea == Area.Menus.BuildingBoost && chksum != 0xed29)
+            {
+                Controller.SendClick(ctrl.ActiveScreen, 250, 550, 100);
+
+                Controller.CaptureApplication(ctrl.ActiveScreen);
+                chksum = ScreenState.GetScreenChecksum(ctrl.ActiveScreen.SuperBitmap, 110, 188, 20);
+            }
+        }
     }
 }
