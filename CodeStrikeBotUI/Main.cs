@@ -842,7 +842,7 @@ namespace CodeStrikeBot
 
             Messages.Message message = null;
 
-            foreach (Messages.Message m in messages)
+            /*foreach (Messages.Message m in messages)
             {
                 if (!m.Complete && m.Ack == tcpPacket.AcknowledgmentNumber)
                 {
@@ -851,7 +851,7 @@ namespace CodeStrikeBot
                     message.AddPacket(packet);
                     break;
                 }
-            }
+            }*/
 
             if (!found)
             {
