@@ -20,7 +20,7 @@ namespace CodeStrikeBot
         {
             if (!File.Exists("data.sdf"))
             {
-                SqlCeEngine en = new SqlCeEngine("DataSource=\"data.sdf\";Password='codestrikebot';Max Database Size=1024");
+                SqlCeEngine en = new SqlCeEngine("DataSource=\"data.sdf\";Password='codestrikebot';Max Database Size=2048");
                 en.CreateDatabase();
             }
 
@@ -36,7 +36,7 @@ namespace CodeStrikeBot
 
         private static SqlCeConnection GetNewConnection()
         {
-            return new SqlCeConnection("DataSource=\"data.sdf\";Password='codestrikebot';Max Database Size=1024");
+            return new SqlCeConnection("DataSource=\"data.sdf\";Password='codestrikebot';Max Database Size=2048");
         }
 
         private void UpdateDatabase()
@@ -433,17 +433,6 @@ namespace CodeStrikeBot
             }
 
             return accounts;
-        }
-
-        public void InsertLog(int logType, byte[] data)
-        {
-            SqlCeCommand command = new SqlCeCommand("INSERT INTO log (type, data) VALUES (@type, @data)", Connection);
-            command.Parameters.AddWithValue("@type", logType);
-            //command.Parameters.AddWithValue("@data", String.Format("X'{0}'", BitConverter.ToString(data).Replace("-", "")));
-            command.Parameters.AddWithValue("@data", data);
-            command.ExecuteNonQuery();
-
-            command.Dispose();
         }
     }
 }
