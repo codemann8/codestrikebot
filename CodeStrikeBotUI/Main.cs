@@ -873,7 +873,7 @@ namespace CodeStrikeBot
 
                     foreach (Messages.Message m in messages)
                     {
-                        if (m.Complete && message.Id != "" && m.Id == message.Id)
+                        if (m.Complete && message.Id != null && message.Id != "" && m.Id == message.Id)
                         {
                             if (m.Length == message.Length)
                             {

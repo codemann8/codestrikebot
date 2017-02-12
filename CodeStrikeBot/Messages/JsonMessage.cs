@@ -41,6 +41,8 @@ namespace CodeStrikeBot.Messages
                 {
                     ret.Id = node.FirstChild.Attributes["id"].Value;
 
+                    node = ret.Document.DocumentElement.FirstChild.FirstChild;
+
                     switch (node.Attributes["node"].Value)
                     {
                         case "EVENT_WAR_RALLY_BEGAN": //rally defense
