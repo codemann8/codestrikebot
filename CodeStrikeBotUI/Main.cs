@@ -882,6 +882,7 @@ namespace CodeStrikeBot
                             }
                             else
                             {
+                                found = found;
                                 //BotDatabase.InsertLog(0, "Packet", "", message.PayloadData);
                             }
                         }
