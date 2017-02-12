@@ -1035,33 +1035,48 @@ namespace CodeStrikeBot
 
         public static void SendKey(Screen s, string keys, bool escape = false)
         {
+            
             if (keys != null && s != null && s.EmulatorProcess != null && !s.EmulatorProcess.HasExited && s.ScreenState.CurrentArea != Area.Emulators.Loading)
             {
-                //if (keys.All(c => "`1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./\n".Contains(c)))
+                if (s.Emulator.Type == EmulatorType.Leapdroid)
                 {
-                    //SendKeyDirect(s, keys);
+                    Main.CurrentForm.Invoke(new Action(() => SendKeyAlternative(s, keys, escape)));
                 }
-                /*else if (!s.ClipboardFailed)
+                else
                 {
-                    if (Main.CurrentForm.InvokeRequired)
+                    if (!s.ClipboardFailed)
                     {
-                        Main.CurrentForm.Invoke(new Action(() => SendKeyPaste(s, keys)));
+                        if (Main.CurrentForm.InvokeRequired)
+                        {
+                            Main.CurrentForm.Invoke(new Action(() => SendKeyPaste(s, keys)));
+                        }
+                        else
+                        {
+                            SendKeyPaste(s, keys);
+                        }
+                    }
+                    else if (keys.All(c => "`1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./\n".Contains(c)))
+                    {
+                        if (Main.CurrentForm.InvokeRequired)
+                        {
+                            Main.CurrentForm.Invoke(new Action(() => SendKeyDirect(s, keys)));
+                        }
+                        else
+                        {
+                            SendKeyDirect(s, keys);
+                        }
                     }
                     else
                     {
-                        SendKeyPaste(s, keys);
-                    }
-                }*/
-                //else
-                {
-                    //if (Main.CurrentForm.InvokeRequired)
-                    {
-                        Main.CurrentForm.Invoke(new Action(() => SendKeyAlternative(s, keys, escape)));
-                    }
-                    //else
-                    {
-                        //SendKeyAlternative(s, keys, escape);
-                        //SendKeyRaw(s, keys, escape);
+                        if (Main.CurrentForm.InvokeRequired)
+                        {
+                            Main.CurrentForm.Invoke(new Action(() => SendKeyAlternative(s, keys, escape)));
+                        }
+                        else
+                        {
+                            SendKeyAlternative(s, keys, escape);
+                            //SendKeyRaw(s, keys, escape);
+                        }
                     }
                 }
             }
@@ -1093,6 +1108,8 @@ namespace CodeStrikeBot
             {
                 if (keys.All(c => "`1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./".Contains(c)))
                 {
+                    Thread.Sleep(500);
+
                     foreach (char c in keys)
                     {
                         VirtualKeyShort key = 0;
