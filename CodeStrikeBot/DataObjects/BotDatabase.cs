@@ -165,8 +165,8 @@ namespace CodeStrikeBot
                     if (account.Id == 0)
                     {
                         command = new SqlCeCommand("INSERT INTO accounts (name, username, email, password, priority, foodNegativeAmt, lastLogin, lastLogout) VALUES (@name, @username, @email, @password, @priority, @foodNegAmt, @lastLogin, @lastLogout)", con);
-                        command.Parameters.AddWithValue("@lastLogin", new DateTime());
-                        command.Parameters.AddWithValue("@lastLogout", new DateTime());
+                        command.Parameters.AddWithValue("@lastLogin", new DateTime().AddYears(1972));
+                        command.Parameters.AddWithValue("@lastLogout", new DateTime().AddYears(1972));
                     }
                     else
                     {
@@ -199,7 +199,7 @@ namespace CodeStrikeBot
                     if (task.Id == 0)
                     {
                         command = new SqlCeCommand("INSERT INTO schedules (accountId, type, interval, amount, count, x, y, backupX, backupY, lastAction) VALUES (@accountId, @type, @interval, @amt, @count, @x, @y, @altX, @altY, @lastAction)", con);
-                        command.Parameters.AddWithValue("@lastAction", new DateTime());
+                        command.Parameters.AddWithValue("@lastAction", new DateTime().AddYears(1972));
                     }
                     else
                     {
