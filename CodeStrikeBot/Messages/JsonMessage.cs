@@ -39,7 +39,7 @@ namespace CodeStrikeBot.Messages
 
                 if (node != null && node.Name == "items")
                 {
-                    ret.Id = UInt64.Parse(node.FirstChild.Attributes["id"].Value, System.Globalization.NumberStyles.HexNumber);
+                    ret.Id = node.FirstChild.Attributes["id"].Value;
 
                     switch (node.Attributes["node"].Value)
                     {

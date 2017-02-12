@@ -19,7 +19,7 @@ namespace CodeStrikeBot.Messages
 
             try
             {
-                this.Id = UInt64.Parse(node.Attributes["id"].Value);
+                this.Id = node.Attributes["id"].Value;
             }
             catch (FormatException e)
             {
