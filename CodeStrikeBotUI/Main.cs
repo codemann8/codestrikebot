@@ -873,7 +873,7 @@ namespace CodeStrikeBot
 
                     foreach (Messages.Message m in messages)
                     {
-                        if (m.Complete && message.Id != 0 && m.Id == message.Id)
+                        if (m.Complete && message.Id != "" && m.Id == message.Id)
                         {
                             if (m.Length == message.Length)
                             {
@@ -882,7 +882,7 @@ namespace CodeStrikeBot
                             }
                             else
                             {
-                                ctrl.Database.InsertLog(0, message.PayloadData);
+                                //BotDatabase.InsertLog(0, "Packet", "", message.PayloadData);
                             }
                         }
                     }
