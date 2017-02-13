@@ -1827,6 +1827,8 @@ namespace CodeStrikeBot
             {
                 Controller.SendClick(ctrl.ActiveScreen, 250, 566, 100);
 
+                Application.DoEvents();
+
                 Controller.CaptureApplication(ctrl.ActiveScreen);
                 chksum = ScreenState.GetScreenChecksum(ctrl.ActiveScreen.SuperBitmap, 110, 188, 20);
             }
