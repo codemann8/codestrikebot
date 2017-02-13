@@ -940,7 +940,7 @@ namespace CodeStrikeBot
                                 else
                                 {
                                     //normal
-                                    ctrl.SendPushover(String.Format("Rally call for {0}{1} by {2}{3}", warMessage.DefenderAlliance, warMessage.DefenderName, warMessage.AttackerAlliance, warMessage.AttackerName), 1);
+                                    ctrl.SendPushover(String.Format("Rally call for {0}{1} by {2}{3}", warMessage.DefenderAlliance, warMessage.DefenderName, warMessage.AttackerAlliance, warMessage.AttackerName), 0);
                                 }
 
                                 tmrSupressAction.Restart();
