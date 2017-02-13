@@ -420,6 +420,8 @@ namespace CodeStrikeBot
                             case 0x0a36: //nox
                             case 0x68e7: //nox Special Winter Shooting Range modal
                             case 0x3554: //nox Special Winter Shooting Range
+                            case 0xc192: //memu Special Valentine's Day Shooting Range modal
+                            case 0x3a76: //memu Special Valentine's Day Shooting Range
                                 chksum = ScreenState.GetScreenChecksum(s.SuperBitmap, 300, 70, 10);
                                 if (chksum == 0xd714)
                                 {
