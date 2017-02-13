@@ -842,7 +842,7 @@ namespace CodeStrikeBot
 
             Messages.Message message = null;
 
-            /*foreach (Messages.Message m in messages)
+            foreach (Messages.Message m in messages)
             {
                 if (!m.Complete && m.Ack == tcpPacket.AcknowledgmentNumber)
                 {
@@ -851,7 +851,7 @@ namespace CodeStrikeBot
                     message.AddPacket(packet);
                     break;
                 }
-            }*/
+            }
 
             if (!found)
             {
@@ -940,7 +940,7 @@ namespace CodeStrikeBot
                                 else
                                 {
                                     //normal
-                                    ctrl.SendPushover(String.Format("Rally call for {0}{1} by {2}{3}", warMessage.DefenderAlliance, warMessage.DefenderName, warMessage.AttackerAlliance, warMessage.AttackerName));
+                                    ctrl.SendPushover(String.Format("Rally call for {0}{1} by {2}{3}", warMessage.DefenderAlliance, warMessage.DefenderName, warMessage.AttackerAlliance, warMessage.AttackerName), 1);
                                 }
 
                                 tmrSupressAction.Restart();
