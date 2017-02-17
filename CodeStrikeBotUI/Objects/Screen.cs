@@ -843,6 +843,8 @@ namespace CodeStrikeBot
 
                                 break;
                             }
+                           
+                            System.Windows.Forms.Application.DoEvents();
 
                             success = true;
 
@@ -859,6 +861,8 @@ namespace CodeStrikeBot
                     }
 
                     Controller.CaptureApplication(this);
+
+                    System.Windows.Forms.Application.DoEvents();
 
                     tries++;
                 }

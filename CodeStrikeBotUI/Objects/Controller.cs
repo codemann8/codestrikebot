@@ -564,6 +564,8 @@ namespace CodeStrikeBot
 
                             while (s.ScreenState.CurrentArea == Area.Emulators.Loading || chksum == 0x0474)
                             {
+                                System.Windows.Forms.Application.DoEvents();
+
                                 Thread.Sleep(500);
                                 Controller.CaptureApplication(s);
 
@@ -736,7 +738,10 @@ namespace CodeStrikeBot
             {
                 tmrRun.Start();
 
-                while (!s.Logout() && tmrRun.ElapsedMilliseconds < 20000) { }
+                while (!s.Logout() && tmrRun.ElapsedMilliseconds < 20000)
+                {
+                    System.Windows.Forms.Application.DoEvents();
+                }
 
                 if (tmrRun.ElapsedMilliseconds < 20000 && s.Emulator.LastKnownAccount != null && s.Emulator.LastKnownAccount.Id != 0)
                 {
