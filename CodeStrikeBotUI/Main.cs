@@ -700,6 +700,7 @@ namespace CodeStrikeBot
                 if (shouldSave)
                 {
                     task = task.Save();
+                    tmrLateSchedule.Restart();
                 }
             }
         }
@@ -1416,12 +1417,7 @@ namespace CodeStrikeBot
                                         ctrl.KillEmulator(s, false);
                                     }
                                 }
-		
-                                Program.RestartApp();
-                            }
 
-                            if (DateTime.Now.Subtract(task.NextAction).Minutes > 10)
-                            {
                                 tmrLateSchedule.Restart();
                                 Program.RestartApp();
                             }
