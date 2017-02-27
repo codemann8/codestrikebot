@@ -362,7 +362,7 @@ namespace CodeStrikeBot
                 }
                 else if (typeof(T) == typeof(Settings))
                 {
-                    command = new SqlCeCommand("SELECT version, emulator1, emulator2, emulator3, emulator4, mapDir, screenshotDir FROM settings", con);
+                    command = new SqlCeCommand("SELECT version, emulatorId1, emulatorId2, emulatorId3, emulatorId4, mapDir, screenshotDir FROM settings", con);
                     reader = command.ExecuteReader();
 
                     reader.Read();

@@ -11,13 +11,13 @@ namespace CodeStrikeBot
     {
         [Column(Name = "version")]
         public int Version { get; set; }
-        [Column(Name = "emulator1")]
+        [Column(Name = "emulatorId1")]
         public int Emulator1 { get; set; }
-        [Column(Name = "emulator2")]
+        [Column(Name = "emulatorId2")]
         public int Emulator2 { get; set; }
-        [Column(Name = "emulator3")]
+        [Column(Name = "emulatorId3")]
         public int Emulator3 { get; set; }
-        [Column(Name = "emulator4")]
+        [Column(Name = "emulatorId4")]
         public int Emulator4 { get; set; }
         [Column(Name = "mapDir")]
         public string MapDir { get; set; }
