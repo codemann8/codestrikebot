@@ -1837,5 +1837,15 @@ namespace CodeStrikeBot
                 chksum = ScreenState.GetScreenChecksum(ctrl.ActiveScreen.SuperBitmap, 110, 188, 20);
             }
         }
+
+        private void btnSaveSettings_Click(object sender, EventArgs e)
+        {
+            ctrl.Database.Settings.Emulator1 = Int32.Parse(txtEmulator1.Text);
+            ctrl.Database.Settings.Emulator2 = Int32.Parse(txtEmulator2.Text);
+            ctrl.Database.Settings.Emulator3 = Int32.Parse(txtEmulator3.Text);
+            ctrl.Database.Settings.Emulator4 = Int32.Parse(txtEmulator4.Text);
+
+            ctrl.Database.Settings.Save();
+        }
     }
 }
