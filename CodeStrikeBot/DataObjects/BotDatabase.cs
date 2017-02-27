@@ -214,7 +214,7 @@ namespace CodeStrikeBot
                 {
                     Settings settings = (Settings)obj;
 
-                    command = new SqlCeCommand("UPDATE settings SET version = @version, emulator1 = @emulator1, emulator2 = @emulator2, emulator3 = @emulator3, emulator4 = @emulator4, mapDir = @mapDir, screenshotDir = @ssDir", con);
+                    command = new SqlCeCommand("UPDATE settings SET version = @version, emulatorId1 = @emulator1, emulatorId2 = @emulator2, emulatorId3 = @emulator3, emulatorId4 = @emulator4, mapDir = @mapDir, screenshotDir = @ssDir", con);
                     
                     command.Parameters.AddWithValue("@version", settings.Version);
                     command.Parameters.AddWithValue("@emulator1", settings.Emulator1);
