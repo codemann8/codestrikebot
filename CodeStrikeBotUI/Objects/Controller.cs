@@ -115,11 +115,11 @@ namespace CodeStrikeBot
             bool restart = false;
 
             sc = new Screen[4];
-            for (int i = 0; i < Database.ActiveEmulators.Length; i++)
+            for (int i = 0; i < Database.Settings.ActiveEmulators.Length; i++)
             {
                 foreach (EmulatorInstance e in emulators)
                 {
-                    if (e.Id == Database.ActiveEmulators[i])
+                    if (e.Id == Database.Settings.ActiveEmulators[i])
                     {
                         sc[i] = Screen.CreateScreen(e);
                         if (sc[i].EmulatorProcess == null)
@@ -227,11 +227,11 @@ namespace CodeStrikeBot
 
         public string GetFullScreenshotDir()
         {
-            string dir = Database.ScreenshotDir;
+            string dir = Database.Settings.ScreenshotDir;
             
             if (!dir.Contains(':'))
             {
-                dir = String.Format("{0}\\{1}", System.Windows.Forms.Application.StartupPath, Database.ScreenshotDir);
+                dir = String.Format("{0}\\{1}", System.Windows.Forms.Application.StartupPath, Database.Settings.ScreenshotDir);
             }
 
             return dir;
@@ -1857,7 +1857,11 @@ namespace CodeStrikeBot
                     sc[window].Emulator = Controller.FindOrCreateEmulatorInstance(process);
                 }
 
-                Database.UpdateSettings(new EmulatorInstance[4] { (sc[0] != null ? sc[0].Emulator : null), (sc[1] != null ? sc[1].Emulator : null), (sc[2] != null ? sc[2].Emulator : null), (sc[3] != null ? sc[3].Emulator : null) }, Database.ScreenshotDir, Database.MapDir);
+                Database.Settings.Emulator1 = (sc[0] != null ? sc[0].Emulator.Id : 0);
+                Database.Settings.Emulator2 = (sc[1] != null ? sc[1].Emulator.Id : 0);
+                Database.Settings.Emulator3 = (sc[2] != null ? sc[2].Emulator.Id : 0);
+                Database.Settings.Emulator4 = (sc[3] != null ? sc[3].Emulator.Id : 0);
+                BotDatabase.SaveObject(Database.Settings);
             }
         }
 

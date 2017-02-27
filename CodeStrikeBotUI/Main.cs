@@ -75,6 +75,11 @@ namespace CodeStrikeBot
 
             ctrl = new Controller();
 
+            txtEmulator1.Text = ctrl.Database.Settings.Emulator1.ToString();
+            txtEmulator2.Text = ctrl.Database.Settings.Emulator2.ToString();
+            txtEmulator3.Text = ctrl.Database.Settings.Emulator3.ToString();
+            txtEmulator4.Text = ctrl.Database.Settings.Emulator4.ToString();
+
             //debug windowing info
             string infoText = String.Format("FrameBorder={0}", SystemInformation.FrameBorderSize);
             infoText += String.Format("\nResizeFrameVerticalBorderWidth={0}", System.Windows.SystemParameters.ResizeFrameVerticalBorderWidth);

@@ -13,8 +13,10 @@ namespace CodeStrikeBot
     {
         public SqlCeConnection Connection { get; private set; }
 
-        public int[] ActiveEmulators;
-        public string ScreenshotDir, MapDir;
+        //public int[] ActiveEmulators;
+        //public string ScreenshotDir, MapDir;
+
+        public Settings Settings { get; set; }
 
         public BotDatabase()
         {
@@ -27,11 +29,11 @@ namespace CodeStrikeBot
             Connection = GetNewConnection();
             Connection.Open();
 
-            this.ActiveEmulators = new int[4];
+            //this.ActiveEmulators = new int[4];
 
             this.UpdateDatabase();
 
-            this.LoadSettings();
+            this.Settings = this.GetSettings();
         }
 
         private static SqlCeConnection GetNewConnection()
@@ -92,61 +94,9 @@ namespace CodeStrikeBot
             }
         }
 
-        private void LoadSettings()
+        private Settings GetSettings()
         {
-            SqlCeCommand command = new SqlCeCommand("SELECT emulatorId1, emulatorId2, emulatorId3, emulatorId4, screenshotDir, mapDir FROM settings", Connection);
-            SqlCeDataReader reader = command.ExecuteReader();
-            reader.Read();
-            this.ActiveEmulators[0] = reader.GetInt32(0);
-            this.ActiveEmulators[1] = reader.GetInt32(1);
-            this.ActiveEmulators[2] = reader.GetInt32(2);
-            this.ActiveEmulators[3] = reader.GetInt32(3);
-            this.ScreenshotDir = reader.GetString(4);
-            this.MapDir = reader.GetString(5);
-            command.Dispose();
-            reader.Dispose();
-        }
-
-        public void UpdateSettings(EmulatorInstance[] emulators, string ssPath, string mapPath)
-        {
-            if (emulators[0] != null)
-            {
-                this.ActiveEmulators[0] = emulators[0].Id;
-            }
-            else
-            {
-                this.ActiveEmulators[0] = 0;
-            }
-            if (emulators[1] != null)
-            {
-                this.ActiveEmulators[1] = emulators[1].Id;
-            }
-            else
-            {
-                this.ActiveEmulators[1] = 0;
-            }
-            if (emulators[2] != null)
-            {
-                this.ActiveEmulators[2] = emulators[2].Id;
-            }
-            else
-            {
-                this.ActiveEmulators[2] = 0;
-            }
-            if (emulators[3] != null)
-            {
-                this.ActiveEmulators[3] = emulators[3].Id;
-            }
-            else
-            {
-                this.ActiveEmulators[3] = 0;
-            }
-            this.ScreenshotDir = ssPath;
-            this.MapDir = mapPath;
-
-            SqlCeCommand command = new SqlCeCommand(String.Format("UPDATE settings SET emulatorId1 = {0}, emulatorId2 = {1}, emulatorId3 = {2}, emulatorId4 = {3}, screenshotDir = '{4}', mapDir = '{5}'", ActiveEmulators[0], ActiveEmulators[1], ActiveEmulators[2], ActiveEmulators[3], ScreenshotDir, MapDir), Connection);
-            command.ExecuteNonQuery();
-            command.Dispose();
+            return (Settings)(GetObjects<Settings>()[0]);
         }
 
         public static DataObject SaveObject(DataObject obj)
@@ -259,6 +209,23 @@ namespace CodeStrikeBot
                     }
 
                     obj = emulator;
+                }
+                else if (obj is Settings)
+                {
+                    Settings settings = (Settings)obj;
+
+                    command = new SqlCeCommand("UPDATE settings SET version = @version, emulator1 = @emulator1, emulator2 = @emulator2, emulator3 = @emulator3, emulator4 = @emulator4, mapDir = @mapDir, screenshotDir = @ssDir", con);
+                    
+                    command.Parameters.AddWithValue("@version", settings.Version);
+                    command.Parameters.AddWithValue("@emulator1", settings.Emulator1);
+                    command.Parameters.AddWithValue("@emulator2", settings.Emulator2);
+                    command.Parameters.AddWithValue("@emulator3", settings.Emulator3);
+                    command.Parameters.AddWithValue("@emulator4", settings.Emulator4);
+                    command.Parameters.AddWithValue("@mapDir", settings.MapDir);
+                    command.Parameters.AddWithValue("@ssDir", settings.ScreenshotDir);
+                    command.ExecuteNonQuery();
+
+                    obj = settings;
                 }
             }
             catch (SqlCeException e)
@@ -393,6 +360,15 @@ namespace CodeStrikeBot
                         list.Add(emulator);
                     }
                 }
+                else if (typeof(T) == typeof(Settings))
+                {
+                    command = new SqlCeCommand("SELECT version, emulator1, emulator2, emulator3, emulator4, mapDir, screenshotDir FROM settings", con);
+                    reader = command.ExecuteReader();
+
+                    reader.Read();
+                    Settings settings = new Settings(reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2), reader.GetInt32(3), reader.GetInt32(4), reader.GetString(5), reader.GetString(6));
+                    list.Add(settings);
+                }
             }
             catch (SqlCeException e)
             {
@@ -418,21 +394,6 @@ namespace CodeStrikeBot
             con.Close();
 
             return list;
-        }
-
-        public List<Account> GetAccounts()
-        {
-            List<Account> accounts = new List<Account>();
-
-            SqlCeCommand command = new SqlCeCommand("SELECT id, name, username, email, password, priority, foodNegativeAmt, lastLogin, lastLogout FROM accounts", Connection);
-            SqlCeDataReader reader = command.ExecuteReader();
-
-            while (reader.Read())
-            {
-                accounts.Add(new Account(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), (AccountPriority)reader.GetInt32(5), reader.GetInt32(6), reader.GetDateTime(7), reader.GetDateTime(8)));
-            }
-
-            return accounts;
         }
     }
 }
