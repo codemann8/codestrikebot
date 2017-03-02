@@ -1729,7 +1729,7 @@ namespace CodeStrikeBot
 
                                         //if (chksum == 0x9148)
                                         //if (chksum == 0xf74a || chksum == 0x4682) //nox
-                                        if (chksum == 0x8b84) //memu
+                                        if (chksum == 0x7166) //memu
                                         {
                                             targetSelected = true;
                                         }
