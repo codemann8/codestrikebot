@@ -1723,7 +1723,7 @@ namespace CodeStrikeBot
                                 {
                                     c = SuperBitmap.GetPixel(200, i);
 
-                                    if (c.Equals(57, 134, 156))
+                                    if (c.Equals(57, 121, 140))
                                     {
                                         chksum = ScreenState.GetScreenChecksum(SuperBitmap, 195, i - 20, 20);
 
@@ -1889,7 +1889,7 @@ namespace CodeStrikeBot
                                             Controller.CaptureApplication(this);
                                             c = SuperBitmap.GetPixel(65, 520);
                                         }
-                                        while (!c.Within(57, 134, 156, 1) && watch.ElapsedMilliseconds < 7000);
+                                        while (!c.Within(57, 121, 140, 1) && watch.ElapsedMilliseconds < 7000);
 
                                         rssNotSet = false;
                                     }
@@ -1936,7 +1936,7 @@ namespace CodeStrikeBot
                                                 break;
                                             default:
                                                 c = SuperBitmap.GetPixel(65, 520);
-                                                if (c.Equals(57, 134, 156))
+                                                if (c.Equals(57, 121, 140))
                                                 {
                                                     pending = false;
                                                 }
