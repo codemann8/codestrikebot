@@ -1567,7 +1567,7 @@ namespace CodeStrikeBot
                         {
                             c = SuperBitmap.GetPixel(282, m);
 
-                            if (c.Equals(33, 158, 90))
+                            if (c.Equals(49, 150, 90))
                             {
                                 //collect mission
                                 clicked = true;
@@ -1729,7 +1729,7 @@ namespace CodeStrikeBot
 
                                         //if (chksum == 0x9148)
                                         //if (chksum == 0xf74a || chksum == 0x4682) //nox
-                                        if (chksum == 0x7166) //memu
+                                        if (chksum == 0xff88) //memu
                                         {
                                             targetSelected = true;
                                         }
