@@ -622,11 +622,11 @@ namespace CodeStrikeBot
                                             case 0x32c5: //Daily Bonus Club
                                             case 0xf84f: //nox Free Daily Bonus
                                                 c = s.SuperBitmap.GetPixel(95, 498);
-                                                if (c.Equals(41, 109, 140))
+                                                if (c.Equals(82, 142, 165))
                                                 {
                                                     state.CurrentArea = Area.MainBases.DailyLogin;
                                                 }
-                                                else if (c.Equals(99, 97, 99))
+                                                else if (c.Equals(90, 89, 90))
                                                 {
                                                     state.CurrentArea = Area.MainBases.DailyLoginClaimed;
                                                 }
