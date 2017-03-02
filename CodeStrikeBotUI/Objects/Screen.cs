@@ -1442,7 +1442,7 @@ namespace CodeStrikeBot
                     {
                         c = SuperBitmap.GetPixel(200, 175);
 
-                        if (c.Equals(57, 121, 140)) //open 50/All
+                        if (c.Equals(33, 40, 49)) //open 50/All
                         {
                             Controller.SendClick(this, 100, 183, 3000); //click Open 50/All
 
@@ -2518,7 +2518,7 @@ namespace CodeStrikeBot
 
                     ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 290, 550, 10);
                     //if (chksum == 0xbd52) //help
-                    if (chksum == 0x394d) //nox help
+                    if (chksum == 0xe94d) //nox help
                     {
                         Controller.SendClick(this, 365, 565, 50); //click Help All
                     }
@@ -2529,7 +2529,7 @@ namespace CodeStrikeBot
                         //if (ScreenState.GetScreenChecksum(bmp, 150, 273, 10) == 0xe6f5 && ScreenState.GetScreenChecksum(bmp, 192, 273, 10) != 0xf143) //loading //f143 depricated?
                         //if (chksum == 0xe6f5 && chksum2 != 0x4266)
                         //if (chksum == 0xd923 && chksum2 != 0x4266) //nox, not true for some reason
-                        if (chksum == 0x3968 && chksum2 != 0xef2b) //memu
+                        if (chksum == 0x3968 && chksum2 != 0xc3d1) //memu
                         {
                             Thread.Sleep((int)(50 * TimeoutFactor));
                         }
