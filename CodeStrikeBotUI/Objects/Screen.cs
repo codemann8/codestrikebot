@@ -1581,7 +1581,7 @@ namespace CodeStrikeBot
                                 Thread.Sleep(50);
                                 break;
                             }*/
-                            else if (c.Equals(57,))
+                            else if (c.Equals(57, 121, 140))
                             {
                                 //start mission
                                 clicked = true;
