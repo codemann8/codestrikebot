@@ -677,9 +677,9 @@ namespace CodeStrikeBot
                                         Controller.CaptureApplication(this);
                                         c = SuperBitmap.GetPixel(60, 224);
                                     }
-                                    while (!c.Equals(57, 134, 165) && tmrRun.ElapsedMilliseconds < 3000);
+                                    while (!c.Equals(57, 121, 140) && tmrRun.ElapsedMilliseconds < 3000);
 
-                                    if (c.Equals(57, 134, 165))
+                                    if (c.Equals(57, 121, 140))
                                     {
                                         tmrRun.Restart();
 
@@ -1438,9 +1438,17 @@ namespace CodeStrikeBot
                     {
                         Controller.SendClick(this, 321, 198, 600); //click gifts
                     }
-                    else if (ScreenState.CurrentArea == Area.Menus.Gifts && (c.Equals(57, 134, 165) || c.Equals(57, 134, 156))) //clear gifts button is available
+                    else if (ScreenState.CurrentArea == Area.Menus.Gifts && c.Equals(57, 121, 140)) //clear gifts button is available
                     {
-                        if (c.Equals(57, 134, 165))
+                        c = SuperBitmap.GetPixel(200, 175);
+
+                        if (c.Equals(57, 121, 140)) //open 50/All
+                        {
+                            Controller.SendClick(this, 100, 183, 3000); //click Open 50/All
+
+                            Controller.SendClick(this, 350, 190, 100); //click X
+                        }
+                        else
                         {
                             for (int p = 217; p < 586; p++)
                             {
@@ -1452,13 +1460,13 @@ namespace CodeStrikeBot
                                     Thread.Sleep((int)(100 * TimeoutFactor));
                                     p = 586;
                                 }
-                                else if (c.Equals(57, 134, 165))
+                                else if (c.Equals(57, 121, 140))
                                 {
                                     //open
                                     Controller.SendClick(this, 335, p, 100);
                                     p = 586;
                                 }
-                                else if (c.Equals(231, 20, 41))
+                                else if (c.Equals(206, 56, 57))
                                 {
                                     //clear
                                 }
@@ -1467,12 +1475,6 @@ namespace CodeStrikeBot
                                     Controller.SendClick(this, 335, 183, 100); //click Clear all
                                 }
                             }
-                        }
-                        else if (c.Equals(57, 134, 156)) //open 50
-                        {
-                            Controller.SendClick(this, 100, 183, 3000); //click Open 50
-
-                            Controller.SendClick(this, 350, 190, 100); //click X
                         }
                     }
                     else
@@ -1484,7 +1486,7 @@ namespace CodeStrikeBot
                 {
                     SuperBitmap.Bitmap.Save(String.Format("{0}\\-save.bmp", Controller.Instance.GetFullScreenshotDir()), System.Drawing.Imaging.ImageFormat.Bmp);
 
-                    if (ScreenState.CurrentArea == Area.Menus.Gifts && SuperBitmap.GetPixel(335, 175).Equals(57, 134, 165)) //clear gifts button is available
+                    if (ScreenState.CurrentArea == Area.Menus.Gifts && SuperBitmap.GetPixel(335, 175).Equals(57, 121, 140)) //clear gifts button is available
                     {
                         giftsLeft = true;
 
@@ -1579,7 +1581,7 @@ namespace CodeStrikeBot
                                 Thread.Sleep(50);
                                 break;
                             }*/
-                            else if (c.Equals(57, 134, 165))
+                            else if (c.Equals(57,))
                             {
                                 //start mission
                                 clicked = true;
@@ -2302,7 +2304,7 @@ namespace CodeStrikeBot
                             //loading
                             Thread.Sleep((int)(200 * TimeoutFactor));
                         }
-                        else if (c.Equals(57, 134, 165))
+                        else if (c.Equals(57, 121, 140))
                         {
                             //complete
                             Controller.SendClick(this, 290, 141, 100);
@@ -2516,7 +2518,7 @@ namespace CodeStrikeBot
 
                     ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 290, 550, 10);
                     //if (chksum == 0xbd52) //help
-                    if (chksum == 0x3e63) //nox help
+                    if (chksum == 0x394d) //nox help
                     {
                         Controller.SendClick(this, 365, 565, 50); //click Help All
                     }
@@ -2527,7 +2529,7 @@ namespace CodeStrikeBot
                         //if (ScreenState.GetScreenChecksum(bmp, 150, 273, 10) == 0xe6f5 && ScreenState.GetScreenChecksum(bmp, 192, 273, 10) != 0xf143) //loading //f143 depricated?
                         //if (chksum == 0xe6f5 && chksum2 != 0x4266)
                         //if (chksum == 0xd923 && chksum2 != 0x4266) //nox, not true for some reason
-                        if (chksum == 0x7619 && chksum2 != 0xef2b) //nox
+                        if (chksum == 0x3968 && chksum2 != 0xef2b) //memu
                         {
                             Thread.Sleep((int)(50 * TimeoutFactor));
                         }
