@@ -1725,11 +1725,11 @@ namespace CodeStrikeBot
 
                                     if (c.Equals(57, 121, 140))
                                     {
-                                        chksum = ScreenState.GetScreenChecksum(SuperBitmap, 195, i - 20, 20);
+                                        chksum = ScreenState.GetScreenChecksum(SuperBitmap, 195, i - 5, 20);
 
                                         //if (chksum == 0x9148)
                                         //if (chksum == 0xf74a || chksum == 0x4682) //nox
-                                        if (chksum == 0xff88) //memu
+                                        if (chksum == 0x10b3) //memu
                                         {
                                             targetSelected = true;
                                         }
