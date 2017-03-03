@@ -1577,7 +1577,7 @@ namespace CodeStrikeBot
                         chksum = bmpScreenCapture.Checksum(510, 442, 20, 20);
                         if (chksum == 0x0474)
                         {
-                            Controller.SendClick(null, 980, 620, 1000);
+                            Controller.SendClick(null, 975, 620, 1000);
                         }
                     }
 
