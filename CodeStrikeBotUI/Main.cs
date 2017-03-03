@@ -1844,18 +1844,18 @@ namespace CodeStrikeBot
 
                 while (ctrl.ActiveScreen.ScreenState.CurrentArea == Area.Menus.BuildingBoost && chksum != 0x4d79)
                 {
-                    while (!ctrl.ActiveScreen.SuperBitmap.GetPixel(244, 546).Equals(33, 142, 82))
-                    {
-                        System.Threading.Thread.Sleep(100);
-                        Controller.CaptureApplication(ctrl.ActiveScreen);
-                    }
-
                     Controller.SendClick(ctrl.ActiveScreen, 250, 566, 1000);
 
                     Application.DoEvents();
 
                     Controller.CaptureApplication(ctrl.ActiveScreen);
                     chksum = ScreenState.GetScreenChecksum(ctrl.ActiveScreen.SuperBitmap, 284, 370, 20);
+
+                    while (ctrl.ActiveScreen.ScreenState.CurrentArea == Area.Menus.BuildingBoost && !ctrl.ActiveScreen.SuperBitmap.GetPixel(244, 546).Equals(33, 142, 82))
+                    {
+                        System.Threading.Thread.Sleep(100);
+                        Controller.CaptureApplication(ctrl.ActiveScreen);
+                    }
                 }
             }
         }
