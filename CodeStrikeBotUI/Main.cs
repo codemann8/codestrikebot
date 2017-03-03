@@ -1827,7 +1827,7 @@ namespace CodeStrikeBot
             Controller.CaptureApplication(ctrl.ActiveScreen);
             uint chksum = ScreenState.GetScreenChecksum(ctrl.ActiveScreen.SuperBitmap, 110, 188, 20);
 
-            while (ctrl.ActiveScreen.ScreenState.CurrentArea == Area.Menus.BuildingBoost && chksum != 0xed29)
+            while (ctrl.ActiveScreen.ScreenState.CurrentArea == Area.Menus.BuildingBoost && !(chksum == 0xed29 || chksum == 0xf425))
             {
                 Controller.SendClick(ctrl.ActiveScreen, 250, 566, 100);
 
@@ -1835,6 +1835,22 @@ namespace CodeStrikeBot
 
                 Controller.CaptureApplication(ctrl.ActiveScreen);
                 chksum = ScreenState.GetScreenChecksum(ctrl.ActiveScreen.SuperBitmap, 110, 188, 20);
+            }
+
+            //now on lv23 and lv24
+            if (chksum == 0xed29 || chksum == 0xf425)
+            {
+                chksum = ScreenState.GetScreenChecksum(ctrl.ActiveScreen.SuperBitmap, 284, 370, 20);
+
+                while (ctrl.ActiveScreen.ScreenState.CurrentArea == Area.Menus.BuildingBoost && chksum != 0x4d79)
+                {
+                    Controller.SendClick(ctrl.ActiveScreen, 250, 566, 1000);
+
+                    Application.DoEvents();
+
+                    Controller.CaptureApplication(ctrl.ActiveScreen);
+                    chksum = ScreenState.GetScreenChecksum(ctrl.ActiveScreen.SuperBitmap, 284, 370, 20);
+                }
             }
         }
 
