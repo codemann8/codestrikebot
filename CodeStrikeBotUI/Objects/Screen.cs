@@ -767,15 +767,31 @@ namespace CodeStrikeBot
                         this.StartApp();
                     }
 
+                    tmrRun.Restart();
+                    
                     //enter email
-                    Controller.SendClick(this, 100, 260, (int)(300 * (tries / 2.0 + 1)));
-                    Controller.SendKey(this, account.Email);
-                    Thread.Sleep((int)((500 * (tries / 2.0 + 1)) * TimeoutFactor));
+                    do
+                    {
+                        Controller.SendClick(this, 100, 260, (int)(300 * (tries / 2.0 + 1)));
+                        Controller.SendKey(this, account.Email);
+                        Thread.Sleep((int)((500 * (tries / 2.0 + 1)) * TimeoutFactor));
+                        Controller.CaptureApplication(this);
+                        chksum = ScreenState.GetScreenChecksum(SuperBitmap, 88, 247, 20);
+                    }
+                    while ((chksum == 0x9fa7 || chksum == 0x174f) && tmrRun.ElapsedMilliseconds < 5000);
+
+                    tmrRun.Restart();
 
                     //enter password
-                    Controller.SendClick(this, 100, 305, (int)(600 * (tries / 2.0 + 1)));
-                    Controller.SendKey(this, account.Password);
-                    Thread.Sleep((int)((500 * (tries / 2.0 + 1)) * TimeoutFactor));
+                    do
+                    {
+                        Controller.SendClick(this, 100, 305, (int)(600 * (tries / 2.0 + 1)));
+                        Controller.SendKey(this, account.Password);
+                        Thread.Sleep((int)((500 * (tries / 2.0 + 1)) * TimeoutFactor));
+                        Controller.CaptureApplication(this);
+                        chksum = ScreenState.GetScreenChecksum(SuperBitmap, 88, 297, 20);
+                    }
+                    while ((chksum == 0x9fa7 || chksum == 0x174f) && tmrRun.ElapsedMilliseconds < 5000);
 
                     Controller.CaptureApplication(this);
                     Color c = SuperBitmap.GetPixel(110, 351), c2;
@@ -897,6 +913,8 @@ namespace CodeStrikeBot
             bool success = false;
             int retryCount = 0;
 
+            Stopwatch tmrRun = new Stopwatch();
+
             do
             {
                 do
@@ -910,12 +928,32 @@ namespace CodeStrikeBot
 
                 if (ScreenState.CurrentArea == Area.StateMaps.Coordinate)
                 {
-                    Controller.SendClick(this, 202, 194, (int)(225 * (retryCount / 2.0 + 1))); //click X
-                    Controller.SendKey(this, x.ToString());
-                    Thread.Sleep((int)((180 + x.ToString().Length * 80) * TimeoutFactor * (retryCount / 2.0 + 1)));
+                    ushort chksum;
+                    tmrRun.Start();
 
-                    Controller.SendClick(this, 298, 194, (int)(225 * (retryCount / 2.0 + 1))); //click Y
-                    Controller.SendKey(this, y.ToString());
+                    do
+                    {
+                        Controller.SendClick(this, 202, 194, (int)(225 * (retryCount / 2.0 + 1))); //click X
+                        Controller.SendKey(this, x.ToString());
+                        Thread.Sleep((int)((180 + x.ToString().Length * 80) * TimeoutFactor * (retryCount / 2.0 + 1)));
+
+                        Controller.CaptureApplication(this);
+                        chksum = ScreenState.GetScreenChecksum(this.SuperBitmap, 186, 184, 10);
+                    }
+                    while (chksum == 0xfde4 && tmrRun.ElapsedMilliseconds < 5000);
+
+                    tmrRun.Restart();
+
+                    do
+                    {
+                        Controller.SendClick(this, 298, 194, (int)(225 * (retryCount / 2.0 + 1))); //click Y
+                        Controller.SendKey(this, y.ToString());
+                        Thread.Sleep((int)((180 + y.ToString().Length * 80) * TimeoutFactor * (retryCount / 2.0 + 1)));
+
+                        Controller.CaptureApplication(this);
+                        chksum = ScreenState.GetScreenChecksum(this.SuperBitmap, 281, 184, 10);
+                    }
+                    while (chksum == 0xfde4 && tmrRun.ElapsedMilliseconds < 5000);
 
                     do
                     {
