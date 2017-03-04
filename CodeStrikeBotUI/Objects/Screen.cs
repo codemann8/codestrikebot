@@ -2625,7 +2625,7 @@ namespace CodeStrikeBot
 
                     ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 195, 551, 10);
                     
-                    if (chksum == 0x7b8f) //memu
+                    if (chksum == 0xf636) //memu
                     {
                         Controller.SendClick(this, 200, 560, 1500); //click Collect
                         Controller.SendClick(this, 40, 680, 300); //Click Base
