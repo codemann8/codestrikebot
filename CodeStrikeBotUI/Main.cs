@@ -1825,7 +1825,7 @@ namespace CodeStrikeBot
         private void btnBoostModifier_Click(object sender, EventArgs e)
         {
             Controller.CaptureApplication(ctrl.ActiveScreen);
-            uint chksum = ScreenState.GetScreenChecksum(ctrl.ActiveScreen.SuperBitmap, 110, 188, 20);
+            uint chksum = ScreenState.GetScreenChecksum(ctrl.ActiveScreen.SuperBitmap, 110, 188, 20), chksum2;
 
             while (ctrl.ActiveScreen.ScreenState.CurrentArea == Area.Menus.BuildingBoost && !(chksum == 0xed29 || chksum == 0xf425))
             {
@@ -1840,16 +1840,20 @@ namespace CodeStrikeBot
             //now on lv23 and lv24
             if (chksum == 0xed29 || chksum == 0xf425)
             {
-                chksum = ScreenState.GetScreenChecksum(ctrl.ActiveScreen.SuperBitmap, 284, 370, 20);
+                chksum = ScreenState.GetScreenChecksum(ctrl.ActiveScreen.SuperBitmap, 289, 311, 20);
+                chksum2 = ScreenState.GetScreenChecksum(ctrl.ActiveScreen.SuperBitmap, 290, 249, 20);
 
-                while (ctrl.ActiveScreen.ScreenState.CurrentArea == Area.Menus.BuildingBoost && chksum != 0x4d79)
+                while (ctrl.ActiveScreen.ScreenState.CurrentArea == Area.Menus.BuildingBoost && chksum != 0xc0ed)
                 {
                     Controller.SendClick(ctrl.ActiveScreen, 250, 566, 1000);
 
                     Application.DoEvents();
 
                     Controller.CaptureApplication(ctrl.ActiveScreen);
-                    chksum = ScreenState.GetScreenChecksum(ctrl.ActiveScreen.SuperBitmap, 284, 370, 20);
+                    chksum = ScreenState.GetScreenChecksum(ctrl.ActiveScreen.SuperBitmap, 289, 311, 20);
+                    chksum2 = ScreenState.GetScreenChecksum(ctrl.ActiveScreen.SuperBitmap, 290, 249, 20);
+                    ctrl.ActiveScreen.SuperBitmap.Bitmap.Save(String.Format("{0}\\boost\\mult\\{1}.bmp", ctrl.GetFullScreenshotDir(), chksum.ToString("X4")));
+                    ctrl.ActiveScreen.SuperBitmap.Bitmap.Save(String.Format("{0}\\boost\\percent\\{1}.bmp", ctrl.GetFullScreenshotDir(), chksum2.ToString("X4")));
 
                     while (ctrl.ActiveScreen.ScreenState.CurrentArea == Area.Menus.BuildingBoost && !ctrl.ActiveScreen.SuperBitmap.GetPixel(244, 546).Equals(33, 142, 82))
                     {
