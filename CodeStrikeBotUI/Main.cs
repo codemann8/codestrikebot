@@ -1843,7 +1843,7 @@ namespace CodeStrikeBot
                 chksum = ScreenState.GetScreenChecksum(ctrl.ActiveScreen.SuperBitmap, 289, 311, 20);
                 chksum2 = ScreenState.GetScreenChecksum(ctrl.ActiveScreen.SuperBitmap, 290, 249, 20);
 
-                while (ctrl.ActiveScreen.ScreenState.CurrentArea == Area.Menus.BuildingBoost && (chksum != 0xc0ed || !(chksum == 0xcbcc && chksum2 == 0x933c)))
+                while (ctrl.ActiveScreen.ScreenState.CurrentArea == Area.Menus.BuildingBoost && !(chksum == 0xc0ed || (chksum == 0xcbcc && chksum2 == 0x933c)))
                 {
                     Controller.SendClick(ctrl.ActiveScreen, 250, 566, 1000);
 
