@@ -40,7 +40,7 @@ namespace CodeStrikeBot
                 catch (Exception e)
                 {
                     BotDatabase.InsertLog(0, String.Format("{0} {1}", e.GetType(), e.Message), e.StackTrace, new byte[1] {0x0});
-                    Controller.SendPushoverStatic("Bot Crash");
+                    Controller.Instance.SendNotification("Bot Crash", NotificationType.Crash);
                     RestartApp();
                 }
             }
@@ -53,7 +53,7 @@ namespace CodeStrikeBot
                 e = e;
             }
             BotDatabase.InsertLog(0, String.Format("{0} {1}", e.Exception.GetType(), e.Exception.Message), e.Exception.StackTrace, new byte[1] { 0x0 });
-            Controller.SendPushoverStatic(String.Format("Bot Crash Threaded {0} {1} {2}", e.Exception.GetType(), e.Exception.Message, e.Exception.StackTrace));
+            Controller.Instance.SendNotification(String.Format("Bot Crash Threaded {0} {1} {2}", e.Exception.GetType(), e.Exception.Message, e.Exception.StackTrace), NotificationType.Crash);
             System.Threading.Thread.Sleep(1000);
             Program.RestartApp();
         }
@@ -61,7 +61,7 @@ namespace CodeStrikeBot
         private static void CatchUnhandledExceptions(object sender, UnhandledExceptionEventArgs e)
         {
             BotDatabase.InsertLog(0, String.Format("Unhandled exception on {0}", e.ExceptionObject.GetType().ToString()), e.ToString(), e.ExceptionObject.ToByteArray());
-            Controller.SendPushoverStatic("Bot Crash Unhandled");
+            Controller.Instance.SendNotification("Bot Crash Unhandled", NotificationType.Crash);
             System.Threading.Thread.Sleep(1000);
             Program.RestartApp();
         }

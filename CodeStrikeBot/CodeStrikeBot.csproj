@@ -48,9 +48,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\SharpPcap.4.2.0\lib\net\SharpPcap.dll</HintPath>
     </Reference>
-    <Reference Include="Slack.Webhooks">
-      <HintPath>..\packages\Slack.Webhooks.0.1.7\lib\net40\Slack.Webhooks.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -88,6 +85,7 @@
     <Compile Include="Messages\JsonMessage.cs" />
     <Compile Include="Messages\Message.cs" />
     <Compile Include="Messages\XmlMessage.cs" />
+    <Compile Include="NotificationType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\CRC16.cs" />
     <Compile Include="Utilities\DynamicJsonConverter.cs" />

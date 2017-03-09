@@ -33,7 +33,7 @@ namespace CodeStrikeBot
 
             this.UpdateDatabase();
 
-            this.Settings = this.GetSettings();
+            this.Settings = (Settings)(GetObjects<Settings>()[0]);
         }
 
         private static SqlCeConnection GetNewConnection()
@@ -85,6 +85,12 @@ namespace CodeStrikeBot
                         command = new SqlCeCommand("UPDATE settings SET version = 2", Connection);
                         command.ExecuteNonQuery();
                         break;
+                    case 2:
+                        command = new SqlCeCommand("ALTER TABLE settings ADD slackURL NVARCHAR(100), pushoverAPIKey NVARCHAR(30), pushoverUserKey NVARCHAR(30)", Connection);
+                        command.ExecuteNonQuery();
+                        command = new SqlCeCommand("UPDATE settings SET version = 3", Connection);
+                        command.ExecuteNonQuery();
+                        break;
                 }
 
                 command.Dispose();
@@ -92,11 +98,6 @@ namespace CodeStrikeBot
 
                 version++;
             }
-        }
-
-        private Settings GetSettings()
-        {
-            return (Settings)(GetObjects<Settings>()[0]);
         }
 
         public static DataObject SaveObject(DataObject obj)
@@ -214,7 +215,7 @@ namespace CodeStrikeBot
                 {
                     Settings settings = (Settings)obj;
 
-                    command = new SqlCeCommand("UPDATE settings SET version = @version, emulatorId1 = @emulator1, emulatorId2 = @emulator2, emulatorId3 = @emulator3, emulatorId4 = @emulator4, mapDir = @mapDir, screenshotDir = @ssDir", con);
+                    command = new SqlCeCommand("UPDATE settings SET version = @version, emulatorId1 = @emulator1, emulatorId2 = @emulator2, emulatorId3 = @emulator3, emulatorId4 = @emulator4, mapDir = @mapDir, screenshotDir = @ssDir, slackURL = @slackUrl, pushoverAPIKey = @pushoverAPI, pushoverUserKey = @pushoverUser", con);
                     
                     command.Parameters.AddWithValue("@version", settings.Version);
                     command.Parameters.AddWithValue("@emulator1", settings.Emulator1);
@@ -223,6 +224,9 @@ namespace CodeStrikeBot
                     command.Parameters.AddWithValue("@emulator4", settings.Emulator4);
                     command.Parameters.AddWithValue("@mapDir", settings.MapDir);
                     command.Parameters.AddWithValue("@ssDir", settings.ScreenshotDir);
+                    command.Parameters.AddWithValue("@slackUrl", settings.SlackURL);
+                    command.Parameters.AddWithValue("@pushoverAPI", settings.SlackURL);
+                    command.Parameters.AddWithValue("@pushoverUser", settings.SlackURL);
                     command.ExecuteNonQuery();
 
                     obj = settings;
@@ -362,11 +366,11 @@ namespace CodeStrikeBot
                 }
                 else if (typeof(T) == typeof(Settings))
                 {
-                    command = new SqlCeCommand("SELECT version, emulatorId1, emulatorId2, emulatorId3, emulatorId4, mapDir, screenshotDir FROM settings", con);
+                    command = new SqlCeCommand("SELECT version, emulatorId1, emulatorId2, emulatorId3, emulatorId4, mapDir, screenshotDir, slackURL, pushoverAPIKey, pushoverUserKey FROM settings", con);
                     reader = command.ExecuteReader();
 
                     reader.Read();
-                    Settings settings = new Settings(reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2), reader.GetInt32(3), reader.GetInt32(4), reader.GetString(5), reader.GetString(6));
+                    Settings settings = new Settings(reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2), reader.GetInt32(3), reader.GetInt32(4), reader.GetString(5), reader.GetString(6), reader.GetString(7), reader.GetString(8), reader.GetString(9));
                     list.Add(settings);
                 }
             }

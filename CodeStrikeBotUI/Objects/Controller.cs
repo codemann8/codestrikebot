@@ -90,8 +90,8 @@ namespace CodeStrikeBot
 
         private Semaphore semaphore;
 
-        private const string PUSHOVER_API_KEY = "a2b1iuppun9c6ug86mnfgs67tsbrg6"; //"a21rq15nvc2rkce11f9ezzk1qwxvd6";
-        private const string PUSHOVER_USER_KEY = "updvgeodcquxs41gsr8cdo2uj5vuhr";
+        private const string PUSHOVER_API_KEY2 = "a2b1iuppun9c6ug86mnfgs67tsbrg6"; //"a21rq15nvc2rkce11f9ezzk1qwxvd6";
+        private const string PUSHOVER_USER_KEY2 = "updvgeodcquxs41gsr8cdo2uj5vuhr";
 
         public BotDatabase Database;
         private PushoverClient.Pushover pclient;
@@ -166,7 +166,7 @@ namespace CodeStrikeBot
             ActiveWindow = 0;
             semaphore = new Semaphore(1, 1);
 
-            pclient = new PushoverClient.Pushover(PUSHOVER_API_KEY);
+            pclient = new PushoverClient.Pushover(Database.Settings.PushoverAPIKey);
         }
 
         public Screen ActiveScreen { get { return sc[ActiveWindow]; } }
@@ -454,7 +454,7 @@ namespace CodeStrikeBot
                                 success = screen.ActivateBoost(task);
                                 if (!success)
                                 {
-                                    SendPushover(String.Format("Failed to activate {0} on {1}", task.Type.ToString(), task.Account.ToString()), 1);
+                                    SendNotification(String.Format("Failed to activate {0} on {1}", task.Type.ToString(), task.Account.ToString()), NotificationType.BoostActivationFail);
                                 }
                                 break;
                             case ScheduleType.ActivateVIP:
@@ -482,7 +482,7 @@ namespace CodeStrikeBot
             catch (Exception e)
             {
                 BotDatabase.InsertLog(0, String.Format("{0} {1}", e.GetType(), e.Message), e.StackTrace, new byte[1] { 0x0 });
-                Controller.SendPushoverStatic(String.Format("Scheduler Crash {0} {1}", e.GetType(), e.Message));
+                Controller.Instance.SendNotification(String.Format("Scheduler Crash {0} {1}", e.GetType(), e.Message), NotificationType.Crash);
             }
             finally
             {
@@ -1609,26 +1609,51 @@ namespace CodeStrikeBot
             }
         }
 
-        public void SendPushover(string message, int priority = 0)
+        public void SendNotification(string message, NotificationType type)
         {
-            PushoverClient.PushResponse response = pclient.Push("MS Alert", message, PUSHOVER_USER_KEY, priority.ToString()); ;
-
-            while (response.Status != 1)
+            if (Database.Settings.PushoverAPIKey != "" && Database.Settings.PushoverUserKey != "")
             {
-                Thread.Sleep(1000);
-                response = pclient.Push("MS Alert", message, PUSHOVER_USER_KEY, priority.ToString());
+                int priority = 0;
+                switch (type)
+                {
+                    case NotificationType.RallyDefense:
+                    case NotificationType.Offline:
+                    case NotificationType.BoostActivationFail:
+                    case NotificationType.IncomingRally:
+                        priority = 1;
+                        break;
+
+                }
+
+                PushoverClient.PushResponse response = pclient.Push("MS Alert", message, Database.Settings.PushoverUserKey, priority.ToString()); ;
+
+                while (response.Status != 1)
+                {
+                    Thread.Sleep(1000);
+                    response = pclient.Push("MS Alert", message, Database.Settings.PushoverUserKey, priority.ToString());
+                }
             }
-        }
-
-        public static void SendPushoverStatic(string message, int priority = 0)
-        {
-            PushoverClient.Pushover pclient = new PushoverClient.Pushover(PUSHOVER_API_KEY);
-            PushoverClient.PushResponse response = pclient.Push("MS Alert", message, PUSHOVER_USER_KEY, priority.ToString()); ;
-
-            while (response.Status != 1)
+            
+            if (Database.Settings.SlackURL != "")
             {
-                Thread.Sleep(1000);
-                response = pclient.Push("MS Alert", message, PUSHOVER_USER_KEY, priority.ToString());
+                Slack.Webhooks.SlackClient slackClient = new Slack.Webhooks.SlackClient(Database.Settings.SlackURL, 30);
+                Slack.Webhooks.SlackMessage slackMessage = new Slack.Webhooks.SlackMessage();
+
+                slackMessage.Channel = "#general";
+                switch (type)
+                {
+                    case NotificationType.RallyDefense:
+                        slackMessage.Channel = "#rallydefense";
+                        break;
+                    case NotificationType.RallyOffense:
+                        slackMessage.Channel = "#rallyoffense";
+                        break;
+                }
+
+                slackMessage.Username = "codestrikebot";
+                slackMessage.Text = message;
+
+                slackClient.Post(slackMessage);
             }
         }
 

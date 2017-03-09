@@ -23,18 +23,30 @@ namespace CodeStrikeBot
         public string MapDir { get; set; }
         [Column(Name = "screenshotDir")]
         public string ScreenshotDir { get; set; }
+        [Column(Name = "slackURL")]
+        public string SlackURL { get; set; }
+        [Column(Name = "pushoverAPIKey")]
+        public string PushoverAPIKey { get; set; }
+        [Column(Name = "pushoverUserKey")]
+        public string PushoverUserKey { get; set; }
 
         public int[] ActiveEmulators { get { return new int[4] { Emulator1, Emulator2, Emulator3, Emulator4 }; } }
-        
-        public Settings(int version, int emulator1, int emulator2, int emulator3, int emulator4, string mapDir, string ssDir)
+
+        public Settings(int version, int emulator1, int emulator2, int emulator3, int emulator4, string mapDir, string ssDir, string slackURL, string pushoverAPIKey, string pushoverUserKey)
         {
             this.Version = version;
+
             this.Emulator1 = emulator1;
             this.Emulator2 = emulator2;
             this.Emulator3 = emulator3;
             this.Emulator4 = emulator4;
+
             this.MapDir = mapDir;
             this.ScreenshotDir = ssDir;
+
+            this.SlackURL = slackURL;
+            this.PushoverAPIKey = pushoverAPIKey;
+            this.PushoverUserKey = pushoverUserKey;
         }
 
         public Settings Save()

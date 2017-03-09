@@ -142,7 +142,7 @@ namespace CodeStrikeBot
 
             if (ctrl.accounts.Count == 0)
             {
-                ctrl.SendPushover("Bot is null", 1);
+                ctrl.SendNotification("Bot is null", NotificationType.Offline);
             }
 
             foreach (Screen s in ctrl.sc)
@@ -320,7 +320,7 @@ namespace CodeStrikeBot
                 //sc.Login(
             }*/
             //TODO: Vacation mode
-            ctrl.SendPushover("Bot offline", 0);		
+            ctrl.SendNotification("Bot offline", NotificationType.Offline);		
 		
             foreach (Screen s in ctrl.sc)		
             {		
@@ -922,11 +922,11 @@ namespace CodeStrikeBot
                                         {
                                             if (warMessage.RallyTime == 60)
                                             {
-                                                ctrl.SendPushover(String.Format("1-Minute Rally on {0}{1} by {2}{3}", warMessage.DefenderAlliance, warMessage.DefenderName, warMessage.AttackerAlliance, warMessage.AttackerName), 1);
+                                                ctrl.SendNotification(String.Format("1-Minute Rally on {0}{1} by {2}{3}", warMessage.DefenderAlliance, warMessage.DefenderName, warMessage.AttackerAlliance, warMessage.AttackerName), NotificationType.RallyDefense);
                                             }
                                             else
                                             {
-                                                ctrl.SendPushover(String.Format("ACTION! Rally on {0}{1} by {2}{3}", warMessage.DefenderAlliance, warMessage.DefenderName, warMessage.AttackerAlliance, warMessage.AttackerName), 1);
+                                                ctrl.SendNotification(String.Format("ACTION! Rally on {0}{1} by {2}{3}", warMessage.DefenderAlliance, warMessage.DefenderName, warMessage.AttackerAlliance, warMessage.AttackerName), NotificationType.RallyDefense);
                                             }
                                         }
                                     }
@@ -935,18 +935,18 @@ namespace CodeStrikeBot
                                     {
                                         if (warMessage.RallyTime == 60)
                                         {
-                                            ctrl.SendPushover(String.Format("1-Minute Rally on {0}{1} by {2}{3}", warMessage.DefenderAlliance, warMessage.DefenderName, warMessage.AttackerAlliance, warMessage.AttackerName), 1);
+                                            ctrl.SendNotification(String.Format("1-Minute Rally on {0}{1} by {2}{3}", warMessage.DefenderAlliance, warMessage.DefenderName, warMessage.AttackerAlliance, warMessage.AttackerName), NotificationType.RallyDefense);
                                         }
                                         else
                                         {
-                                            ctrl.SendPushover(String.Format("Help! Rally on {0}{1} by {2}{3}", warMessage.DefenderAlliance, warMessage.DefenderName, warMessage.AttackerAlliance, warMessage.AttackerName), 1);
+                                            ctrl.SendNotification(String.Format("Help! Rally on {0}{1} by {2}{3}", warMessage.DefenderAlliance, warMessage.DefenderName, warMessage.AttackerAlliance, warMessage.AttackerName), NotificationType.RallyDefense);
                                         }
                                     }
                                 }
                                 else
                                 {
                                     //normal
-                                    ctrl.SendPushover(String.Format("Rally call for {0}{1} by {2}{3}", warMessage.DefenderAlliance, warMessage.DefenderName, warMessage.AttackerAlliance, warMessage.AttackerName), 0);
+                                    ctrl.SendNotification(String.Format("Rally call for {0}{1} by {2}{3}", warMessage.DefenderAlliance, warMessage.DefenderName, warMessage.AttackerAlliance, warMessage.AttackerName), NotificationType.RallyOffense);
                                 }
 
                                 tmrSupressAction.Restart();
@@ -987,7 +987,7 @@ namespace CodeStrikeBot
                                     }
                                     else
                                     {
-                                        ctrl.SendPushover(ctrl.GetStatusMessage());
+                                        ctrl.SendNotification(ctrl.GetStatusMessage(), NotificationType.Status);
                                     }
                                 }
                                 else if (command.StartsWith("rss"))
@@ -1077,7 +1077,7 @@ namespace CodeStrikeBot
 
                                         if (!success)
                                         {
-                                            ctrl.SendPushover(String.Format("Failed to activate {0} on {1}", ScheduleType.Shield.ToString(), a.ToString()));
+                                            ctrl.SendNotification(String.Format("Failed to activate {0} on {1}", ScheduleType.Shield.ToString(), a.ToString()), NotificationType.BoostActivationFail);
                                         }
                                     }
                                 }
@@ -1148,7 +1148,7 @@ namespace CodeStrikeBot
                             {
                                 tmrSupressAction.Restart();
 
-                                ctrl.SendPushover("Alliance tile appeared");
+                                ctrl.SendNotification("Alliance tile appeared", NotificationType.AllianceTile);
                             }
                         }
                     }
@@ -1415,7 +1415,7 @@ namespace CodeStrikeBot
                                 if (DateTime.Now.Subtract(task.NextAction).Minutes < 30)
                                 {
                                     //TODO: Vacation mode, revert back to priority alert
-                                    ctrl.SendPushover("Scheduled tasks are past due", 0);
+                                    ctrl.SendNotification("Scheduled tasks are past due", NotificationType.TasksPastDue);
 
                                     foreach (Screen s in ctrl.sc)
                                     {
@@ -1431,7 +1431,7 @@ namespace CodeStrikeBot
 
                     if (tmrHeartBeat.ElapsedMilliseconds >= 3600000)
                     {
-                        ctrl.SendPushover(String.Format("Heartbeat:\n{0}", ctrl.GetStatusMessage()));
+                        ctrl.SendNotification(String.Format("Heartbeat:\n{0}", ctrl.GetStatusMessage()), NotificationType.Status);
                         tmrHeartBeat.Restart();
                     }
 
@@ -1692,7 +1692,16 @@ namespace CodeStrikeBot
                                         if (tmrAttackNotify.ElapsedMilliseconds > 300000)
                                         {
                                             tmrAttackNotify.Restart();
-                                            ctrl.SendPushover(String.Format("Incoming {0} at {1}", (s.ScreenState.Overlays.Contains(Overlay.Incomings.Attack) ? "Attack" : "Rally"), s.Emulator.LastKnownAccount.ToString()), 1);
+
+                                            if (s.ScreenState.Overlays.Contains(Overlay.Incomings.Attack))
+                                            {
+                                                ctrl.SendNotification(String.Format("Incoming Attack at {1}", s.Emulator.LastKnownAccount.ToString()), NotificationType.IncomingAttack);
+                                            }
+
+                                            if (s.ScreenState.Overlays.Contains(Overlay.Incomings.Rally))
+                                            {
+                                                ctrl.SendNotification(String.Format("Incoming Rally at {1}", s.Emulator.LastKnownAccount.ToString()), NotificationType.IncomingRally);
+                                            }
                                         }
                                     }
 
@@ -1710,7 +1719,7 @@ namespace CodeStrikeBot
                 catch (Exception ex)
                 {
                     BotDatabase.InsertLog(0, String.Format("{0} {1}", ex.GetType(), ex.Message), ex.StackTrace, new byte[1] { 0x0 });
-                    ctrl.SendPushover(String.Format("Auto Actions Crash {0} {1} {2}", ex.GetType(), ex.Message, ex.StackTrace));
+                    ctrl.SendNotification(String.Format("Auto Actions Crash {0} {1} {2}", ex.GetType(), ex.Message, ex.StackTrace), NotificationType.Crash);
 
 
                     System.Threading.Thread.Sleep(5000);
@@ -1876,6 +1885,9 @@ namespace CodeStrikeBot
             ctrl.Database.Settings.Emulator2 = Int32.Parse(txtEmulator2.Text);
             ctrl.Database.Settings.Emulator3 = Int32.Parse(txtEmulator3.Text);
             ctrl.Database.Settings.Emulator4 = Int32.Parse(txtEmulator4.Text);
+            ctrl.Database.Settings.SlackURL = txtSlackURL.Text;
+            ctrl.Database.Settings.PushoverAPIKey = txtPushoverAPI.Text;
+            ctrl.Database.Settings.PushoverUserKey = txtPushoverUser.Text;
 
             ctrl.Database.Settings.Save();
         }

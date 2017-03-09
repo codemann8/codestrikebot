@@ -145,6 +145,13 @@ namespace CodeStrikeBot
             this.btnTasks = new System.Windows.Forms.Button();
             this.btnClearGifts = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.txtSlackURL = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.groupBox10 = new System.Windows.Forms.GroupBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.txtPushoverAPI = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.txtPushoverUser = new System.Windows.Forms.TextBox();
             this.stsStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bsScheduleTask)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bsAccount)).BeginInit();
@@ -182,6 +189,7 @@ namespace CodeStrikeBot
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tabControl1.SuspendLayout();
+            this.groupBox10.SuspendLayout();
             this.SuspendLayout();
             // 
             // stsStrip
@@ -284,6 +292,7 @@ namespace CodeStrikeBot
             // 
             // tabSettings
             // 
+            this.tabSettings.Controls.Add(this.groupBox10);
             this.tabSettings.Controls.Add(this.btnSaveSettings);
             this.tabSettings.Controls.Add(this.groupBox9);
             this.tabSettings.Location = new System.Drawing.Point(8, 39);
@@ -744,11 +753,13 @@ namespace CodeStrikeBot
             this.hexData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.hexData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.Dock = System.Windows.Forms.DockStyle.Fill;
             this.hexData.Location = new System.Drawing.Point(0, 0);
             this.hexData.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.hexData.Name = "hexData";
             this.hexData.RowCount = 1;
+            this.hexData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -1473,6 +1484,72 @@ namespace CodeStrikeBot
             this.tabControl1.Size = new System.Drawing.Size(1916, 392);
             this.tabControl1.TabIndex = 16;
             // 
+            // txtSlackURL
+            // 
+            this.txtSlackURL.Location = new System.Drawing.Point(175, 28);
+            this.txtSlackURL.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.txtSlackURL.Name = "txtSlackURL";
+            this.txtSlackURL.Size = new System.Drawing.Size(902, 31);
+            this.txtSlackURL.TabIndex = 4;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 31);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(113, 25);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "Slack URL";
+            // 
+            // groupBox10
+            // 
+            this.groupBox10.Controls.Add(this.txtPushoverUser);
+            this.groupBox10.Controls.Add(this.label3);
+            this.groupBox10.Controls.Add(this.txtPushoverAPI);
+            this.groupBox10.Controls.Add(this.label2);
+            this.groupBox10.Controls.Add(this.label1);
+            this.groupBox10.Controls.Add(this.txtSlackURL);
+            this.groupBox10.Location = new System.Drawing.Point(168, 6);
+            this.groupBox10.Name = "groupBox10";
+            this.groupBox10.Size = new System.Drawing.Size(1094, 187);
+            this.groupBox10.TabIndex = 6;
+            this.groupBox10.TabStop = false;
+            this.groupBox10.Text = "Notifications";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 68);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(142, 25);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "Pushover API";
+            // 
+            // txtPushoverAPI
+            // 
+            this.txtPushoverAPI.Location = new System.Drawing.Point(155, 65);
+            this.txtPushoverAPI.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.txtPushoverAPI.Name = "txtPushoverAPI";
+            this.txtPushoverAPI.Size = new System.Drawing.Size(377, 31);
+            this.txtPushoverAPI.TabIndex = 7;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(539, 68);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(154, 25);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "Pushover User";
+            // 
+            // txtPushoverUser
+            // 
+            this.txtPushoverUser.Location = new System.Drawing.Point(700, 65);
+            this.txtPushoverUser.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.txtPushoverUser.Name = "txtPushoverUser";
+            this.txtPushoverUser.Size = new System.Drawing.Size(377, 31);
+            this.txtPushoverUser.TabIndex = 9;
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
@@ -1530,6 +1607,8 @@ namespace CodeStrikeBot
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.tabControl1.ResumeLayout(false);
+            this.groupBox10.ResumeLayout(false);
+            this.groupBox10.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1649,6 +1728,13 @@ namespace CodeStrikeBot
         private System.Windows.Forms.Button btnTasks;
         private System.Windows.Forms.Button btnClearGifts;
         private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.GroupBox groupBox10;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox txtSlackURL;
+        private System.Windows.Forms.TextBox txtPushoverUser;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox txtPushoverAPI;
+        private System.Windows.Forms.Label label2;
     }
 }
 
