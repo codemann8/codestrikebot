@@ -237,8 +237,8 @@ namespace CodeStrikeBot
                     command.Parameters.AddWithValue("@mapDir", settings.MapDir);
                     command.Parameters.AddWithValue("@ssDir", settings.ScreenshotDir);
                     command.Parameters.AddWithValue("@slackUrl", settings.SlackURL);
-                    command.Parameters.AddWithValue("@pushoverAPI", settings.SlackURL);
-                    command.Parameters.AddWithValue("@pushoverUser", settings.SlackURL);
+                    command.Parameters.AddWithValue("@pushoverAPI", settings.PushoverAPIKey);
+                    command.Parameters.AddWithValue("@pushoverUser", settings.PushoverUserKey);
                     command.ExecuteNonQuery();
 
                     obj = settings;
