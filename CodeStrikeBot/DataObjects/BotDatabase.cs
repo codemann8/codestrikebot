@@ -91,7 +91,7 @@ namespace CodeStrikeBot
                             command.ExecuteNonQuery();
                             break;
                         case 2:
-                            command = new SqlCeCommand("ALTER TABLE settings ADD slackURL NVARCHAR(100) NOT NULL DEFAULT '', pushoverAPIKey NCHAR(30) NOT NULL DEFAULT '', pushoverUserKey NCHAR(30) NOT NULL DEFAULT ''", Connection);
+                            command = new SqlCeCommand("ALTER TABLE settings ADD slackURL NVARCHAR(100) NOT NULL DEFAULT '', pushoverAPIKey NVARCHAR(30) NOT NULL DEFAULT '', pushoverUserKey NVARCHAR(30) NOT NULL DEFAULT ''", Connection);
                             command.ExecuteNonQuery();
                             command = new SqlCeCommand("UPDATE settings SET version = 3", Connection);
                             command.ExecuteNonQuery();
