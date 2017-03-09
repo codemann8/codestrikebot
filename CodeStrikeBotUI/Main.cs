@@ -79,6 +79,9 @@ namespace CodeStrikeBot
             txtEmulator2.Text = ctrl.Database.Settings.Emulator2.ToString();
             txtEmulator3.Text = ctrl.Database.Settings.Emulator3.ToString();
             txtEmulator4.Text = ctrl.Database.Settings.Emulator4.ToString();
+            txtSlackURL.Text = ctrl.Database.Settings.SlackURL;
+            txtPushoverAPI.Text = ctrl.Database.Settings.PushoverAPIKey;
+            txtPushoverUser.Text = ctrl.Database.Settings.PushoverUserKey;
 
             //debug windowing info
             string infoText = String.Format("FrameBorder={0}", SystemInformation.FrameBorderSize);
