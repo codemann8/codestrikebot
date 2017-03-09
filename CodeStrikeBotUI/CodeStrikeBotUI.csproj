@@ -104,20 +104,18 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="PushoverClient, Version=1.0.11.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\PushoverNET.1.0.11\lib\net40\PushoverClient.dll</HintPath>
+      <HintPath>\\cody-danielle\Library\Projects\_External\Pushover.NET-master\PushoverClient\bin\Debug\PushoverClient.dll</HintPath>
     </Reference>
-    <Reference Include="RestSharp">
-      <HintPath>..\packages\RestSharp.104.4.0\lib\net4\RestSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.Text, Version=3.9.71.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="RestSharp, Version=104.4.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ServiceStack.Text.3.9.71\lib\net35\ServiceStack.Text.dll</HintPath>
+      <HintPath>..\packages\RestSharp.104.4.0\lib\net4\RestSharp.dll</HintPath>
     </Reference>
     <Reference Include="SharpPcap, Version=4.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\SharpPcap.4.2.0\lib\net\SharpPcap.dll</HintPath>
     </Reference>
-    <Reference Include="Slack.Webhooks">
+    <Reference Include="Slack.Webhooks, Version=0.1.7.18980, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Slack.Webhooks.0.1.7\lib\net40\Slack.Webhooks.dll</HintPath>
     </Reference>
     <Reference Include="System" />
