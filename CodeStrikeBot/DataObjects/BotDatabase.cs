@@ -58,43 +58,55 @@ namespace CodeStrikeBot
 
             while (version != 1)
             {
-                command = new SqlCeCommand("SELECT version FROM settings", Connection);
-                reader = command.ExecuteReader();
-
-                reader.Read();
-
-                switch ((int)reader["version"])
+                try
                 {
-                    case 0:
-                        command = new SqlCeCommand("CREATE TABLE accounts (id INTEGER PRIMARY KEY IDENTITY, name NVARCHAR(20) NOT NULL, username NVARCHAR(30) NOT NULL, email NVARCHAR(60) NOT NULL, password NVARCHAR(30) NOT NULL, priority INT DEFAULT 0, foodNegativeAmt INT DEFAULT 0, lastLogin DATETIME DEFAULT 0, lastLogout DATETIME DEFAULT 0)", Connection);
-                        command.ExecuteNonQuery();
-                        command = new SqlCeCommand("CREATE TABLE log (id INTEGER PRIMARY KEY IDENTITY, type INT NOT NULL, description NVARCHAR(100), detail NVARCHAR(255), data IMAGE, timestamp DATETIME DEFAULT GETDATE() NOT NULL)", Connection);
-                        command.ExecuteNonQuery();
-                        command = new SqlCeCommand("CREATE TABLE schedules (id INTEGER PRIMARY KEY IDENTITY, accountId INT NOT NULL, type INT NOT NULL, interval INT NOT NULL, amount INT NOT NULL, count INT DEFAULT 1, x INT, y INT, lastAction DATETIME DEFAULT 0)", Connection);
-                        command.ExecuteNonQuery();
-                        command = new SqlCeCommand("CREATE UNIQUE INDEX NameIdx ON accounts (name)", Connection);
-                        command.ExecuteNonQuery();
-                        command = new SqlCeCommand("CREATE TABLE emulators (id INTEGER PRIMARY KEY IDENTITY, type INT NOT NULL, command NVARCHAR(100), windowName NVARCHAR(60), lastKnownAccountId INT NOT NULL)", Connection);
-                        command.ExecuteNonQuery();
-                        command = new SqlCeCommand("UPDATE settings SET version = 1, emulatorId1 = 0, emulatorId2 = 0, emulatorId3 = 0, emulatorId4 = 0, screenshotDir = 'output\\ss', mapDir = 'output\\map'", Connection);
-                        command.ExecuteNonQuery();
-                        break;
-                    case 1:
-                        command = new SqlCeCommand("ALTER TABLE schedules ADD backupX INTEGER DEFAULT 0, backupY INTEGER DEFAULT 0", Connection);
-                        command.ExecuteNonQuery();
-                        command = new SqlCeCommand("UPDATE settings SET version = 2", Connection);
-                        command.ExecuteNonQuery();
-                        break;
-                    case 2:
-                        command = new SqlCeCommand("ALTER TABLE settings ADD slackURL NVARCHAR(100), pushoverAPIKey NVARCHAR(30), pushoverUserKey NVARCHAR(30)", Connection);
-                        command.ExecuteNonQuery();
-                        command = new SqlCeCommand("UPDATE settings SET version = 3", Connection);
-                        command.ExecuteNonQuery();
-                        break;
+                    command = new SqlCeCommand("SELECT version FROM settings", Connection);
+                    reader = command.ExecuteReader();
+
+                    reader.Read();
+
+                    int versionCheck = (int)reader["version"];
+                    reader.Dispose();
+
+                    switch (versionCheck)
+                    {
+                        case 0:
+                            command = new SqlCeCommand("CREATE TABLE accounts (id INTEGER PRIMARY KEY IDENTITY, name NVARCHAR(20) NOT NULL, username NVARCHAR(30) NOT NULL, email NVARCHAR(60) NOT NULL, password NVARCHAR(30) NOT NULL, priority INT DEFAULT 0, foodNegativeAmt INT DEFAULT 0, lastLogin DATETIME DEFAULT 0, lastLogout DATETIME DEFAULT 0)", Connection);
+                            command.ExecuteNonQuery();
+                            command = new SqlCeCommand("CREATE TABLE log (id INTEGER PRIMARY KEY IDENTITY, type INT NOT NULL, description NVARCHAR(100), detail NVARCHAR(255), data IMAGE, timestamp DATETIME DEFAULT GETDATE() NOT NULL)", Connection);
+                            command.ExecuteNonQuery();
+                            command = new SqlCeCommand("CREATE TABLE schedules (id INTEGER PRIMARY KEY IDENTITY, accountId INT NOT NULL, type INT NOT NULL, interval INT NOT NULL, amount INT NOT NULL, count INT DEFAULT 1, x INT, y INT, lastAction DATETIME DEFAULT 0)", Connection);
+                            command.ExecuteNonQuery();
+                            command = new SqlCeCommand("CREATE UNIQUE INDEX NameIdx ON accounts (name)", Connection);
+                            command.ExecuteNonQuery();
+                            command = new SqlCeCommand("CREATE TABLE emulators (id INTEGER PRIMARY KEY IDENTITY, type INT NOT NULL, command NVARCHAR(100), windowName NVARCHAR(60), lastKnownAccountId INT NOT NULL)", Connection);
+                            command.ExecuteNonQuery();
+                            command = new SqlCeCommand("UPDATE settings SET version = 1, emulatorId1 = 0, emulatorId2 = 0, emulatorId3 = 0, emulatorId4 = 0, screenshotDir = 'output\\ss', mapDir = 'output\\map'", Connection);
+                            command.ExecuteNonQuery();
+                            break;
+                        case 1:
+                            command = new SqlCeCommand("ALTER TABLE schedules ADD backupX INTEGER DEFAULT 0, backupY INTEGER DEFAULT 0", Connection);
+                            command.ExecuteNonQuery();
+                            command = new SqlCeCommand("UPDATE settings SET version = 2", Connection);
+                            command.ExecuteNonQuery();
+                            break;
+                        case 2:
+                            command = new SqlCeCommand("ALTER TABLE settings ADD slackURL NVARCHAR(100) NOT NULL DEFAULT '', pushoverAPIKey NCHAR(30) NOT NULL DEFAULT '', pushoverUserKey NCHAR(30) NOT NULL DEFAULT ''", Connection);
+                            command.ExecuteNonQuery();
+                            command = new SqlCeCommand("UPDATE settings SET version = 3", Connection);
+                            command.ExecuteNonQuery();
+                            break;
+                    }
+                }
+                catch (SqlCeException e)
+                {
+                    /*if (e.ErrorCode == SQLiteErrorCode.Constraint_Check)
+                    {
+                        //name already in use
+                    }*/
                 }
 
                 command.Dispose();
-                reader.Dispose();
 
                 version++;
             }
