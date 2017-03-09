@@ -90,9 +90,6 @@ namespace CodeStrikeBot
 
         private Semaphore semaphore;
 
-        private const string PUSHOVER_API_KEY2 = "a2b1iuppun9c6ug86mnfgs67tsbrg6"; //"a21rq15nvc2rkce11f9ezzk1qwxvd6";
-        private const string PUSHOVER_USER_KEY2 = "updvgeodcquxs41gsr8cdo2uj5vuhr";
-
         public BotDatabase Database;
         private PushoverClient.Pushover pclient;
 
