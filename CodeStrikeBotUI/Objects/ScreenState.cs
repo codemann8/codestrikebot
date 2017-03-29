@@ -489,14 +489,9 @@ namespace CodeStrikeBot
                                 //case 0x9e4f:  //depricated?
                                 state.CurrentArea = Area.Others.Splash;
                                 break;
-                            case 0x7feb:
-                            case 0x1aed: //grayed out/modal dialog
-                            case 0xbb1c: //loading/logging in
-                                //case 0xb0ac:  //depricated?
-                            case 0xb81a: //nox new
-                            case 0x4edd: //nox new modal
-                            case 0x26bc: //nox new login failed
-                            case 0xc794: //nox new loading
+                            case 0x60b3: //memu
+                            case 0xa5a8: //memu loading
+                            case 0xb1d0: //memu modal
                                 state.CurrentArea = Area.Others.Login;
                                 break;
                             case 0x0f50: //memu
@@ -621,12 +616,12 @@ namespace CodeStrikeBot
                                             case 0xb69d: //Free Daily Bonus
                                             case 0x32c5: //Daily Bonus Club
                                             case 0xf84f: //nox Free Daily Bonus
-                                                c = s.SuperBitmap.GetPixel(95, 498);
-                                                if (c.Equals(82, 142, 165))
+                                                c = s.SuperBitmap.GetPixel(100, 430);
+                                                if (c.Equals(41, 93, 115))
                                                 {
                                                     state.CurrentArea = Area.MainBases.DailyLogin;
                                                 }
-                                                else if (c.Equals(90, 89, 90))
+                                                else if (c.Equals(115, 121, 123))
                                                 {
                                                     state.CurrentArea = Area.MainBases.DailyLoginClaimed;
                                                 }

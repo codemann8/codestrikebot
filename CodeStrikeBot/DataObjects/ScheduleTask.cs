@@ -102,6 +102,11 @@ namespace CodeStrikeBot
         Shield = 6,
         AntiScout = 7,
         GhostRally = 8,
-        ActivateVIP = 9
+        ActivateVIP = 9,
+        UpkeepReduction = 10,
+        Health = 11,
+        Defense = 12,
+        Milestone = 13,
+        EliteRebelTarget = 14,
     }
 }

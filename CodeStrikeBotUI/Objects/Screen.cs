@@ -747,8 +747,10 @@ namespace CodeStrikeBot
 
                 while (ScreenState.CurrentArea == Area.Others.Login && tries < 6)
                 {
+                    Controller.CaptureApplication(this);
+
                     uint chksum = ScreenState.GetScreenChecksum(SuperBitmap, 88, 247, 20);
-                    if (chksum != 0x9fa7) //nox, if email has been previously entered
+                    if (chksum != 0x58bb) //nox, if email has been previously entered
                     {
                         while (!KillApp()) { }
                         {
@@ -758,7 +760,7 @@ namespace CodeStrikeBot
                     }
 
                     chksum = ScreenState.GetScreenChecksum(SuperBitmap, 88, 297, 20);
-                    if (chksum != 0x9fa7) //nox, if password has been previously entered
+                    if (chksum != 0x58f5) //nox, if password has been previously entered
                     {
                         while (!KillApp()) { }
                         {
@@ -772,30 +774,30 @@ namespace CodeStrikeBot
                     //enter email
                     do
                     {
-                        Controller.SendClick(this, 100, 260, (int)(300 * (tries / 2.0 + 1)));
+                        Controller.SendClick(this, 300, 240, (int)(300 * (tries / 2.0 + 1)));
                         Controller.SendKey(this, account.Email);
                         Thread.Sleep((int)((500 * (tries / 2.0 + 1)) * TimeoutFactor));
                         Controller.CaptureApplication(this);
-                        chksum = ScreenState.GetScreenChecksum(SuperBitmap, 88, 247, 20);
+                        chksum = ScreenState.GetScreenChecksum(SuperBitmap, 89, 225, 20);
                     }
-                    while ((chksum == 0x9fa7 || chksum == 0x174f) && tmrRun.ElapsedMilliseconds < 5000);
+                    while ((chksum == 0xa5df || chksum == 0x80c1) && tmrRun.ElapsedMilliseconds < 5000);
 
                     tmrRun.Restart();
 
                     //enter password
                     do
                     {
-                        Controller.SendClick(this, 100, 305, (int)(600 * (tries / 2.0 + 1)));
+                        Controller.SendClick(this, 300, 285, (int)(600 * (tries / 2.0 + 1)));
                         Controller.SendKey(this, account.Password);
                         Thread.Sleep((int)((500 * (tries / 2.0 + 1)) * TimeoutFactor));
                         Controller.CaptureApplication(this);
-                        chksum = ScreenState.GetScreenChecksum(SuperBitmap, 88, 297, 20);
+                        chksum = ScreenState.GetScreenChecksum(SuperBitmap, 89, 275, 20);
                     }
-                    while ((chksum == 0x9fa7 || chksum == 0x174f) && tmrRun.ElapsedMilliseconds < 5000);
+                    while ((chksum == 0x174f || chksum == 0x5a20) && tmrRun.ElapsedMilliseconds < 5000);
 
                     Controller.CaptureApplication(this);
-                    Color c = SuperBitmap.GetPixel(110, 351), c2;
-                    if (c.Equals(82, 85, 90) || c.Equals(33, 32, 33))
+                    Color c = SuperBitmap.GetPixel(110, 325), c2;
+                    if (c.Equals(82, 81, 82) || c.Equals(33, 32, 33))
                     {
                         //backspace fields
                         /*this.SendClick(310, 260, 250);
@@ -814,34 +816,33 @@ namespace CodeStrikeBot
                     {
                         do
                         {
-                            Controller.SendClick(this, 100, 350, 100); //click Login
+                            Controller.SendClick(this, 100, 325, 100); //click Login
                             Controller.CaptureApplication(this);
-                            c = SuperBitmap.GetPixel(110, 355);
+                            c = SuperBitmap.GetPixel(100, 325);
                         }
-                        while (c.Equals(57, 125, 156));
+                        while (c.Equals(57, 121, 140));
 
                         Thread.Sleep(300);
                         Controller.CaptureApplication(this);
 
                         tmrRun.Restart();
 
+                        success = true;
+
                         while (ScreenState.CurrentArea == Area.Others.Login && tmrRun.ElapsedMilliseconds < 30000)
                         {
-                            c = SuperBitmap.GetPixel(140, 125);
+                            //success = true;
 
-                            if (c.Equals(41, 44, 49)) //error message
+                            chksum = ScreenState.GetScreenChecksum(SuperBitmap, 190, 116, 20);
+
+                            switch (chksum)
                             {
-                                c = SuperBitmap.GetPixel(240, 270);
-                                if (c.Equals(231, 20, 41)) //device not registered
-                                {
-                                    //Controller.SendClick(this, 100, 270, 300); //click Retry
-                                }
-
-                                c = SuperBitmap.GetPixel(110, 219);
-                                c2 = SuperBitmap.GetPixel(140, 219);
-                                if (c2.Equals(57, 125, 156)) //login fail or error
-                                {
-                                    //this.SendClick(110, 219, 300);
+                                case 0x1dd6: //loading/wait
+                                    success = true;
+                                    break;
+                                case 0x0172: //login failed
+                                case 0xc995: //notice (server under maintenence)
+                                    //this.SendClick(120, 110, 300);
 
                                     //backspace fields
                                     /*this.SendClick(310, 260, 250);
@@ -850,19 +851,28 @@ namespace CodeStrikeBot
                                     this.SendClick(310, 305, 250);
                                     this.SendKey(new String('\b', account.Password.Length));
                                     */
+
                                     if (!KillApp())
                                     {
                                         Controller.Instance.RestartEmulator(this);
                                     }
                                     this.StartApp();
-                                }
 
-                                break;
+                                    success = false;
+                                    break;
+                                case 0x5e3e: //device not registered
+                                    //Controller.SendClick(this, 100, 275, 300); //click Retry
+
+                                    if (!KillApp())
+                                    {
+                                        Controller.Instance.RestartEmulator(this);
+                                    }
+                                    this.StartApp();
+
+                                    return false;
                             }
                            
                             System.Windows.Forms.Application.DoEvents();
-
-                            success = true;
 
                             TimeoutFactor = 1.0;
 
@@ -2176,11 +2186,25 @@ namespace CodeStrikeBot
                         switch (type)
                         {
                             case ScheduleType.Shield:
-                                //chkType = 0xadae;
-                                chkType = 0xd4f2;
+                                chkType = 0x4b1a;
                                 break;
                             case ScheduleType.AntiScout:
-                                chkType = 0x9229;
+                                chkType = 0x1dd5;
+                                break;
+                            case ScheduleType.UpkeepReduction:
+                                chkType = 0xdb1e;
+                                break;
+                            case ScheduleType.Health:
+                                chkType = 0x656a;
+                                break;
+                            case ScheduleType.Defense:
+                                chkType = 0x3d9e;
+                                break;
+                            case ScheduleType.Milestone:
+                                chkType = 0xb5d2;
+                                break;
+                            case ScheduleType.EliteRebelTarget:
+                                chkType = 0x7831;
                                 break;
                         }
 
@@ -2697,7 +2721,7 @@ namespace CodeStrikeBot
                 else if (ScreenState.CurrentArea == Area.MainBases.DailyLogin)
                 {
                     tasksLeft = true;
-                    Controller.SendClick(this, 130, 490, 500); //click Claim
+                    Controller.SendClick(this, 130, 430, 500); //click Claim
                 }
                 else if (ScreenState.CurrentArea == Area.MainBases.DailyLoginClaimed)
                 {
