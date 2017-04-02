@@ -2416,7 +2416,7 @@ namespace CodeStrikeBot
                 Controller.CaptureApplication(this);
 
                 //get back until base or map screen
-                if (!(ScreenState.CurrentArea == Area.StateMaps.Main || ScreenState.CurrentArea == Area.MainBases.Main || ScreenState.CurrentArea == Area.Others.Login || ScreenState.CurrentArea == Area.Emulators.Android || ScreenState.CurrentArea == Area.Others.Splash || ScreenState.CurrentArea == Area.Emulators.Crash || ScreenState.CurrentArea == Area.Emulators.TaskManager || ScreenState.CurrentArea == Area.Emulators.TaskManagerApp || ScreenState.CurrentArea == Area.Emulators.TaskManagerRemove))
+                if (!(ScreenState.CurrentArea == Area.StateMaps.Main || ScreenState.CurrentArea == Area.MainBases.Main || ScreenState.CurrentArea == Area.Others.Login || ScreenState.CurrentArea == Area.Emulators.Android || ScreenState.CurrentArea == Area.Emulators.Loading || ScreenState.CurrentArea == Area.Others.Splash || ScreenState.CurrentArea == Area.Emulators.Crash || ScreenState.CurrentArea == Area.Emulators.TaskManager || ScreenState.CurrentArea == Area.Emulators.TaskManagerApp || ScreenState.CurrentArea == Area.Emulators.TaskManagerRemove))
                 {
                     tasksLeft = true;
 

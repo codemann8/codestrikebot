@@ -614,13 +614,13 @@ namespace CodeStrikeBot
 
             tmrRun.Start();
 
-            while (tasksLeft && tmrRun.ElapsedMilliseconds < 5000)
+            while (tasksLeft && tmrRun.ElapsedMilliseconds < 10000)
             {
                 tasksLeft = false;
 
                 foreach (Screen s in sc)
                 {
-                    if (s != null)
+                    if (s != null && s.EmulatorProcess != null)
                     {
                         if (s.GoToBaseOrMapStep())
                         {
@@ -647,7 +647,7 @@ namespace CodeStrikeBot
                             Controller.CaptureApplication(s);
 
                             //go to world view
-                            if (s.ScreenState.CurrentArea != Area.StateMaps.Main && !(s.ScreenState.CurrentArea == Area.Others.Login || s.ScreenState.CurrentArea == Area.Emulators.Android || s.ScreenState.CurrentArea == Area.Others.Splash || s.ScreenState.CurrentArea == Area.Emulators.Crash || s.ScreenState.CurrentArea == Area.Emulators.TaskManager || s.ScreenState.CurrentArea == Area.Emulators.TaskManagerApp || s.ScreenState.CurrentArea == Area.Emulators.TaskManagerRemove))
+                            if (s.ScreenState.CurrentArea != Area.StateMaps.Main && !(s.ScreenState.CurrentArea == Area.Others.Login || s.ScreenState.CurrentArea == Area.Emulators.Android || s.ScreenState.CurrentArea == Area.Emulators.Loading || s.ScreenState.CurrentArea == Area.Others.Splash || s.ScreenState.CurrentArea == Area.Emulators.Crash || s.ScreenState.CurrentArea == Area.Emulators.TaskManager || s.ScreenState.CurrentArea == Area.Emulators.TaskManagerApp || s.ScreenState.CurrentArea == Area.Emulators.TaskManagerRemove))
                             {
                                 tasksLeft = true;
                                 Controller.SendClick(s, 40, 675, 400); //click World
@@ -673,13 +673,11 @@ namespace CodeStrikeBot
                                 Controller.CaptureApplication(s);
 
                                 //go to base view
-                                if (s.ScreenState.CurrentArea != Area.MainBases.Main && !(s.ScreenState.CurrentArea == Area.Others.Login || s.ScreenState.CurrentArea == Area.Emulators.Android || s.ScreenState.CurrentArea == Area.Others.Splash || s.ScreenState.CurrentArea == Area.Emulators.Crash || s.ScreenState.CurrentArea == Area.Emulators.TaskManager || s.ScreenState.CurrentArea == Area.Emulators.TaskManagerApp || s.ScreenState.CurrentArea == Area.Emulators.TaskManagerRemove))
+                                if (s.ScreenState.CurrentArea != Area.MainBases.Main && !(s.ScreenState.CurrentArea == Area.Others.Login || s.ScreenState.CurrentArea == Area.Emulators.Android || s.ScreenState.CurrentArea == Area.Emulators.Loading || s.ScreenState.CurrentArea == Area.Others.Splash || s.ScreenState.CurrentArea == Area.Emulators.Crash || s.ScreenState.CurrentArea == Area.Emulators.TaskManager || s.ScreenState.CurrentArea == Area.Emulators.TaskManagerApp || s.ScreenState.CurrentArea == Area.Emulators.TaskManagerRemove))
                                 {
                                     tasksLeft = true;
                                     Controller.SendClick(s, 40, 675, 300); //click Base
                                 }
-
-                                //bmp.Dispose();
                             }
                         }
                     }
@@ -714,6 +712,54 @@ namespace CodeStrikeBot
                                     }
                                 }
                             }
+                        }
+                    }
+                    else
+                    {
+                        foreach (Screen s in sc)
+                        {
+                            if (s != null && s.EmulatorProcess != null)
+                            {
+                                Controller.CaptureApplication(s);
+
+                                if (s.ScreenState.CurrentArea != Area.MainBases.Main && !(s.ScreenState.CurrentArea == Area.Others.Login || s.ScreenState.CurrentArea == Area.Emulators.Android || s.ScreenState.CurrentArea == Area.Emulators.Loading || s.ScreenState.CurrentArea == Area.Others.Splash || s.ScreenState.CurrentArea == Area.Emulators.Crash || s.ScreenState.CurrentArea == Area.Emulators.TaskManager || s.ScreenState.CurrentArea == Area.Emulators.TaskManagerApp || s.ScreenState.CurrentArea == Area.Emulators.TaskManagerRemove))
+                                {
+                                    RestartEmulator(s);
+                                    s.Login(s.Emulator.LastKnownAccount);
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (Screen s in sc)
+                    {
+                        if (s != null && s.EmulatorProcess != null)
+                        {
+                            Controller.CaptureApplication(s);
+
+                            if (s.ScreenState.CurrentArea != Area.StateMaps.Main && !(s.ScreenState.CurrentArea == Area.Others.Login || s.ScreenState.CurrentArea == Area.Emulators.Android || s.ScreenState.CurrentArea == Area.Emulators.Loading || s.ScreenState.CurrentArea == Area.Others.Splash || s.ScreenState.CurrentArea == Area.Emulators.Crash || s.ScreenState.CurrentArea == Area.Emulators.TaskManager || s.ScreenState.CurrentArea == Area.Emulators.TaskManagerApp || s.ScreenState.CurrentArea == Area.Emulators.TaskManagerRemove))
+                            {
+                                RestartEmulator(s);
+                                s.Login(s.Emulator.LastKnownAccount);
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                foreach (Screen s in sc)
+                {
+                    if (s != null && s.EmulatorProcess != null)
+                    {
+                        Controller.CaptureApplication(s);
+
+                        if (s.ScreenState.CurrentArea != Area.StateMaps.Main && s.ScreenState.CurrentArea != Area.StateMaps.FullScreen && s.ScreenState.CurrentArea != Area.MainBases.Main && !(s.ScreenState.CurrentArea == Area.Others.Login || s.ScreenState.CurrentArea == Area.Emulators.Android || s.ScreenState.CurrentArea == Area.Emulators.Loading || s.ScreenState.CurrentArea == Area.Others.Splash || s.ScreenState.CurrentArea == Area.Emulators.Crash || s.ScreenState.CurrentArea == Area.Emulators.TaskManager || s.ScreenState.CurrentArea == Area.Emulators.TaskManagerApp || s.ScreenState.CurrentArea == Area.Emulators.TaskManagerRemove))
+                        {
+                            RestartEmulator(s);
+                            s.Login(s.Emulator.LastKnownAccount);
                         }
                     }
                 }
