@@ -1755,8 +1755,16 @@ namespace CodeStrikeBot
             if (s != null && s.EmulatorProcess != null)
             {
                 Rect rect = new Rect();
+                Stopwatch tmrRun = new Stopwatch();
 
-                while (!s.EmulatorProcess.HasExited && GetWindowRect(s.EmulatorProcess.MainWindowHandle, ref rect) == (IntPtr)0) { }
+                tmrRun.Start();
+
+                while (tmrRun.ElapsedMilliseconds < 10000 && !s.EmulatorProcess.HasExited && GetWindowRect(s.EmulatorProcess.MainWindowHandle, ref rect) == (IntPtr)0) { }
+
+                if (tmrRun.ElapsedMilliseconds >= 10000)
+                {
+                    Program.RestartApp();
+                }
 
                 int failure = 100;
                 do
