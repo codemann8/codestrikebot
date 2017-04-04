@@ -1672,7 +1672,8 @@ namespace CodeStrikeBot
                                     }
                                     else if (s.ScreenState.CurrentArea == Area.Others.Quit)
                                     {
-                                        s.ClickBack(800); //click Back
+                                        //s.ClickBack(800); //click Back
+                                        Controller.SendClick(s, 145, 480, 1000);
                                     }
                                     else if (s.ScreenState.CurrentArea == Area.Emulators.Crash)
                                     {
