@@ -2785,7 +2785,8 @@ namespace CodeStrikeBot
                 else if (ScreenState.CurrentArea == Area.Others.Quit || ScreenState.CurrentArea == Area.Menus.Resources)
                 {
                     tasksLeft = true;
-                    this.ClickBack(1000);
+                    //this.ClickBack(1000);
+                    Controller.SendClick(this, 145, 480, 1000);
                 }
             }
 

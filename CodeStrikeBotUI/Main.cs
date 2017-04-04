@@ -1660,8 +1660,7 @@ namespace CodeStrikeBot
                                     {
                                         ctrl.StartApp(s);
                                     }
-                                    //TODO: Fix, this keeps stealing sessions from existing emulators, probably just a leapdroid issue
-                                    else if (s.Emulator.LastKnownAccount != null && s.Emulator.LastKnownAccount.Id != 0 && !s.PreventFromOpening && s.ScreenState.CurrentArea == Area.Others.Login)
+                                    else if (s.Emulator.LastKnownAccount != null && s.Emulator.LastKnownAccount.Id != 0 && s.ScreenState.CurrentArea == Area.Others.Login)
                                     {
                                         ctrl.Login(s, s.Emulator.LastKnownAccount);
                                     }
