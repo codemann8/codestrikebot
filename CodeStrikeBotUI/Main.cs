@@ -1668,7 +1668,7 @@ namespace CodeStrikeBot
                                     else if (s.ScreenState.CurrentArea == Area.Others.SessionTimeout)
                                     {
                                         s.PreventFromOpening = true;
-                                        Controller.SendClick(s, 200, 205, 300); //click
+                                        Controller.SendClick(s, 200, 205, 1000); //click
                                     }
                                     else if (s.ScreenState.CurrentArea == Area.Others.Quit)
                                     {
