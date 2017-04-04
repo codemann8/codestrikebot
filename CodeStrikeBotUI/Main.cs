@@ -429,6 +429,11 @@ namespace CodeStrikeBot
                 try
                 {
                     g.DrawImage(bmp.Bitmap, 0, 0, new Rectangle(Int32.Parse(txtCustomX.Text), Int32.Parse(txtCustomY.Text), bmpCheck.Width, bmpCheck.Height), GraphicsUnit.Pixel);
+                    if (picCheck.Image != null)
+                    {
+                        picCheck.Image.Dispose();
+                    }
+                    
                     picCheck.Image = bmpCheck;
                     //lblBmpChecksum.Text = bmpCheck.Checksum().ToString("X4");
                     lblBmpChecksum.Text = bmp.Checksum(Int32.Parse(txtCustomX.Text), Int32.Parse(txtCustomY.Text), bmpCheck.Width, bmpCheck.Height).ToString("X4");
