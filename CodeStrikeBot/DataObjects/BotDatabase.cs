@@ -162,7 +162,7 @@ namespace CodeStrikeBot
                     if (task.Id == 0)
                     {
                         command = new SqlCeCommand("INSERT INTO schedules (accountId, type, interval, amount, count, x, y, backupX, backupY, lastAction) VALUES (@accountId, @type, @interval, @amt, @count, @x, @y, @altX, @altY, @lastAction)", con);
-                        command.Parameters.AddWithValue("@lastAction", new DateTime().AddYears(1972));
+                        command.Parameters.AddWithValue("@lastAction", DateTime.Now);
                     }
                     else
                     {
