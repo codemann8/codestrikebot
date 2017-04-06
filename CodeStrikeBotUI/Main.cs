@@ -1174,9 +1174,9 @@ namespace CodeStrikeBot
                                                 ctrl.KillEmulator(s, false);
                                             }
                                         }
-                                    }
 
-                                    Program.RestartApp();
+                                        Program.RestartApp();
+                                    }
                                 }
                                 else
                                 {
