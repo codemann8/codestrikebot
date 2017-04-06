@@ -1040,19 +1040,38 @@ namespace CodeStrikeBot
 
                                     command = command.Substring(6);
 
-                                    int screenNum = Int32.Parse(command.Substring(0, 1)) - 1;
+                                    Account acc = ctrl.FindAccount(command.Substring(0, command.IndexOf(' ')));
 
-                                    command = command.Substring(2);
-
-                                    Account acc = ctrl.FindAccount(command);
-
-                                    if (acc != null && screenNum >= 0 && screenNum < ctrl.sc.Length && ctrl.sc[screenNum] != null && ctrl.sc[screenNum].EmulatorProcess != null)
+                                    if (acc != null)
                                     {
-                                        ctrl.BeginTask();
-                                        ctrl.Logout(ctrl.sc[screenNum]);
-                                        ctrl.StartApp(ctrl.sc[screenNum]);
-                                        ctrl.Login(ctrl.sc[screenNum], acc);
-                                        ctrl.EndTask();
+                                        command = command.Trim();
+
+                                        Screen s = null;
+
+                                        if (command == "")
+                                        {
+                                            s = ctrl.GetNextWindow(acc);
+                                        }
+                                        else
+                                        {
+                                            command = command.Substring(command.IndexOf(' ') + 1);
+
+                                            int screenNum = Int32.Parse(command.Trim()) - 1;
+
+                                            if (screenNum >= 0 && screenNum < ctrl.sc.Length)
+                                            {
+                                                s = ctrl.sc[screenNum];
+                                            }
+                                        }
+
+                                        if (s != null && s.EmulatorProcess != null)
+                                        {
+                                            ctrl.BeginTask();
+                                            ctrl.Logout(s);
+                                            ctrl.StartApp(s);
+                                            ctrl.Login(s, acc);
+                                            ctrl.EndTask();
+                                        }
                                     }
                                 }
                                 else if (command.StartsWith("shield"))
@@ -1128,11 +1147,23 @@ namespace CodeStrikeBot
                                 {
                                     command = command.Substring(4).Trim();
 
-                                    foreach (Screen s in ctrl.sc)
+                                    int window = Int32.Parse(command);
+
+                                    if (window > 0)
                                     {
-                                        if (s != null)
+                                        if (ctrl.sc[window - 1] != null)
                                         {
-                                            ctrl.KillEmulator(s, false);
+                                            ctrl.KillEmulator(ctrl.sc[window - 1], false);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        foreach (Screen s in ctrl.sc)
+                                        {
+                                            if (s != null)
+                                            {
+                                                ctrl.KillEmulator(s, false);
+                                            }
                                         }
                                     }
 

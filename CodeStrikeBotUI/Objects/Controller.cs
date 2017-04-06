@@ -188,7 +188,7 @@ namespace CodeStrikeBot
         {
             foreach (Account a in accounts)
             {
-                if (a.Name == name)
+                if (a.Name.ToLower() == name.ToLower())
                 {
                     return a;
                 }
