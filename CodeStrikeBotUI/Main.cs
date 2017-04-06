@@ -1039,13 +1039,23 @@ namespace CodeStrikeBot
                                     }
 
                                     command = command.Substring(6);
+                                    command = command.Trim();
 
-                                    Account acc = ctrl.FindAccount(command.Substring(0, command.IndexOf(' ')));
+                                    Account acc = null;
+
+                                    if (command.IndexOf(' ') > -1)
+                                    {
+                                        acc = ctrl.FindAccount(command.Substring(0, command.IndexOf(' ')));
+                                        command = command.Substring(0, command.IndexOf(' ') - 1);
+                                    }
+                                    else
+                                    {
+                                        acc = ctrl.FindAccount(command);
+                                        command = "";
+                                    }
 
                                     if (acc != null)
                                     {
-                                        command = command.Trim();
-
                                         Screen s = null;
 
                                         if (command == "")
@@ -1054,9 +1064,8 @@ namespace CodeStrikeBot
                                         }
                                         else
                                         {
-                                            command = command.Substring(command.IndexOf(' ') + 1);
-
-                                            int screenNum = Int32.Parse(command.Trim()) - 1;
+                                            command = command.Trim();
+                                            int screenNum = Int32.Parse(command) - 1;
 
                                             if (screenNum >= 0 && screenNum < ctrl.sc.Length)
                                             {
