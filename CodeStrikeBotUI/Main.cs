@@ -1625,7 +1625,7 @@ namespace CodeStrikeBot
                         chksum = bmpScreenCapture.Checksum(510, 442, 20, 20);
                         if (chksum == 0x0474)
                         {
-                            Controller.SendClick(null, 975, 620, 1000);
+                            Controller.SendClick(null, 970, 620, 1000);
                         }
                     }
 
@@ -1692,6 +1692,13 @@ namespace CodeStrikeBot
                                 if (chksum == 0x6b07) //Updates are available
                                 {
                                     s.ClickBack(300); //click Back
+                                }
+
+                                if (chksum == 0x3b17) //Notice
+                                {
+                                    chksum = ScreenState.GetScreenChecksum(s.SuperBitmap, 190, 115, 20);
+                                    //s.ClickBack(300); //click Back
+                                    //TODO: Finish later
                                 }
 
                                 if (s.ScreenState != null)
