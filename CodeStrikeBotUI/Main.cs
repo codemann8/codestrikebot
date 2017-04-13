@@ -1627,7 +1627,14 @@ namespace CodeStrikeBot
                         chksum = bmpScreenCapture.Checksum(510, 442, 20, 20);
                         if (chksum == 0x0474)
                         {
-                            Controller.SendClick(null, 970, 620, 1000);
+                            Controller.SendClick(null, 965, 620, 1000);
+                        }
+
+                        //check LINE update dialog
+                        Color c = bmpScreenCapture.GetPixel(970, 555);
+                        if (c.Equals(8, 186, 0))
+                        {
+                            Controller.SendClick(null, 965, 555, 1000);
                         }
                     }
 
@@ -1716,7 +1723,7 @@ namespace CodeStrikeBot
                                     else if (s.ScreenState.CurrentArea == Area.Others.SessionTimeout)
                                     {
                                         s.PreventFromOpening = true;
-                                        Controller.SendClick(s, 200, 205, 1000); //click
+                                        Controller.SendClick(s, 200, 205, 2000); //click
                                     }
                                     else if (s.ScreenState.CurrentArea == Area.Others.Quit)
                                     {
