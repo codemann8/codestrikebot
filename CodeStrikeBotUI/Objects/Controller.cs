@@ -1654,49 +1654,52 @@ namespace CodeStrikeBot
 
         public void SendNotification(string message, NotificationType type)
         {
-            if (Database.Settings.PushoverAPIKey != "" && Database.Settings.PushoverUserKey != "")
+            if (Database != null && Database.Settings != null)
             {
-                int priority = 0;
-                switch (type)
+                if (Database.Settings.PushoverAPIKey != "" && Database.Settings.PushoverUserKey != "")
                 {
-                    case NotificationType.RallyDefense:
-                    case NotificationType.Offline:
-                    case NotificationType.BoostActivationFail:
-                    case NotificationType.IncomingRally:
-                        priority = 1;
-                        break;
+                    int priority = 0;
+                    switch (type)
+                    {
+                        case NotificationType.RallyDefense:
+                        case NotificationType.Offline:
+                        case NotificationType.BoostActivationFail:
+                        case NotificationType.IncomingRally:
+                            priority = 1;
+                            break;
 
+                    }
+
+                    PushoverClient.PushResponse response = pclient.Push("MS Alert", message, Database.Settings.PushoverUserKey, priority.ToString()); ;
+
+                    while (response.Status != 1)
+                    {
+                        Thread.Sleep(1000);
+                        response = pclient.Push("MS Alert", message, Database.Settings.PushoverUserKey, priority.ToString());
+                    }
                 }
 
-                PushoverClient.PushResponse response = pclient.Push("MS Alert", message, Database.Settings.PushoverUserKey, priority.ToString()); ;
-
-                while (response.Status != 1)
+                if (Database.Settings.SlackURL != "")
                 {
-                    Thread.Sleep(1000);
-                    response = pclient.Push("MS Alert", message, Database.Settings.PushoverUserKey, priority.ToString());
+                    Slack.Webhooks.SlackClient slackClient = new Slack.Webhooks.SlackClient(Database.Settings.SlackURL, 30);
+                    Slack.Webhooks.SlackMessage slackMessage = new Slack.Webhooks.SlackMessage();
+
+                    slackMessage.Channel = "#general";
+                    switch (type)
+                    {
+                        case NotificationType.RallyDefense:
+                            slackMessage.Channel = "#rallydefense";
+                            break;
+                        case NotificationType.RallyOffense:
+                            slackMessage.Channel = "#rallyoffense";
+                            break;
+                    }
+
+                    slackMessage.Username = "codestrikebot";
+                    slackMessage.Text = message;
+
+                    slackClient.Post(slackMessage);
                 }
-            }
-            
-            if (Database.Settings.SlackURL != "")
-            {
-                Slack.Webhooks.SlackClient slackClient = new Slack.Webhooks.SlackClient(Database.Settings.SlackURL, 30);
-                Slack.Webhooks.SlackMessage slackMessage = new Slack.Webhooks.SlackMessage();
-
-                slackMessage.Channel = "#general";
-                switch (type)
-                {
-                    case NotificationType.RallyDefense:
-                        slackMessage.Channel = "#rallydefense";
-                        break;
-                    case NotificationType.RallyOffense:
-                        slackMessage.Channel = "#rallyoffense";
-                        break;
-                }
-
-                slackMessage.Username = "codestrikebot";
-                slackMessage.Text = message;
-
-                slackClient.Post(slackMessage);
             }
         }
 
