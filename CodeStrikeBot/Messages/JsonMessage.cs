@@ -54,7 +54,7 @@ namespace CodeStrikeBot.Messages
                         case "EVENT_MARCH": //march
                             node = ret.Document.DocumentElement.SelectSingleNode("//*[local-name()='payload']");
                             string json = node.InnerText;
-                            ret = new MarchMessage(ret);
+                            //ret = new MarchMessage(ret);
                             break;
                     }
                 }

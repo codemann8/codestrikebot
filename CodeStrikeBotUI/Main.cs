@@ -960,7 +960,7 @@ namespace CodeStrikeBot
                         {
                             Messages.MarchMessage marchMessage = (Messages.MarchMessage)message;
 
-                            lstRadar.Items.Add(marchMessage);
+                            lstRadar.Items.Insert(0, marchMessage);
                         }
                         else if (message is Messages.ChatMessage)
                         {

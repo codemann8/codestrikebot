@@ -45,12 +45,21 @@ namespace CodeStrikeBot.Messages.Data
     public enum MarchState
     {
         Advancing,
+        Returning,
+        Busy,
         Unknown
     }
 
     public enum MarchType
     {
         Attack,
+        Rally,
+        Scout,
+        Reinforcement,
+        War,
+        Encampment,
+        RebelAttack,
+        HeroEscape,
         Unknown
     }
 
