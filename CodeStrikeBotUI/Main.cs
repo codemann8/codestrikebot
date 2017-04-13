@@ -10,10 +10,6 @@ using System.Drawing.Imaging;
 using System.Xml;
 using Microsoft.VisualBasic;
 
-//chanid 1476158142
-//chansec 54dbbf4f93feec08423257005f547155
-//mid u7eb967896d6bd6f645f407c68ef800d6
-
 namespace CodeStrikeBot
 {
     public partial class Main : Form
@@ -959,6 +955,12 @@ namespace CodeStrikeBot
 
                                 tmrSupressAction.Restart();
                             }
+                        }
+                        else if (message is Messages.MarchMessage)
+                        {
+                            Messages.MarchMessage marchMessage = (Messages.MarchMessage)message;
+
+                            lstRadar.Items.Add(marchMessage);
                         }
                         else if (message is Messages.ChatMessage)
                         {
@@ -1945,6 +1947,13 @@ namespace CodeStrikeBot
             ctrl.Database.Settings.PushoverUserKey = txtPushoverUser.Text;
 
             ctrl.Database.Settings.Save();
+        }
+
+        private void tabControlMain_Selected(object sender, TabControlEventArgs e)
+        {
+            TabPage current = (sender as TabControl).SelectedTab;
+
+            FormContainer.Panel2Collapsed = current.Text == "Activity";
         }
     }
 }

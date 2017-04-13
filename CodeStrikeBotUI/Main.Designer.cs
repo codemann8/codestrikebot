@@ -31,9 +31,9 @@ namespace CodeStrikeBot
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.stsStrip = new System.Windows.Forms.StatusStrip();
             this.stsStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.stsSpacer = new System.Windows.Forms.ToolStripStatusLabel();
@@ -41,9 +41,6 @@ namespace CodeStrikeBot
             this.bckScreenState = new System.ComponentModel.BackgroundWorker();
             this.bckSniffer = new System.ComponentModel.BackgroundWorker();
             this.bckHeartBeat = new System.ComponentModel.BackgroundWorker();
-            this.bsScheduleTask = new System.Windows.Forms.BindingSource(this.components);
-            this.bsAccount = new System.Windows.Forms.BindingSource(this.components);
-            this.bsPacket = new System.Windows.Forms.BindingSource(this.components);
             this.bsColorCustom = new System.Windows.Forms.BindingSource(this.components);
             this.bckRegularTasks = new System.ComponentModel.BackgroundWorker();
             this.bckScheduler = new System.ComponentModel.BackgroundWorker();
@@ -51,6 +48,13 @@ namespace CodeStrikeBot
             this.bckAutoActions = new System.ComponentModel.BackgroundWorker();
             this.dataGridViewComboBoxColumn1 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.tabSettings = new System.Windows.Forms.TabPage();
+            this.groupBox10 = new System.Windows.Forms.GroupBox();
+            this.txtPushoverUser = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.txtPushoverAPI = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.txtSlackURL = new System.Windows.Forms.TextBox();
             this.btnSaveSettings = new System.Windows.Forms.Button();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
             this.lblEmulator4 = new System.Windows.Forms.Label();
@@ -75,9 +79,6 @@ namespace CodeStrikeBot
             this.tabActivity = new System.Windows.Forms.TabPage();
             this.contActivity = new System.Windows.Forms.SplitContainer();
             this.gridPacket = new System.Windows.Forms.DataGridView();
-            this.timestampDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.typeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.lengthDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Id = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.btnCopyText = new System.Windows.Forms.Button();
@@ -90,28 +91,12 @@ namespace CodeStrikeBot
             this.tabAccounts = new System.Windows.Forms.TabPage();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.gridAccounts = new System.Windows.Forms.DataGridView();
-            this.nameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.userNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.emailDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.passwordDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.priorityGridViewComboBoxColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.foodNegativeAmountDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.lastLoginDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.lastLogoutDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabScreens = new System.Windows.Forms.TabPage();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.btnScheduleRun = new System.Windows.Forms.Button();
             this.gridSchedules = new System.Windows.Forms.DataGridView();
-            this.typeDataGridViewComboBoxColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.intervalDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.amountDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.countDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.xDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.yDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.BackupX = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.BackupY = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.lastActionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.nextActionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.btnResize = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
@@ -144,20 +129,39 @@ namespace CodeStrikeBot
             this.chkTasks = new System.Windows.Forms.CheckBox();
             this.btnTasks = new System.Windows.Forms.Button();
             this.btnClearGifts = new System.Windows.Forms.Button();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.txtSlackURL = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.groupBox10 = new System.Windows.Forms.GroupBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.txtPushoverAPI = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.txtPushoverUser = new System.Windows.Forms.TextBox();
+            this.tabControlMain = new System.Windows.Forms.TabControl();
+            this.FormContainer = new System.Windows.Forms.SplitContainer();
+            this.dataGridViewComboBoxColumn2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.typeDataGridViewComboBoxColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.intervalDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.amountDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.countDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.xDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.yDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.lastActionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.nextActionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.bsScheduleTask = new System.Windows.Forms.BindingSource(this.components);
+            this.nameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.userNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.emailDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.passwordDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.priorityGridViewComboBoxColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.foodNegativeAmountDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.lastLoginDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.lastLogoutDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.bsAccount = new System.Windows.Forms.BindingSource(this.components);
+            this.timestampDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.typeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.lengthDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.bsPacket = new System.Windows.Forms.BindingSource(this.components);
+            this.tabMonitor = new System.Windows.Forms.TabPage();
+            this.tabControlMonitor = new System.Windows.Forms.TabControl();
+            this.grpRadar = new System.Windows.Forms.GroupBox();
+            this.lstRadar = new System.Windows.Forms.ListBox();
             this.stsStrip.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.bsScheduleTask)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bsAccount)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bsPacket)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bsColorCustom)).BeginInit();
             this.tabSettings.SuspendLayout();
+            this.groupBox10.SuspendLayout();
             this.groupBox9.SuspendLayout();
             this.tabDebug.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picCheck)).BeginInit();
@@ -188,8 +192,17 @@ namespace CodeStrikeBot
             this.groupBox6.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            this.tabControl1.SuspendLayout();
-            this.groupBox10.SuspendLayout();
+            this.tabControlMain.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.FormContainer)).BeginInit();
+            this.FormContainer.Panel1.SuspendLayout();
+            this.FormContainer.Panel2.SuspendLayout();
+            this.FormContainer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bsScheduleTask)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bsAccount)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bsPacket)).BeginInit();
+            this.tabMonitor.SuspendLayout();
+            this.tabControlMonitor.SuspendLayout();
+            this.grpRadar.SuspendLayout();
             this.SuspendLayout();
             // 
             // stsStrip
@@ -199,10 +212,10 @@ namespace CodeStrikeBot
             this.stsStatus,
             this.stsSpacer,
             this.stsState});
-            this.stsStrip.Location = new System.Drawing.Point(0, 392);
+            this.stsStrip.Location = new System.Drawing.Point(0, 492);
             this.stsStrip.Name = "stsStrip";
             this.stsStrip.Padding = new System.Windows.Forms.Padding(4, 0, 28, 0);
-            this.stsStrip.Size = new System.Drawing.Size(1916, 37);
+            this.stsStrip.Size = new System.Drawing.Size(2190, 37);
             this.stsStrip.TabIndex = 7;
             // 
             // stsStatus
@@ -214,7 +227,7 @@ namespace CodeStrikeBot
             // stsSpacer
             // 
             this.stsSpacer.Name = "stsSpacer";
-            this.stsSpacer.Size = new System.Drawing.Size(1816, 32);
+            this.stsSpacer.Size = new System.Drawing.Size(2090, 32);
             this.stsSpacer.Spring = true;
             // 
             // stsState
@@ -242,19 +255,6 @@ namespace CodeStrikeBot
             // 
             this.bckHeartBeat.WorkerSupportsCancellation = true;
             this.bckHeartBeat.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bckHeartBeat_DoWork);
-            // 
-            // bsScheduleTask
-            // 
-            this.bsScheduleTask.DataSource = typeof(CodeStrikeBot.ScheduleTask);
-            // 
-            // bsAccount
-            // 
-            this.bsAccount.DataSource = typeof(CodeStrikeBot.Account);
-            // 
-            // bsPacket
-            // 
-            this.bsPacket.DataSource = typeof(CodeStrikeBot.Messages.Message);
-            this.bsPacket.CurrentChanged += new System.EventHandler(this.bsPacket_CurrentChanged);
             // 
             // bsColorCustom
             // 
@@ -298,14 +298,80 @@ namespace CodeStrikeBot
             this.tabSettings.Location = new System.Drawing.Point(8, 39);
             this.tabSettings.Name = "tabSettings";
             this.tabSettings.Padding = new System.Windows.Forms.Padding(3);
-            this.tabSettings.Size = new System.Drawing.Size(1900, 345);
+            this.tabSettings.Size = new System.Drawing.Size(1270, 445);
             this.tabSettings.TabIndex = 5;
             this.tabSettings.Text = "Settings";
             this.tabSettings.UseVisualStyleBackColor = true;
             // 
+            // groupBox10
+            // 
+            this.groupBox10.Controls.Add(this.txtPushoverUser);
+            this.groupBox10.Controls.Add(this.label3);
+            this.groupBox10.Controls.Add(this.txtPushoverAPI);
+            this.groupBox10.Controls.Add(this.label2);
+            this.groupBox10.Controls.Add(this.label1);
+            this.groupBox10.Controls.Add(this.txtSlackURL);
+            this.groupBox10.Location = new System.Drawing.Point(168, 6);
+            this.groupBox10.Name = "groupBox10";
+            this.groupBox10.Size = new System.Drawing.Size(1094, 187);
+            this.groupBox10.TabIndex = 6;
+            this.groupBox10.TabStop = false;
+            this.groupBox10.Text = "Notifications";
+            // 
+            // txtPushoverUser
+            // 
+            this.txtPushoverUser.Location = new System.Drawing.Point(700, 65);
+            this.txtPushoverUser.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.txtPushoverUser.Name = "txtPushoverUser";
+            this.txtPushoverUser.Size = new System.Drawing.Size(377, 31);
+            this.txtPushoverUser.TabIndex = 9;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(539, 68);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(154, 25);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "Pushover User";
+            // 
+            // txtPushoverAPI
+            // 
+            this.txtPushoverAPI.Location = new System.Drawing.Point(155, 65);
+            this.txtPushoverAPI.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.txtPushoverAPI.Name = "txtPushoverAPI";
+            this.txtPushoverAPI.Size = new System.Drawing.Size(377, 31);
+            this.txtPushoverAPI.TabIndex = 7;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 68);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(142, 25);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "Pushover API";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 31);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(113, 25);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "Slack URL";
+            // 
+            // txtSlackURL
+            // 
+            this.txtSlackURL.Location = new System.Drawing.Point(175, 28);
+            this.txtSlackURL.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.txtSlackURL.Name = "txtSlackURL";
+            this.txtSlackURL.Size = new System.Drawing.Size(902, 31);
+            this.txtSlackURL.TabIndex = 4;
+            // 
             // btnSaveSettings
             // 
-            this.btnSaveSettings.Location = new System.Drawing.Point(7, 292);
+            this.btnSaveSettings.Location = new System.Drawing.Point(7, 392);
             this.btnSaveSettings.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnSaveSettings.Name = "btnSaveSettings";
             this.btnSaveSettings.Size = new System.Drawing.Size(148, 44);
@@ -411,7 +477,7 @@ namespace CodeStrikeBot
             this.tabDebug.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.tabDebug.Name = "tabDebug";
             this.tabDebug.Padding = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.tabDebug.Size = new System.Drawing.Size(1900, 345);
+            this.tabDebug.Size = new System.Drawing.Size(1270, 445);
             this.tabDebug.TabIndex = 3;
             this.tabDebug.Text = "Debug";
             this.tabDebug.UseVisualStyleBackColor = true;
@@ -422,7 +488,7 @@ namespace CodeStrikeBot
             this.txtScreenOrder.Margin = new System.Windows.Forms.Padding(6);
             this.txtScreenOrder.Multiline = true;
             this.txtScreenOrder.Name = "txtScreenOrder";
-            this.txtScreenOrder.Size = new System.Drawing.Size(196, 166);
+            this.txtScreenOrder.Size = new System.Drawing.Size(530, 356);
             this.txtScreenOrder.TabIndex = 29;
             // 
             // txtBmpSize
@@ -517,7 +583,7 @@ namespace CodeStrikeBot
             this.tabActivity.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.tabActivity.Name = "tabActivity";
             this.tabActivity.Padding = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.tabActivity.Size = new System.Drawing.Size(1900, 345);
+            this.tabActivity.Size = new System.Drawing.Size(1270, 445);
             this.tabActivity.TabIndex = 2;
             this.tabActivity.Text = "Activity";
             this.tabActivity.UseVisualStyleBackColor = true;
@@ -537,7 +603,7 @@ namespace CodeStrikeBot
             // contActivity.Panel2
             // 
             this.contActivity.Panel2.Controls.Add(this.splitContainer2);
-            this.contActivity.Size = new System.Drawing.Size(1892, 333);
+            this.contActivity.Size = new System.Drawing.Size(1262, 433);
             this.contActivity.SplitterDistance = 270;
             this.contActivity.SplitterWidth = 8;
             this.contActivity.TabIndex = 20;
@@ -547,14 +613,14 @@ namespace CodeStrikeBot
             this.gridPacket.AccessibleRole = System.Windows.Forms.AccessibleRole.TitleBar;
             this.gridPacket.AllowDrop = true;
             this.gridPacket.AutoGenerateColumns = false;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gridPacket.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridPacket.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
             this.gridPacket.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gridPacket.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.timestampDataGridViewTextBoxColumn,
@@ -562,48 +628,28 @@ namespace CodeStrikeBot
             this.lengthDataGridViewTextBoxColumn,
             this.Id});
             this.gridPacket.DataSource = this.bsPacket;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.gridPacket.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.gridPacket.DefaultCellStyle = dataGridViewCellStyle5;
             this.gridPacket.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridPacket.Location = new System.Drawing.Point(0, 0);
             this.gridPacket.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.gridPacket.Name = "gridPacket";
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gridPacket.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
-            this.gridPacket.Size = new System.Drawing.Size(270, 333);
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridPacket.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            this.gridPacket.Size = new System.Drawing.Size(270, 433);
             this.gridPacket.TabIndex = 17;
-            // 
-            // timestampDataGridViewTextBoxColumn
-            // 
-            this.timestampDataGridViewTextBoxColumn.DataPropertyName = "Timestamp";
-            this.timestampDataGridViewTextBoxColumn.HeaderText = "Timestamp";
-            this.timestampDataGridViewTextBoxColumn.Name = "timestampDataGridViewTextBoxColumn";
-            // 
-            // typeDataGridViewTextBoxColumn
-            // 
-            this.typeDataGridViewTextBoxColumn.DataPropertyName = "Type";
-            this.typeDataGridViewTextBoxColumn.HeaderText = "Type";
-            this.typeDataGridViewTextBoxColumn.Name = "typeDataGridViewTextBoxColumn";
-            this.typeDataGridViewTextBoxColumn.Width = 60;
-            // 
-            // lengthDataGridViewTextBoxColumn
-            // 
-            this.lengthDataGridViewTextBoxColumn.DataPropertyName = "Length";
-            this.lengthDataGridViewTextBoxColumn.HeaderText = "Length";
-            this.lengthDataGridViewTextBoxColumn.Name = "lengthDataGridViewTextBoxColumn";
-            this.lengthDataGridViewTextBoxColumn.Width = 50;
             // 
             // Id
             // 
@@ -631,7 +677,7 @@ namespace CodeStrikeBot
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.splitContainer1);
-            this.splitContainer2.Size = new System.Drawing.Size(1614, 333);
+            this.splitContainer2.Size = new System.Drawing.Size(984, 433);
             this.splitContainer2.SplitterDistance = 30;
             this.splitContainer2.SplitterWidth = 8;
             this.splitContainer2.TabIndex = 20;
@@ -698,8 +744,8 @@ namespace CodeStrikeBot
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.treeXml);
-            this.splitContainer1.Size = new System.Drawing.Size(1614, 295);
-            this.splitContainer1.SplitterDistance = 141;
+            this.splitContainer1.Size = new System.Drawing.Size(984, 395);
+            this.splitContainer1.SplitterDistance = 188;
             this.splitContainer1.SplitterWidth = 8;
             this.splitContainer1.TabIndex = 19;
             // 
@@ -707,6 +753,8 @@ namespace CodeStrikeBot
             // 
             this.hexData.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Inset;
             this.hexData.ColumnCount = 1;
+            this.hexData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.hexData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -806,7 +854,9 @@ namespace CodeStrikeBot
             this.hexData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.hexData.Size = new System.Drawing.Size(1614, 141);
+            this.hexData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.hexData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.hexData.Size = new System.Drawing.Size(984, 188);
             this.hexData.TabIndex = 18;
             // 
             // treeXml
@@ -815,7 +865,7 @@ namespace CodeStrikeBot
             this.treeXml.Location = new System.Drawing.Point(0, 0);
             this.treeXml.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.treeXml.Name = "treeXml";
-            this.treeXml.Size = new System.Drawing.Size(1614, 146);
+            this.treeXml.Size = new System.Drawing.Size(984, 199);
             this.treeXml.TabIndex = 0;
             // 
             // tabAccounts
@@ -825,7 +875,7 @@ namespace CodeStrikeBot
             this.tabAccounts.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.tabAccounts.Name = "tabAccounts";
             this.tabAccounts.Padding = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.tabAccounts.Size = new System.Drawing.Size(1900, 345);
+            this.tabAccounts.Size = new System.Drawing.Size(1270, 445);
             this.tabAccounts.TabIndex = 4;
             this.tabAccounts.Text = "Accounts";
             this.tabAccounts.UseVisualStyleBackColor = true;
@@ -833,11 +883,12 @@ namespace CodeStrikeBot
             // groupBox8
             // 
             this.groupBox8.Controls.Add(this.gridAccounts);
-            this.groupBox8.Location = new System.Drawing.Point(16, 8);
+            this.groupBox8.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox8.Location = new System.Drawing.Point(4, 6);
             this.groupBox8.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.groupBox8.Name = "groupBox8";
             this.groupBox8.Padding = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.groupBox8.Size = new System.Drawing.Size(1872, 315);
+            this.groupBox8.Size = new System.Drawing.Size(1262, 433);
             this.groupBox8.TabIndex = 18;
             this.groupBox8.TabStop = false;
             this.groupBox8.Text = "Setup";
@@ -857,75 +908,16 @@ namespace CodeStrikeBot
             this.lastLoginDataGridViewTextBoxColumn,
             this.lastLogoutDataGridViewTextBoxColumn});
             this.gridAccounts.DataSource = this.bsAccount;
-            this.gridAccounts.Location = new System.Drawing.Point(12, 37);
+            this.gridAccounts.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gridAccounts.Location = new System.Drawing.Point(4, 30);
             this.gridAccounts.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.gridAccounts.Name = "gridAccounts";
-            this.gridAccounts.Size = new System.Drawing.Size(1848, 267);
+            this.gridAccounts.Size = new System.Drawing.Size(1254, 397);
             this.gridAccounts.TabIndex = 0;
             this.gridAccounts.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.gridAccounts_CellFormatting);
             this.gridAccounts.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridAccounts_CellLeave);
             this.gridAccounts.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.gridAccounts_EditingControlShowing);
             this.gridAccounts.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.gridAccounts_UserDeletingRow);
-            // 
-            // nameDataGridViewTextBoxColumn
-            // 
-            this.nameDataGridViewTextBoxColumn.DataPropertyName = "Name";
-            this.nameDataGridViewTextBoxColumn.HeaderText = "Name";
-            this.nameDataGridViewTextBoxColumn.Name = "nameDataGridViewTextBoxColumn";
-            this.nameDataGridViewTextBoxColumn.Width = 113;
-            // 
-            // userNameDataGridViewTextBoxColumn
-            // 
-            this.userNameDataGridViewTextBoxColumn.DataPropertyName = "UserName";
-            this.userNameDataGridViewTextBoxColumn.HeaderText = "UserName";
-            this.userNameDataGridViewTextBoxColumn.Name = "userNameDataGridViewTextBoxColumn";
-            this.userNameDataGridViewTextBoxColumn.Width = 158;
-            // 
-            // emailDataGridViewTextBoxColumn
-            // 
-            this.emailDataGridViewTextBoxColumn.DataPropertyName = "Email";
-            this.emailDataGridViewTextBoxColumn.HeaderText = "Email";
-            this.emailDataGridViewTextBoxColumn.Name = "emailDataGridViewTextBoxColumn";
-            this.emailDataGridViewTextBoxColumn.Width = 110;
-            // 
-            // passwordDataGridViewTextBoxColumn
-            // 
-            this.passwordDataGridViewTextBoxColumn.DataPropertyName = "Password";
-            this.passwordDataGridViewTextBoxColumn.HeaderText = "Password";
-            this.passwordDataGridViewTextBoxColumn.Name = "passwordDataGridViewTextBoxColumn";
-            this.passwordDataGridViewTextBoxColumn.Width = 151;
-            // 
-            // priorityGridViewComboBoxColumn
-            // 
-            this.priorityGridViewComboBoxColumn.DataPropertyName = "Priority";
-            this.priorityGridViewComboBoxColumn.HeaderText = "Priority";
-            this.priorityGridViewComboBoxColumn.Name = "priorityGridViewComboBoxColumn";
-            this.priorityGridViewComboBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.priorityGridViewComboBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.priorityGridViewComboBoxColumn.Width = 124;
-            // 
-            // foodNegativeAmountDataGridViewTextBoxColumn
-            // 
-            this.foodNegativeAmountDataGridViewTextBoxColumn.DataPropertyName = "FoodNegativeAmount";
-            this.foodNegativeAmountDataGridViewTextBoxColumn.HeaderText = "FoodNegativeAmount";
-            this.foodNegativeAmountDataGridViewTextBoxColumn.Name = "foodNegativeAmountDataGridViewTextBoxColumn";
-            this.foodNegativeAmountDataGridViewTextBoxColumn.Width = 264;
-            // 
-            // lastLoginDataGridViewTextBoxColumn
-            // 
-            this.lastLoginDataGridViewTextBoxColumn.DataPropertyName = "LastLogin";
-            this.lastLoginDataGridViewTextBoxColumn.HeaderText = "LastLogin";
-            this.lastLoginDataGridViewTextBoxColumn.Name = "lastLoginDataGridViewTextBoxColumn";
-            this.lastLoginDataGridViewTextBoxColumn.ReadOnly = true;
-            this.lastLoginDataGridViewTextBoxColumn.Width = 151;
-            // 
-            // lastLogoutDataGridViewTextBoxColumn
-            // 
-            this.lastLogoutDataGridViewTextBoxColumn.DataPropertyName = "LastLogout";
-            this.lastLogoutDataGridViewTextBoxColumn.HeaderText = "LastLogout";
-            this.lastLogoutDataGridViewTextBoxColumn.Name = "lastLogoutDataGridViewTextBoxColumn";
-            this.lastLogoutDataGridViewTextBoxColumn.ReadOnly = true;
-            this.lastLogoutDataGridViewTextBoxColumn.Width = 164;
             // 
             // tabScreens
             // 
@@ -937,7 +929,7 @@ namespace CodeStrikeBot
             this.tabScreens.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.tabScreens.Name = "tabScreens";
             this.tabScreens.Padding = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.tabScreens.Size = new System.Drawing.Size(1900, 345);
+            this.tabScreens.Size = new System.Drawing.Size(1270, 445);
             this.tabScreens.TabIndex = 1;
             this.tabScreens.Text = "Session";
             this.tabScreens.UseVisualStyleBackColor = true;
@@ -950,14 +942,14 @@ namespace CodeStrikeBot
             this.groupBox7.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.groupBox7.Name = "groupBox7";
             this.groupBox7.Padding = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.groupBox7.Size = new System.Drawing.Size(1356, 315);
+            this.groupBox7.Size = new System.Drawing.Size(718, 420);
             this.groupBox7.TabIndex = 17;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Schedules";
             // 
             // btnScheduleRun
             // 
-            this.btnScheduleRun.Location = new System.Drawing.Point(12, 256);
+            this.btnScheduleRun.Location = new System.Drawing.Point(8, 364);
             this.btnScheduleRun.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnScheduleRun.Name = "btnScheduleRun";
             this.btnScheduleRun.Size = new System.Drawing.Size(148, 44);
@@ -986,60 +978,10 @@ namespace CodeStrikeBot
             this.gridSchedules.Location = new System.Drawing.Point(12, 37);
             this.gridSchedules.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.gridSchedules.Name = "gridSchedules";
-            this.gridSchedules.Size = new System.Drawing.Size(1332, 206);
+            this.gridSchedules.Size = new System.Drawing.Size(698, 315);
             this.gridSchedules.TabIndex = 0;
             this.gridSchedules.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridSchedules_CellLeave);
             this.gridSchedules.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.gridSchedules_UserDeletingRow);
-            // 
-            // typeDataGridViewComboBoxColumn
-            // 
-            this.typeDataGridViewComboBoxColumn.DataPropertyName = "Type";
-            this.typeDataGridViewComboBoxColumn.HeaderText = "Type";
-            this.typeDataGridViewComboBoxColumn.Name = "typeDataGridViewComboBoxColumn";
-            this.typeDataGridViewComboBoxColumn.Width = 66;
-            // 
-            // intervalDataGridViewTextBoxColumn
-            // 
-            this.intervalDataGridViewTextBoxColumn.DataPropertyName = "Interval";
-            this.intervalDataGridViewTextBoxColumn.HeaderText = "Interval";
-            this.intervalDataGridViewTextBoxColumn.MaxInputLength = 9;
-            this.intervalDataGridViewTextBoxColumn.Name = "intervalDataGridViewTextBoxColumn";
-            this.intervalDataGridViewTextBoxColumn.Width = 127;
-            // 
-            // amountDataGridViewTextBoxColumn
-            // 
-            this.amountDataGridViewTextBoxColumn.DataPropertyName = "Amount";
-            this.amountDataGridViewTextBoxColumn.HeaderText = "Amount";
-            this.amountDataGridViewTextBoxColumn.MaxInputLength = 9;
-            this.amountDataGridViewTextBoxColumn.Name = "amountDataGridViewTextBoxColumn";
-            this.amountDataGridViewTextBoxColumn.Width = 130;
-            // 
-            // countDataGridViewTextBoxColumn
-            // 
-            this.countDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.countDataGridViewTextBoxColumn.DataPropertyName = "Count";
-            this.countDataGridViewTextBoxColumn.HeaderText = "Count";
-            this.countDataGridViewTextBoxColumn.MaxInputLength = 9;
-            this.countDataGridViewTextBoxColumn.Name = "countDataGridViewTextBoxColumn";
-            this.countDataGridViewTextBoxColumn.Width = 35;
-            // 
-            // xDataGridViewTextBoxColumn
-            // 
-            this.xDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.xDataGridViewTextBoxColumn.DataPropertyName = "X";
-            this.xDataGridViewTextBoxColumn.HeaderText = "X";
-            this.xDataGridViewTextBoxColumn.MaxInputLength = 4;
-            this.xDataGridViewTextBoxColumn.Name = "xDataGridViewTextBoxColumn";
-            this.xDataGridViewTextBoxColumn.Width = 35;
-            // 
-            // yDataGridViewTextBoxColumn
-            // 
-            this.yDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.yDataGridViewTextBoxColumn.DataPropertyName = "Y";
-            this.yDataGridViewTextBoxColumn.HeaderText = "Y";
-            this.yDataGridViewTextBoxColumn.MaxInputLength = 4;
-            this.yDataGridViewTextBoxColumn.Name = "yDataGridViewTextBoxColumn";
-            this.yDataGridViewTextBoxColumn.Width = 35;
             // 
             // BackupX
             // 
@@ -1059,21 +1001,6 @@ namespace CodeStrikeBot
             this.BackupY.Name = "BackupY";
             this.BackupY.Width = 60;
             // 
-            // lastActionDataGridViewTextBoxColumn
-            // 
-            this.lastActionDataGridViewTextBoxColumn.DataPropertyName = "LastAction";
-            this.lastActionDataGridViewTextBoxColumn.HeaderText = "LastAction";
-            this.lastActionDataGridViewTextBoxColumn.Name = "lastActionDataGridViewTextBoxColumn";
-            this.lastActionDataGridViewTextBoxColumn.Width = 158;
-            // 
-            // nextActionDataGridViewTextBoxColumn
-            // 
-            this.nextActionDataGridViewTextBoxColumn.DataPropertyName = "NextAction";
-            this.nextActionDataGridViewTextBoxColumn.HeaderText = "NextAction";
-            this.nextActionDataGridViewTextBoxColumn.Name = "nextActionDataGridViewTextBoxColumn";
-            this.nextActionDataGridViewTextBoxColumn.ReadOnly = true;
-            this.nextActionDataGridViewTextBoxColumn.Width = 161;
-            // 
             // groupBox5
             // 
             this.groupBox5.Controls.Add(this.btnResize);
@@ -1081,7 +1008,7 @@ namespace CodeStrikeBot
             this.groupBox5.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Padding = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.groupBox5.Size = new System.Drawing.Size(252, 202);
+            this.groupBox5.Size = new System.Drawing.Size(252, 304);
             this.groupBox5.TabIndex = 16;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Windows Tasks";
@@ -1105,7 +1032,7 @@ namespace CodeStrikeBot
             this.groupBox3.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Padding = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.groupBox3.Size = new System.Drawing.Size(240, 317);
+            this.groupBox3.Size = new System.Drawing.Size(240, 421);
             this.groupBox3.TabIndex = 14;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Active Session";
@@ -1117,13 +1044,13 @@ namespace CodeStrikeBot
             this.lstAccounts.Location = new System.Drawing.Point(12, 37);
             this.lstAccounts.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.lstAccounts.Name = "lstAccounts";
-            this.lstAccounts.Size = new System.Drawing.Size(212, 204);
+            this.lstAccounts.Size = new System.Drawing.Size(212, 304);
             this.lstAccounts.TabIndex = 10;
             this.lstAccounts.SelectedIndexChanged += new System.EventHandler(this.lstAccounts_SelectedIndexChanged);
             // 
             // btnSwitch
             // 
-            this.btnSwitch.Location = new System.Drawing.Point(12, 258);
+            this.btnSwitch.Location = new System.Drawing.Point(8, 365);
             this.btnSwitch.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnSwitch.Name = "btnSwitch";
             this.btnSwitch.Size = new System.Drawing.Size(148, 44);
@@ -1217,7 +1144,7 @@ namespace CodeStrikeBot
             this.tabTasks.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.tabTasks.Name = "tabTasks";
             this.tabTasks.Padding = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.tabTasks.Size = new System.Drawing.Size(1900, 345);
+            this.tabTasks.Size = new System.Drawing.Size(1270, 445);
             this.tabTasks.TabIndex = 0;
             this.tabTasks.Text = "Tasks";
             this.tabTasks.UseVisualStyleBackColor = true;
@@ -1237,7 +1164,7 @@ namespace CodeStrikeBot
             this.groupBox6.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.Padding = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.groupBox6.Size = new System.Drawing.Size(640, 156);
+            this.groupBox6.Size = new System.Drawing.Size(499, 196);
             this.groupBox6.TabIndex = 14;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Debug";
@@ -1310,7 +1237,7 @@ namespace CodeStrikeBot
             // 
             // txtSliceStartX
             // 
-            this.txtSliceStartX.Location = new System.Drawing.Point(336, 102);
+            this.txtSliceStartX.Location = new System.Drawing.Point(12, 148);
             this.txtSliceStartX.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.txtSliceStartX.Name = "txtSliceStartX";
             this.txtSliceStartX.Size = new System.Drawing.Size(80, 31);
@@ -1319,7 +1246,7 @@ namespace CodeStrikeBot
             // 
             // txtSliceStartY
             // 
-            this.txtSliceStartY.Location = new System.Drawing.Point(428, 102);
+            this.txtSliceStartY.Location = new System.Drawing.Point(104, 148);
             this.txtSliceStartY.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.txtSliceStartY.Name = "txtSliceStartY";
             this.txtSliceStartY.Size = new System.Drawing.Size(80, 31);
@@ -1328,7 +1255,7 @@ namespace CodeStrikeBot
             // 
             // txtRowStart
             // 
-            this.txtRowStart.Location = new System.Drawing.Point(524, 102);
+            this.txtRowStart.Location = new System.Drawing.Point(200, 148);
             this.txtRowStart.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.txtRowStart.Name = "txtRowStart";
             this.txtRowStart.Size = new System.Drawing.Size(80, 31);
@@ -1468,94 +1395,253 @@ namespace CodeStrikeBot
             this.btnClearGifts.UseVisualStyleBackColor = true;
             this.btnClearGifts.Click += new System.EventHandler(this.btnClearGifts_Click);
             // 
-            // tabControl1
+            // tabControlMain
             // 
-            this.tabControl1.Controls.Add(this.tabTasks);
-            this.tabControl1.Controls.Add(this.tabScreens);
-            this.tabControl1.Controls.Add(this.tabAccounts);
-            this.tabControl1.Controls.Add(this.tabActivity);
-            this.tabControl1.Controls.Add(this.tabDebug);
-            this.tabControl1.Controls.Add(this.tabSettings);
-            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl1.Location = new System.Drawing.Point(0, 0);
-            this.tabControl1.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1916, 392);
-            this.tabControl1.TabIndex = 16;
+            this.tabControlMain.Controls.Add(this.tabTasks);
+            this.tabControlMain.Controls.Add(this.tabScreens);
+            this.tabControlMain.Controls.Add(this.tabAccounts);
+            this.tabControlMain.Controls.Add(this.tabActivity);
+            this.tabControlMain.Controls.Add(this.tabDebug);
+            this.tabControlMain.Controls.Add(this.tabSettings);
+            this.tabControlMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControlMain.Location = new System.Drawing.Point(0, 0);
+            this.tabControlMain.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.tabControlMain.Name = "tabControlMain";
+            this.tabControlMain.SelectedIndex = 0;
+            this.tabControlMain.Size = new System.Drawing.Size(1286, 492);
+            this.tabControlMain.TabIndex = 16;
+            this.tabControlMain.Selected += new System.Windows.Forms.TabControlEventHandler(this.tabControlMain_Selected);
             // 
-            // txtSlackURL
+            // FormContainer
             // 
-            this.txtSlackURL.Location = new System.Drawing.Point(175, 28);
-            this.txtSlackURL.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.txtSlackURL.Name = "txtSlackURL";
-            this.txtSlackURL.Size = new System.Drawing.Size(902, 31);
-            this.txtSlackURL.TabIndex = 4;
+            this.FormContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.FormContainer.Location = new System.Drawing.Point(0, 0);
+            this.FormContainer.Name = "FormContainer";
             // 
-            // label1
+            // FormContainer.Panel1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 31);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(113, 25);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "Slack URL";
+            this.FormContainer.Panel1.Controls.Add(this.tabControlMain);
             // 
-            // groupBox10
+            // FormContainer.Panel2
             // 
-            this.groupBox10.Controls.Add(this.txtPushoverUser);
-            this.groupBox10.Controls.Add(this.label3);
-            this.groupBox10.Controls.Add(this.txtPushoverAPI);
-            this.groupBox10.Controls.Add(this.label2);
-            this.groupBox10.Controls.Add(this.label1);
-            this.groupBox10.Controls.Add(this.txtSlackURL);
-            this.groupBox10.Location = new System.Drawing.Point(168, 6);
-            this.groupBox10.Name = "groupBox10";
-            this.groupBox10.Size = new System.Drawing.Size(1094, 187);
-            this.groupBox10.TabIndex = 6;
-            this.groupBox10.TabStop = false;
-            this.groupBox10.Text = "Notifications";
+            this.FormContainer.Panel2.Controls.Add(this.tabControlMonitor);
+            this.FormContainer.Size = new System.Drawing.Size(2190, 492);
+            this.FormContainer.SplitterDistance = 1286;
+            this.FormContainer.TabIndex = 17;
             // 
-            // label2
+            // dataGridViewComboBoxColumn2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 68);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(142, 25);
-            this.label2.TabIndex = 6;
-            this.label2.Text = "Pushover API";
+            this.dataGridViewComboBoxColumn2.DataPropertyName = "Type";
+            this.dataGridViewComboBoxColumn2.HeaderText = "Type";
+            this.dataGridViewComboBoxColumn2.Name = "dataGridViewComboBoxColumn2";
+            this.dataGridViewComboBoxColumn2.Width = 68;
             // 
-            // txtPushoverAPI
+            // typeDataGridViewComboBoxColumn
             // 
-            this.txtPushoverAPI.Location = new System.Drawing.Point(155, 65);
-            this.txtPushoverAPI.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.txtPushoverAPI.Name = "txtPushoverAPI";
-            this.txtPushoverAPI.Size = new System.Drawing.Size(377, 31);
-            this.txtPushoverAPI.TabIndex = 7;
+            this.typeDataGridViewComboBoxColumn.DataPropertyName = "Type";
+            this.typeDataGridViewComboBoxColumn.HeaderText = "Type";
+            this.typeDataGridViewComboBoxColumn.Name = "typeDataGridViewComboBoxColumn";
+            this.typeDataGridViewComboBoxColumn.Width = 68;
             // 
-            // label3
+            // intervalDataGridViewTextBoxColumn
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(539, 68);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(154, 25);
-            this.label3.TabIndex = 8;
-            this.label3.Text = "Pushover User";
+            this.intervalDataGridViewTextBoxColumn.DataPropertyName = "Interval";
+            this.intervalDataGridViewTextBoxColumn.HeaderText = "Interval";
+            this.intervalDataGridViewTextBoxColumn.MaxInputLength = 9;
+            this.intervalDataGridViewTextBoxColumn.Name = "intervalDataGridViewTextBoxColumn";
+            this.intervalDataGridViewTextBoxColumn.Width = 127;
             // 
-            // txtPushoverUser
+            // amountDataGridViewTextBoxColumn
             // 
-            this.txtPushoverUser.Location = new System.Drawing.Point(700, 65);
-            this.txtPushoverUser.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.txtPushoverUser.Name = "txtPushoverUser";
-            this.txtPushoverUser.Size = new System.Drawing.Size(377, 31);
-            this.txtPushoverUser.TabIndex = 9;
+            this.amountDataGridViewTextBoxColumn.DataPropertyName = "Amount";
+            this.amountDataGridViewTextBoxColumn.HeaderText = "Amount";
+            this.amountDataGridViewTextBoxColumn.MaxInputLength = 9;
+            this.amountDataGridViewTextBoxColumn.Name = "amountDataGridViewTextBoxColumn";
+            this.amountDataGridViewTextBoxColumn.Width = 130;
+            // 
+            // countDataGridViewTextBoxColumn
+            // 
+            this.countDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.countDataGridViewTextBoxColumn.DataPropertyName = "Count";
+            this.countDataGridViewTextBoxColumn.HeaderText = "Count";
+            this.countDataGridViewTextBoxColumn.MaxInputLength = 9;
+            this.countDataGridViewTextBoxColumn.Name = "countDataGridViewTextBoxColumn";
+            this.countDataGridViewTextBoxColumn.Width = 35;
+            // 
+            // xDataGridViewTextBoxColumn
+            // 
+            this.xDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.xDataGridViewTextBoxColumn.DataPropertyName = "X";
+            this.xDataGridViewTextBoxColumn.HeaderText = "X";
+            this.xDataGridViewTextBoxColumn.MaxInputLength = 4;
+            this.xDataGridViewTextBoxColumn.Name = "xDataGridViewTextBoxColumn";
+            this.xDataGridViewTextBoxColumn.Width = 35;
+            // 
+            // yDataGridViewTextBoxColumn
+            // 
+            this.yDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.yDataGridViewTextBoxColumn.DataPropertyName = "Y";
+            this.yDataGridViewTextBoxColumn.HeaderText = "Y";
+            this.yDataGridViewTextBoxColumn.MaxInputLength = 4;
+            this.yDataGridViewTextBoxColumn.Name = "yDataGridViewTextBoxColumn";
+            this.yDataGridViewTextBoxColumn.Width = 35;
+            // 
+            // lastActionDataGridViewTextBoxColumn
+            // 
+            this.lastActionDataGridViewTextBoxColumn.DataPropertyName = "LastAction";
+            this.lastActionDataGridViewTextBoxColumn.HeaderText = "LastAction";
+            this.lastActionDataGridViewTextBoxColumn.Name = "lastActionDataGridViewTextBoxColumn";
+            this.lastActionDataGridViewTextBoxColumn.Width = 158;
+            // 
+            // nextActionDataGridViewTextBoxColumn
+            // 
+            this.nextActionDataGridViewTextBoxColumn.DataPropertyName = "NextAction";
+            this.nextActionDataGridViewTextBoxColumn.HeaderText = "NextAction";
+            this.nextActionDataGridViewTextBoxColumn.Name = "nextActionDataGridViewTextBoxColumn";
+            this.nextActionDataGridViewTextBoxColumn.ReadOnly = true;
+            this.nextActionDataGridViewTextBoxColumn.Width = 161;
+            // 
+            // bsScheduleTask
+            // 
+            this.bsScheduleTask.DataSource = typeof(CodeStrikeBot.ScheduleTask);
+            // 
+            // nameDataGridViewTextBoxColumn
+            // 
+            this.nameDataGridViewTextBoxColumn.DataPropertyName = "Name";
+            this.nameDataGridViewTextBoxColumn.HeaderText = "Name";
+            this.nameDataGridViewTextBoxColumn.Name = "nameDataGridViewTextBoxColumn";
+            this.nameDataGridViewTextBoxColumn.Width = 113;
+            // 
+            // userNameDataGridViewTextBoxColumn
+            // 
+            this.userNameDataGridViewTextBoxColumn.DataPropertyName = "UserName";
+            this.userNameDataGridViewTextBoxColumn.HeaderText = "UserName";
+            this.userNameDataGridViewTextBoxColumn.Name = "userNameDataGridViewTextBoxColumn";
+            this.userNameDataGridViewTextBoxColumn.Width = 158;
+            // 
+            // emailDataGridViewTextBoxColumn
+            // 
+            this.emailDataGridViewTextBoxColumn.DataPropertyName = "Email";
+            this.emailDataGridViewTextBoxColumn.HeaderText = "Email";
+            this.emailDataGridViewTextBoxColumn.Name = "emailDataGridViewTextBoxColumn";
+            this.emailDataGridViewTextBoxColumn.Width = 110;
+            // 
+            // passwordDataGridViewTextBoxColumn
+            // 
+            this.passwordDataGridViewTextBoxColumn.DataPropertyName = "Password";
+            this.passwordDataGridViewTextBoxColumn.HeaderText = "Password";
+            this.passwordDataGridViewTextBoxColumn.Name = "passwordDataGridViewTextBoxColumn";
+            this.passwordDataGridViewTextBoxColumn.Width = 151;
+            // 
+            // priorityGridViewComboBoxColumn
+            // 
+            this.priorityGridViewComboBoxColumn.DataPropertyName = "Priority";
+            this.priorityGridViewComboBoxColumn.HeaderText = "Priority";
+            this.priorityGridViewComboBoxColumn.Name = "priorityGridViewComboBoxColumn";
+            this.priorityGridViewComboBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.priorityGridViewComboBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.priorityGridViewComboBoxColumn.Width = 124;
+            // 
+            // foodNegativeAmountDataGridViewTextBoxColumn
+            // 
+            this.foodNegativeAmountDataGridViewTextBoxColumn.DataPropertyName = "FoodNegativeAmount";
+            this.foodNegativeAmountDataGridViewTextBoxColumn.HeaderText = "FoodNegativeAmount";
+            this.foodNegativeAmountDataGridViewTextBoxColumn.Name = "foodNegativeAmountDataGridViewTextBoxColumn";
+            this.foodNegativeAmountDataGridViewTextBoxColumn.Width = 264;
+            // 
+            // lastLoginDataGridViewTextBoxColumn
+            // 
+            this.lastLoginDataGridViewTextBoxColumn.DataPropertyName = "LastLogin";
+            this.lastLoginDataGridViewTextBoxColumn.HeaderText = "LastLogin";
+            this.lastLoginDataGridViewTextBoxColumn.Name = "lastLoginDataGridViewTextBoxColumn";
+            this.lastLoginDataGridViewTextBoxColumn.ReadOnly = true;
+            this.lastLoginDataGridViewTextBoxColumn.Width = 151;
+            // 
+            // lastLogoutDataGridViewTextBoxColumn
+            // 
+            this.lastLogoutDataGridViewTextBoxColumn.DataPropertyName = "LastLogout";
+            this.lastLogoutDataGridViewTextBoxColumn.HeaderText = "LastLogout";
+            this.lastLogoutDataGridViewTextBoxColumn.Name = "lastLogoutDataGridViewTextBoxColumn";
+            this.lastLogoutDataGridViewTextBoxColumn.ReadOnly = true;
+            this.lastLogoutDataGridViewTextBoxColumn.Width = 164;
+            // 
+            // bsAccount
+            // 
+            this.bsAccount.DataSource = typeof(CodeStrikeBot.Account);
+            // 
+            // timestampDataGridViewTextBoxColumn
+            // 
+            this.timestampDataGridViewTextBoxColumn.DataPropertyName = "Timestamp";
+            this.timestampDataGridViewTextBoxColumn.HeaderText = "Timestamp";
+            this.timestampDataGridViewTextBoxColumn.Name = "timestampDataGridViewTextBoxColumn";
+            // 
+            // typeDataGridViewTextBoxColumn
+            // 
+            this.typeDataGridViewTextBoxColumn.DataPropertyName = "Type";
+            this.typeDataGridViewTextBoxColumn.HeaderText = "Type";
+            this.typeDataGridViewTextBoxColumn.Name = "typeDataGridViewTextBoxColumn";
+            this.typeDataGridViewTextBoxColumn.Width = 60;
+            // 
+            // lengthDataGridViewTextBoxColumn
+            // 
+            this.lengthDataGridViewTextBoxColumn.DataPropertyName = "Length";
+            this.lengthDataGridViewTextBoxColumn.HeaderText = "Length";
+            this.lengthDataGridViewTextBoxColumn.Name = "lengthDataGridViewTextBoxColumn";
+            this.lengthDataGridViewTextBoxColumn.Width = 50;
+            // 
+            // bsPacket
+            // 
+            this.bsPacket.DataSource = typeof(CodeStrikeBot.Messages.Message);
+            this.bsPacket.CurrentChanged += new System.EventHandler(this.bsPacket_CurrentChanged);
+            // 
+            // tabMonitor
+            // 
+            this.tabMonitor.Controls.Add(this.grpRadar);
+            this.tabMonitor.Location = new System.Drawing.Point(8, 39);
+            this.tabMonitor.Name = "tabMonitor";
+            this.tabMonitor.Padding = new System.Windows.Forms.Padding(3);
+            this.tabMonitor.Size = new System.Drawing.Size(884, 445);
+            this.tabMonitor.TabIndex = 0;
+            this.tabMonitor.Text = "Monitor";
+            this.tabMonitor.UseVisualStyleBackColor = true;
+            // 
+            // tabControlMonitor
+            // 
+            this.tabControlMonitor.Controls.Add(this.tabMonitor);
+            this.tabControlMonitor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControlMonitor.Location = new System.Drawing.Point(0, 0);
+            this.tabControlMonitor.Name = "tabControlMonitor";
+            this.tabControlMonitor.SelectedIndex = 0;
+            this.tabControlMonitor.Size = new System.Drawing.Size(900, 492);
+            this.tabControlMonitor.TabIndex = 0;
+            // 
+            // grpRadar
+            // 
+            this.grpRadar.Controls.Add(this.lstRadar);
+            this.grpRadar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grpRadar.Location = new System.Drawing.Point(3, 3);
+            this.grpRadar.Name = "grpRadar";
+            this.grpRadar.Size = new System.Drawing.Size(878, 439);
+            this.grpRadar.TabIndex = 0;
+            this.grpRadar.TabStop = false;
+            this.grpRadar.Text = "Radar";
+            // 
+            // lstRadar
+            // 
+            this.lstRadar.FormattingEnabled = true;
+            this.lstRadar.ItemHeight = 25;
+            this.lstRadar.Location = new System.Drawing.Point(7, 33);
+            this.lstRadar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.lstRadar.Name = "lstRadar";
+            this.lstRadar.Size = new System.Drawing.Size(475, 329);
+            this.lstRadar.TabIndex = 11;
             // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1916, 429);
-            this.Controls.Add(this.tabControl1);
+            this.ClientSize = new System.Drawing.Size(2190, 529);
+            this.Controls.Add(this.FormContainer);
             this.Controls.Add(this.stsStrip);
             this.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.Name = "Main";
@@ -1564,11 +1650,10 @@ namespace CodeStrikeBot
             this.Load += new System.EventHandler(this.Main_Load);
             this.stsStrip.ResumeLayout(false);
             this.stsStrip.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.bsScheduleTask)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bsAccount)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bsPacket)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bsColorCustom)).EndInit();
             this.tabSettings.ResumeLayout(false);
+            this.groupBox10.ResumeLayout(false);
+            this.groupBox10.PerformLayout();
             this.groupBox9.ResumeLayout(false);
             this.groupBox9.PerformLayout();
             this.tabDebug.ResumeLayout(false);
@@ -1606,9 +1691,17 @@ namespace CodeStrikeBot
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            this.tabControl1.ResumeLayout(false);
-            this.groupBox10.ResumeLayout(false);
-            this.groupBox10.PerformLayout();
+            this.tabControlMain.ResumeLayout(false);
+            this.FormContainer.Panel1.ResumeLayout(false);
+            this.FormContainer.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.FormContainer)).EndInit();
+            this.FormContainer.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.bsScheduleTask)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bsAccount)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bsPacket)).EndInit();
+            this.tabMonitor.ResumeLayout(false);
+            this.tabControlMonitor.ResumeLayout(false);
+            this.grpRadar.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1727,7 +1820,7 @@ namespace CodeStrikeBot
         private System.Windows.Forms.CheckBox chkTasks;
         private System.Windows.Forms.Button btnTasks;
         private System.Windows.Forms.Button btnClearGifts;
-        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabControl tabControlMain;
         private System.Windows.Forms.GroupBox groupBox10;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtSlackURL;
@@ -1735,6 +1828,12 @@ namespace CodeStrikeBot
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtPushoverAPI;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.SplitContainer FormContainer;
+        private System.Windows.Forms.DataGridViewComboBoxColumn dataGridViewComboBoxColumn2;
+        private System.Windows.Forms.TabControl tabControlMonitor;
+        private System.Windows.Forms.TabPage tabMonitor;
+        private System.Windows.Forms.GroupBox grpRadar;
+        private System.Windows.Forms.ListBox lstRadar;
     }
 }
 

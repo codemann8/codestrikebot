@@ -94,5 +94,10 @@ namespace CodeStrikeBot
 
             return ret;
         }
+
+        public static DateTime ToDateTime(this Int32 i)
+        {
+            return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(i);
+        }
     }
 }

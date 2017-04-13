@@ -47,12 +47,14 @@ namespace CodeStrikeBot.Messages
                     {
                         case "EVENT_WAR_RALLY_BEGAN": //rally defense
                             ret.LoadXml();
-                            node = ret.Document.DocumentElement.SelectSingleNode("//*[local-name()='payload']");
-                            string json = node.InnerText;
+                            //node = ret.Document.DocumentElement.SelectSingleNode("//*[local-name()='payload']");
+                            //string json = node.InnerText;
                             ret = new WarRallyBeginMessage(ret);
                             break;
                         case "EVENT_MARCH": //march
                             node = ret.Document.DocumentElement.SelectSingleNode("//*[local-name()='payload']");
+                            string json = node.InnerText;
+                            ret = new MarchMessage(ret);
                             break;
                     }
                 }
