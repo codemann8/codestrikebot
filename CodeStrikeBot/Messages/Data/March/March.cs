@@ -40,6 +40,11 @@ namespace CodeStrikeBot.Messages.Data
         {
             march_id = id;
         }
+
+        public override string ToString()
+        {
+            return String.Format("{0}: {1} {2}->{3}", Enum.GetName(typeof(MarchType), this.type).Replace("CodeStrikeBot.Messages.Data.MarchType", ""), this.march_id, this.from_name, this.dest_name);
+        }
     }
 
     public enum MarchState

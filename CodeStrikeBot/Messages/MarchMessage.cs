@@ -11,6 +11,8 @@ namespace CodeStrikeBot.Messages
     public class MarchMessage : JsonMessage
     {
         public Data.March March;
+        public string RawJson;
+        public bool Error;
 
         public MarchMessage(JsonMessage message)
             : base(message)
@@ -19,11 +21,13 @@ namespace CodeStrikeBot.Messages
             this.Type = MessageType.March;
 
             System.Xml.XmlNode node = this.Document.DocumentElement.SelectSingleNode("//*[local-name()='payload']");
-            string json = node.InnerText;
+            this.RawJson = node.InnerText;
+            string json = this.RawJson;
+
+            this.Error = false;
 
             try
             {
-
                 json = json.Substring(json.IndexOf("\"") + 1);
                 this.March = new Data.March(json.Substring(0, json.IndexOf("\"")));
 
@@ -42,8 +46,11 @@ namespace CodeStrikeBot.Messages
                 json = json.Substring(json.IndexOf("army_id") + 9);
                 this.March.army_id = Int32.Parse(json.Substring(0, json.IndexOf(",")));
 
-                json = json.Substring(json.IndexOf("home_id") + 9);
-                this.March.home_id = Int32.Parse(json.Substring(0, json.IndexOf(",")));
+                if (json.IndexOf("home_id") > -1)
+                {
+                    json = json.Substring(json.IndexOf("home_id") + 9);
+                    this.March.home_id = Int32.Parse(json.Substring(0, json.IndexOf(",")));
+                }
 
                 json = json.Substring(json.IndexOf("dest_province_id") + 18);
                 this.March.dest_province_id = Int32.Parse(json.Substring(0, json.IndexOf(",")));
@@ -172,13 +179,13 @@ namespace CodeStrikeBot.Messages
             }
             catch (FormatException ex)
             {
-                ex = ex;
+                this.Error = true;
             }
         }
 
         public override string ToString()
         {
-            return String.Format("\"{0}\": {1}->{2}", this.March.march_id, this.March.from_name, this.March.dest_name);
+            return (this.Error ? "*ERROR* " : "") + this.March.ToString();
         }
     }
 }

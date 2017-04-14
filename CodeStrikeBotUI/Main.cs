@@ -980,7 +980,7 @@ namespace CodeStrikeBot
                                 {
                                     //while (ctrl.IdleLevel > 0)
                                     {
-                                        System.Threading.Thread.Sleep(1000);
+                                        //System.Threading.Thread.Sleep(1000);
                                     }
 
                                     command = command.Substring(6).Trim();
@@ -1004,7 +1004,7 @@ namespace CodeStrikeBot
                                 {
                                     //while (ctrl.IdleLevel > 0)
                                     {
-                                        System.Threading.Thread.Sleep(1000);
+                                        //System.Threading.Thread.Sleep(1000);
                                     }
 
                                     command = command.Substring(4);
@@ -1961,6 +1961,14 @@ namespace CodeStrikeBot
             TabPage current = (sender as TabControl).SelectedTab;
 
             FormContainer.Panel2Collapsed = current.Text == "Activity";
+        }
+
+        private void btnExportMarch_Click(object sender, EventArgs e)
+        {
+            Messages.MarchMessage message = (Messages.MarchMessage)lstRadar.SelectedItem;
+
+            System.IO.Directory.CreateDirectory(String.Format("{0}\\output\\debug\\marches", System.Windows.Forms.Application.StartupPath));
+            System.IO.File.WriteAllText(String.Format("{0}\\output\\debug\\marches\\{1}.txt", System.Windows.Forms.Application.StartupPath, message.Id), message.RawJson);
         }
     }
 }
