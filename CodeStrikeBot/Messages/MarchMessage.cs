@@ -181,6 +181,10 @@ namespace CodeStrikeBot.Messages
             {
                 this.Error = true;
             }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                this.Error = true;
+            }
         }
 
         public override string ToString()
