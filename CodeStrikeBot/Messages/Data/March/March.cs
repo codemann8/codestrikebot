@@ -48,7 +48,7 @@ namespace CodeStrikeBot.Messages.Data
 
         public override string ToString()
         {
-            return String.Format("{0}: {1} {2}->{3}", Enum.GetName(typeof(MarchType), this.Type).Replace("CodeStrikeBot.Messages.Data.MarchType", ""), this.march_id, this.from_name, this.dest_name);
+            return String.Format("{0}: {1} {2}->{3}", Enum.GetName(typeof(MarchType), this.Type).Replace("CodeStrikeBot.Messages.Data.MarchType", ""), this.MarchId, this.FromName, this.DestName);
         }
     }
 
