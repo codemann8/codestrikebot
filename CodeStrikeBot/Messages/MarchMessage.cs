@@ -42,6 +42,7 @@ namespace CodeStrikeBot.Messages
         public string hero_gender { get; set; }
         public string hero_name { get; set; }
         public string dest_name { get; set; }
+        public bool dest_name_need_localize { get; set; }
         public string from_name { get; set; }
 
         public MarchMessage(JsonMessage message)
@@ -208,6 +209,9 @@ namespace CodeStrikeBot.Messages
                             break;
                         case "dest_name":
                             this.dest_name = kvp.Value;
+                            break;
+                        case "dest_name_need_localize":
+                            this.dest_name_need_localize = kvp.Value == "true";
                             break;
                         case "from_name":
                             this.from_name = kvp.Value;

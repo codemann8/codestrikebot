@@ -29,6 +29,7 @@ namespace CodeStrikeBot.Messages.Data
         public int DestChunkId { get; private set; }
         public int DestTileId { get; private set; }
         public string DestName { get; private set; }
+        public bool DestNameNeedLocalize { get; private set; }
 
         public DateTime StartTime { get; private set; }
         public DateTime EndTime { get; set; }
