@@ -1632,9 +1632,10 @@ namespace CodeStrikeBot
 
                         //check LINE update dialog
                         Color c = bmpScreenCapture.GetPixel(970, 555);
-                        if (c.Equals(8, 186, 0))
+                        if (c.Equals(11, 178, 3))
                         {
-                            Controller.SendClick(null, 965, 555, 1000);
+                            Controller.SendClick(null, 965, 555, 10000);
+                            Program.RestartApp();
                         }
                     }
 
