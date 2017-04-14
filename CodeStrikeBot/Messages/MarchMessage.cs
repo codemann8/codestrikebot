@@ -39,6 +39,8 @@ namespace CodeStrikeBot.Messages
         public int truce_type { get; set; }
         public int color { get; set; }
         public bool king { get; set; }
+        public string hero_gender { get; set; }
+        public string hero_name { get; set; }
         public string dest_name { get; set; }
         public string from_name { get; set; }
 
@@ -173,7 +175,7 @@ namespace CodeStrikeBot.Messages
                                     break;
                                 default:
                                     this.emoji = Data.MarchEmoji.Unknown;
-                                    this.Error = true;
+                                    //this.Error = true;
                                     break;
                             }
                             break;
@@ -197,6 +199,12 @@ namespace CodeStrikeBot.Messages
                             break;
                         case "king":
                             this.king = kvp.Value == "true";
+                            break;
+                        case "hero_gender":
+                            this.hero_gender = kvp.Value;
+                            break;
+                        case "hero_name":
+                            this.hero_name = kvp.Value;
                             break;
                         case "dest_name":
                             this.dest_name = kvp.Value;

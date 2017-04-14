@@ -41,6 +41,9 @@ namespace CodeStrikeBot.Messages.Data
         public int Color { get; private set; }
         public bool King { get; set; }
 
+        public string HeroGender { get; private set; }
+        public string HeroName { get; private set; }
+
         public March(MarchMessage message)
         {
             this.MarchId = message.march_id;
