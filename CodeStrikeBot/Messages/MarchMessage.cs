@@ -65,7 +65,7 @@ namespace CodeStrikeBot.Messages
 
                 foreach (string pair in pairs)
                 {
-                    KeyValuePair<string, string> kvp = new KeyValuePair<string, string>(pair.Substring(0, json.IndexOf(":")).Replace("\"", ""), pair.Substring(pair.IndexOf(":") + 1).Replace("\"", ""));
+                    KeyValuePair<string, string> kvp = new KeyValuePair<string, string>(pair.Substring(0, pair.IndexOf(":")).Replace("\"", ""), pair.Substring(pair.IndexOf(":") + 1).Replace("\"", ""));
 
                     switch (kvp.Key)
                     {
