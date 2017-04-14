@@ -156,6 +156,9 @@ namespace CodeStrikeBot.Messages
                                 case "war":
                                     this.type = Data.MarchType.War;
                                     break;
+                                case "trade":
+                                    this.type = Data.MarchType.Trade;
+                                    break;
                                 case "encamp":
                                     this.type = Data.MarchType.Tile;
                                     break;
