@@ -234,12 +234,12 @@ namespace CodeStrikeBot.Messages
 
         public int DestCoordX()
         {
-            return this.dest_chunk_id / 256 * 16 + this.dest_tile_id % 8;
+            return this.dest_chunk_id / 256 * 16 + this.dest_tile_id % 16;
         }
 
         public int DestCoordY()
         {
-            return this.dest_chunk_id % 256 * 32 + (int)Math.Ceiling(this.dest_tile_id / 8.0);
+            return this.dest_chunk_id % 256 * 32 + (this.dest_tile_id / 16) * 2 + this.dest_tile_id % 2;
         }
 
         public override string ToString()
