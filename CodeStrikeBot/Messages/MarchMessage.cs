@@ -10,9 +10,37 @@ namespace CodeStrikeBot.Messages
 {
     public class MarchMessage : JsonMessage
     {
-        public Data.March March;
         public string RawJson;
         public bool Error;
+
+        public string march_id { get; set; }
+        public int user_id { get; set; }
+        public int empire_id { get; set; }
+        public int id { get; set; }
+        public int city_id { get; set; }
+        public int army_id { get; set; }
+        public int home_id { get; set; }
+        public int dest_province_id { get; set; }
+        public int dest_chunk_id { get; set; }
+        public int dest_tile_id { get; set; }
+        public int from_province_id { get; set; }
+        public int from_chunk_id { get; set; }
+        public int from_tile_id { get; set; }
+        public Data.MarchState state { get; set; }
+        public DateTime start_time { get; set; }
+        public DateTime dest_time { get; set; }
+        public Data.MarchType type { get; set; }
+        public int alliance_id { get; set; }
+        public Data.MarchEmoji emoji { get; set; }
+        public DateTime emoji_starttime { get; set; }
+        public string type_data { get; set; }
+        public DateTime update_ts { get; set; }
+        public int anim_attrib { get; set; }
+        public int truce_type { get; set; }
+        public int color { get; set; }
+        public bool king { get; set; }
+        public string dest_name { get; set; }
+        public string from_name { get; set; }
 
         public MarchMessage(JsonMessage message)
             : base(message)
@@ -29,153 +57,158 @@ namespace CodeStrikeBot.Messages
             try
             {
                 json = json.Substring(json.IndexOf("\"") + 1);
-                this.March = new Data.March(json.Substring(0, json.IndexOf("\"")));
+                this.march_id = json.Substring(0, json.IndexOf("\""));
+                json = json.Substring(json.IndexOf("{") + 1);
+                json = json.Substring(0, json.IndexOf("}"));
 
-                json = json.Substring(json.IndexOf("user_id") + 9);
-                this.March.user_id = Int32.Parse(json.Substring(0, json.IndexOf(",")));
+                string[] pairs = json.Split(',');
 
-                json = json.Substring(json.IndexOf("empire_id") + 11);
-                this.March.empire_id = Int32.Parse(json.Substring(0, json.IndexOf(",")));
-
-                json = json.Substring(json.IndexOf("\"id\"") + 5);
-                this.March.id = Int32.Parse(json.Substring(0, json.IndexOf(",")));
-
-                json = json.Substring(json.IndexOf("city_id") + 9);
-                this.March.city_id = Int32.Parse(json.Substring(0, json.IndexOf(",")));
-
-                json = json.Substring(json.IndexOf("army_id") + 9);
-                this.March.army_id = Int32.Parse(json.Substring(0, json.IndexOf(",")));
-
-                if (json.IndexOf("home_id") > -1)
+                foreach (string pair in pairs)
                 {
-                    json = json.Substring(json.IndexOf("home_id") + 9);
-                    this.March.home_id = Int32.Parse(json.Substring(0, json.IndexOf(",")));
+                    KeyValuePair<string, string> kvp = new KeyValuePair<string, string>(pair.Substring(0, json.IndexOf(":")).Replace("\"", ""), pair.Substring(pair.IndexOf(":") + 1).Replace("\"", ""));
+
+                    switch (kvp.Key)
+                    {
+                        case "user_id":
+                            this.user_id = Int32.Parse(kvp.Value);
+                            break;
+                        case "empire_id":
+                            this.empire_id = Int32.Parse(kvp.Value);
+                            break;
+                        case "id":
+                            this.id = Int32.Parse(kvp.Value);
+                            break;
+                        case "city_id":
+                            this.city_id = Int32.Parse(kvp.Value);
+                            break;
+                        case "army_id":
+                            this.army_id = Int32.Parse(kvp.Value);
+                            break;
+                        case "home_id":
+                            this.home_id = Int32.Parse(kvp.Value);
+                            break;
+                        case "dest_province_id":
+                            this.dest_province_id = Int32.Parse(kvp.Value);
+                            break;
+                        case "dest_chunk_id":
+                            this.dest_chunk_id = Int32.Parse(kvp.Value);
+                            break;
+                        case "dest_tile_id":
+                            this.dest_tile_id = Int32.Parse(kvp.Value);
+                            break;
+                        case "from_province_id":
+                            this.from_province_id = Int32.Parse(kvp.Value);
+                            break;
+                        case "from_chunk_id":
+                            this.from_chunk_id = Int32.Parse(kvp.Value);
+                            break;
+                        case "from_tile_id":
+                            this.from_tile_id = Int32.Parse(kvp.Value);
+                            break;
+                        case "state":
+                            switch (kvp.Value)
+                            {
+                                case "advancing":
+                                    this.state = Data.MarchState.Advancing;
+                                    break;
+                                case "returning":
+                                    this.state = Data.MarchState.Returning;
+                                    break;
+                                case "busy":
+                                    this.state = Data.MarchState.Busy;
+                                    break;
+                                default:
+                                    this.state = Data.MarchState.Unknown;
+                                    this.Error = true;
+                                    break;
+                            }
+                            break;
+                        case "start_time":
+                            this.start_time = Int32.Parse(kvp.Value).ToDateTime();
+                            break;
+                        case "dest_time":
+                            this.dest_time = Int32.Parse(kvp.Value).ToDateTime();
+                            break;
+                        case "type":
+                            switch (kvp.Value)
+                            {
+                                case "attack":
+                                    this.type = Data.MarchType.Attack;
+                                    break;
+                                case "hero_attack":
+                                    this.type = Data.MarchType.RebelAttack;
+                                    break;
+                                case "hero_escape":
+                                    this.type = Data.MarchType.HeroEscape;
+                                    break;
+                                case "rally":
+                                    this.type = Data.MarchType.Rally;
+                                    break;
+                                case "scout":
+                                    this.type = Data.MarchType.Scout;
+                                    break;
+                                case "reinforce":
+                                    this.type = Data.MarchType.Reinforcement;
+                                    break;
+                                case "war":
+                                    this.type = Data.MarchType.War;
+                                    break;
+                                case "encamp":
+                                    this.type = Data.MarchType.Encampment;
+                                    break;
+                                default:
+                                    this.type = Data.MarchType.Unknown;
+                                    this.Error = true;
+                                    break;
+                            }
+                            break;
+                        case "alliance_id":
+                            this.alliance_id = Int32.Parse(kvp.Value);
+                            break;
+                        case "emoji":
+                            switch (kvp.Value)
+                            {
+                                case "EMOJI_MARCH_DEFAULT":
+                                    this.emoji = Data.MarchEmoji.Default;
+                                    break;
+                                default:
+                                    this.emoji = Data.MarchEmoji.Unknown;
+                                    this.Error = true;
+                                    break;
+                            }
+                            break;
+                        case "emoji_starttime":
+                            this.emoji_starttime = Int32.Parse(kvp.Value).ToDateTime();
+                            break;
+                        case "type_data":
+                            this.type_data = kvp.Value;
+                            break;
+                        case "update_ts":
+                            this.update_ts = Int32.Parse(kvp.Value).ToDateTime();
+                            break;
+                        case "anim_attrib":
+                            this.anim_attrib = Int32.Parse(kvp.Value);
+                            break;
+                        case "truce_type":
+                            this.truce_type = Int32.Parse(kvp.Value);
+                            break;
+                        case "color":
+                            this.color = Int32.Parse(kvp.Value);
+                            break;
+                        case "king":
+                            this.king = kvp.Value == "true";
+                            break;
+                        case "dest_name":
+                            this.dest_name = kvp.Value;
+                            break;
+                        case "from_name":
+                            this.from_name = kvp.Value;
+                            break;
+                        default:
+                            this.Error = true;
+                            break;
+                    }
                 }
-
-                json = json.Substring(json.IndexOf("dest_province_id") + 18);
-                this.March.dest_province_id = Int32.Parse(json.Substring(0, json.IndexOf(",")));
-
-                json = json.Substring(json.IndexOf("dest_chunk_id") + 15);
-                this.March.dest_chunk_id = Int32.Parse(json.Substring(0, json.IndexOf(",")));
-
-                json = json.Substring(json.IndexOf("dest_tile_id") + 14);
-                this.March.dest_tile_id = Int32.Parse(json.Substring(0, json.IndexOf(",")));
-
-                json = json.Substring(json.IndexOf("from_province_id") + 18);
-                this.March.from_province_id = Int32.Parse(json.Substring(0, json.IndexOf(",")));
-
-                json = json.Substring(json.IndexOf("from_chunk_id") + 15);
-                this.March.from_chunk_id = Int32.Parse(json.Substring(0, json.IndexOf(",")));
-
-                json = json.Substring(json.IndexOf("from_tile_id") + 14);
-                this.March.from_tile_id = Int32.Parse(json.Substring(0, json.IndexOf(",")));
-
-                json = json.Substring(json.IndexOf("state") + 8);
-                switch (json.Substring(0, json.IndexOf("\"")))
-                {
-                    case "advancing":
-                        this.March.state = Data.MarchState.Advancing;
-                        break;
-                    case "returning":
-                        this.March.state = Data.MarchState.Returning;
-                        break;
-                    case "busy":
-                        this.March.state = Data.MarchState.Busy;
-                        break;
-                    default:
-                        this.March.state = Data.MarchState.Unknown;
-                        break;
-                }
-
-                json = json.Substring(json.IndexOf("start_time") + 12);
-                if (json.IndexOf("\"") == 0)
-                {
-                    json = json.Substring(1);
-                    this.March.start_time = Int32.Parse(json.Substring(0, json.IndexOf("\""))).ToDateTime();
-                }
-                else
-                {
-                    this.March.start_time = Int32.Parse(json.Substring(0, json.IndexOf(","))).ToDateTime();
-                }
-
-                json = json.Substring(json.IndexOf("dest_time") + 11);
-                this.March.dest_time = Int32.Parse(json.Substring(0, json.IndexOf(","))).ToDateTime();
-
-                json = json.Substring(json.IndexOf("type") + 7);
-                switch (json.Substring(0, json.IndexOf("\"")))
-                {
-                    case "attack":
-                        this.March.type = Data.MarchType.Attack;
-                        break;
-                    case "hero_attack":
-                        this.March.type = Data.MarchType.RebelAttack;
-                        break;
-                    case "hero_escape":
-                        this.March.type = Data.MarchType.HeroEscape;
-                        break;
-                    case "rally":
-                        this.March.type = Data.MarchType.Rally;
-                        break;
-                    case "scout":
-                        this.March.type = Data.MarchType.Scout;
-                        break;
-                    case "reinforce":
-                        this.March.type = Data.MarchType.Reinforcement;
-                        break;
-                    case "war":
-                        this.March.type = Data.MarchType.War;
-                        break;
-                    case "encamp":
-                        this.March.type = Data.MarchType.Encampment;
-                        break;
-                    default:
-                        this.March.type = Data.MarchType.Unknown;
-                        break;
-                }
-
-                json = json.Substring(json.IndexOf("alliance_id") + 13);
-                this.March.alliance_id = Int32.Parse(json.Substring(0, json.IndexOf(",")));
-
-                json = json.Substring(json.IndexOf("emoji") + 8);
-                switch (json.Substring(0, json.IndexOf("\"")))
-                {
-                    case "EMOJI_MARCH_DEFAULT":
-                        this.March.emoji = Data.MarchEmoji.Default;
-                        break;
-                    default:
-                        this.March.emoji = Data.MarchEmoji.Default;
-                        break;
-                }
-
-                json = json.Substring(json.IndexOf("emoji_starttime") + 17);
-                this.March.emoji_starttime = Int32.Parse(json.Substring(0, json.IndexOf(","))).ToDateTime();
-
-                json = json.Substring(json.IndexOf("type_data") + 11);
-                this.March.type_data = json.Substring(0, json.IndexOf("update_ts") - 2);
-
-                json = json.Substring(json.IndexOf("update_ts") + 11);
-                this.March.update_ts = Int32.Parse(json.Substring(0, json.IndexOf(","))).ToDateTime();
-
-                json = json.Substring(json.IndexOf("anim_attrib") + 13);
-                this.March.anim_attrib = Int32.Parse(json.Substring(0, json.IndexOf(",")));
-
-                json = json.Substring(json.IndexOf("color") + 7);
-                this.March.color = Int32.Parse(json.Substring(0, json.IndexOf(",")));
-
-                if (this.March.type != Data.MarchType.HeroEscape)
-                {
-                    json = json.Substring(json.IndexOf("king") + 6);
-                    this.March.king = json.Substring(0, json.IndexOf(",")) == "true";
-                }
-
-                if (json.IndexOf("dest_name") > -1)
-                {
-                    json = json.Substring(json.IndexOf("dest_name") + 12);
-                    this.March.dest_name = json.Substring(0, json.IndexOf("\""));
-                }
-
-                json = json.Substring(json.IndexOf("from_name") + 12);
-                this.March.from_name = json.Substring(0, json.IndexOf("\""));
             }
             catch (FormatException ex)
             {
@@ -189,7 +222,7 @@ namespace CodeStrikeBot.Messages
 
         public override string ToString()
         {
-            return (this.Error ? "*ERROR* " : "") + this.March.ToString();
+            return (this.Error ? "*ERROR* " : "") + String.Format("{0}: {1} {2}->{3}", this.march_id, Enum.GetName(typeof(Data.MarchType), this.type).Replace("CodeStrikeBot.Messages.Data.MarchType", ""), this.from_name, this.dest_name);
         }
     }
 }

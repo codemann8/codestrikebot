@@ -8,42 +8,47 @@ namespace CodeStrikeBot.Messages.Data
 {
     public class March
     {
-        public string march_id { get; set; }
-        public int user_id { get; set; }
-        public int empire_id { get; set; }
-        public int id { get; set; }
-        public int city_id { get; set; }
-        public int army_id { get; set; }
-        public int home_id { get; set; }
-        public int dest_province_id { get; set; }
-        public int dest_chunk_id { get; set; }
-        public int dest_tile_id { get; set; }
-        public int from_province_id { get; set; }
-        public int from_chunk_id { get; set; }
-        public int from_tile_id { get; set; }
-        public MarchState state { get; set; }
-        public DateTime start_time { get; set; }
-        public DateTime dest_time { get; set; }
-        public MarchType type { get; set; }
-        public int alliance_id { get; set; }
-        public MarchEmoji emoji { get; set; }
-        public DateTime emoji_starttime { get; set; }
-        public string type_data { get; set; }
-        public DateTime update_ts { get; set; }
-        public int anim_attrib { get; set; }
-        public int color { get; set; }
-        public bool king { get; set; }
-        public string dest_name { get; set; }
-        public string from_name { get; set; }
+        public string MarchId { get; private set; }
+        public MarchType Type { get; private set; }
+        public MarchState State { get; set; }
 
-        public March(string id)
+        public int UserId { get; private set; }
+        public int EmpireId { get; private set; }
+        public int Id { get; private set; }
+        public int CityId { get; private set; }
+        public int ArmyId { get; private set; }
+        public int HomeId { get; private set; }
+        public int AllianceId { get; private set; }
+
+        public int FromProvinceId { get; private set; }
+        public int FromChunkId { get; private set; }
+        public int FromTileId { get; private set; }
+        public string FromName { get; private set; }
+
+        public int DestProvinceId { get; private set; }
+        public int DestChunkId { get; private set; }
+        public int DestTileId { get; private set; }
+        public string DestName { get; private set; }
+
+        public DateTime StartTime { get; private set; }
+        public DateTime EndTime { get; set; }
+        public DateTime LastUpdate { get; set; }
+        
+        public MarchEmoji Emoji { get; set; }
+        public DateTime EmojiStartTime { get; set; }
+        public string TypeData { get; set; }
+        public int AnimAttrib { get; set; }
+        public int Color { get; private set; }
+        public bool King { get; set; }
+
+        public March(MarchMessage message)
         {
-            march_id = id;
+            this.MarchId = message.march_id;
         }
 
         public override string ToString()
         {
-            return String.Format("{0}: {1} {2}->{3}", Enum.GetName(typeof(MarchType), this.type).Replace("CodeStrikeBot.Messages.Data.MarchType", ""), this.march_id, this.from_name, this.dest_name);
+            return String.Format("{0}: {1} {2}->{3}", Enum.GetName(typeof(MarchType), this.Type).Replace("CodeStrikeBot.Messages.Data.MarchType", ""), this.march_id, this.from_name, this.dest_name);
         }
     }
 
@@ -52,6 +57,7 @@ namespace CodeStrikeBot.Messages.Data
         Advancing,
         Returning,
         Busy,
+        Ended,
         Unknown
     }
 
@@ -70,6 +76,7 @@ namespace CodeStrikeBot.Messages.Data
 
     public enum MarchEmoji
     {
-        Default
+        Default,
+        Unknown
     }
 }
