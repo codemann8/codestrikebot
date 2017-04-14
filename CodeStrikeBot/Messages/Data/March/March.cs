@@ -72,7 +72,7 @@ namespace CodeStrikeBot.Messages.Data
         Scout,
         Reinforcement,
         War,
-        Encampment,
+        Tile,
         RebelAttack,
         HeroEscape,
         Unknown

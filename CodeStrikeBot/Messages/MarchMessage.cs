@@ -157,7 +157,7 @@ namespace CodeStrikeBot.Messages
                                     this.type = Data.MarchType.War;
                                     break;
                                 case "encamp":
-                                    this.type = Data.MarchType.Encampment;
+                                    this.type = Data.MarchType.Tile;
                                     break;
                                 default:
                                     this.type = Data.MarchType.Unknown;
@@ -232,9 +232,19 @@ namespace CodeStrikeBot.Messages
             }
         }
 
+        public int DestCoordX()
+        {
+            return this.dest_chunk_id / 256 * 16 + this.dest_tile_id % 8;
+        }
+
+        public int DestCoordY()
+        {
+            return this.dest_chunk_id % 256 * 32 + (int)Math.Ceiling(this.dest_tile_id / 8.0);
+        }
+
         public override string ToString()
         {
-            return (this.Error ? "*ERROR* " : "") + String.Format("{0}: {1} {2}->{3}", this.march_id, Enum.GetName(typeof(Data.MarchType), this.type).Replace("CodeStrikeBot.Messages.Data.MarchType", ""), this.from_name, this.dest_name);
+            return (this.Error ? "*ERROR* " : "") + String.Format("{0}: {1} {2}:{3} {4}->{5}", this.march_id, Enum.GetName(typeof(Data.MarchType), this.type).Replace("CodeStrikeBot.Messages.Data.MarchType", ""), this.DestCoordX(), this.DestCoordY(), this.from_name, this.dest_name);
         }
     }
 }
