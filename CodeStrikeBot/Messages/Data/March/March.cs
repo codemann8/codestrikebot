@@ -65,10 +65,9 @@ namespace CodeStrikeBot.Messages.Data
             this.HeroGender = message.hero_gender;
             this.HeroName = message.hero_name;
 
-            this.Update(message);
-
             this.messages = new List<MarchMessage>();
-            this.messages.Add(message);
+
+            this.Update(message);
         }
 
         public void Update(MarchMessage message)
