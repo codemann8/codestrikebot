@@ -28,6 +28,7 @@ namespace CodeStrikeBot
         {
             int indentLevel = 0, offset = 0;
             string insert = "";
+            bool kvp = false;
 
             while (offset < json.Length)
             {
@@ -37,20 +38,26 @@ namespace CodeStrikeBot
                     case '[':
                         indentLevel++;
                         insert = "\n" + new String(' ', indentLevel * 3);
-                        json.Insert(offset + 1, insert);
+                        json = json.Insert(offset + 1, insert);
                         offset += insert.Length;
+                        kvp = false;
                         break;
                     case '}':
                     case ']':
                         indentLevel--;
                         insert = "\n" + new String(' ', indentLevel * 3);
-                        json.Insert(offset, insert);
+                        json = json.Insert(offset, insert);
                         offset += insert.Length;
+                        kvp = false;
                         break;
                     case ',':
-                        insert = "\n" + new String(' ', indentLevel * 3);
-                        json.Insert(offset + 1, insert);
+                        insert = (kvp ? "\n" + new String(' ', indentLevel * 3) : " ");
+                        json = json.Insert(offset + 1, insert);
                         offset += insert.Length;
+                        kvp = false;
+                        break;
+                    case ':':
+                        kvp = true;
                         break;
                 }
 
