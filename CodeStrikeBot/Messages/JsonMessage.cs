@@ -52,9 +52,16 @@ namespace CodeStrikeBot.Messages
                             ret = new WarRallyBeginMessage(ret);
                             break;
                         case "EVENT_MARCH": //march
+                            ret.LoadXml();
+                            //node = ret.Document.DocumentElement.SelectSingleNode("//*[local-name()='payload']");
+                            //string json = node.InnerText;
+                            ret = new MarchMessage(ret);
+                            break;
+                        case "EVENT_SYNCEDDATA": //march
                             node = ret.Document.DocumentElement.SelectSingleNode("//*[local-name()='payload']");
                             string json = node.InnerText;
-                            ret = new MarchMessage(ret);
+                            System.IO.Directory.CreateDirectory(String.Format(".\\output\\debug\\synceddata"));
+                            System.IO.File.WriteAllText(String.Format(".\\output\\debug\\synceddate\\{0}.txt", message.Id), json);
                             break;
                     }
                 }

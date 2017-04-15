@@ -96,7 +96,7 @@ namespace CodeStrikeBot.Messages.Data
 
         public override string ToString()
         {
-            return String.Format("{0}: {1} {2}:{3}:{4} {5}->{6}", Enum.GetName(typeof(MarchType), this.Type).Replace("CodeStrikeBot.Messages.Data.MarchType", ""), this.MarchId, this.DestCoordinate.Z, this.DestCoordinate.X, this.DestCoordinate.Y, this.FromName, this.DestName);
+            return String.Format("{0}: {1}:{2}:{3} {4}->{5}", Enum.GetName(typeof(MarchType), this.Type).Replace("CodeStrikeBot.Messages.Data.MarchType", ""), this.DestCoordinate.Z, this.DestCoordinate.X, this.DestCoordinate.Y, this.FromName, this.DestName);
         }
 
         public int CompareTo(object o)
