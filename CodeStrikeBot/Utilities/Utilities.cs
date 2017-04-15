@@ -23,5 +23,41 @@ namespace CodeStrikeBot
         {
             return new Point3D(ChunkTileId2XCoordinate(chunkId, tileId), ChunkTileId2YCoordinate(chunkId, tileId), provinceId);
         }
+
+        public static string FormatJSON(string json)
+        {
+            int indentLevel = 0, offset = 0;
+            string insert = "";
+
+            while (offset < json.Length)
+            {
+                switch (json[offset])
+                {
+                    case '{':
+                    case '[':
+                        indentLevel++;
+                        insert = "\n" + new String(' ', indentLevel * 3);
+                        json.Insert(offset + 1, insert);
+                        offset += insert.Length;
+                        break;
+                    case '}':
+                    case ']':
+                        indentLevel--;
+                        insert = "\n" + new String(' ', indentLevel * 3);
+                        json.Insert(offset, insert);
+                        offset += insert.Length;
+                        break;
+                    case ',':
+                        insert = "\n" + new String(' ', indentLevel * 3);
+                        json.Insert(offset + 1, insert);
+                        offset += insert.Length;
+                        break;
+                }
+
+                offset++;
+            }
+
+            return json;
+        }
     }
 }

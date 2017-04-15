@@ -61,7 +61,7 @@ namespace CodeStrikeBot.Messages
                             node = ret.Document.DocumentElement.SelectSingleNode("//*[local-name()='payload']");
                             string json = node.InnerText;
                             System.IO.Directory.CreateDirectory(String.Format(".\\output\\debug\\synceddata"));
-                            System.IO.File.WriteAllText(String.Format(".\\output\\debug\\synceddata\\{0}.txt", ret.Id), json);
+                            System.IO.File.WriteAllText(String.Format(".\\output\\debug\\synceddata\\{0}.txt", ret.Id), Utilities.FormatJSON(json));
                             break;
                     }
                 }
