@@ -978,6 +978,12 @@ namespace CodeStrikeBot
                                 ctrl.endedMarches.Add(march);
                             }
 
+                            foreach (Messages.Data.March m in ctrl.marches.Where(m => m.EndTime <= DateTime.Now).ToList())
+                            {
+                                ctrl.marches.Remove(m);
+                                ctrl.endedMarches.Add(m);
+                            }
+
                             ctrl.marches.Sort();
 
                             lstRadar.Items.Clear();
