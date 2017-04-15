@@ -138,6 +138,7 @@ namespace CodeStrikeBot.Messages.Data
         Scout,
         Reinforcement,
         War,
+        Trade,
         Tile,
         RebelAttack,
         HeroEscape,
