@@ -98,12 +98,17 @@ namespace CodeStrikeBot
         public List<EmulatorInstance> emulators;
         public List<Account> accounts;
 
+        public List<Messages.Data.March> marches, endedMarches;
+
         public DateTime StartScheduler, StartTasks, StartScreenState, StartAutoActions;
 
         public Controller()
         {
             Instance = this;
 
+            marches = new List<Messages.Data.March>();
+            endedMarches = new List<Messages.Data.March>();
+            
             Database = new BotDatabase();
 
             accounts = Account.GetAccounts();

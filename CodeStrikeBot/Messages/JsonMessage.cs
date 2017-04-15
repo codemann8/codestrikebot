@@ -23,7 +23,7 @@ namespace CodeStrikeBot.Messages
 
             //DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(Messages.Data.TileUpdatedMessage));
             var serializer = new JavaScriptSerializer();
-            serializer.RegisterConverters(new[] { new Utilities.DynamicJsonConverter() });
+            serializer.RegisterConverters(new[] { new DynamicJsonConverter() });
 
             //dynamic data = serializer.Deserialize(json, typeof(object));
         }

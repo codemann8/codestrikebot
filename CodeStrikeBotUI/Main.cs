@@ -960,7 +960,28 @@ namespace CodeStrikeBot
                         {
                             Messages.MarchMessage marchMessage = (Messages.MarchMessage)message;
 
-                            lstRadar.Items.Insert(0, marchMessage);
+                            Messages.Data.March march = ctrl.marches.Where(m => m.MarchId == marchMessage.march_id).FirstOrDefault();
+
+                            if (march == null)
+                            {
+                                march = new Messages.Data.March(marchMessage);
+                                ctrl.marches.Add(march);
+                            }
+                            else
+                            {
+                                march.Update(marchMessage);
+                            }
+
+                            if (march.State == Messages.Data.MarchState.Ended)
+                            {
+                                ctrl.marches.Remove(march);
+                                ctrl.endedMarches.Add(march);
+                            }
+
+                            ctrl.marches.Sort();
+
+                            lstRadar.Items.Clear();
+                            lstRadar.Items.AddRange(ctrl.marches.ToArray());
                         }
                         else if (message is Messages.ChatMessage)
                         {

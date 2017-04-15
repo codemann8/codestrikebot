@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Web.Script.Serialization;
 
-namespace CodeStrikeBot.Utilities
+namespace CodeStrikeBot
 {
     public sealed class DynamicJsonConverter : JavaScriptConverter
     {
