@@ -978,7 +978,7 @@ namespace CodeStrikeBot
                                 ctrl.endedMarches.Add(march);
                             }
 
-                            foreach (Messages.Data.March m in ctrl.marches.Where(m => m.EndTime <= DateTime.Now).ToList())
+                            foreach (Messages.Data.March m in ctrl.marches.Where(m => m.EndTime.ToUniversalTime() <= DateTime.Now.ToUniversalTime()).ToList())
                             {
                                 ctrl.marches.Remove(m);
                                 ctrl.endedMarches.Add(m);
