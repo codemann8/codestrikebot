@@ -2633,9 +2633,11 @@ namespace CodeStrikeBot
                     tasksLeft = true;
 
                     //seasonal shooting range modal dialog
-                    if (ScreenState.GetScreenChecksum(SuperBitmap, 188, 426, 20) == 0x358e)
+                    ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 189, 435, 20);
+
+                    if (chksum == 0x0c9b)
                     {
-                        Controller.SendClick(this, 188, 426, 300);
+                        Controller.SendClick(this, 189, 435, 300);
                     }
 
                     /*bool done = false;
