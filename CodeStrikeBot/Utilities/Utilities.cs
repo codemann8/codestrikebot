@@ -7,16 +7,36 @@ using System.Web.UI.DataVisualization.Charting;
 
 namespace CodeStrikeBot
 {
-    static class Utilities
+    public static class Utilities
     {
+        public static int ChunkId2XCoordinate(int chunkId)
+        {
+            return chunkId / 256 * 16;
+        }
+
+        public static int ChunkId2YCoordinate(int chunkId)
+        {
+            return chunkId % 256 * 32;
+        }
+
+        public static int TileId2XCoordinate(int tileId)
+        {
+            return tileId % 16;
+        }
+
+        public static int TileId2YCoordinate(int tileId)
+        {
+            return (tileId / 16) * 2 + tileId % 2;
+        }
+
         private static int ChunkTileId2XCoordinate(int chunkId, int tileId)
         {
-            return chunkId / 256 * 16 + tileId % 16;
+            return ChunkId2XCoordinate(chunkId) + TileId2XCoordinate(tileId);
         }
 
         private static int ChunkTileId2YCoordinate(int chunkId, int tileId)
         {
-            return chunkId % 256 * 32 + (tileId / 16) * 2 + tileId % 2;
+            return ChunkId2YCoordinate(chunkId) + TileId2YCoordinate(tileId);
         }
 
         public static Point3D ProvinceChunkTile2Point3D(int provinceId, int chunkId, int tileId)

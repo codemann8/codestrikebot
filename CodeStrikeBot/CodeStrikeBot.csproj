@@ -34,6 +34,11 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="PacketDotNet, Version=0.13.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\PacketDotNet.0.13.0\lib\net\PacketDotNet.dll</HintPath>
@@ -63,7 +68,6 @@
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -76,6 +80,7 @@
     <Compile Include="DataObjects\Settings.cs" />
     <Compile Include="Messages\ChatMessage.cs" />
     <Compile Include="Messages\Data\March\March.cs" />
+    <Compile Include="Messages\Data\March\Watchtower.cs" />
     <Compile Include="Messages\Data\Payload.cs" />
     <Compile Include="Messages\Data\PayloadArray.cs" />
     <Compile Include="Messages\Data\PayloadObject.cs" />
@@ -83,6 +88,7 @@
     <Compile Include="Messages\Data\PayloadValue.cs" />
     <Compile Include="Messages\Data\TileUpdatedMessage.cs" />
     <Compile Include="Messages\EmptyMessage.cs" />
+    <Compile Include="Messages\SyncedDataMessage.cs" />
     <Compile Include="Messages\MarchMessage.cs" />
     <Compile Include="Messages\WarRallyBeginMessage.cs" />
     <Compile Include="Messages\JsonMessage.cs" />

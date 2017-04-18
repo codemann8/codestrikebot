@@ -43,6 +43,8 @@ namespace CodeStrikeBot.Messages.Data
         public string HeroGender { get; private set; }
         public string HeroName { get; private set; }
 
+        public Watchtower Watchtower { get; set; }
+
         public List<MarchMessage> messages;
 
         public March(MarchMessage message)
@@ -94,9 +96,24 @@ namespace CodeStrikeBot.Messages.Data
             this.messages.Add(message);
         }
 
+        public void Update(Watchtower watch)
+        {
+            if (this.Watchtower == null || this.Watchtower.timestamp < watch.timestamp)
+            {
+                this.Watchtower = watch;
+            }
+        }
+
         public override string ToString()
         {
-            return String.Format("{0}: {1}:{2}:{3} {4}->{5}", Enum.GetName(typeof(MarchType), this.Type).Replace("CodeStrikeBot.Messages.Data.MarchType", ""), this.DestCoordinate.Z, this.DestCoordinate.X, this.DestCoordinate.Y, this.FromName, this.DestName);
+            if (this.Watchtower != null)
+            {
+                return String.Format("{6} {0}: {1}:{2}:{3} {4}->{5}", Enum.GetName(typeof(MarchType), this.Type).Replace("CodeStrikeBot.Messages.Data.MarchType", ""), this.DestCoordinate.Z, this.DestCoordinate.X, this.DestCoordinate.Y, this.FromName, this.DestName, this.Watchtower.ActualTotalUnits);
+            }
+            else
+            {
+                return String.Format("{0}: {1}:{2}:{3} {4}->{5}", Enum.GetName(typeof(MarchType), this.Type).Replace("CodeStrikeBot.Messages.Data.MarchType", ""), this.DestCoordinate.Z, this.DestCoordinate.X, this.DestCoordinate.Y, this.FromName, this.DestName);
+            }
         }
 
         public int CompareTo(object o)
@@ -141,6 +158,14 @@ namespace CodeStrikeBot.Messages.Data
         Tile,
         RebelAttack,
         HeroEscape,
+        Unknown
+    }
+
+    public enum TargetType
+    {
+        City,
+        Encampment,
+        GameUnknown,
         Unknown
     }
 

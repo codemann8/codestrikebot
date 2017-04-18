@@ -39,6 +39,8 @@ namespace CodeStrikeBot.Messages
 
         public Message(Message message)
         {
+            this.Id = message.Id;
+
             this.packets = message.packets;
             this.Ack = message.Ack;
             this.RawData = message.RawData;
@@ -108,6 +110,7 @@ namespace CodeStrikeBot.Messages
         Chat = 2,
         March = 3,
         Rally = 4,
-        TileUpdate = 5
+        TileUpdate = 5,
+        SyncedData = 6
     }
 }

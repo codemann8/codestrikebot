@@ -10,9 +10,6 @@ namespace CodeStrikeBot.Messages
 {
     public class MarchMessage : JsonMessage
     {
-        public string RawJson;
-        public bool Error;
-
         public string march_id { get; set; }
         public int user_id { get; set; }
         public int empire_id { get; set; }

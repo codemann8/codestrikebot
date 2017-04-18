@@ -978,7 +978,7 @@ namespace CodeStrikeBot
                                 ctrl.endedMarches.Add(march);
                             }
 
-                            foreach (Messages.Data.March m in ctrl.marches.Where(m => m.EndTime.ToUniversalTime() <= DateTime.Now.ToUniversalTime()).ToList())
+                            foreach (Messages.Data.March m in ctrl.marches.Where(m => m.EndTime <= DateTime.Now.ToUniversalTime()).ToList())
                             {
                                 ctrl.marches.Remove(m);
                                 ctrl.endedMarches.Add(m);
@@ -988,6 +988,24 @@ namespace CodeStrikeBot
 
                             lstRadar.Items.Clear();
                             lstRadar.Items.AddRange(ctrl.marches.ToArray());
+                        }
+                        else if (message is Messages.SyncedDataMessage)
+                        {
+                            Messages.SyncedDataMessage syncedDataMessage = (Messages.SyncedDataMessage)message;
+
+                            foreach (Messages.Data.Watchtower w in syncedDataMessage.Watchtowers)
+                            {
+                                Messages.Data.March march = ctrl.marches.Where(m => m.MarchId == w.march_id).FirstOrDefault();
+
+                                if (march == null)
+                                {
+                                    //TODO: error, should not be a watchtower without a march
+                                }
+                                else
+                                {
+                                    march.Update(w);
+                                }
+                            }
                         }
                         else if (message is Messages.ChatMessage)
                         {
