@@ -773,6 +773,8 @@ namespace CodeStrikeBot
                             state = state;
                         }
 
+                        state.Overlays.Clear();
+
                         //Overlays
                         if (state.CurrentArea == Area.MainBases.Main)
                         {
