@@ -1751,12 +1751,12 @@ namespace CodeStrikeBot
                                     else if (s.ScreenState.CurrentArea == Area.Others.SessionTimeout)
                                     {
                                         s.PreventFromOpening = true;
-                                        Controller.SendClick(s, 200, 205, 2000); //click
+                                        Controller.SendClick(s, 200, 205, 5000); //click
                                     }
                                     else if (s.ScreenState.CurrentArea == Area.Others.Quit)
                                     {
                                         //s.ClickBack(800); //click Back
-                                        Controller.SendClick(s, 145, 480, 1000);
+                                        Controller.SendClick(s, 145, 480, 3000);
                                     }
                                     else if (s.ScreenState.CurrentArea == Area.Emulators.Crash)
                                     {
