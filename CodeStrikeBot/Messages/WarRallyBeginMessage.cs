@@ -174,7 +174,7 @@ namespace CodeStrikeBot.Messages
                                             case "city_id": slot.city_id = (int)kvp.Value; break;
                                             case "army_id": slot.army_id = (int)kvp.Value; break;
                                             case "rank": slot.rank = (int)kvp.Value; break;
-                                            case "vip": slot.vip =(int) kvp.Value; break;
+                                            case "vip": slot.vip = (int) kvp.Value; break;
                                             case "alliance_tag": slot.alliance_tag = kvp.Value.ToString(); break;
                                             case "timer_length": slot.timer_length = (int)kvp.Value; break;
                                             case "timer": slot.timer = (int)kvp.Value; break;

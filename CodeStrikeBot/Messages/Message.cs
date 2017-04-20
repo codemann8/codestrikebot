@@ -111,6 +111,7 @@ namespace CodeStrikeBot.Messages
         March = 3,
         Rally = 4,
         TileUpdate = 5,
-        SyncedData = 6
+        SyncedData = 6,
+        AllianceUpdate = 7
     }
 }

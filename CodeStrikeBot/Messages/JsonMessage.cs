@@ -78,6 +78,29 @@ namespace CodeStrikeBot.Messages
                                     System.IO.File.WriteAllText(String.Format(".\\output\\debug\\synceddata\\{0}.txt", ret.Id), Utilities.FormatJSON(ret.RawJson));
                                 }
                                 break;
+                            case "EVENT_ALLIANCE_UPDATE":
+                                ret = new AllianceUpdateMessage(ret);
+                                break;
+                            case "EVENT_ALLIANCE_FUNDS_UPDATE":
+                                ret = new AllianceFundsUpdateMessage(ret);
+                                break;
+                            case "EVENT_ALLIANCE_GIFT_CREATED":
+                                ret = new AllianceGiftCreatedMessage(ret);
+                                break;
+                            case "EVENT_ALLIANCE_GIFT_READY":
+                                break;
+                            case "EVENT_ALLIANCE_HELP_FINISHED":
+                                ret = new AllianceHelpFinishedMessage(ret);
+                                break;
+                            case "EVENT_ALLIANCE_HELP_REQUESTED":
+                                ret = new AllianceHelpRequestedMessage(ret);
+                                break;
+                            case "EVENT_ALLIANCE_HELPED":
+                                ret = new AllianceHelpedMessage(ret);
+                                break;
+                            case "EVENT_ALLIANCE_STORE_HISTORY_UPDATE":
+                                ret = new AllianceStoreHistoryUpdateMessage(ret);
+                                break;
                             default:
                                 System.IO.Directory.CreateDirectory(String.Format(".\\output\\debug\\unknownJson"));
                                 System.IO.File.WriteAllText(String.Format(".\\output\\debug\\unknownJson\\{0}-{1}.txt", node.Attributes["node"].Value, ret.Id), Utilities.FormatJSON(ret.RawJson));
