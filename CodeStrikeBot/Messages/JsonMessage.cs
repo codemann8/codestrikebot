@@ -51,41 +51,43 @@ namespace CodeStrikeBot.Messages
                     try
                     {
                         ret.Json = JToken.Parse(ret.RawJson);
+
+                        switch (node.Attributes["node"].Value)
+                        {
+                            case "EVENT_WAR_RALLY_BEGAN": //rally
+                                ret = new WarRallyBeginMessage(ret);
+                                break;
+                            case "EVENT_WAR_RALLY_ENDED": //rally end
+                                ret = new WarRallyEndedMessage(ret);
+                                break;
+                            case "EVENT_MARCH": //march
+                                ret = new MarchMessage(ret);
+                                break;
+                            case "EVENT_SYNCEDDATA": //various data
+                                ret = new SyncedDataMessage(ret);
+
+                                //TODO: Remove debug output eventually
+                                if (((SyncedDataMessage)ret).Watchtowers.Count > 0)
+                                {
+                                    System.IO.Directory.CreateDirectory(String.Format(".\\output\\debug\\synceddata\\_watchtower"));
+                                    System.IO.File.WriteAllText(String.Format(".\\output\\debug\\synceddata\\_watchtower\\{0}.txt", (ret.Error ? "ERROR_" : "") + ret.Id), Utilities.FormatJSON(ret.RawJson));
+                                }
+                                else
+                                {
+                                    System.IO.Directory.CreateDirectory(String.Format(".\\output\\debug\\synceddata"));
+                                    System.IO.File.WriteAllText(String.Format(".\\output\\debug\\synceddata\\{0}.txt", ret.Id), Utilities.FormatJSON(ret.RawJson));
+                                }
+                                break;
+                            default:
+                                System.IO.Directory.CreateDirectory(String.Format(".\\output\\debug\\unknownJson"));
+                                System.IO.File.WriteAllText(String.Format(".\\output\\debug\\unknownJson\\{0}-{1}.txt", node.Attributes["node"].Value, ret.Id), Utilities.FormatJSON(ret.RawJson));
+                                break;
+                        }
                     }
                     catch (Newtonsoft.Json.JsonReaderException ex)
                     {
-                        ex = ex;
-                    }
-                    switch (node.Attributes["node"].Value)
-                    {
-                        case "EVENT_WAR_RALLY_BEGAN": //rally
-                            ret = new WarRallyBeginMessage(ret);
-                            break;
-                        case "EVENT_WAR_RALLY_ENDED": //rally end
-                            ret = new WarRallyEndedMessage(ret);
-                            break;
-                        case "EVENT_MARCH": //march
-                            ret = new MarchMessage(ret);
-                            break;
-                        case "EVENT_SYNCEDDATA": //various data
-                            ret = new SyncedDataMessage(ret);
-
-                            //TODO: Remove debug output eventually
-                            if (((SyncedDataMessage)ret).Watchtowers.Count > 0)
-                            {
-                                System.IO.Directory.CreateDirectory(String.Format(".\\output\\debug\\synceddata\\_watchtower"));
-                                System.IO.File.WriteAllText(String.Format(".\\output\\debug\\synceddata\\_watchtower\\{0}.txt", (ret.Error ? "ERROR_" : "") + ret.Id), Utilities.FormatJSON(ret.RawJson));
-                            }
-                            else
-                            {
-                                System.IO.Directory.CreateDirectory(String.Format(".\\output\\debug\\synceddata"));
-                                System.IO.File.WriteAllText(String.Format(".\\output\\debug\\synceddata\\{0}.txt", ret.Id), Utilities.FormatJSON(ret.RawJson));
-                            }
-                            break;
-                        default:
-                            System.IO.Directory.CreateDirectory(String.Format(".\\output\\debug\\unknownJson"));
-                            System.IO.File.WriteAllText(String.Format(".\\output\\debug\\unknownJson\\{0}-{1}.txt", node.Attributes["node"].Value, ret.Id), Utilities.FormatJSON(ret.RawJson));
-                            break;
+                        System.IO.Directory.CreateDirectory(String.Format(".\\output\\debug\\unknownJson"));
+                        System.IO.File.WriteAllText(String.Format(".\\output\\debug\\unknownJson\\-ERROR-{0}-{1}.txt", node.Attributes["node"].Value, ret.Id), Utilities.FormatJSON(ret.RawJson));
                     }
                 }
             }
