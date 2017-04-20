@@ -53,7 +53,7 @@ namespace CodeStrikeBot.Messages
                             case "status": this.status = (int)stat.Value; break;
                             case "created_ts": this.created_ts = ((int)stat.Value).ToDateTime(); break;
                             case "source_code": this.source_code = (int)stat.Value; break;
-                            case "_shardID": this._shardID = (((JValue)stat.Value).Type == JTokenType.Null ? -1 : (int)stat.Value); break;
+                            case "_shardID": this._shardID = (stat.Value.Type == JTokenType.Null ? -1 : (int)stat.Value); break;
                             default: this.Error = true; break;
                         }
                     }

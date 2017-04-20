@@ -60,7 +60,7 @@ namespace CodeStrikeBot.Messages
                             case "timer_start": this.timer_start = ((int)war.Value).ToDateTime(); break;
                             case "timer_end": this.timer_end = ((int)war.Value).ToDateTime(); break;
                             case "troop_count": this.troop_count = (int)war.Value; break;
-                            case "hero_composite_id": this.hero_composite_id = (((JValue)war.Value).Type == JTokenType.Null ? -1 : (int)war.Value); break;
+                            case "hero_composite_id": this.hero_composite_id = (war.Value.Type == JTokenType.Null ? -1 : (int)war.Value); break;
                             case "troop_max": this.troop_max = (int)war.Value; break;
                             case "rallied_troop_count": this.rallied_troop_count = (int)war.Value; break;
                             case "trap_max": this.trap_max = (int)war.Value; break;
