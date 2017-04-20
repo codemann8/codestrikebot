@@ -60,10 +60,10 @@ namespace CodeStrikeBot.Messages.Data
             {
                 try
                 {
-                    switch (w.Key.Replace("\"", ""))
+                    switch (w.Key)
                     {
                         case "march_type":
-                            switch (w.Value.ToString().Replace("\"", ""))
+                            switch (w.Value.ToString())
                             {
                                 case "attack": this.march_type = MarchType.Attack; break;
                                 case "encamp": this.march_type = MarchType.Tile; break;
@@ -77,7 +77,7 @@ namespace CodeStrikeBot.Messages.Data
                             }
                             break;
                         case "march_state":
-                            switch (w.Value.ToString().Replace("\"", ""))
+                            switch (w.Value.ToString())
                             {
                                 case "advancing": this.march_state = MarchState.Advancing; break;
                                 default:
@@ -87,7 +87,7 @@ namespace CodeStrikeBot.Messages.Data
                             }
                             break;
                         case "id": this.march_id = w.Value.ToString(); break;
-                        case "timestamp": this.timestamp = Int32.Parse(w.Value.ToString().Replace("\"", "")).ToDateTime(); break;
+                        case "timestamp": this.timestamp = Int32.Parse(w.Value.ToString()).ToDateTime(); break;
                         case "target_province_id": this.target_coordinate.Z = (int)w.Value; break;
                         case "target_chunk_id":
                             this.target_coordinate.X += Utilities.ChunkId2XCoordinate((int)w.Value);
@@ -101,7 +101,7 @@ namespace CodeStrikeBot.Messages.Data
                         case "target_city": this.target_city = (int)w.Value; break;
                         case "target_name": this.target_name = w.Value.ToString(); break;
                         case "target_type":
-                            switch (w.Value.ToString().Replace("\"", ""))
+                            switch (w.Value.ToString())
                             {
                                 case "city": this.target_type = TargetType.City; break;
                                 case "encampment": this.target_type = TargetType.Encampment; break;
@@ -123,8 +123,8 @@ namespace CodeStrikeBot.Messages.Data
                             this.coordinate.X += Utilities.TileId2XCoordinate((int)w.Value);
                             this.coordinate.Y += Utilities.TileId2YCoordinate((int)w.Value);
                             break;
-                        case "start_time": this.start_time = Int32.Parse(w.Value.ToString().Replace("\"", "")).ToDateTime(); break;
-                        case "dest_time": this.dest_time = Int32.Parse(w.Value.ToString().Replace("\"", "")).ToDateTime(); break;
+                        case "start_time": this.start_time = Int32.Parse(w.Value.ToString()).ToDateTime(); break;
+                        case "dest_time": this.dest_time = Int32.Parse(w.Value.ToString()).ToDateTime(); break;
                         case "speedup_empire": this.speedup_empire = (bool)w.Value; break;
                         case "alliance_tag": this.alliance_tag = w.Value.ToString(); break;
                         case "alliance_name": this.alliance_name = w.Value.ToString(); break;
@@ -140,7 +140,7 @@ namespace CodeStrikeBot.Messages.Data
 
                                 foreach (KeyValuePair<string, JToken> t in (JObject)w.Value)
                                 {
-                                    switch (t.Key.Replace("\"", ""))
+                                    switch (t.Key)
                                     {
                                         case "TYPE0": this.valueless_unit_types.TYPE0 = (bool)t.Value; break;
                                         case "TYPE1": this.valueless_unit_types.TYPE1 = (bool)t.Value; break;
@@ -158,7 +158,7 @@ namespace CodeStrikeBot.Messages.Data
 
                                 foreach (KeyValuePair<string, JToken> t in (JObject)w.Value)
                                 {
-                                    switch (t.Key.Replace("\"", ""))
+                                    switch (t.Key)
                                     {
                                         case "TYPE4": this.valueless_trap_unit_types.TYPE4 = (bool)t.Value; break;
                                         default: this.Error = true; break;
@@ -173,7 +173,7 @@ namespace CodeStrikeBot.Messages.Data
 
                                 foreach (KeyValuePair<string, JToken> t in (JObject)w.Value)
                                 {
-                                    switch (t.Key.Replace("\"", ""))
+                                    switch (t.Key)
                                     {
                                         //TROOPS
                                         //t1
@@ -345,7 +345,7 @@ namespace CodeStrikeBot.Messages.Data
                                 {
                                     this.ActualTotalUnits += (int)t.Value;
 
-                                    switch (t.Key.Replace("\"", ""))
+                                    switch (t.Key)
                                     {
                                         //TROOPS
                                         //t1
@@ -516,7 +516,7 @@ namespace CodeStrikeBot.Messages.Data
 
                                 foreach (KeyValuePair<string, JToken> t in (JObject)w.Value)
                                 {
-                                    switch (t.Key.Replace("\"", ""))
+                                    switch (t.Key)
                                     {
                                         case "research_c_infatt": this.research.research_c_infatt = (int)t.Value; break;
                                         case "research_c_ranatt": this.research.research_c_ranatt = (int)t.Value; break;

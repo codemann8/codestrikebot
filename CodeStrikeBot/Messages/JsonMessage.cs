@@ -17,7 +17,7 @@ namespace CodeStrikeBot.Messages
         public JsonMessage(Message message)
             : base(message)
         {
-            
+            this.Error = false;
         }
 
         public JsonMessage(JsonMessage message)

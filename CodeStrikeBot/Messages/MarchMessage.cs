@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Xml;
-//using System.Runtime.Serialization.Json;
-using System.Web.Script.Serialization;
+using System.Xml;using Newtonsoft.Json.Linq;
 
 namespace CodeStrikeBot.Messages
 {
@@ -45,180 +43,87 @@ namespace CodeStrikeBot.Messages
         public MarchMessage(JsonMessage message)
             : base(message)
         {
-            this.Id = message.Id;
             this.Type = MessageType.March;
-
-            System.Xml.XmlNode node = this.Document.DocumentElement.SelectSingleNode("//*[local-name()='payload']");
-            this.RawJson = node.InnerText;
-            string json = this.RawJson;
-
-            this.Error = false;
 
             try
             {
-                json = json.Substring(json.IndexOf("\"") + 1);
-                this.march_id = json.Substring(0, json.IndexOf("\""));
-                json = json.Substring(json.IndexOf("{") + 1);
-                json = json.Substring(0, json.IndexOf("}"));
-
-                string[] pairs = json.Split(',');
-
-                foreach (string pair in pairs)
+                if (this.Json is JObject)
                 {
-                    KeyValuePair<string, string> kvp = new KeyValuePair<string, string>(pair.Substring(0, pair.IndexOf(":")).Replace("\"", ""), pair.Substring(pair.IndexOf(":") + 1).Replace("\"", ""));
-
-                    switch (kvp.Key)
+                    foreach (KeyValuePair<string, JToken> root in (JObject)this.Json)
                     {
-                        case "user_id":
-                            this.user_id = Int32.Parse(kvp.Value);
-                            break;
-                        case "empire_id":
-                            this.empire_id = Int32.Parse(kvp.Value);
-                            break;
-                        case "id":
-                            this.id = Int32.Parse(kvp.Value);
-                            break;
-                        case "city_id":
-                            this.city_id = Int32.Parse(kvp.Value);
-                            break;
-                        case "army_id":
-                            this.army_id = Int32.Parse(kvp.Value);
-                            break;
-                        case "home_id":
-                            this.home_id = Int32.Parse(kvp.Value);
-                            break;
-                        case "dest_province_id":
-                            this.dest_province_id = Int32.Parse(kvp.Value);
-                            break;
-                        case "dest_chunk_id":
-                            this.dest_chunk_id = Int32.Parse(kvp.Value);
-                            break;
-                        case "dest_tile_id":
-                            this.dest_tile_id = Int32.Parse(kvp.Value);
-                            break;
-                        case "from_province_id":
-                            this.from_province_id = Int32.Parse(kvp.Value);
-                            break;
-                        case "from_chunk_id":
-                            this.from_chunk_id = Int32.Parse(kvp.Value);
-                            break;
-                        case "from_tile_id":
-                            this.from_tile_id = Int32.Parse(kvp.Value);
-                            break;
-                        case "state":
-                            switch (kvp.Value)
+                        march_id = root.Key;
+
+                        foreach (KeyValuePair<string, JToken> m in (JObject)root.Value)
+                        {
+                            switch (m.Key)
                             {
-                                case "advancing":
-                                    this.state = Data.MarchState.Advancing;
+                                case "user_id": this.user_id = (int)m.Value; break;
+                                case "empire_id": this.empire_id = (int)m.Value; break;
+                                case "id": this.id = (int)m.Value; break;
+                                case "city_id": this.city_id = (int)m.Value; break;
+                                case "army_id": this.army_id = (int)m.Value; break;
+                                case "home_id": this.home_id = (int)m.Value; break;
+                                case "dest_province_id": this.dest_province_id = (int)m.Value; break;
+                                case "dest_chunk_id": this.dest_chunk_id = (int)m.Value; break;
+                                case "dest_tile_id": this.dest_tile_id = (int)m.Value; break;
+                                case "from_province_id": this.from_province_id = (int)m.Value; break;
+                                case "from_chunk_id": this.from_chunk_id = (int)m.Value; break;
+                                case "from_tile_id": this.from_tile_id = (int)m.Value; break;
+                                case "state":
+                                    switch (m.Value.ToString())
+                                    {
+                                        case "advancing": this.state = Data.MarchState.Advancing; break;
+                                        case "returning": this.state = Data.MarchState.Returning; break;
+                                        case "busy": this.state = Data.MarchState.Busy; break;
+                                        default:
+                                            this.state = Data.MarchState.Unknown;
+                                            this.Error = true;
+                                            break;
+                                    }
                                     break;
-                                case "returning":
-                                    this.state = Data.MarchState.Returning;
+                                case "start_time": this.start_time = ((int)m.Value).ToDateTime(); break;
+                                case "dest_time": this.dest_time = ((int)m.Value).ToDateTime(); break;
+                                case "type":
+                                    switch (m.Value.ToString())
+                                    {
+                                        case "attack": this.type = Data.MarchType.Attack; break;
+                                        case "hero_attack": this.type = Data.MarchType.RebelAttack; break;
+                                        case "hero_escape": this.type = Data.MarchType.HeroEscape; break;
+                                        case "rally": this.type = Data.MarchType.Rally; break;
+                                        case "scout": this.type = Data.MarchType.Scout; break;
+                                        case "reinforce": this.type = Data.MarchType.Reinforcement; break;
+                                        case "war": this.type = Data.MarchType.War; break;
+                                        case "trade": this.type = Data.MarchType.Trade; break;
+                                        case "encamp": this.type = Data.MarchType.Tile; break;
+                                        default:
+                                            this.type = Data.MarchType.Unknown;
+                                            this.Error = true;
+                                            break;
+                                    }
                                     break;
-                                case "busy":
-                                    this.state = Data.MarchState.Busy;
+                                case "alliance_id": this.alliance_id = (int)m.Value; break;
+                                case "emoji":
+                                    switch (m.Value.ToString())
+                                    {
+                                        case "EMOJI_MARCH_DEFAULT": this.emoji = Data.MarchEmoji.Default; break;
+                                        default: this.emoji = Data.MarchEmoji.Unknown; break;
+                                    }
                                     break;
-                                default:
-                                    this.state = Data.MarchState.Unknown;
-                                    this.Error = true;
-                                    break;
+                                case "emoji_starttime": this.emoji_starttime = ((int)m.Value).ToDateTime(); break;
+                                case "type_data": this.type_data = m.Value.ToString(); break;
+                                case "update_ts": this.update_ts = ((int)m.Value).ToDateTime(); break;
+                                case "anim_attrib": this.anim_attrib = (int)m.Value; break;
+                                case "truce_type": this.truce_type = (int)m.Value; break;
+                                case "color": this.color = (int)m.Value; break;
+                                case "king": this.king = (bool)m.Value; break;
+                                case "hero_gender": this.hero_gender = m.Value.ToString(); break;
+                                case "hero_name": this.hero_name = m.Value.ToString(); break;
+                                case "dest_name": this.dest_name = m.Value.ToString(); break;
+                                case "dest_name_need_localize": this.dest_name_need_localize = (bool)m.Value; break;
+                                case "from_name": this.from_name = m.Value.ToString(); break;
+                                default: this.Error = true; break;
                             }
-                            break;
-                        case "start_time":
-                            this.start_time = Int32.Parse(kvp.Value).ToDateTime();
-                            break;
-                        case "dest_time":
-                            this.dest_time = Int32.Parse(kvp.Value).ToDateTime();
-                            break;
-                        case "type":
-                            switch (kvp.Value)
-                            {
-                                case "attack":
-                                    this.type = Data.MarchType.Attack;
-                                    break;
-                                case "hero_attack":
-                                    this.type = Data.MarchType.RebelAttack;
-                                    break;
-                                case "hero_escape":
-                                    this.type = Data.MarchType.HeroEscape;
-                                    break;
-                                case "rally":
-                                    this.type = Data.MarchType.Rally;
-                                    break;
-                                case "scout":
-                                    this.type = Data.MarchType.Scout;
-                                    break;
-                                case "reinforce":
-                                    this.type = Data.MarchType.Reinforcement;
-                                    break;
-                                case "war":
-                                    this.type = Data.MarchType.War;
-                                    break;
-                                case "trade":
-                                    this.type = Data.MarchType.Trade;
-                                    break;
-                                case "encamp":
-                                    this.type = Data.MarchType.Tile;
-                                    break;
-                                default:
-                                    this.type = Data.MarchType.Unknown;
-                                    this.Error = true;
-                                    break;
-                            }
-                            break;
-                        case "alliance_id":
-                            this.alliance_id = Int32.Parse(kvp.Value);
-                            break;
-                        case "emoji":
-                            switch (kvp.Value)
-                            {
-                                case "EMOJI_MARCH_DEFAULT":
-                                    this.emoji = Data.MarchEmoji.Default;
-                                    break;
-                                default:
-                                    this.emoji = Data.MarchEmoji.Unknown;
-                                    //this.Error = true;
-                                    break;
-                            }
-                            break;
-                        case "emoji_starttime":
-                            this.emoji_starttime = Int32.Parse(kvp.Value).ToDateTime();
-                            break;
-                        case "type_data":
-                            this.type_data = kvp.Value;
-                            break;
-                        case "update_ts":
-                            this.update_ts = Int32.Parse(kvp.Value).ToDateTime();
-                            break;
-                        case "anim_attrib":
-                            this.anim_attrib = Int32.Parse(kvp.Value);
-                            break;
-                        case "truce_type":
-                            this.truce_type = Int32.Parse(kvp.Value);
-                            break;
-                        case "color":
-                            this.color = Int32.Parse(kvp.Value);
-                            break;
-                        case "king":
-                            this.king = kvp.Value == "true";
-                            break;
-                        case "hero_gender":
-                            this.hero_gender = kvp.Value;
-                            break;
-                        case "hero_name":
-                            this.hero_name = kvp.Value;
-                            break;
-                        case "dest_name":
-                            this.dest_name = kvp.Value;
-                            break;
-                        case "dest_name_need_localize":
-                            this.dest_name_need_localize = kvp.Value == "true";
-                            break;
-                        case "from_name":
-                            this.from_name = kvp.Value;
-                            break;
-                        default:
-                            this.Error = true;
-                            break;
+                        }
                     }
                 }
             }
