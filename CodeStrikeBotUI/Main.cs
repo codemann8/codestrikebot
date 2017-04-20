@@ -914,43 +914,43 @@ namespace CodeStrikeBot
                         if (message is Messages.WarRallyBeginMessage)
                         {
                             Messages.WarRallyBeginMessage warMessage = (Messages.WarRallyBeginMessage)message;
-                            if (warMessage.RallyTime <= 900 && tmrSupressAction.ElapsedMilliseconds > 1000)
+                            if (warMessage.timer <= 900 && tmrSupressAction.ElapsedMilliseconds > 1000)
                             {
-                                if (warMessage.DefenderAlliance == "(FuKT)")
+                                if (warMessage.defender.alliance_tag == "(FuKT)") //TODO: Move this hard-coded value to user-defined Settings
                                 {
                                     bool sent = false;
 
                                     foreach (Account a in ctrl.accounts)
                                     {
-                                        if (a.Name == warMessage.DefenderName)
+                                        if (a.Name == warMessage.defender.empire)
                                         {
-                                            if (warMessage.RallyTime == 60)
+                                            if (warMessage.timer == 60)
                                             {
-                                                ctrl.SendNotification(String.Format("1-Minute Rally on {0}{1} by {2}{3}", warMessage.DefenderAlliance, warMessage.DefenderName, warMessage.AttackerAlliance, warMessage.AttackerName), NotificationType.RallyDefense);
+                                                ctrl.SendNotification(String.Format("1min Rally on {0}{1} by {2}{3}", warMessage.defender.alliance_tag, warMessage.defender.empire, warMessage.attacker.alliance_tag, warMessage.attacker.empire), NotificationType.RallyDefense);
                                             }
                                             else
                                             {
-                                                ctrl.SendNotification(String.Format("ACTION! Rally on {0}{1} by {2}{3}", warMessage.DefenderAlliance, warMessage.DefenderName, warMessage.AttackerAlliance, warMessage.AttackerName), NotificationType.RallyDefense);
+                                                ctrl.SendNotification(String.Format("Rally on {0}{1} by {2}{3}", warMessage.defender.alliance_tag, warMessage.defender.empire, warMessage.attacker.alliance_tag, warMessage.attacker.empire), NotificationType.RallyDefense);
                                             }
                                         }
                                     }
                                     //high
                                     if (!sent)
                                     {
-                                        if (warMessage.RallyTime == 60)
+                                        if (warMessage.timer == 60)
                                         {
-                                            ctrl.SendNotification(String.Format("1-Minute Rally on {0}{1} by {2}{3}", warMessage.DefenderAlliance, warMessage.DefenderName, warMessage.AttackerAlliance, warMessage.AttackerName), NotificationType.RallyDefense);
+                                            ctrl.SendNotification(String.Format("1min Rally on {0}{1} by {2}{3}", warMessage.defender.alliance_tag, warMessage.defender.empire, warMessage.attacker.alliance_tag, warMessage.attacker.empire), NotificationType.RallyDefense);
                                         }
                                         else
                                         {
-                                            ctrl.SendNotification(String.Format("Help! Rally on {0}{1} by {2}{3}", warMessage.DefenderAlliance, warMessage.DefenderName, warMessage.AttackerAlliance, warMessage.AttackerName), NotificationType.RallyDefense);
+                                            ctrl.SendNotification(String.Format("Rally on {0}{1} by {2}{3}", warMessage.defender.alliance_tag, warMessage.defender.empire, warMessage.attacker.alliance_tag, warMessage.attacker.empire), NotificationType.RallyDefense);
                                         }
                                     }
                                 }
                                 else
                                 {
                                     //normal
-                                    ctrl.SendNotification(String.Format("Rally call for {0}{1} by {2}{3}", warMessage.DefenderAlliance, warMessage.DefenderName, warMessage.AttackerAlliance, warMessage.AttackerName), NotificationType.RallyOffense);
+                                    ctrl.SendNotification(String.Format("Rally call for {0}{1} by {2}{3}", warMessage.defender.alliance_tag, warMessage.defender.empire, warMessage.attacker.alliance_tag, warMessage.attacker.empire), NotificationType.RallyOffense);
                                 }
 
                                 tmrSupressAction.Restart();

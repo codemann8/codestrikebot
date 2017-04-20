@@ -59,15 +59,12 @@ namespace CodeStrikeBot.Messages
                     switch (node.Attributes["node"].Value)
                     {
                         case "EVENT_WAR_RALLY_BEGAN": //rally defense
-                            
                             ret = new WarRallyBeginMessage(ret);
                             break;
                         case "EVENT_MARCH": //march
-                            ret.LoadXml();
                             ret = new MarchMessage(ret);
                             break;
                         case "EVENT_SYNCEDDATA": //various data
-                            ret.LoadXml();
                             ret = new SyncedDataMessage(ret);
 
                             //TODO: Remove debug output eventually
