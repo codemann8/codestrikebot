@@ -9,14 +9,14 @@ namespace CodeStrikeBot.Messages
 {
     public class SyncedDataMessage : JsonMessage
     {
-        public List<Data.Watchtower> Watchtowers { get; private set; }
+        public List<Objects.Watchtower> Watchtowers { get; private set; }
 
         public SyncedDataMessage(JsonMessage message)
             : base(message)
         {
             this.Type = MessageType.SyncedData;
 
-            this.Watchtowers = new List<Data.Watchtower>();
+            this.Watchtowers = new List<Objects.Watchtower>();
 
             try
             {
@@ -30,15 +30,15 @@ namespace CodeStrikeBot.Messages
                                 foreach (KeyValuePair<string, JToken> m in (JObject)kvp.Value)
                                 {
                                     string marchId = m.Key;
-                                    Data.Watchtower watch;
+                                    Objects.Watchtower watch;
 
                                     if (m.Value is JObject)
                                     {
-                                        watch = new Data.Watchtower((JObject)m.Value);
+                                        watch = new Objects.Watchtower((JObject)m.Value);
                                     }
                                     else
                                     {
-                                        watch = new Data.Watchtower(m.Key);
+                                        watch = new Objects.Watchtower(m.Key);
                                     }
 
                                     this.Error |= watch.Error;

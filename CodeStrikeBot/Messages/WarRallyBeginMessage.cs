@@ -290,6 +290,7 @@ namespace CodeStrikeBot.Messages
             public int total_trap_max { get; set; }
         }
 
+        //TODO: Move to outer scope, preferably a floating Rally object
         public class SharedCounts
         {
             public int alliance_incoming_invites { get; set; }

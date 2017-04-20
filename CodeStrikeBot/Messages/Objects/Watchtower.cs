@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 using System.Web.UI.DataVisualization.Charting;
 using Newtonsoft.Json.Linq;
 
-namespace CodeStrikeBot.Messages.Data
+namespace CodeStrikeBot.Messages.Objects
 {
     public class Watchtower
     {
-        public MarchType march_type { get; set; }
-        public MarchState march_state { get; set; }
+        public March.MarchType march_type { get; set; }
+        public March.MarchState march_state { get; set; }
         public string march_id { get; set; }
         public DateTime timestamp { get; set; }
         public Point3D target_coordinate { get; set; }
@@ -65,13 +65,13 @@ namespace CodeStrikeBot.Messages.Data
                         case "march_type":
                             switch (w.Value.ToString())
                             {
-                                case "attack": this.march_type = MarchType.Attack; break;
-                                case "encamp": this.march_type = MarchType.Tile; break;
-                                case "scout": this.march_type = MarchType.Scout; break;
-                                case "trade": this.march_type = MarchType.Trade; break;
-                                case "reinforce": this.march_type = MarchType.Reinforcement; break;
+                                case "attack": this.march_type = March.MarchType.Attack; break;
+                                case "encamp": this.march_type = March.MarchType.Tile; break;
+                                case "scout": this.march_type = March.MarchType.Scout; break;
+                                case "trade": this.march_type = March.MarchType.Trade; break;
+                                case "reinforce": this.march_type = March.MarchType.Reinforcement; break;
                                 default:
-                                    this.march_type = MarchType.Unknown;
+                                    this.march_type = March.MarchType.Unknown;
                                     this.Error = true;
                                     break;
                             }
@@ -79,9 +79,9 @@ namespace CodeStrikeBot.Messages.Data
                         case "march_state":
                             switch (w.Value.ToString())
                             {
-                                case "advancing": this.march_state = MarchState.Advancing; break;
+                                case "advancing": this.march_state = March.MarchState.Advancing; break;
                                 default:
-                                    this.march_state = MarchState.Unknown;
+                                    this.march_state = March.MarchState.Unknown;
                                     this.Error = true;
                                     break;
                             }

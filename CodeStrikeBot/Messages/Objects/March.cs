@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.UI.DataVisualization.Charting;
 
-namespace CodeStrikeBot.Messages.Data
+namespace CodeStrikeBot.Messages.Objects
 {
     public class March : IComparable
     {
@@ -136,29 +136,35 @@ namespace CodeStrikeBot.Messages.Data
                 return 1;
             }
         }
-    }
 
-    public enum MarchState
-    {
-        Advancing,
-        Returning,
-        Busy,
-        Ended,
-        Unknown
-    }
+        public enum MarchState
+        {
+            Advancing,
+            Returning,
+            Busy,
+            Ended,
+            Unknown
+        }
 
-    public enum MarchType
-    {
-        Attack,
-        Rally,
-        Scout,
-        Reinforcement,
-        War,
-        Trade,
-        Tile,
-        RebelAttack,
-        HeroEscape,
-        Unknown
+        public enum MarchType
+        {
+            Attack,
+            Rally,
+            Scout,
+            Reinforcement,
+            War,
+            Trade,
+            Tile,
+            RebelAttack,
+            HeroEscape,
+            Unknown
+        }
+
+        public enum MarchEmoji
+        {
+            Default,
+            Unknown
+        }
     }
 
     public enum TargetType
@@ -166,12 +172,6 @@ namespace CodeStrikeBot.Messages.Data
         City,
         Encampment,
         GameUnknown,
-        Unknown
-    }
-
-    public enum MarchEmoji
-    {
-        Default,
         Unknown
     }
 }

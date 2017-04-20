@@ -21,12 +21,12 @@ namespace CodeStrikeBot.Messages
         public int from_province_id { get; set; }
         public int from_chunk_id { get; set; }
         public int from_tile_id { get; set; }
-        public Data.MarchState state { get; set; }
+        public Objects.March.MarchState state { get; set; }
         public DateTime start_time { get; set; }
         public DateTime dest_time { get; set; }
-        public Data.MarchType type { get; set; }
+        public Objects.March.MarchType type { get; set; }
         public int alliance_id { get; set; }
-        public Data.MarchEmoji emoji { get; set; }
+        public Objects.March.MarchEmoji emoji { get; set; }
         public DateTime emoji_starttime { get; set; }
         public string type_data { get; set; }
         public DateTime update_ts { get; set; }
@@ -72,11 +72,11 @@ namespace CodeStrikeBot.Messages
                                 case "state":
                                     switch (m.Value.ToString())
                                     {
-                                        case "advancing": this.state = Data.MarchState.Advancing; break;
-                                        case "returning": this.state = Data.MarchState.Returning; break;
-                                        case "busy": this.state = Data.MarchState.Busy; break;
+                                        case "advancing": this.state = Objects.March.MarchState.Advancing; break;
+                                        case "returning": this.state = Objects.March.MarchState.Returning; break;
+                                        case "busy": this.state = Objects.March.MarchState.Busy; break;
                                         default:
-                                            this.state = Data.MarchState.Unknown;
+                                            this.state = Objects.March.MarchState.Unknown;
                                             this.Error = true;
                                             break;
                                     }
@@ -86,17 +86,17 @@ namespace CodeStrikeBot.Messages
                                 case "type":
                                     switch (m.Value.ToString())
                                     {
-                                        case "attack": this.type = Data.MarchType.Attack; break;
-                                        case "hero_attack": this.type = Data.MarchType.RebelAttack; break;
-                                        case "hero_escape": this.type = Data.MarchType.HeroEscape; break;
-                                        case "rally": this.type = Data.MarchType.Rally; break;
-                                        case "scout": this.type = Data.MarchType.Scout; break;
-                                        case "reinforce": this.type = Data.MarchType.Reinforcement; break;
-                                        case "war": this.type = Data.MarchType.War; break;
-                                        case "trade": this.type = Data.MarchType.Trade; break;
-                                        case "encamp": this.type = Data.MarchType.Tile; break;
+                                        case "attack": this.type = Objects.March.MarchType.Attack; break;
+                                        case "hero_attack": this.type = Objects.March.MarchType.RebelAttack; break;
+                                        case "hero_escape": this.type = Objects.March.MarchType.HeroEscape; break;
+                                        case "rally": this.type = Objects.March.MarchType.Rally; break;
+                                        case "scout": this.type = Objects.March.MarchType.Scout; break;
+                                        case "reinforce": this.type = Objects.March.MarchType.Reinforcement; break;
+                                        case "war": this.type = Objects.March.MarchType.War; break;
+                                        case "trade": this.type = Objects.March.MarchType.Trade; break;
+                                        case "encamp": this.type = Objects.March.MarchType.Tile; break;
                                         default:
-                                            this.type = Data.MarchType.Unknown;
+                                            this.type = Objects.March.MarchType.Unknown;
                                             this.Error = true;
                                             break;
                                     }
@@ -105,8 +105,8 @@ namespace CodeStrikeBot.Messages
                                 case "emoji":
                                     switch (m.Value.ToString())
                                     {
-                                        case "EMOJI_MARCH_DEFAULT": this.emoji = Data.MarchEmoji.Default; break;
-                                        default: this.emoji = Data.MarchEmoji.Unknown; break;
+                                        case "EMOJI_MARCH_DEFAULT": this.emoji = Objects.March.MarchEmoji.Default; break;
+                                        default: this.emoji = Objects.March.MarchEmoji.Unknown; break;
                                     }
                                     break;
                                 case "emoji_starttime": this.emoji_starttime = ((int)m.Value).ToDateTime(); break;
@@ -139,7 +139,7 @@ namespace CodeStrikeBot.Messages
 
         public override string ToString()
         {
-            return (this.Error ? "*ERROR* " : "") + String.Format("{0}: {1} {2}->{3}", this.march_id, Enum.GetName(typeof(Data.MarchType), this.type).Replace("CodeStrikeBot.Messages.Data.MarchType", ""), this.from_name, this.dest_name);
+            return (this.Error ? "*ERROR* " : "") + String.Format("{0}: {1} {2}->{3}", this.march_id, Enum.GetName(typeof(Objects.March.MarchType), this.type).Replace("CodeStrikeBot.Messages.Data.MarchType", ""), this.from_name, this.dest_name);
         }
     }
 }

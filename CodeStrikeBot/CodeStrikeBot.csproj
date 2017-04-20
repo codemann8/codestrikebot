@@ -79,17 +79,12 @@
     <Compile Include="DataObjects\ScheduleTask.cs" />
     <Compile Include="DataObjects\Settings.cs" />
     <Compile Include="Messages\ChatMessage.cs" />
-    <Compile Include="Messages\Data\March\March.cs" />
-    <Compile Include="Messages\Data\March\Watchtower.cs" />
-    <Compile Include="Messages\Data\Payload.cs" />
-    <Compile Include="Messages\Data\PayloadArray.cs" />
-    <Compile Include="Messages\Data\PayloadObject.cs" />
-    <Compile Include="Messages\Data\PayloadTupleArray.cs" />
-    <Compile Include="Messages\Data\PayloadValue.cs" />
-    <Compile Include="Messages\Data\TileUpdatedMessage.cs" />
+    <Compile Include="Messages\Objects\March.cs" />
+    <Compile Include="Messages\Objects\Watchtower.cs" />
     <Compile Include="Messages\EmptyMessage.cs" />
     <Compile Include="Messages\SyncedDataMessage.cs" />
     <Compile Include="Messages\MarchMessage.cs" />
+    <Compile Include="Messages\WarRallyEndedMessage.cs" />
     <Compile Include="Messages\WarRallyBeginMessage.cs" />
     <Compile Include="Messages\JsonMessage.cs" />
     <Compile Include="Messages\Message.cs" />
@@ -108,6 +103,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

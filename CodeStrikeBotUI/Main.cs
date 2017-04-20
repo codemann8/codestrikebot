@@ -940,11 +940,11 @@ namespace CodeStrikeBot
                         {
                             Messages.MarchMessage marchMessage = (Messages.MarchMessage)message;
 
-                            Messages.Data.March march = ctrl.marches.Where(m => m.MarchId == marchMessage.march_id).FirstOrDefault();
+                            Messages.Objects.March march = ctrl.marches.Where(m => m.MarchId == marchMessage.march_id).FirstOrDefault();
 
                             if (march == null)
                             {
-                                march = new Messages.Data.March(marchMessage);
+                                march = new Messages.Objects.March(marchMessage);
                                 ctrl.marches.Add(march);
                             }
                             else
@@ -952,13 +952,13 @@ namespace CodeStrikeBot
                                 march.Update(marchMessage);
                             }
 
-                            if (march.State == Messages.Data.MarchState.Ended)
+                            if (march.State == Messages.Objects.March.MarchState.Ended)
                             {
                                 ctrl.marches.Remove(march);
                                 ctrl.endedMarches.Add(march);
                             }
 
-                            foreach (Messages.Data.March m in ctrl.marches.Where(m => m.EndTime <= DateTime.Now.ToUniversalTime()).ToList())
+                            foreach (Messages.Objects.March m in ctrl.marches.Where(m => m.EndTime <= DateTime.Now.ToUniversalTime()).ToList())
                             {
                                 ctrl.marches.Remove(m);
                                 ctrl.endedMarches.Add(m);
@@ -973,9 +973,9 @@ namespace CodeStrikeBot
                         {
                             Messages.SyncedDataMessage syncedDataMessage = (Messages.SyncedDataMessage)message;
 
-                            foreach (Messages.Data.Watchtower w in syncedDataMessage.Watchtowers)
+                            foreach (Messages.Objects.Watchtower w in syncedDataMessage.Watchtowers)
                             {
-                                Messages.Data.March march = ctrl.marches.Where(m => m.MarchId == w.march_id).FirstOrDefault();
+                                Messages.Objects.March march = ctrl.marches.Where(m => m.MarchId == w.march_id).FirstOrDefault();
 
                                 if (march == null)
                                 {
