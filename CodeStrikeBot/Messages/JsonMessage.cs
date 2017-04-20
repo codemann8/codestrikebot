@@ -82,6 +82,10 @@ namespace CodeStrikeBot.Messages
                                 System.IO.File.WriteAllText(String.Format(".\\output\\debug\\synceddata\\{0}.txt", ret.Id), Utilities.FormatJSON(ret.RawJson));
                             }
                             break;
+                        default:
+                            System.IO.Directory.CreateDirectory(String.Format(".\\output\\debug\\unknownJson"));
+                            System.IO.File.WriteAllText(String.Format(".\\output\\debug\\unknownJson\\{0}-{1}.txt", node.Attributes["node"].Value, ret.Id), Utilities.FormatJSON(ret.RawJson));
+                            break;
                     }
                 }
             }
