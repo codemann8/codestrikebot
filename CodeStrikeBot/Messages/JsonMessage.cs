@@ -58,8 +58,11 @@ namespace CodeStrikeBot.Messages
                     }
                     switch (node.Attributes["node"].Value)
                     {
-                        case "EVENT_WAR_RALLY_BEGAN": //rally defense
+                        case "EVENT_WAR_RALLY_BEGAN": //rally
                             ret = new WarRallyBeginMessage(ret);
+                            break;
+                        case "EVENT_WAR_RALLY_ENDED": //rally end
+                            ret = new WarRallyEndedMessage(ret);
                             break;
                         case "EVENT_MARCH": //march
                             ret = new MarchMessage(ret);
