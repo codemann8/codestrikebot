@@ -26,7 +26,7 @@ namespace CodeStrikeBot.Messages
                     {
                         switch (root.Key)
                         {
-                            case "_event": this._event = root.Value.ToString(); break;
+                            case "event": this._event = root.Value.ToString(); break;
                             case "help_data":
                                 this.help_data = new List<HelpData>();
                                 foreach (KeyValuePair<string, JToken> help in (JObject)root.Value)

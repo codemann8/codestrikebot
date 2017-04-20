@@ -49,11 +49,18 @@ namespace CodeStrikeBot.Messages
                                                 switch (dict.Key)
                                                 {
                                                     case "level": this.description.dict.level = (int)dict.Value; break;
-                                                    case "dict":
+                                                    case "building_name":
                                                         this.description.dict.building_name = new List<string>();
                                                         foreach (string name in (JArray)dict.Value)
                                                         {
                                                             this.description.dict.building_name.Add(name);
+                                                        }
+                                                        break;
+                                                    case "research_name":
+                                                        this.description.dict.research_name = new List<string>();
+                                                        foreach (string name in (JArray)dict.Value)
+                                                        {
+                                                            this.description.dict.research_name.Add(name);
                                                         }
                                                         break;
                                                     default: this.Error = true; break;
@@ -87,6 +94,7 @@ namespace CodeStrikeBot.Messages
         {
             public int level { get; set; }
             public List<string> building_name { get; set; }
+            public List<string> research_name { get; set; }
         }
 
         public class Description
