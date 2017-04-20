@@ -83,6 +83,13 @@ namespace CodeStrikeBot.Messages
                                 System.IO.File.WriteAllText(String.Format(".\\output\\debug\\unknownJson\\{0}-{1}.txt", node.Attributes["node"].Value, ret.Id), Utilities.FormatJSON(ret.RawJson));
                                 break;
                         }
+
+                        //TODO: Remove this debugging eventually
+                        if (!(ret is SyncedDataMessage) && ret.Error)
+                        {
+                            System.IO.Directory.CreateDirectory(String.Format(".\\output\\debug\\error"));
+                            System.IO.File.WriteAllText(String.Format(".\\output\\debug\\error\\{0}-{1}.txt", node.Attributes["node"].Value, ret.Id), Utilities.FormatJSON(ret.RawJson));
+                        }
                     }
                     catch (Newtonsoft.Json.JsonReaderException ex)
                     {
