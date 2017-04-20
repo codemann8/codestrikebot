@@ -20,34 +20,37 @@ namespace CodeStrikeBot.Messages
 
             try
             {
-                foreach (KeyValuePair<string, JToken> kvp in this.Json)
+                if (this.Json is JObject)
                 {
-                    switch (kvp.Key.Replace("\"", ""))
+                    foreach (KeyValuePair<string, JToken> kvp in (JObject)this.Json)
                     {
-                        case "Watchtower": //watchtower
-                            foreach (KeyValuePair<string, JToken> m in (JObject)kvp.Value)
-                            {
-                                string marchId = m.Key;
-                                Data.Watchtower watch;
-
-                                if (m.Value is JObject)
+                        switch (kvp.Key.Replace("\"", ""))
+                        {
+                            case "Watchtower": //watchtower
+                                foreach (KeyValuePair<string, JToken> m in (JObject)kvp.Value)
                                 {
-                                    watch = new Data.Watchtower((JObject)m.Value);
-                                }
-                                else
-                                {
-                                    watch = new Data.Watchtower(m.Key);
-                                }
+                                    string marchId = m.Key;
+                                    Data.Watchtower watch;
 
-                                this.Error |= watch.Error;
+                                    if (m.Value is JObject)
+                                    {
+                                        watch = new Data.Watchtower((JObject)m.Value);
+                                    }
+                                    else
+                                    {
+                                        watch = new Data.Watchtower(m.Key);
+                                    }
 
-                                this.Watchtowers.Add(watch);
-                            }
-                            break;
-                        default:
-                            //other synceddata types
-                            //save types to list for future additions
-                            break;
+                                    this.Error |= watch.Error;
+
+                                    this.Watchtowers.Add(watch);
+                                }
+                                break;
+                            default:
+                                //other synceddata types
+                                //save types to list for future additions
+                                break;
+                        }
                     }
                 }
             }

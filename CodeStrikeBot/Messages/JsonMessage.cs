@@ -10,7 +10,7 @@ namespace CodeStrikeBot.Messages
     public class JsonMessage : XmlMessage
     {
         public string RawJson;
-        public JObject Json;
+        public JToken Json;
         
         public bool Error;
 
@@ -43,15 +43,23 @@ namespace CodeStrikeBot.Messages
                     ret.Id = node.FirstChild.Attributes["id"].Value;
                     ret.Timestamp = Int32.Parse(node.FirstChild.Attributes["timestamp"].Value).ToDateTime();
 
+                    ret.LoadXml();
                     node = ret.Document.DocumentElement.FirstChild.FirstChild;
-                    node = ret.Document.DocumentElement.SelectSingleNode("//*[local-name()='payload']");
-                    ret.RawJson = node.InnerText;
-                    ret.Json = JObject.Parse(ret.RawJson);
+                    
+                    ret.RawJson = ret.Document.DocumentElement.SelectSingleNode("//*[local-name()='payload']").InnerText;
 
+                    try
+                    {
+                        ret.Json = JToken.Parse(ret.RawJson);
+                    }
+                    catch (Newtonsoft.Json.JsonReaderException ex)
+                    {
+                        ex = ex;
+                    }
                     switch (node.Attributes["node"].Value)
                     {
                         case "EVENT_WAR_RALLY_BEGAN": //rally defense
-                            ret.LoadXml();
+                            
                             ret = new WarRallyBeginMessage(ret);
                             break;
                         case "EVENT_MARCH": //march

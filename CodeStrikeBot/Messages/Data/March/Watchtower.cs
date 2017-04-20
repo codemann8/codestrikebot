@@ -74,6 +74,12 @@ namespace CodeStrikeBot.Messages.Data
                                 case "scout":
                                     this.march_type = MarchType.Scout;
                                     break;
+                                case "trade":
+                                    this.march_type = MarchType.Trade;
+                                    break;
+                                case "reinforce":
+                                    this.march_type = MarchType.Reinforcement;
+                                    break;
                                 default:
                                     this.march_type = MarchType.Unknown;
                                     this.Error = true;
@@ -233,6 +239,12 @@ namespace CodeStrikeBot.Messages.Data
                                 {
                                     switch (t.Key.Replace("\"", ""))
                                     {
+                                        case "troop_swordsmen":
+                                            this.approx_unit_types.troop_swordsmen = t.Value.ToString();
+                                            break;
+                                        case "troop_outriders":
+                                            this.approx_unit_types.troop_outriders = t.Value.ToString();
+                                            break;
                                         case "troop_hoplites":
                                             this.approx_unit_types.troop_hoplites = t.Value.ToString();
                                             break;
@@ -347,6 +359,12 @@ namespace CodeStrikeBot.Messages.Data
 
                                     switch (t.Key.Replace("\"", ""))
                                     {
+                                        case "troop_swordsmen":
+                                            this.specific_unit_types.troop_swordsmen = (int)t.Value;
+                                            break;
+                                        case "troop_outriders":
+                                            this.specific_unit_types.troop_outriders = (int)t.Value;
+                                            break;
                                         case "troop_hoplites":
                                             this.specific_unit_types.troop_hoplites = (int)t.Value;
                                             break;
@@ -563,6 +581,11 @@ namespace CodeStrikeBot.Messages.Data
 
         public class ApproxUnitTypes
         {
+            //t1
+            public string troop_swordsmen { get; set; } //soldier
+            public string troop_outriders { get; set; } //patrol vehicle
+
+            //t2
             public string troop_hoplites { get; set; } //machine gunner//reg inf t2
 
             //t5
@@ -603,7 +626,12 @@ namespace CodeStrikeBot.Messages.Data
 
         public class SpecificUnitTypes
         {
-            public int troop_hoplites { get; set; }
+            //t1
+            public int troop_swordsmen { get; set; } //soldier
+            public int troop_outriders { get; set; } //patrol vehicle
+
+            //t2
+            public int troop_hoplites { get; set; } //machine gunner
 
             //t5
             public int troop_t5_normal_siege { get; set; }
