@@ -55,7 +55,7 @@ namespace CodeStrikeBot.Messages
                         switch (node.Attributes["node"].Value)
                         {
                             case "EVENT_WAR_RALLY_BEGAN": //rally
-                                ret = new WarRallyBeginMessage(ret);
+                                ret = new WarRallyMessage(ret);
                                 break;
                             case "EVENT_WAR_RALLY_ENDED": //rally end
                                 ret = new WarRallyEndedMessage(ret);

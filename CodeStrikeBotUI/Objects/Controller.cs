@@ -100,6 +100,8 @@ namespace CodeStrikeBot
 
         public List<Messages.Objects.March> marches, endedMarches;
 
+        public List<Messages.Objects.Rally> rallies;
+
         public DateTime StartScheduler, StartTasks, StartScreenState, StartAutoActions;
 
         public Controller()
@@ -108,6 +110,8 @@ namespace CodeStrikeBot
 
             marches = new List<Messages.Objects.March>();
             endedMarches = new List<Messages.Objects.March>();
+
+            rallies = new List<Messages.Objects.Rally>();
             
             Database = new BotDatabase();
 

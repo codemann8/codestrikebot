@@ -911,30 +911,46 @@ namespace CodeStrikeBot
                             BotDatabase.InsertLog(1, "Not a message", "", message.PayloadData);
                         }
 
-                        if (message is Messages.WarRallyBeginMessage)
+                        if (message is Messages.WarRallyMessage)
                         {
-                            Messages.WarRallyBeginMessage warMessage = (Messages.WarRallyBeginMessage)message;
-                            if (warMessage.timer <= 900 && tmrSupressAction.ElapsedMilliseconds > 1000)
+                            Messages.WarRallyMessage warMessage = (Messages.WarRallyMessage)message;
+
+                            Messages.Objects.Rally rally = ctrl.rallies.Where(r => r.RallyId == warMessage.war_id).FirstOrDefault();
+
+                            if (rally == null)
                             {
-                                if (warMessage.defender.alliance_tag == "(FuKT)") //TODO: Move this hard-coded value to user-defined Settings
+                                rally = new Messages.Objects.Rally(warMessage);
+                                ctrl.rallies.Add(rally);
+
+                                if (warMessage.timer <= 900 && tmrSupressAction.ElapsedMilliseconds > 1000)
                                 {
-                                    if (warMessage.timer == 60)
+                                    if (warMessage.defender.AllianceTag == "(FuKT)") //TODO: Move this hard-coded value to user-defined Settings
                                     {
-                                        ctrl.SendNotification(String.Format("1min Rally on {0}{1} by {2}{3}", warMessage.defender.alliance_tag, warMessage.defender.empire, warMessage.attacker.alliance_tag, warMessage.attacker.empire), NotificationType.RallyDefense);
+                                        if (warMessage.timer == 60)
+                                        {
+                                            ctrl.SendNotification(String.Format("1min Rally on {0}{1} by {2}{3}", warMessage.defender.AllianceTag, warMessage.defender.UserName, warMessage.attacker.AllianceTag, warMessage.attacker.UserName), NotificationType.RallyDefense);
+                                        }
+                                        else
+                                        {
+                                            ctrl.SendNotification(String.Format("Rally on {0}{1} by {2}{3}", warMessage.defender.AllianceTag, warMessage.defender.UserName, warMessage.attacker.AllianceTag, warMessage.attacker.UserName), NotificationType.RallyDefense);
+                                        }
                                     }
                                     else
                                     {
-                                        ctrl.SendNotification(String.Format("Rally on {0}{1} by {2}{3}", warMessage.defender.alliance_tag, warMessage.defender.empire, warMessage.attacker.alliance_tag, warMessage.attacker.empire), NotificationType.RallyDefense);
+                                        //normal
+                                        ctrl.SendNotification(String.Format("Rally call for {0}{1} by {2}{3}", warMessage.defender.AllianceTag, warMessage.defender.UserName, warMessage.attacker.AllianceTag, warMessage.attacker.UserName), NotificationType.RallyOffense);
                                     }
-                                }
-                                else
-                                {
-                                    //normal
-                                    ctrl.SendNotification(String.Format("Rally call for {0}{1} by {2}{3}", warMessage.defender.alliance_tag, warMessage.defender.empire, warMessage.attacker.alliance_tag, warMessage.attacker.empire), NotificationType.RallyOffense);
-                                }
 
-                                tmrSupressAction.Restart();
+                                    tmrSupressAction.Restart();
+                                }
                             }
+                            else
+                            {
+                                rally.Update(warMessage);
+                            }
+
+                            ctrl.marches.Sort();
+                            
                         }
                         else if (message is Messages.MarchMessage)
                         {

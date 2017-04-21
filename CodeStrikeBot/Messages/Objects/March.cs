@@ -45,7 +45,7 @@ namespace CodeStrikeBot.Messages.Objects
 
         public Watchtower Watchtower { get; set; }
 
-        public List<MarchMessage> messages;
+        public List<MarchMessage> Messages;
 
         public March(MarchMessage message)
         {
@@ -67,7 +67,7 @@ namespace CodeStrikeBot.Messages.Objects
             this.HeroGender = message.hero_gender;
             this.HeroName = message.hero_name;
 
-            this.messages = new List<MarchMessage>();
+            this.Messages = new List<MarchMessage>();
 
             this.Update(message);
         }
@@ -93,7 +93,7 @@ namespace CodeStrikeBot.Messages.Objects
                 }
             }
 
-            this.messages.Add(message);
+            this.Messages.Add(message);
         }
 
         public void Update(Watchtower watch)

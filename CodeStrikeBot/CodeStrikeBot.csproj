@@ -86,13 +86,14 @@
     <Compile Include="Messages\AllianceStoreHistoryUpdateMessage.cs" />
     <Compile Include="Messages\ChatMessage.cs" />
     <Compile Include="Messages\Objects\March.cs" />
+    <Compile Include="Messages\Objects\Rally.cs" />
     <Compile Include="Messages\Objects\Watchtower.cs" />
     <Compile Include="Messages\EmptyMessage.cs" />
     <Compile Include="Messages\SyncedDataMessage.cs" />
     <Compile Include="Messages\MarchMessage.cs" />
     <Compile Include="Messages\AllianceUpdateMessage.cs" />
     <Compile Include="Messages\WarRallyEndedMessage.cs" />
-    <Compile Include="Messages\WarRallyBeginMessage.cs" />
+    <Compile Include="Messages\WarRallyMessage.cs" />
     <Compile Include="Messages\JsonMessage.cs" />
     <Compile Include="Messages\Message.cs" />
     <Compile Include="Messages\XmlMessage.cs" />
