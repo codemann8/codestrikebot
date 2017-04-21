@@ -86,7 +86,9 @@
     <Compile Include="Messages\AllianceStoreHistoryUpdateMessage.cs" />
     <Compile Include="Messages\ChatMessage.cs" />
     <Compile Include="Messages\Objects\March.cs" />
-    <Compile Include="Messages\Objects\Rally.cs" />
+    <Compile Include="Messages\Objects\Rally.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Messages\Objects\Watchtower.cs" />
     <Compile Include="Messages\EmptyMessage.cs" />
     <Compile Include="Messages\SyncedDataMessage.cs" />
