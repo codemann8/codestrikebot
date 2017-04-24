@@ -14,7 +14,10 @@ namespace CodeStrikeBot.Messages
         public long gift_level_end { get; set; }
         public long gift_level_progress { get; set; }
         public int size { get; set; }
+        public int owner_member_id { get; set; }
+        public string owner_name { get; set; }
         public int alliance_id { get; set; }
+        
 
         public AllianceUpdateMessage(JsonMessage message)
             : base(message)
@@ -35,6 +38,8 @@ namespace CodeStrikeBot.Messages
                             case "gift_level_end": this.gift_level_end = (long)stat.Value; break;
                             case "gift_level_progress": this.gift_level_progress = (long)stat.Value; break;
                             case "size": this.size = (int)stat.Value; break;
+                            case "owner_member_id": this.owner_member_id = (int)stat.Value; break;
+                            case "owner_name": this.owner_name = stat.Value.ToString(); break;
                             case "alliance_id": this.alliance_id = (int)stat.Value; break;
                             default: this.Error = true; break;
                         }
