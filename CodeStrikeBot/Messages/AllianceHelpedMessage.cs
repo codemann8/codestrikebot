@@ -28,23 +28,30 @@ namespace CodeStrikeBot.Messages
                         {
                             case "event": this._event = root.Value.ToString(); break;
                             case "help_data":
-                                this.help_data = new List<HelpData>();
-                                foreach (KeyValuePair<string, JToken> help in (JObject)root.Value)
+                                if (root.Value is JObject)
                                 {
-                                    HelpData data = new HelpData();
-                                    data.help_id = help.Key;
-                                    
-                                    foreach (KeyValuePair<string, JToken> d in (JObject)help.Value)
+                                    this.help_data = new List<HelpData>();
+                                    foreach (KeyValuePair<string, JToken> help in (JObject)root.Value)
                                     {
-                                       switch (d.Key)
-                                       {
-                                           case "help_count": data.help_count = (int)d.Value; break;
-                                           case "helper_user_id": data.helper_userid = (int)d.Value; break;
-                                           default: this.Error = true; break;
-                                       }
-                                    }
+                                        HelpData data = new HelpData();
+                                        data.help_id = help.Key;
 
-                                    this.help_data.Add(data);
+                                        foreach (KeyValuePair<string, JToken> d in (JObject)help.Value)
+                                        {
+                                            switch (d.Key)
+                                            {
+                                                case "help_count": data.help_count = (int)d.Value; break;
+                                                case "helper_user_id": data.helper_userid = (int)d.Value; break;
+                                                default: this.Error = true; break;
+                                            }
+                                        }
+
+                                        this.help_data.Add(data);
+                                    }
+                                }
+                                else
+                                {
+                                    this.Error = true;
                                 }
                                 break;
                             default: this.Error = true; break;
