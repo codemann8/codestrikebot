@@ -134,6 +134,7 @@ namespace CodeStrikeBot.Messages.Objects
             public string CityName { get; set; }
             public int CityId { get; set; }
             public Point3D Tile { get; set; }
+            public int TileOverlay { get; set; }
             public int ControlPointId { get; set; }
             public int ControlPointAllianceId { get; set; }
         }
