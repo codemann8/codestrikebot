@@ -27,7 +27,7 @@ namespace CodeStrikeBot.Messages
                     {
                         switch (stat.Key)
                         {
-                            case "_event": this._event = stat.Value.ToString(); break;
+                            case "event": this._event = stat.Value.ToString(); break;
                             case "help_id": this.help_id = stat.Value.ToString(); break;
                             case "help_currency": this.help_currency = (int)stat.Value; break;
                             default: this.Error = true; break;
