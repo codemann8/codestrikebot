@@ -95,6 +95,7 @@ namespace CodeStrikeBot.Messages
                                         case "war": this.type = Objects.March.MarchType.War; break;
                                         case "trade": this.type = Objects.March.MarchType.Trade; break;
                                         case "encamp": this.type = Objects.March.MarchType.Tile; break;
+                                        case "digging": this.type = Objects.March.MarchType.Digging; break;
                                         default:
                                             this.type = Objects.March.MarchType.Unknown;
                                             this.Error = true;

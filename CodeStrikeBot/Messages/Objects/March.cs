@@ -157,6 +157,7 @@ namespace CodeStrikeBot.Messages.Objects
             Tile,
             RebelAttack,
             HeroEscape,
+            Digging,
             Unknown
         }
 
