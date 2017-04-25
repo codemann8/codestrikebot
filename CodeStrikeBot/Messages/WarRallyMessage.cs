@@ -164,7 +164,7 @@ namespace CodeStrikeBot.Messages
                                                         this.defender.Tile.X += Utilities.TileId2XCoordinate((int)tile.Value);
                                                         this.defender.Tile.Y += Utilities.TileId2YCoordinate((int)tile.Value);
                                                         break;
-                                                    case "overlay": this.defender.TileOverlay = (int)def.Value; break;
+                                                    case "overlay": this.defender.TileOverlay = (int)tile.Value; break;
                                                     default: this.Error = true; break;
                                                 }
                                             }
