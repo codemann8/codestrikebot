@@ -467,6 +467,7 @@ namespace CodeStrikeBot
                                         if (chksum == 0xf81a || chksum == 0x3dd6) //nox and nox new
                                         {
                                             state.CurrentArea = Area.Others.SessionTimeout;
+                                            s.PreventFromOpening = true;
                                         }
                                         else
                                         {
