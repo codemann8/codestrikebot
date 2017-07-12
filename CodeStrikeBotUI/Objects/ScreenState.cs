@@ -445,13 +445,13 @@ namespace CodeStrikeBot
                                 break;
                             case 0xfab0:
                             case 0xee9d:
-                                chksum = ScreenState.GetScreenChecksum(s.SuperBitmap, 110, 440, 20);
+                                chksum = ScreenState.GetScreenChecksum(s.SuperBitmap, 110, 430, 20);
                                 switch (chksum)
                                 {
-                                    case 0x8e17: //Leap?
-                                    case 0xd04b: //MEmu
+                                    case 0x3075: //MEmu
                                         state.CurrentArea = Area.Emulators.Android;
                                         break;
+                                    /*TODO Redo
                                     case 0xb47c:
                                         state.CurrentArea = Area.Emulators.TaskManagerApp;
                                         break;
@@ -460,7 +460,7 @@ namespace CodeStrikeBot
                                         break;
                                     case 0xa115:
                                         state.CurrentArea = Area.Emulators.TaskManager;
-                                        break;
+                                        break;*/
                                     case 0xfab0:
                                         chksum = ScreenState.GetScreenChecksum(s.SuperBitmap, 190, 150, 20);
                                         //if (chksum == 0xa265)
@@ -487,6 +487,7 @@ namespace CodeStrikeBot
                             case 0x59b7:
                             case 0xe2f3: //arnold
                             case 0xb951: //halloween arnold
+                            case 0x67fa:
                                 //case 0x9e4f:  //depricated?
                                 state.CurrentArea = Area.Others.Splash;
                                 break;
@@ -607,6 +608,7 @@ namespace CodeStrikeBot
                                 {
                                     case 0xf958:
                                     case 0x2f05: //nox new
+                                    case 0x97e4:
                                         state.CurrentArea = Area.MainBases.Main;
                                         break;
                                     case 0x3ef3: //main base with modal dialog
@@ -633,6 +635,7 @@ namespace CodeStrikeBot
                                                 break;
                                             case 0xa377: //"Congratulations"
                                             case 0x76a1: //"Supply Crate"
+                                            case 0x8770: //"Supply Crate"
                                             case 0x57d2: //nox congrats
                                                 state.CurrentArea = Area.MainBases.BlueCrateCollect;
                                                 break;
@@ -800,16 +803,19 @@ namespace CodeStrikeBot
                                 }
                             }
 
-                            c = s.SuperBitmap.GetPixel(35, 498);
-                            c2 = s.SuperBitmap.GetPixel(29, 498);
+                            //c = s.SuperBitmap.GetPixel(35, 498);
+                            //c2 = s.SuperBitmap.GetPixel(29, 498);
+                            c = s.SuperBitmap.GetPixel(275, 535);
                             //Rectangle(4, 489, 63, 18)
                             //if (Math.Abs(c.R - c.G) <= 11 && (c.Within(157, 156, 155, 28) || c2.Within(165, 162, 156, 28)) && 
-                            if (ScreenState.BlackBoxExists(s.SuperBitmap, new Rectangle(253, 562, 63, 18), Color.FromArgb(74, 77, 74), 10))
+                            if (ScreenState.BlackBoxExists(s.SuperBitmap, new Rectangle(253, 562, 63, 18), Color.FromArgb(74, 77, 74), 10)
+                            && !c.Equals(57, 85, 140))
                             {
                                 state.Overlays.Add(Overlay.Widgets.SilverCrate);
                             }
 
                             chksum = ScreenState.GetScreenChecksum(s.SuperBitmap, 275, 532, 10);
+                            c = s.SuperBitmap.GetPixel(275, 535);
                             if (chksum != 0x41fa && !ScreenState.BlackBoxExists(s.SuperBitmap, new Rectangle(253, 562, 63, 18), Color.FromArgb(74, 77, 74)))
                             {
                                 int n = 0;

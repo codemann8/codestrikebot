@@ -541,7 +541,8 @@ namespace CodeStrikeBot
                     {
                         TimeoutFactor = Math.Max(1.001, (double)watch.ElapsedMilliseconds / 400);
 
-                        if (TimeoutFactor != 1.0)
+                        //TODO Slow mode
+                        if (TimeoutFactor != 5.0)
                         {
                             success = true;
                         }
@@ -874,7 +875,8 @@ namespace CodeStrikeBot
                            
                             System.Windows.Forms.Application.DoEvents();
 
-                            TimeoutFactor = 1.0;
+                            //TODO Slow mode
+                            TimeoutFactor = 5.0;
 
                             Thread.Sleep((int)(200));
                             Controller.CaptureApplication(this);
@@ -2171,7 +2173,7 @@ namespace CodeStrikeBot
 
                     while (ScreenState.CurrentArea == Area.MainBases.Main && watch.ElapsedMilliseconds < 2000)
                     {
-                        Controller.SendClick(this, 360, 200, 800); //Click Boosts
+                        Controller.SendClick(this, 360, 200, 1200); //Click Boosts
                         Controller.CaptureApplication(this);
                     }
 
@@ -2605,7 +2607,7 @@ namespace CodeStrikeBot
                 else if (ScreenState.CurrentArea == Area.MainBases.BlueCrateCollect)
                 {
                     tasksLeft = true;
-                    Controller.SendClick(this, 140, 392, 500); //click Collect
+                    Controller.SendClick(this, 140, 395, 500); //click Collect
                 }
                 else if (ScreenState.CurrentArea == Area.MainBases.SilverCrateCollect)
                 {

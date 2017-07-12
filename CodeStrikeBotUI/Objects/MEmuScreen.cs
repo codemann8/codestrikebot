@@ -23,7 +23,8 @@ namespace CodeStrikeBot
             Emulator = emulator;
             ClipboardFailed = false;
             PreventFromOpening = false;
-            TimeoutFactor = 1.0;
+            //TODO Slow mode
+            TimeoutFactor = 5.0;
             TimeSinceChecksumChanged = DateTime.Now;
 
             Process[] procs = Process.GetProcessesByName(PROCESSNAME);
@@ -65,7 +66,9 @@ namespace CodeStrikeBot
             //Emulator = emulator;
             ClipboardFailed = false;
             PreventFromOpening = false;
-            TimeoutFactor = 1.0;
+            //TODO Slow mode
+            //TimeoutFactor = 1.0;
+            TimeoutFactor = 5;
             TimeSinceChecksumChanged = DateTime.Now;
 
             WINDOW_TITLEBAR_H = 44;

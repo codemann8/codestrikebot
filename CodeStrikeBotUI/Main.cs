@@ -1703,9 +1703,9 @@ namespace CodeStrikeBot
                                     //ctrl.UpdateWindowInfo();
                                     System.Threading.Thread.Sleep(1000);
                                     Controller.CaptureApplication(s);
-
+                                    //TODO Slow mode
                                     if (s.IsFucked || (s.ScreenState.CurrentArea != Area.StateMaps.FullScreen && s.ScreenState.CurrentArea != Area.Others.Login && s.ScreenState.CurrentArea != Area.Others.Chat
-                                        && DateTime.Now.Subtract(s.TimeSinceChecksumChanged).Seconds > 30))
+                                        && DateTime.Now.Subtract(s.TimeSinceChecksumChanged).Seconds > 60))
                                     {
                                         if (s.ScreenState.CurrentArea != Area.Emulators.Android)
                                         {
@@ -1731,12 +1731,14 @@ namespace CodeStrikeBot
                                     ctrl.Login(s, s.Emulator.LastKnownAccount);
                                 }
 
+                                //TODO Slow mode
+                                /*
                                 if (s.TimeoutFactor > 3.0)
                                 {
                                     BotDatabase.InsertLog(2, String.Format("Emulator slow: {0}", s.Emulator.WindowName), s.LastChecksum.ToString("X4"), new byte[1] { 0x0 });
                                     ctrl.RestartEmulator(s, false);
                                     ctrl.Login(s, s.Emulator.LastKnownAccount);
-                                }
+                                }*/
 
                                 ushort chksum = ScreenState.GetScreenChecksum(s.SuperBitmap, 190, 115, 20);
 
