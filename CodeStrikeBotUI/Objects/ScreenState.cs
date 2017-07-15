@@ -765,17 +765,20 @@ namespace CodeStrikeBot
                                 break;
                         }
 
-                        if (state.CurrentArea == Area.Unknown)
+                        try
                         {
-                            chksum = ScreenState.GetScreenChecksum(s.SuperBitmap, 160, 12, 20);
-                            s.SuperBitmap.Bitmap.Save(String.Format("{0}\\unknown{1}.bmp", Controller.Instance.GetFullScreenshotDir(), chksum.ToString("X4")), System.Drawing.Imaging.ImageFormat.Bmp);
-                            
-                            if (state.CurrentArea == Area.Menu)
+                            if (state.CurrentArea == Area.Unknown)
                             {
-                                s.SuperBitmap.Bitmap.Save(String.Format("{0}\\-save.bmp", Controller.Instance.GetFullScreenshotDir()), System.Drawing.Imaging.ImageFormat.Bmp);
+                                chksum = ScreenState.GetScreenChecksum(s.SuperBitmap, 160, 12, 20);
+                                s.SuperBitmap.Bitmap.Save(String.Format("{0}\\unknown{1}.bmp", Controller.Instance.GetFullScreenshotDir(), chksum.ToString("X4")), System.Drawing.Imaging.ImageFormat.Bmp);
+
+                                if (state.CurrentArea == Area.Menu)
+                                {
+                                    s.SuperBitmap.Bitmap.Save(String.Format("{0}\\-save.bmp", Controller.Instance.GetFullScreenshotDir()), System.Drawing.Imaging.ImageFormat.Bmp);
+                                }
                             }
-                            state = state;
                         }
+                        catch (System.Runtime.InteropServices.ExternalException ex) { }
 
                         state.Overlays.Clear();
 
