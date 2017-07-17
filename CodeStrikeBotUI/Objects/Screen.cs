@@ -2796,5 +2796,38 @@ namespace CodeStrikeBot
 
             return tasksLeft;
         }
+
+        public void GetScreenState()
+        {
+            ScreenState state = new ScreenStateMS();
+
+            state.CurrentArea = Area.Unknown;
+
+            int failure = 100;
+            do
+            {
+                if (!state.UpdateScreenState(SuperBitmap))
+                {
+                    failure--;
+                }
+                else
+                {
+                    failure = 0;
+                }
+            }
+            while (failure > 0);
+
+            if (ScreenState != null && ScreenState.CurrentArea != state.CurrentArea)
+            {
+                TimeSinceAreaChanged = DateTime.Now;
+            }
+
+            ScreenState = state;
+
+            if (ScreenState.CurrentArea == Area.Others.SessionTimeout)
+            {
+                PreventFromOpening = true;
+            }
+        }
     }
 }

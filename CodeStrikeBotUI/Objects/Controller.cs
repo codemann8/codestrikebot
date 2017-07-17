@@ -1797,7 +1797,7 @@ namespace CodeStrikeBot
                             g.CopyFromScreen(s.WindowRect.left + s.WINDOW_MARGIN_L, s.WindowRect.top + s.WINDOW_TITLEBAR_H, 0, 0, new Size(SCREEN_W, SCREEN_H), CopyPixelOperation.SourceCopy);
                         }
 
-                        ScreenState.GetScreenState(s);
+                        s.GetScreenState();
                         failure = 0;
                     }
                     catch (ArgumentException e) { failure--; }
