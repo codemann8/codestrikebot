@@ -95,6 +95,7 @@ namespace CodeStrikeBot
 
         public Screen[] sc { get; private set; }
 
+        public List<App> apps;
         public List<EmulatorInstance> emulators;
         public List<Account> accounts;
 
@@ -115,8 +116,9 @@ namespace CodeStrikeBot
             
             Database = new BotDatabase();
 
-            accounts = Account.GetAccounts();
-            emulators = EmulatorInstance.GetEmulators(accounts);
+            apps = App.GetApps();
+            accounts = Account.GetAccounts(apps);
+            emulators = EmulatorInstance.GetEmulators(accounts, apps);
 
             bool restart = false;
 
@@ -306,13 +308,19 @@ namespace CodeStrikeBot
 
         public ScheduleTask GetNextTask()
         {
-            List<ScheduleTask> tasks = ScheduleTask.GetTasks(accounts);
+            List<ScheduleTask> tasks = ScheduleTask.GetTasks(accounts, apps);
 
             foreach (ScheduleTask t in tasks)
             {
                 if (t.Type == ScheduleType.Shield || t.Type == ScheduleType.AntiScout || t.Type == ScheduleType.GhostRally)
                 {
-                    return t;
+                    foreach (Screen s in sc)
+                    {
+                        if (s.Emulator.App.Id == t.App.Id)
+                        {
+                            return t;
+                        }
+                    }
                 }
             }
 
@@ -320,14 +328,25 @@ namespace CodeStrikeBot
             {
                 foreach (Screen s in sc)
                 {
-                    if (s != null && s.Emulator.LastKnownAccount != null && t.Account.Id == s.Emulator.LastKnownAccount.Id)
+                    if (s != null && s.Emulator.LastKnownAccount != null && t.Account.Id == s.Emulator.LastKnownAccount.Id && t.App.Id == s.Emulator.App.Id)
                     {
                         return t;
                     }
                 }
             }
 
-            return tasks.FirstOrDefault();
+            foreach (ScheduleTask t in tasks)
+            {
+                foreach (Screen s in sc)
+                {
+                    if (s.Emulator.App.Id == t.App.Id)
+                    {
+                        return t;
+                    }
+                }
+            }
+
+            return null;
         }
 
         public Screen GetNextWindow(Account account)
@@ -406,6 +425,82 @@ namespace CodeStrikeBot
             return screen;
         }
 
+        public Screen GetNextWindow(ScheduleTask task)
+        {
+            Screen screen = null;
+
+            foreach (Screen s in sc)
+            {
+                if (s != null && !s.IsFucked && s.EmulatorProcess != null && s.Emulator.App.Id == task.App.Id && s.Emulator.LastKnownAccount != null && s.Emulator.LastKnownAccount == task.Account)
+                {
+                    screen = s;
+                    break;
+                }
+            }
+
+            if (screen == null)
+            {
+                foreach (Screen s in sc)
+                {
+                    if (s != null && !s.PreventFromOpening && !s.IsFucked && s.EmulatorProcess != null && s.Emulator.App.Id == task.App.Id && (s.Emulator.LastKnownAccount == null || s.ScreenState.CurrentArea == Area.Others.Login || s.ScreenState.CurrentArea == Area.Emulators.Android))
+                    {
+                        screen = s;
+                        break;
+                    }
+                }
+
+                if (screen == null)
+                {
+                    foreach (Screen s in sc)
+                    {
+                        if (s != null && !s.PreventFromOpening && !s.IsFucked && s.EmulatorProcess != null && s.Emulator.App.Id == task.App.Id && s.Emulator.LastKnownAccount != null && (int)s.Emulator.LastKnownAccount.Priority < 3 && !s.ScreenState.Overlays.Contains(Overlay.Widgets.MissionsAvailable) && !s.ScreenState.Overlays.Contains(Overlay.Widgets.SilverCrate) && !s.ScreenState.Overlays.Contains(Overlay.Widgets.AllianceHelp))
+                        {
+                            screen = s;
+                            break;
+                        }
+                    }
+
+                    if (screen == null)
+                    {
+                        foreach (Screen s in sc)
+                        {
+                            if (s != null && !s.PreventFromOpening && !s.IsFucked && s.EmulatorProcess != null && s.Emulator.App.Id == task.App.Id && s.Emulator.LastKnownAccount != null && s.Emulator.LastKnownAccount.Priority == 0)
+                            {
+                                screen = s;
+                                break;
+                            }
+                        }
+
+                        if (screen == null)
+                        {
+                            foreach (Screen s in sc)
+                            {
+                                if (s != null && !s.PreventFromOpening && !s.IsFucked && s.EmulatorProcess != null && s.Emulator.App.Id == task.App.Id && s.Emulator.LastKnownAccount != null && (int)s.Emulator.LastKnownAccount.Priority == 1)
+                                {
+                                    screen = s;
+                                    break;
+                                }
+                            }
+
+                            if (screen == null)
+                            {
+                                foreach (Screen s in sc)
+                                {
+                                    if (s != null && !s.PreventFromOpening && !s.IsFucked && s.EmulatorProcess != null && s.Emulator.App.Id == task.App.Id && s.Emulator.LastKnownAccount != null && (int)s.Emulator.LastKnownAccount.Priority == 2)
+                                    {
+                                        screen = s;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return screen;
+        }
+
         public void ExecuteTask(ScheduleTask task)
         {
             try
@@ -413,7 +508,7 @@ namespace CodeStrikeBot
                 BeginTask();
                 SpeedTest();
 
-                Screen screen = GetNextWindow(task.Account);
+                Screen screen = GetNextWindow(task);
                 Stopwatch tmrRun = new Stopwatch();
 
                 if (screen != null)
@@ -1929,7 +2024,7 @@ namespace CodeStrikeBot
                 }
             }
 
-            EmulatorInstance emulator = new EmulatorInstance(0, type, (p.MainWindowTitle.Contains(' ') ? p.MainWindowTitle.Substring(0, p.MainWindowTitle.IndexOf(' ')) : p.MainWindowTitle), command, new Account(0));
+            EmulatorInstance emulator = new EmulatorInstance(0, type, (p.MainWindowTitle.Contains(' ') ? p.MainWindowTitle.Substring(0, p.MainWindowTitle.IndexOf(' ')) : p.MainWindowTitle), command, new Account(0), new App(0));
             emulator.Save();
 
             return emulator;

@@ -25,8 +25,12 @@ namespace CodeStrikeBot
         public DateTime LastLogin { get; set; }
         [Column(Name = "lastLogout")]
         public DateTime LastLogout { get; set; }
+        [Column(Name = "appId")]
+        public int AppId { get; set; }
 
-        public Account(int id, string Name, string UserName, string Email, string Password, AccountPriority Priority, int FoodNegativeAmount, DateTime lastLogin, DateTime lastLogout)
+        public App App { get; set; }
+
+        public Account(int id, string Name, string UserName, string Email, string Password, AccountPriority Priority, int FoodNegativeAmount, DateTime lastLogin, DateTime lastLogout, App app)
         {
             this.Id = id;
             this.Name = Name;
@@ -37,6 +41,7 @@ namespace CodeStrikeBot
             this.FoodNegativeAmount = FoodNegativeAmount;
             this.LastLogin = lastLogin;
             this.LastLogout = lastLogout;
+            this.App = app;
         }
 
         public Account(int id)
@@ -54,14 +59,24 @@ namespace CodeStrikeBot
             return (Account)BotDatabase.SaveObject(this);
         }
 
-        public static List<Account> GetAccounts()
+        public static List<Account> GetAccounts(List<App> apps)
         {
             List<DataObject> objects = BotDatabase.GetObjects<Account>();
             List<Account> accounts = new List<Account>();
 
             foreach (DataObject o in objects)
             {
-                accounts.Add((Account)o);
+                Account account = (Account)o;
+
+                foreach (App a in apps)
+                {
+                    if (a.Id == account.App.Id)
+                    {
+                        account.App = a;
+                    }
+                }
+
+                accounts.Add(account);
             }
 
             return accounts;

@@ -96,6 +96,32 @@ namespace CodeStrikeBot
                             command = new SqlCeCommand("UPDATE settings SET version = 3", Connection);
                             command.ExecuteNonQuery();
                             break;
+                        case 3:
+                            command = new SqlCeCommand("CREATE TABLE apps (id INTEGER PRIMARY KEY IDENTITY, name NVARCHAR(30), shortName NVARCHAR(6))", Connection);
+                            command.ExecuteNonQuery();
+                            command = new SqlCeCommand("INSERT INTO apps (name, shortName) VALUES ('Mobile Strike', 'MS')", Connection);
+                            command.ExecuteNonQuery();
+                            command = new SqlCeCommand("INSERT INTO apps (name, shortName) VALUES ('Final Fantasy XV', 'FFXV')", Connection);
+                            command.ExecuteNonQuery();
+                            command = new SqlCeCommand("ALTER TABLE schedules ADD appId INTEGER NOT NULL DEFAULT 0", Connection);
+                            command.ExecuteNonQuery();
+                            command = new SqlCeCommand("UPDATE schedules SET appId = 1", Connection);
+                            command.ExecuteNonQuery();
+                            command = new SqlCeCommand("DROP INDEX accounts.NameIdx", Connection);
+                            command.ExecuteNonQuery();
+                            command = new SqlCeCommand("ALTER TABLE accounts ADD appId INTEGER NOT NULL DEFAULT 0", Connection);
+                            command.ExecuteNonQuery();
+                            command = new SqlCeCommand("UPDATE accounts SET appId = 1", Connection);
+                            command.ExecuteNonQuery();
+                            command = new SqlCeCommand("CREATE UNIQUE INDEX AppAccIdx ON accounts (appId, name)", Connection);
+                            command.ExecuteNonQuery();
+                            command = new SqlCeCommand("ALTER TABLE emulators ADD appId INTEGER NOT NULL DEFAULT 0", Connection);
+                            command.ExecuteNonQuery();
+                            command = new SqlCeCommand("UPDATE emulators SET appId = 1", Connection);
+                            command.ExecuteNonQuery();
+                            command = new SqlCeCommand("UPDATE settings SET version = 4", Connection);
+                            command.ExecuteNonQuery();
+                            break;
                     }
                 }
                 catch (SqlCeException e)
@@ -127,9 +153,10 @@ namespace CodeStrikeBot
 
                     if (account.Id == 0)
                     {
-                        command = new SqlCeCommand("INSERT INTO accounts (name, username, email, password, priority, foodNegativeAmt, lastLogin, lastLogout) VALUES (@name, @username, @email, @password, @priority, @foodNegAmt, @lastLogin, @lastLogout)", con);
+                        command = new SqlCeCommand("INSERT INTO accounts (name, username, email, password, priority, foodNegativeAmt, lastLogin, lastLogout, appId) VALUES (@name, @username, @email, @password, @priority, @foodNegAmt, @lastLogin, @lastLogout, @appId)", con);
                         command.Parameters.AddWithValue("@lastLogin", new DateTime().AddYears(1972));
                         command.Parameters.AddWithValue("@lastLogout", new DateTime().AddYears(1972));
+                        command.Parameters.AddWithValue("@appId", account.App.Id);
                     }
                     else
                     {
@@ -161,8 +188,9 @@ namespace CodeStrikeBot
 
                     if (task.Id == 0)
                     {
-                        command = new SqlCeCommand("INSERT INTO schedules (accountId, type, interval, amount, count, x, y, backupX, backupY, lastAction) VALUES (@accountId, @type, @interval, @amt, @count, @x, @y, @altX, @altY, @lastAction)", con);
+                        command = new SqlCeCommand("INSERT INTO schedules (accountId, type, interval, amount, count, x, y, backupX, backupY, lastAction, appId) VALUES (@accountId, @type, @interval, @amt, @count, @x, @y, @altX, @altY, @lastAction, @appId)", con);
                         command.Parameters.AddWithValue("@lastAction", DateTime.Now);
+                        command.Parameters.AddWithValue("@appId", task.App.Id);
                     }
                     else
                     {
@@ -201,11 +229,11 @@ namespace CodeStrikeBot
 
                     if (emulator.Id == 0)
                     {
-                        command = new SqlCeCommand("INSERT INTO emulators (type, windowName, command, lastKnownAccountId) VALUES (@type, @windowName, @command, @accountId)", con);
+                        command = new SqlCeCommand("INSERT INTO emulators (type, windowName, command, lastKnownAccountId, appId) VALUES (@type, @windowName, @command, @accountId, @appId)", con);
                     }
                     else
                     {
-                        command = new SqlCeCommand("UPDATE emulators SET type = @type, windowName = @windowName, command = @command, lastKnownAccountId = @accountId WHERE id = @id", con);
+                        command = new SqlCeCommand("UPDATE emulators SET type = @type, windowName = @windowName, command = @command, lastKnownAccountId = @accountId, appId = @appId WHERE id = @id", con);
                         command.Parameters.AddWithValue("@id", emulator.Id);
                     }
 
@@ -213,6 +241,7 @@ namespace CodeStrikeBot
                     command.Parameters.AddWithValue("@windowName", emulator.WindowName);
                     command.Parameters.AddWithValue("@command", emulator.Command);
                     command.Parameters.AddWithValue("@accountId", emulator.LastKnownAccount == null ? 0 : emulator.LastKnownAccount.Id);
+                    command.Parameters.AddWithValue("@appId", emulator.App.Id); 
                     command.ExecuteNonQuery();
 
                     if (emulator.Id == 0)
@@ -345,35 +374,46 @@ namespace CodeStrikeBot
             {
                 if (typeof(T) == typeof(ScheduleTask))
                 {
-                    command = new SqlCeCommand("SELECT id, accountId, type, interval, amount, count, x, y, backupX, backupY, lastAction FROM schedules", con);
+                    command = new SqlCeCommand("SELECT id, accountId, type, interval, amount, count, x, y, backupX, backupY, lastAction, appId FROM schedules", con);
                     reader = command.ExecuteReader();
 
                     while (reader.Read())
                     {
-                        ScheduleTask task = new ScheduleTask(reader.GetInt32(0), new Account(reader.GetInt32(1)), (ScheduleType)reader.GetInt32(2), reader.GetInt32(3), reader.GetInt32(4), reader.GetInt32(5), reader.GetInt32(6), reader.GetInt32(7), reader.GetInt32(8), reader.GetInt32(9), reader.GetDateTime(10));
+                        ScheduleTask task = new ScheduleTask(reader.GetInt32(0), new Account(reader.GetInt32(1)), (ScheduleType)reader.GetInt32(2), reader.GetInt32(3), reader.GetInt32(4), reader.GetInt32(5), reader.GetInt32(6), reader.GetInt32(7), reader.GetInt32(8), reader.GetInt32(9), reader.GetDateTime(10), new App(reader.GetInt32(11)));
                         list.Add(task);
                     }
                 }
                 else if (typeof(T) == typeof(Account))
                 {
-                    command = new SqlCeCommand("SELECT id, name, username, email, password, priority, foodNegativeAmt, lastLogin, lastLogout FROM accounts", con);
+                    command = new SqlCeCommand("SELECT id, name, username, email, password, priority, foodNegativeAmt, lastLogin, lastLogout, appId FROM accounts", con);
                     reader = command.ExecuteReader();
 
                     while (reader.Read())
                     {
-                        Account account = new Account(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), (AccountPriority)reader.GetInt32(5), reader.GetInt32(6), reader.GetDateTime(7), reader.GetDateTime(8));
+                        Account account = new Account(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), (AccountPriority)reader.GetInt32(5), reader.GetInt32(6), reader.GetDateTime(7), reader.GetDateTime(8), new App(reader.GetInt32(9)));
                         list.Add(account);
                     }
                 }
                 else if (typeof(T) == typeof(EmulatorInstance))
                 {
-                    command = new SqlCeCommand("SELECT id, type, windowName, command, lastKnownAccountId FROM emulators", con);
+                    command = new SqlCeCommand("SELECT id, type, windowName, command, lastKnownAccountId, appId FROM emulators", con);
                     reader = command.ExecuteReader();
 
                     while (reader.Read())
                     {
-                        EmulatorInstance emulator = new EmulatorInstance(reader.GetInt32(0), (EmulatorType)reader.GetInt32(1), reader.GetString(2), reader.GetString(3), new Account(reader.GetInt32(4)));
+                        EmulatorInstance emulator = new EmulatorInstance(reader.GetInt32(0), (EmulatorType)reader.GetInt32(1), reader.GetString(2), reader.GetString(3), new Account(reader.GetInt32(4)), new App(reader.GetInt32(5)));
                         list.Add(emulator);
+                    }
+                }
+                else if (typeof(T) == typeof(App))
+                {
+                    command = new SqlCeCommand("SELECT id, name, shortName FROM apps", con);
+                    reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        App app = new App(reader.GetInt32(0), reader.GetString(1), reader.GetString(2));
+                        list.Add(app);
                     }
                 }
                 else if (typeof(T) == typeof(Settings))

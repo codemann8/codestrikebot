@@ -24,7 +24,7 @@ namespace CodeStrikeBot
             ClipboardFailed = false;
             PreventFromOpening = false;
             //TODO Slow mode
-            TimeoutFactor = 5.0;
+            TimeoutFactor = 1.0;
             TimeSinceChecksumChanged = DateTime.Now;
 
             Process[] procs = Process.GetProcessesByName(PROCESSNAME);
@@ -67,8 +67,8 @@ namespace CodeStrikeBot
             ClipboardFailed = false;
             PreventFromOpening = false;
             //TODO Slow mode
-            //TimeoutFactor = 1.0;
-            TimeoutFactor = 5;
+            TimeoutFactor = 1.0;
+            //TimeoutFactor = 5;
             TimeSinceChecksumChanged = DateTime.Now;
 
             WINDOW_TITLEBAR_H = 44;
@@ -82,7 +82,7 @@ namespace CodeStrikeBot
                 if (p.MainWindowTitle.StartsWith(windowName))
                 {
                     EmulatorProcess = p;
-                    Emulator = new EmulatorInstance(0, EmulatorType.Leapdroid, windowName, p.CommandLineArgs(EmulatorType.MEmu), new Account(0));
+                    Emulator = new EmulatorInstance(0, EmulatorType.Leapdroid, windowName, p.CommandLineArgs(EmulatorType.MEmu), new Account(0), new App(0));
                     break;
                 }
             }

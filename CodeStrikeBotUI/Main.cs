@@ -71,10 +71,35 @@ namespace CodeStrikeBot
 
             ctrl = new Controller();
 
+            cboEmulator1.BindingContext = new BindingContext();
+            cboEmulator1.DataSource = ctrl.apps;
+            cboEmulator1.DisplayMember = "ShortName";
+            cboEmulator1.ValueMember = null;
+            cboEmulator2.BindingContext = new BindingContext();
+            cboEmulator2.DataSource = ctrl.apps;
+            cboEmulator2.DisplayMember = "ShortName";
+            cboEmulator2.ValueMember = null;
+            cboEmulator3.BindingContext = new BindingContext();
+            cboEmulator3.DataSource = ctrl.apps;
+            cboEmulator3.DisplayMember = "ShortName";
+            cboEmulator3.ValueMember = null;
+            cboEmulator4.BindingContext = new BindingContext();
+            cboEmulator4.DataSource = ctrl.apps;
+            cboEmulator4.DisplayMember = "ShortName";
+            cboEmulator4.ValueMember = null;
+            cboAccountAppFilter.BindingContext = new BindingContext();
+            cboAccountAppFilter.DataSource = ctrl.apps;
+            cboAccountAppFilter.DisplayMember = "Name";
+            cboAccountAppFilter.ValueMember = null;
+
             txtEmulator1.Text = ctrl.Database.Settings.Emulator1.ToString();
             txtEmulator2.Text = ctrl.Database.Settings.Emulator2.ToString();
             txtEmulator3.Text = ctrl.Database.Settings.Emulator3.ToString();
             txtEmulator4.Text = ctrl.Database.Settings.Emulator4.ToString();
+            cboEmulator1.SelectedItem = ctrl.sc[0].Emulator.App;
+            cboEmulator2.SelectedItem = ctrl.sc[1].Emulator.App;
+            cboEmulator3.SelectedItem = ctrl.sc[2].Emulator.App;
+            cboEmulator4.SelectedItem = ctrl.sc[3].Emulator.App;
             txtSlackURL.Text = ctrl.Database.Settings.SlackURL;
             txtPushoverAPI.Text = ctrl.Database.Settings.PushoverAPIKey;
             txtPushoverUser.Text = ctrl.Database.Settings.PushoverUserKey;
@@ -170,8 +195,8 @@ namespace CodeStrikeBot
                 lstAccounts.SelectedIndex = 0;
             }
 
-            chkScheduler.Checked = true;
-            chkTasks.Checked = true;
+            //chkScheduler.Checked = true;
+            //chkTasks.Checked = true;
 
             bckScreenState.RunWorkerAsync();
 
@@ -184,14 +209,19 @@ namespace CodeStrikeBot
 
         private void ReloadAccountList()
         {
+            cboAccountAppFilter.SelectedItem = ctrl.ActiveScreen.Emulator.App;
             lstAccounts.Items.Clear();
             bsAccount.Clear();
+            
             foreach (Account a in ctrl.accounts)
             {
-                lstAccounts.Items.Add(a);
-                bsAccount.Add(a);
+                if (a.App.Id == ctrl.ActiveScreen.Emulator.App.Id)
+                {
+                    lstAccounts.Items.Add(a);
+                    bsAccount.Add(a);
+                }
             }
-            bsAccount.Add(new Account(0, "", "", "", "", AccountPriority.NoMonitor, 0, new DateTime(), new DateTime()));
+            bsAccount.Add(new Account(0, "", "", "", "", AccountPriority.NoMonitor, 0, new DateTime(), new DateTime(), ctrl.ActiveScreen.Emulator.App));
         }
 
         private void btnScreen_Click(object sender, EventArgs e)
@@ -221,22 +251,34 @@ namespace CodeStrikeBot
 
         private void rdoWindow1_CheckedChanged(object sender, EventArgs e)
         {
-            ctrl.ActiveWindow = 0;
+            ChangeActiveWindow(0);
         }
 
         private void rdoWindow2_CheckedChanged(object sender, EventArgs e)
         {
-            ctrl.ActiveWindow = 1;
+            ChangeActiveWindow(1);
         }
 
         private void rdoWindow3_CheckedChanged(object sender, EventArgs e)
         {
-            ctrl.ActiveWindow = 2;
+            ChangeActiveWindow(2);
         }
 
         private void rdoWindow4_CheckedChanged(object sender, EventArgs e)
         {
-            ctrl.ActiveWindow = 3;
+            ChangeActiveWindow(3);
+        }
+
+        private void ChangeActiveWindow(int idx)
+        {
+            App app = ctrl.ActiveScreen.Emulator.App;
+
+            ctrl.ActiveWindow = idx;
+
+            if (app != ctrl.ActiveScreen.Emulator.App)
+            {
+                ReloadAccountList();
+            }
         }
 
         private void tmrTimeout_Tick(object sender, EventArgs e)
@@ -566,7 +608,7 @@ namespace CodeStrikeBot
             while (!bckScheduler.CancellationPending)
             {
                 ScheduleTask task = ctrl.GetNextTask();
-
+                
                 int timeout = 5;
 
                 if (task != null)
@@ -789,6 +831,19 @@ namespace CodeStrikeBot
 
                 //EpicWar Address
                 foreach (System.Net.IPAddress address in System.Net.Dns.GetHostAddresses("live-api-wiso.epicwar-online.com"))
+                {
+                    if (filter == "")
+                    {
+                        filter = "host " + address.ToString();
+                    }
+                    else
+                    {
+                        filter += " or host " + address.ToString();
+                    }
+                }
+
+                //DIFF EpicAction Address
+                foreach (System.Net.IPAddress address in System.Net.Dns.GetHostAddresses("api-niso.epicaction-online.com"))
                 {
                     if (filter == "")
                     {
@@ -1483,7 +1538,9 @@ namespace CodeStrikeBot
                 }
             }
 
-            bsScheduleTask.Add(new ScheduleTask(0, (Account)lstAccounts.SelectedItem, 0, 0, 0, 0, 0, 0, 0, 0, new DateTime()));
+            Account account = (Account)lstAccounts.SelectedItem;
+
+            bsScheduleTask.Add(new ScheduleTask(0, account, 0, 0, 0, 0, 0, 0, 0, 0, new DateTime(), account.App));
         }
 
         private void bckKeepAlive_DoWork(object sender, DoWorkEventArgs e)
@@ -1772,7 +1829,8 @@ namespace CodeStrikeBot
                                     else if (s.ScreenState.CurrentArea == Area.Others.Quit)
                                     {
                                         //s.ClickBack(800); //click Back
-                                        Controller.SendClick(s, 145, 480, 3000);
+                                        //Controller.SendClick(s, 145, 480, 3000); //DIFF
+                                        Controller.SendClick(s, 254, 393, 3000); //DIFF ff
                                     }
                                     else if (s.ScreenState.CurrentArea == Area.Emulators.Crash)
                                     {
@@ -1845,6 +1903,8 @@ namespace CodeStrikeBot
             if (account.Name != "" && account.UserName != "" && account.Email != "" && account.Password != "")
             {
                 bool reloadAccountList = account.Id == 0;
+
+                account.App = ctrl.ActiveScreen.Emulator.App;
 
                 account = account.Save();
 
@@ -1996,8 +2056,16 @@ namespace CodeStrikeBot
             ctrl.Database.Settings.SlackURL = txtSlackURL.Text;
             ctrl.Database.Settings.PushoverAPIKey = txtPushoverAPI.Text;
             ctrl.Database.Settings.PushoverUserKey = txtPushoverUser.Text;
-
             ctrl.Database.Settings.Save();
+
+            ctrl.sc[0].Emulator.App = (App)cboEmulator1.SelectedItem;
+            ctrl.sc[0].Emulator.Save();
+            ctrl.sc[1].Emulator.App = (App)cboEmulator2.SelectedItem;
+            ctrl.sc[1].Emulator.Save();
+            ctrl.sc[2].Emulator.App = (App)cboEmulator3.SelectedItem;
+            ctrl.sc[2].Emulator.Save();
+            ctrl.sc[3].Emulator.App = (App)cboEmulator4.SelectedItem;
+            ctrl.sc[3].Emulator.Save();
         }
 
         private void tabControlMain_Selected(object sender, TabControlEventArgs e)

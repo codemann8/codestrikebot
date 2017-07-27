@@ -33,7 +33,9 @@ namespace CodeStrikeBot
         [Column(Name = "lastAction")]
         public DateTime LastAction { get; set; }
 
-        public ScheduleTask(int id, Account account, ScheduleType type, int interval, int amount, int count, int x, int y, int backupX, int backupY, DateTime lastAction)
+        public App App { get; set; }
+
+        public ScheduleTask(int id, Account account, ScheduleType type, int interval, int amount, int count, int x, int y, int backupX, int backupY, DateTime lastAction, App app)
         {
             Id = id;
             Account = account;
@@ -46,6 +48,7 @@ namespace CodeStrikeBot
             BackupX = backupX;
             BackupY = backupY;
             LastAction = lastAction;
+            App = app;
         }
 
         public DateTime NextAction
@@ -58,7 +61,7 @@ namespace CodeStrikeBot
             return (ScheduleTask)BotDatabase.SaveObject(this);
         }
 
-        public static List<ScheduleTask> GetTasks(List<Account> accounts)
+        public static List<ScheduleTask> GetTasks(List<Account> accounts, List<App> apps)
         {
             List<DataObject> objects = BotDatabase.GetObjects<ScheduleTask>();
             List<ScheduleTask> tasks = new List<ScheduleTask>();
@@ -76,6 +79,15 @@ namespace CodeStrikeBot
                             task.Account = a;
                         }
                     }
+
+                    foreach (App a in apps)
+                    {
+                        if (a.Id == task.App.Id)
+                        {
+                            task.App = a;
+                        }
+                    }
+
                     tasks.Add(task);
                 }
             }

@@ -2580,11 +2580,13 @@ namespace CodeStrikeBot
                 {
                     tasksLeft = true;
 
-                    ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 290, 550, 10);
-                    //if (chksum == 0xbd52) //help
-                    if (chksum == 0xe94d) //nox help
+                    ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 290, 560, 10);
+                    
+                    //if (chksum == 0xe94d) //nox help //MS DIFF
+                    if (chksum == 0xa960) //ff DIFF
                     {
-                        Controller.SendClick(this, 365, 565, 50); //click Help All
+                        //Controller.SendClick(this, 365, 565, 50); //click Help All DIFF MS
+                        Controller.SendClick(this, 365, 568, 50); //click Help All DIFF ff
                     }
                     else
                     {
@@ -2799,7 +2801,19 @@ namespace CodeStrikeBot
 
         public void GetScreenState()
         {
-            ScreenState state = new ScreenStateMS();
+            ScreenState state;
+
+            switch (Emulator.App.ShortName)
+            {
+                case "MS":
+                    state = new ScreenStateMS();
+                    break;
+                case "FFXV":
+                    state = new ScreenStateFFXV();
+                    break;
+                default:
+                    return;
+            }
 
             state.CurrentArea = Area.Unknown;
 

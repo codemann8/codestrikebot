@@ -75,6 +75,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataObjects\App.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DataObjects\EmulatorInstance.cs" />
     <Compile Include="DataObjects\Account.cs" />
     <Compile Include="DataObjects\BotDatabase.cs" />

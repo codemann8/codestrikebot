@@ -17,14 +17,19 @@ namespace CodeStrikeBot
         public string Command { get; set; }
         [Column(Name = "lastKnownAccount")]
         public Account LastKnownAccount { get; set; }
+        //[Column(Name = "appId")]
+        //public int AppId { get; set; }
 
-        public EmulatorInstance(int id, EmulatorType type, string windowName, string command, Account lastKnownAccount)
+        public App App { get; set; }
+
+        public EmulatorInstance(int id, EmulatorType type, string windowName, string command, Account lastKnownAccount, App app)
         {
             this.Id = id;
             this.Type = type;
             this.WindowName = windowName;
             this.Command = command;
             this.LastKnownAccount = lastKnownAccount;
+            this.App = app;
         }
 
         public EmulatorInstance(int id)
@@ -42,7 +47,7 @@ namespace CodeStrikeBot
             return (EmulatorInstance)BotDatabase.SaveObject(this);
         }
 
-        public static List<EmulatorInstance> GetEmulators(List<Account> accounts)
+        public static List<EmulatorInstance> GetEmulators(List<Account> accounts, List<App> apps)
         {
             List<DataObject> objects = BotDatabase.GetObjects<EmulatorInstance>();
             List<EmulatorInstance> emulators = new List<EmulatorInstance>();
@@ -58,6 +63,15 @@ namespace CodeStrikeBot
                         emulator.LastKnownAccount = a;
                     }
                 }
+
+                foreach (App a in apps)
+                {
+                    if (a.Id == emulator.App.Id)
+                    {
+                        emulator.App = a;
+                    }
+                }
+
                 emulators.Add(emulator);
             }
 

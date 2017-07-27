@@ -68,7 +68,7 @@ namespace CodeStrikeBot
                 if (p.MainWindowTitle.StartsWith(windowName))
                 {
                     EmulatorProcess = p;
-                    Emulator = new EmulatorInstance(0, EmulatorType.Nox, windowName, p.CommandLineArgs(EmulatorType.Nox), new Account(0));
+                    Emulator = new EmulatorInstance(0, EmulatorType.Nox, windowName, p.CommandLineArgs(EmulatorType.Nox), new Account(0), new App(0));
                     break;
                 }
             }

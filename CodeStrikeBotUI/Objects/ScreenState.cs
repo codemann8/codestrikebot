@@ -213,21 +213,6 @@ namespace CodeStrikeBot
 
                     this.GetGameArea(bmp);
 
-                    try
-                    {
-                        if (CurrentArea == Area.Unknown)
-                        {
-                            ushort chksum = ScreenState.GetScreenChecksum(bmp, 160, 12, 20);
-                            bmp.Bitmap.Save(String.Format("{0}\\unknown{1}.bmp", Controller.Instance.GetFullScreenshotDir(), chksum.ToString("X4")), System.Drawing.Imaging.ImageFormat.Bmp);
-
-                            if (CurrentArea == Area.Menu)
-                            {
-                                bmp.Bitmap.Save(String.Format("{0}\\-save.bmp", Controller.Instance.GetFullScreenshotDir()), System.Drawing.Imaging.ImageFormat.Bmp);
-                            }
-                        }
-                    }
-                    catch (System.Runtime.InteropServices.ExternalException ex) { }
-
                     this.GetGameOverlays(bmp);
                 }
             }
