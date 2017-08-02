@@ -1735,6 +1735,13 @@ namespace CodeStrikeBot
                             Controller.SendClick(null, 965, 555, 10000);
                             Program.RestartApp();
                         }
+
+                        //check Teamviewer session ended
+                        chksum = bmpScreenCapture.Checksum(768, 505, 20, 20);
+                        if (chksum == 0x9b7f)
+                        {
+                            Controller.SendClick(null, 1176, 600, 200);
+                        }
                     }
 
                     foreach (Screen s in ctrl.sc)

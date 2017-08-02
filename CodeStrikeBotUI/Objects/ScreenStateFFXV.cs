@@ -628,16 +628,16 @@ namespace CodeStrikeBot
                 Overlays.Add(Overlay.Widgets.MissionsAvailable);
             }
 
-            chksum = ScreenState.GetScreenChecksum(bmp, 352, 457, 8);
-            //switch (chksum)
-            //{
+            chksum = ScreenState.GetScreenChecksum(bmp, 360, 494, 8);//DIFF ff
+            switch (chksum)
+            {
             //    case 0x7d6a:
             //        Overlays.Add(Overlay.Incomings.Rally);
             //        s.SuperBitmap.Bitmap.Save(Controller.Instance.GetFullScreenshotDir() + "rally.bmp", System.Drawing.Imaging.ImageFormat.Bmp);
             //        break;
-            //    case 0x6de0:
-            //        Overlays.Add(Overlay.Incomings.Attack);
-            //        break;
+                case 0x3d9f:
+                    Overlays.Add(Overlay.Incomings.Attack);
+                    break;
             //    case 0x1475:
             //        Overlays.Add(Overlay.Incomings.Scout);
             //        break;
@@ -647,7 +647,7 @@ namespace CodeStrikeBot
             //    case 0xe405:
             //        Overlays.Add(Overlay.Incomings.Reinforcement);
             //        break;
-            //}
+            }
         }
     }
 }
