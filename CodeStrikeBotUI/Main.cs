@@ -1843,12 +1843,37 @@ namespace CodeStrikeBot
                                             ctrl.Login(s.Emulator.LastKnownAccount);
                                         }
                                     }
+                                    else if (s.ScreenState.CurrentArea == Area.MainBases.BlueCrateCollect)
+                                    {
+                                        Controller.SendClick(s, 190, 420, 2000);
+                                    }
+                                    else if (s.ScreenState.CurrentArea == Area.Unknown)
+                                    {
+                                        System.Threading.Thread.Sleep(10000);
+                                        Controller.CaptureApplication(s);
+
+                                        if (s.ScreenState.CurrentArea == Area.Unknown)
+                                        {
+                                            s.ClickBack();
+                                        }
+                                    }
 
                                     if (s.ScreenState.Overlays.Contains(Overlay.Widgets.AllianceHelp))
                                     {
                                         ctrl.BeginTask();
                                         s.RegularTasksStep();
                                         ctrl.EndTask();
+                                    }
+
+                                    if (s.ScreenState.Overlays.Contains(Overlay.Widgets.BlueCrate))
+                                    {
+                                        System.Threading.Thread.Sleep(5000);
+                                        Controller.CaptureApplication(s);
+
+                                        if (s.ScreenState.Overlays.Contains(Overlay.Widgets.BlueCrate))
+                                        {
+                                            Controller.SendClick(s, 90, 575, 1000);
+                                        }
                                     }
 
                                     if ((s.ScreenState.Overlays.Contains(Overlay.Incomings.Attack) || s.ScreenState.Overlays.Contains(Overlay.Incomings.Rally)))

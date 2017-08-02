@@ -750,23 +750,25 @@ namespace CodeStrikeBot
                 {
                     Controller.CaptureApplication(this);
 
-                    uint chksum = ScreenState.GetScreenChecksum(SuperBitmap, 88, 247, 20);
-                    if (chksum != 0x58bb) //nox, if email has been previously entered
+                    ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 88, 216, 20);//DIFF ff
+                    if (chksum != 0x5921) //nox, if email has been previously entered
                     {
                         while (!KillApp()) { }
                         {
                             //Controller.Instance.RestartEmulator(this);
                         }
+                        Thread.Sleep(500);
                         this.StartApp();
                     }
 
-                    chksum = ScreenState.GetScreenChecksum(SuperBitmap, 88, 297, 20);
-                    if (chksum != 0x58f5) //nox, if password has been previously entered
+                    chksum = ScreenState.GetScreenChecksum(SuperBitmap, 88, 263, 20);//DIFF ff
+                    if (chksum != 0x5921) //nox, if password has been previously entered
                     {
                         while (!KillApp()) { }
                         {
                             //Controller.Instance.RestartEmulator(this);
                         }
+                        Thread.Sleep(500);
                         this.StartApp();
                     }
 
@@ -775,30 +777,30 @@ namespace CodeStrikeBot
                     //enter email
                     do
                     {
-                        Controller.SendClick(this, 300, 240, (int)(300 * (tries / 2.0 + 1)));
+                        Controller.SendClick(this, 300, 226, (int)(300 * (tries / 2.0 + 1)));//DIFF ff
                         Controller.SendKey(this, account.Email);
                         Thread.Sleep((int)((500 * (tries / 2.0 + 1)) * TimeoutFactor));
                         Controller.CaptureApplication(this);
-                        chksum = ScreenState.GetScreenChecksum(SuperBitmap, 89, 225, 20);
+                        chksum = ScreenState.GetScreenChecksum(SuperBitmap, 82, 216, 20);//DIFF ff
                     }
-                    while ((chksum == 0xa5df || chksum == 0x80c1) && tmrRun.ElapsedMilliseconds < 5000);
-
+                    while ((chksum == 0xe182 || chksum == 0x55ac) && tmrRun.ElapsedMilliseconds < 50000);//DIFF ff
+                    
                     tmrRun.Restart();
 
                     //enter password
                     do
                     {
-                        Controller.SendClick(this, 300, 285, (int)(600 * (tries / 2.0 + 1)));
+                        Controller.SendClick(this, 300, 273, (int)(600 * (tries / 2.0 + 1)));//DIFF ff
                         Controller.SendKey(this, account.Password);
                         Thread.Sleep((int)((500 * (tries / 2.0 + 1)) * TimeoutFactor));
                         Controller.CaptureApplication(this);
-                        chksum = ScreenState.GetScreenChecksum(SuperBitmap, 89, 275, 20);
+                        chksum = ScreenState.GetScreenChecksum(SuperBitmap, 82, 263, 20);//DIFF ff
                     }
-                    while ((chksum == 0x174f || chksum == 0x5a20) && tmrRun.ElapsedMilliseconds < 5000);
+                    while ((chksum == 0xe182 || chksum == 0x55ac) && tmrRun.ElapsedMilliseconds < 50000);//DIFF ff
 
                     Controller.CaptureApplication(this);
-                    Color c = SuperBitmap.GetPixel(110, 325), c2;
-                    if (c.Equals(82, 81, 82) || c.Equals(33, 32, 33))
+                    chksum = ScreenState.GetScreenChecksum(SuperBitmap, 188, 304, 20);
+                    if (chksum == 0x673b) //DIFF ff login gray
                     {
                         //backspace fields
                         /*this.SendClick(310, 260, 250);
@@ -819,9 +821,9 @@ namespace CodeStrikeBot
                         {
                             Controller.SendClick(this, 100, 325, 100); //click Login
                             Controller.CaptureApplication(this);
-                            c = SuperBitmap.GetPixel(100, 325);
+                            chksum = ScreenState.GetScreenChecksum(SuperBitmap, 188, 304, 20);
                         }
-                        while (c.Equals(57, 121, 140));
+                        while (chksum == 0x9dc3);
 
                         Thread.Sleep(300);
                         Controller.CaptureApplication(this);
@@ -835,14 +837,15 @@ namespace CodeStrikeBot
                             //success = true;
 
                             chksum = ScreenState.GetScreenChecksum(SuperBitmap, 190, 116, 20);
+                            SuperBitmap.Bitmap.Save(String.Format("{0}\\login.bmp", Controller.Instance.GetFullScreenshotDir()), ImageFormat.Bmp);
 
                             switch (chksum)
                             {
-                                case 0x1dd6: //loading/wait
+                                case 0x16d1: //loading/wait
                                     success = true;
                                     break;
-                                case 0x0172: //login failed
-                                case 0xc995: //notice (server under maintenence)
+                                case 0xbebc: //login failed
+                                //case 0xc995: //notice (server under maintenence)
                                     //this.SendClick(120, 110, 300);
 
                                     //backspace fields
@@ -861,7 +864,7 @@ namespace CodeStrikeBot
 
                                     success = false;
                                     break;
-                                case 0x5e3e: //device not registered
+                                /*case 0x5e3e: //device not registered
                                     //Controller.SendClick(this, 100, 275, 300); //click Retry
 
                                     if (!KillApp())
@@ -870,15 +873,18 @@ namespace CodeStrikeBot
                                     }
                                     this.StartApp();
 
-                                    return false;
+                                    return false;*/
+                                default:
+                                    break;
                             }
                            
                             System.Windows.Forms.Application.DoEvents();
 
                             //TODO Slow mode
-                            TimeoutFactor = 5.0;
+                            //TimeoutFactor = 5.0;
+                            TimeoutFactor = 1.0;
 
-                            Thread.Sleep((int)(200));
+                            Thread.Sleep((int)(500));
                             Controller.CaptureApplication(this);
                         }
 
@@ -2543,7 +2549,8 @@ namespace CodeStrikeBot
                     if (ScreenState.Overlays.Contains(Overlay.Widgets.AmmoFreeAttack))
                     {
                         tasksLeft = true;
-                        Controller.SendClick(this, 210, 558, 1200); //click Free Attack
+                        //Controller.SendClick(this, 210, 558, 1200); //click Free Attack
+                        Controller.SendClick(this, 275, 600, 1200); //click Free Attack DIFF ff
                     }
                     /*else if (state.Overlays.Contains(Overlay.Widgets.SilverCrate))
                     {

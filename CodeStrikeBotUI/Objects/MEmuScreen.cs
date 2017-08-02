@@ -143,7 +143,7 @@ namespace CodeStrikeBot
 
                 while (ScreenState.CurrentArea == Area.Emulators.Android && tmrRun.ElapsedMilliseconds < 8000)
                 {
-                    Controller.SendClick(this, 50, 200, 2000); //click app
+                    Controller.SendClick(this, 127, 115, 2000); //click app //DIFF ff
 
                     Controller.CaptureApplication(this);
                 }

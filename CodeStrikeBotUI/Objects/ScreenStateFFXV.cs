@@ -15,8 +15,10 @@ namespace CodeStrikeBot
 
         protected override void GetGameArea(SuperBitmap bmp)
         {
+            //Y-axis 485-551 notification area
             //menu area
             ushort chksum = ScreenState.GetScreenChecksum(bmp, 160, 16, 14);//DIFF
+            ushort chksum2;
             Color c, c2, c3;
 
             switch (chksum)
@@ -192,6 +194,9 @@ namespace CodeStrikeBot
                 case 0x6db5:	
                     CurrentArea = Area.Menus.VIPSubscriptions;
                     break;
+                case 0xd0b4: //attack of the flan
+                    CurrentArea = Area.Menus.ShootingRanges.Main;
+                    break;
                 /*case 0x6eae:
                 case 0x8993: //nox
                 case 0xa5f9: //nox new
@@ -271,9 +276,11 @@ namespace CodeStrikeBot
                     break;
                 case 0x2ce8:
                 case 0x2689: //loading
+                case 0x033d: //modal (login failed)
                     CurrentArea = Area.Others.Login;
                     break;
                 case 0x5272:
+                case 0x1a37: //upgrade building TODO move to new enum
                     CurrentArea = Area.Menus.BuildingList;
                     break;
                 case 0x1224:
@@ -300,7 +307,15 @@ namespace CodeStrikeBot
                     break;
                 case 0x0f62: //barracks
                 case 0xe46e: //training grounds
-                    CurrentArea = Area.Menus.Buildings.TrainingGrounds;
+                    chksum2 = ScreenState.GetScreenChecksum(bmp, 180, 240, 14);
+                    if (chksum2 == 0x4d6a)
+                    {
+                        CurrentArea = Area.Menus.ShootingRanges.Lobby;
+                    }
+                    else
+                    {
+                        CurrentArea = Area.Menus.Buildings.TrainingGrounds;
+                    }
                     break;
                 case 0x5af3:
                     CurrentArea = Area.Menus.Buildings.Bank;
@@ -342,13 +357,12 @@ namespace CodeStrikeBot
                 case 0x34cf:
                     CurrentArea = Area.Menus.Buildings.Vault;
                     break;
-                /*case 0x9be4: //memu alliance chat
-                case 0x9d42: //memu state/alliance transition
-                case 0x658b: //memu state chat
-                case 0x1cbd: //memu custom chat
-                case 0x0169: //memu contact list
+                case 0x1a80: //alliance chat
+                //case 0x1380: //state/alliance transition
+                case 0xe554: //state/custom chat
+                case 0xfff8: //contact list
                     CurrentArea = Area.Others.Chat;
-                    break;*/
+                    break;
                 case 0x0ed3: //get gold
                     CurrentArea = Area.Others.Ad;
                     break;
@@ -359,7 +373,7 @@ namespace CodeStrikeBot
                     CurrentArea = Area.StateMaps.Main;
                     break;
                 default:
-                    ushort chksum2 = ScreenState.GetScreenChecksum(bmp, 72, 302, 20); //DIFF
+                    chksum2 = ScreenState.GetScreenChecksum(bmp, 72, 302, 20); //DIFF
 
                     switch (chksum2)
                     {
@@ -524,6 +538,12 @@ namespace CodeStrikeBot
                     Overlays.Add(Overlay.Widgets.SilverCrate);
                 }
 
+                //DIFF ff
+                if (!ScreenState.BlackBoxExists(bmp, new Rectangle(64, 588, 51, 18), Color.FromArgb(74, 77, 74)))
+                {
+                    Overlays.Add(Overlay.Widgets.BlueCrate);
+                }
+
                 chksum = ScreenState.GetScreenChecksum(bmp, 275, 532, 10);
                 c = bmp.GetPixel(275, 535);
                 if (chksum != 0x41fa && !ScreenState.BlackBoxExists(bmp, new Rectangle(253, 562, 63, 18), Color.FromArgb(74, 77, 74)))
@@ -580,7 +600,8 @@ namespace CodeStrikeBot
                     Overlays.Add(Overlay.Widgets.RewardsCrate);
                 }
                 //Rectangle(253, 490, 63, 17)
-                if (ScreenState.BlackBoxExists(bmp, new Rectangle(178, 563, 63, 17), Color.FromArgb(74, 77, 74)))
+                //if (ScreenState.BlackBoxExists(bmp, new Rectangle(178, 563, 63, 17), Color.FromArgb(74, 77, 74)))
+                if (ScreenState.BlackBoxExists(bmp, new Rectangle(249, 590, 51, 16), Color.FromArgb(74, 77, 74))) //DIFF ff
                 {
                     Overlays.Add(Overlay.Widgets.AmmoFreeAttack);
                 }
