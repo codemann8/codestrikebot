@@ -2550,7 +2550,7 @@ namespace CodeStrikeBot
                     {
                         tasksLeft = true;
                         //Controller.SendClick(this, 210, 558, 1200); //click Free Attack
-                        Controller.SendClick(this, 275, 600, 1200); //click Free Attack DIFF ff
+                        Controller.SendClick(this, 275, 600, 2000); //click Free Attack DIFF ff
                     }
                     /*else if (state.Overlays.Contains(Overlay.Widgets.SilverCrate))
                     {
@@ -2680,7 +2680,22 @@ namespace CodeStrikeBot
                 {
                     tasksLeft = true;
 
-                    ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 185, 225, 10);
+                    //ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 185, 225, 10);
+                    ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 188, 388, 20); //DIFF ff
+                    if (chksum == 0xe2f2) //if Collect Button (doesn't account for animated button)
+                    {
+                        //Random r = new Random();
+                        //Controller.SendClick(this, 188, 415 + r.Next(0, 20), 1000); //click Collect
+                        Controller.SendClick(this, 188, 388, 1000); //click Collect
+                        Controller.SendClick(this, 40, 680, 300); //Click Base
+                    }
+                    else
+                    {
+                        int r = new Random().Next(0, 2);
+                        Controller.SendClick(this, 75 + 120 * r, 285, 1500); //click Crate
+                    }
+
+                    /* DIFF MS
                     //if (chksum == 0x24a6)//pick a crate
                     if (chksum == 0x66b5 || chksum == 0xb40e || chksum == 0x0aad) //nox and nox new
                     {
@@ -2692,7 +2707,7 @@ namespace CodeStrikeBot
                         Random r = new Random();
                         Controller.SendClick(this, 200, 415 + r.Next(0, 20), 1000); //click Collect
                         Controller.SendClick(this, 40, 680, 300); //Click Base
-                    }
+                    }*/
                 }
                 else if (ScreenState.CurrentArea == Area.Menus.ShootingRanges.Crates)
                 {

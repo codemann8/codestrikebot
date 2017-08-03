@@ -386,25 +386,52 @@ namespace CodeStrikeBot
                             catch (System.Runtime.InteropServices.ExternalException e) { }*/
                             break;
                         default:
-                            c = bmp.GetPixel(112, 17);
-                            c2 = bmp.GetPixel(285, 28);
-                            if (c.Equals(41, 113, 156))
+                            chksum2 = ScreenState.GetScreenChecksum(bmp, 60, 120, 20);
+                            if (chksum2 == 0x994e)
                             {
-                                //world map
-                                c = bmp.GetPixel(372, 12);
-
-                                if (c.R > 30 && c.G > 30 && c.B > 35)
-                                {
-                                    CurrentArea = Area.StateMaps.FullScreen;
-                                }
+                                CurrentArea = Area.Menus.ShootingRanges.NormalCrate;
                             }
-                            else if (c.Equals(16, 44, 57))
+                            else
                             {
-                                //world map modal		
-                                chksum = ScreenState.GetScreenChecksum(bmp, 180, 190, 10);
-                                if (chksum == 0x4c29)
+                                c = bmp.GetPixel(112, 17);
+                                c2 = bmp.GetPixel(285, 28);
+                                if (c.Equals(41, 113, 156))
                                 {
-                                    CurrentArea = Area.Others.Quit;
+                                    //world map
+                                    c = bmp.GetPixel(372, 12);
+
+                                    if (c.R > 30 && c.G > 30 && c.B > 35)
+                                    {
+                                        CurrentArea = Area.StateMaps.FullScreen;
+                                    }
+                                }
+                                else if (c.Equals(16, 44, 57))
+                                {
+                                    //world map modal		
+                                    chksum = ScreenState.GetScreenChecksum(bmp, 180, 190, 10);
+                                    if (chksum == 0x4c29)
+                                    {
+                                        CurrentArea = Area.Others.Quit;
+                                    }
+                                    else
+                                    {
+                                        c = bmp.GetPixel(178, 183);
+
+                                        if (c.Equals(239, 239, 239) || c.Equals(247, 255, 255))
+                                        {
+                                            //world map coordinate		
+                                            c = bmp.GetPixel(269, 265);
+
+                                            if (c.R > 5 && c.G > 40 && c.B > 50)
+                                            {
+                                                CurrentArea = Area.StateMaps.Coordinate;
+                                            }
+                                            else
+                                            {
+                                                CurrentArea = Area.StateMaps.CoordinateError;
+                                            }
+                                        }
+                                    }
                                 }
                                 else
                                 {
@@ -412,7 +439,7 @@ namespace CodeStrikeBot
 
                                     if (c.Equals(239, 239, 239) || c.Equals(247, 255, 255))
                                     {
-                                        //world map coordinate		
+                                        //world map coordinate
                                         c = bmp.GetPixel(269, 265);
 
                                         if (c.R > 5 && c.G > 40 && c.B > 50)
@@ -424,55 +451,36 @@ namespace CodeStrikeBot
                                             CurrentArea = Area.StateMaps.CoordinateError;
                                         }
                                     }
-                                }
-                            }
-                            else
-                            {
-                                c = bmp.GetPixel(178, 183);
-
-                                if (c.Equals(239, 239, 239) || c.Equals(247, 255, 255))
-                                {
-                                    //world map coordinate
-                                    c = bmp.GetPixel(269, 265);
-
-                                    if (c.R > 5 && c.G > 40 && c.B > 50)
-                                    {
-                                        CurrentArea = Area.StateMaps.Coordinate;
-                                    }
                                     else
                                     {
-                                        CurrentArea = Area.StateMaps.CoordinateError;
-                                    }
-                                }
-                                else
-                                {
-                                    c = bmp.GetPixel(20, 20);
+                                        c = bmp.GetPixel(20, 20);
 
-                                    if (!c.Equals(140, 211, 239))
-                                    {
-                                        c = bmp.GetPixel(50, 350);
-                                        c2 = bmp.GetPixel(325, 550);
-                                        c3 = bmp.GetPixel(200, 500);
-                                        if (!c.Equals(0, 0, 0) || !c2.Equals(0, 0, 0))
+                                        if (!c.Equals(140, 211, 239))
                                         {
-                                            c = bmp.GetPixel(378, 20);
-                                            c2 = bmp.GetPixel(135, 665);
-                                            c3 = bmp.GetPixel(135, 535);
-                                            if ((c.Equals(239, 239, 239) && (c2.Equals(222, 130, 0) || c2.Equals(33, 158, 90)))
-                                                || (c.Equals(247, 247, 247) && c3.Equals(222, 130, 0))
-                                                || c.Equals(239, 235, 231)) //&& c3.Equals(222, 130, 0)))
+                                            c = bmp.GetPixel(50, 350);
+                                            c2 = bmp.GetPixel(325, 550);
+                                            c3 = bmp.GetPixel(200, 500);
+                                            if (!c.Equals(0, 0, 0) || !c2.Equals(0, 0, 0))
                                             {
-                                                CurrentArea = Area.Others.Ad;
-                                            }
-                                            else
-                                            {
-                                                c = c;
+                                                c = bmp.GetPixel(378, 20);
+                                                c2 = bmp.GetPixel(135, 665);
+                                                c3 = bmp.GetPixel(135, 535);
+                                                if ((c.Equals(239, 239, 239) && (c2.Equals(222, 130, 0) || c2.Equals(33, 158, 90)))
+                                                    || (c.Equals(247, 247, 247) && c3.Equals(222, 130, 0))
+                                                    || c.Equals(239, 235, 231)) //&& c3.Equals(222, 130, 0)))
+                                                {
+                                                    CurrentArea = Area.Others.Ad;
+                                                }
+                                                else
+                                                {
+                                                    c = c;
+                                                }
                                             }
                                         }
-                                    }
-                                    else
-                                    {
-                                        c = c;
+                                        else
+                                        {
+                                            c = c;
+                                        }
                                     }
                                 }
                             }
