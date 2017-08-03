@@ -147,16 +147,16 @@
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
     <Compile Include="Objects\Controller.cs" />
-    <Compile Include="Objects\MEmuScreen.cs" />
-    <Compile Include="Objects\LeapdroidScreen.cs" />
-    <Compile Include="Objects\NoxScreen.cs" />
-    <Compile Include="Objects\Droid4XScreen.cs" />
-    <Compile Include="Objects\ScreenStateFFXV.cs" />
-    <Compile Include="Objects\ScreenStateMS.cs" />
+    <Compile Include="Objects\Emulators\MEmuEmulator.cs" />
+    <Compile Include="Objects\Emulators\LeapdroidEmulator.cs" />
+    <Compile Include="Objects\Emulators\NoxEmulator.cs" />
+    <Compile Include="Objects\Emulators\Droid4XEmulator.cs" />
+    <Compile Include="Objects\Apps\AppFinalFantasyXV.cs" />
+    <Compile Include="Objects\Apps\AppMobileStrike.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Objects\Screen.cs" />
-    <Compile Include="Objects\ScreenState.cs" />
+    <Compile Include="Objects\Emulators\Emulator.cs" />
+    <Compile Include="Objects\Apps\App.cs" />
     <Compile Include="Utilities\Extensions.cs" />
     <Compile Include="Utilities\ListBoxDialog.cs" />
     <Compile Include="Utilities\ReplaceThisPrompt.cs" />
