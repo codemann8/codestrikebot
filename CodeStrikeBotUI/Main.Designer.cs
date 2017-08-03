@@ -1126,7 +1126,7 @@ namespace CodeStrikeBot
             // 
             // bsAccount
             // 
-            this.bsAccount.DataSource = typeof(CodeStrikeBot.Account);
+            this.bsAccount.DataSource = typeof(CodeStrikeBot.DataObjects.Account);
             // 
             // tabScreens
             // 
@@ -1277,7 +1277,7 @@ namespace CodeStrikeBot
             // 
             // bsScheduleTask
             // 
-            this.bsScheduleTask.DataSource = typeof(CodeStrikeBot.ScheduleTask);
+            this.bsScheduleTask.DataSource = typeof(CodeStrikeBot.DataObjects.ScheduleTask);
             // 
             // groupBox5
             // 

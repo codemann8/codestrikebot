@@ -14,7 +14,8 @@ namespace CodeStrikeBot
     {
         public static new string PROCESSNAME = "LeapdroidVM";
 
-        public LeapdroidScreen(EmulatorInstance emulator) : base(emulator)
+        public LeapdroidScreen(DataObjects.EmulatorInstance emulator)
+            : base(emulator)
         {
             WINDOW_TITLEBAR_H = 30;
             WINDOW_MARGIN_L = 8;
@@ -79,7 +80,7 @@ namespace CodeStrikeBot
                 if (p.MainWindowTitle.StartsWith(windowName))
                 {
                     EmulatorProcess = p;
-                    Emulator = new EmulatorInstance(0, EmulatorType.Leapdroid, windowName, p.CommandLineArgs(EmulatorType.Leapdroid), new Account(0), new App(0));
+                    Emulator = new DataObjects.EmulatorInstance(0, EmulatorType.Leapdroid, windowName, p.CommandLineArgs(EmulatorType.Leapdroid), new DataObjects.Account(0), new DataObjects.App(0));
                     break;
                 }
             }

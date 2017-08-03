@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Data.Linq.Mapping;
 
-namespace CodeStrikeBot
+namespace CodeStrikeBot.DataObjects
 {
     [Table(Name = "settings")]
     public class Settings : DataObject

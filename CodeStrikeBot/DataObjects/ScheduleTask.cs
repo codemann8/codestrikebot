@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.Linq.Mapping;
 
-namespace CodeStrikeBot
+namespace CodeStrikeBot.DataObjects
 {
     [Table(Name = "schedules")]
     public class ScheduleTask : DataObject, IComparable<ScheduleTask>
@@ -102,7 +102,10 @@ namespace CodeStrikeBot
             return DateTime.Compare(this.NextAction, task.NextAction);
         }
     }
+}
 
+namespace CodeStrikeBot
+{
     public enum ScheduleType : int
     {
         StoneTransfer = 0,

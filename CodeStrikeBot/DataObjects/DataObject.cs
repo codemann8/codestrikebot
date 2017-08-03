@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data.Linq.Mapping;
 
-namespace CodeStrikeBot
+namespace CodeStrikeBot.DataObjects
 {
     public abstract class DataObject
     {

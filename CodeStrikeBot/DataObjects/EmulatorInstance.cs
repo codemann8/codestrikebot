@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Data.Linq.Mapping;
 
-namespace CodeStrikeBot
+namespace CodeStrikeBot.DataObjects
 {
     [Table(Name = "emulators")]
     public class EmulatorInstance : DataObject
@@ -78,7 +78,10 @@ namespace CodeStrikeBot
             return emulators;
         }
     }
+}
 
+namespace CodeStrikeBot
+{
     public enum EmulatorType : int
     {
         Droid4X = 0,

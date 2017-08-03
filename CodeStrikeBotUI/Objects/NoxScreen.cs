@@ -14,7 +14,7 @@ namespace CodeStrikeBot
     {
         public static new string PROCESSNAME = "Nox";
 
-        public NoxScreen(EmulatorInstance emulator) : base(emulator)
+        public NoxScreen(DataObjects.EmulatorInstance emulator) : base(emulator)
         {
             WINDOW_TITLEBAR_H = 36;
             WINDOW_MARGIN_L = 2;
@@ -68,7 +68,7 @@ namespace CodeStrikeBot
                 if (p.MainWindowTitle.StartsWith(windowName))
                 {
                     EmulatorProcess = p;
-                    Emulator = new EmulatorInstance(0, EmulatorType.Nox, windowName, p.CommandLineArgs(EmulatorType.Nox), new Account(0), new App(0));
+                    Emulator = new DataObjects.EmulatorInstance(0, EmulatorType.Nox, windowName, p.CommandLineArgs(EmulatorType.Nox), new DataObjects.Account(0), new DataObjects.App(0));
                     break;
                 }
             }

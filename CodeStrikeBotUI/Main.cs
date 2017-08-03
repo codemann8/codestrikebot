@@ -212,8 +212,8 @@ namespace CodeStrikeBot
             cboAccountAppFilter.SelectedItem = ctrl.ActiveScreen.Emulator.App;
             lstAccounts.Items.Clear();
             bsAccount.Clear();
-            
-            foreach (Account a in ctrl.accounts)
+
+            foreach (DataObjects.Account a in ctrl.accounts)
             {
                 if (a.App.Id == ctrl.ActiveScreen.Emulator.App.Id)
                 {
@@ -221,7 +221,7 @@ namespace CodeStrikeBot
                     bsAccount.Add(a);
                 }
             }
-            bsAccount.Add(new Account(0, "", "", "", "", AccountPriority.NoMonitor, 0, new DateTime(), new DateTime(), ctrl.ActiveScreen.Emulator.App));
+            bsAccount.Add(new DataObjects.Account(0, "", "", "", "", AccountPriority.NoMonitor, 0, new DateTime(), new DateTime(), ctrl.ActiveScreen.Emulator.App));
         }
 
         private void btnScreen_Click(object sender, EventArgs e)
@@ -244,7 +244,7 @@ namespace CodeStrikeBot
                 ctrl.BeginTask(1000);
                 ctrl.Logout();
                 ctrl.StartApp();
-                ctrl.Login((Account)lstAccounts.SelectedItem);
+                ctrl.Login((DataObjects.Account)lstAccounts.SelectedItem);
                 ctrl.EndTask();
             }
         }
@@ -271,7 +271,7 @@ namespace CodeStrikeBot
 
         private void ChangeActiveWindow(int idx)
         {
-            App app = ctrl.ActiveScreen.Emulator.App;
+            DataObjects.App app = ctrl.ActiveScreen.Emulator.App;
 
             ctrl.ActiveWindow = idx;
 
@@ -607,7 +607,7 @@ namespace CodeStrikeBot
 
             while (!bckScheduler.CancellationPending)
             {
-                ScheduleTask task = ctrl.GetNextTask();
+                DataObjects.ScheduleTask task = ctrl.GetNextTask();
                 
                 int timeout = 5;
 
@@ -676,7 +676,7 @@ namespace CodeStrikeBot
 
         private void btnScheduler_Click(object sender, EventArgs e)
         {
-            ScheduleTask task = ctrl.GetNextTask();
+            DataObjects.ScheduleTask task = ctrl.GetNextTask();
             if (task != null)
             {
                 ctrl.BeginTask(1000);
@@ -713,7 +713,7 @@ namespace CodeStrikeBot
 
         private void btnScheduleRun_Click(object sender, EventArgs e)
         {
-            ScheduleTask task = (ScheduleTask)bsScheduleTask.Current;
+            DataObjects.ScheduleTask task = (DataObjects.ScheduleTask)bsScheduleTask.Current;
 
             if (task != null)
             {
@@ -723,7 +723,7 @@ namespace CodeStrikeBot
 
         private void gridSchedules_CellLeave(object sender, DataGridViewCellEventArgs e)
         {
-            ScheduleTask task = (ScheduleTask)bsScheduleTask.Current;
+            DataObjects.ScheduleTask task = (DataObjects.ScheduleTask)bsScheduleTask.Current;
 
             if (task.Interval > 0)
             {
@@ -761,7 +761,7 @@ namespace CodeStrikeBot
             DialogResult response = MessageBox.Show("Are you sure you want to delete this schedule?", "Delete?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
             if ((response == DialogResult.Yes))
             {
-                ScheduleTask task = (ScheduleTask)bsScheduleTask.Current;
+                DataObjects.ScheduleTask task = (DataObjects.ScheduleTask)bsScheduleTask.Current;
                 if (task.Id > 0)
                 {
                     task.Delete();
@@ -1139,7 +1139,7 @@ namespace CodeStrikeBot
                                     command = command.Substring(6);
                                     command = command.Trim();
 
-                                    Account acc = null;
+                                    DataObjects.Account acc = null;
 
                                     if (command.IndexOf(' ') > -1)
                                     {
@@ -1185,7 +1185,7 @@ namespace CodeStrikeBot
                                 {
                                     command = command.Substring(7).Trim();
 
-                                    Account a = ctrl.FindAccount(command);
+                                    DataObjects.Account a = ctrl.FindAccount(command);
 
                                     bool success = false;
 
@@ -1528,19 +1528,19 @@ namespace CodeStrikeBot
         private void lstAccounts_SelectedIndexChanged(object sender, EventArgs e)
         {
             bsScheduleTask.Clear();
-            
-            foreach (ScheduleTask task in BotDatabase.GetObjects<ScheduleTask>())
+
+            foreach (DataObjects.ScheduleTask task in BotDatabase.GetObjects<DataObjects.ScheduleTask>())
             {
-                if (task.Account.Id == ((Account)lstAccounts.SelectedItem).Id)
+                if (task.Account.Id == ((DataObjects.Account)lstAccounts.SelectedItem).Id)
                 {
-                    task.Account = (Account)lstAccounts.SelectedItem;
+                    task.Account = (DataObjects.Account)lstAccounts.SelectedItem;
                     bsScheduleTask.Add(task);
                 }
             }
 
-            Account account = (Account)lstAccounts.SelectedItem;
+            DataObjects.Account account = (DataObjects.Account)lstAccounts.SelectedItem;
 
-            bsScheduleTask.Add(new ScheduleTask(0, account, 0, 0, 0, 0, 0, 0, 0, 0, new DateTime(), account.App));
+            bsScheduleTask.Add(new DataObjects.ScheduleTask(0, account, 0, 0, 0, 0, 0, 0, 0, 0, new DateTime(), account.App));
         }
 
         private void bckKeepAlive_DoWork(object sender, DoWorkEventArgs e)
@@ -1556,7 +1556,7 @@ namespace CodeStrikeBot
                 {
                     if (tmrLateSchedule.ElapsedMilliseconds > 1800000 && chkScheduler.Checked)
                     {
-                        foreach (ScheduleTask task in BotDatabase.GetObjects<ScheduleTask>())
+                        foreach (DataObjects.ScheduleTask task in BotDatabase.GetObjects<DataObjects.ScheduleTask>())
                         {
                             if (DateTime.Now.Subtract(task.NextAction).Minutes > 15)
                             {
@@ -1930,7 +1930,7 @@ namespace CodeStrikeBot
 
         private void gridAccounts_CellLeave(object sender, DataGridViewCellEventArgs e)
         {
-            Account account = (Account)bsAccount.Current;
+            DataObjects.Account account = (DataObjects.Account)bsAccount.Current;
 
             if (account.Name != "" && account.UserName != "" && account.Email != "" && account.Password != "")
             {
@@ -1952,7 +1952,7 @@ namespace CodeStrikeBot
             DialogResult response = MessageBox.Show("Are you sure you want to delete this account?", "Delete?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
             if ((response == DialogResult.Yes))
             {
-                Account account = (Account)bsAccount.Current;
+                DataObjects.Account account = (DataObjects.Account)bsAccount.Current;
                 if (account.Id > 0)
                 {
                     account.Delete();
@@ -2090,13 +2090,13 @@ namespace CodeStrikeBot
             ctrl.Database.Settings.PushoverUserKey = txtPushoverUser.Text;
             ctrl.Database.Settings.Save();
 
-            ctrl.sc[0].Emulator.App = (App)cboEmulator1.SelectedItem;
+            ctrl.sc[0].Emulator.App = (DataObjects.App)cboEmulator1.SelectedItem;
             ctrl.sc[0].Emulator.Save();
-            ctrl.sc[1].Emulator.App = (App)cboEmulator2.SelectedItem;
+            ctrl.sc[1].Emulator.App = (DataObjects.App)cboEmulator2.SelectedItem;
             ctrl.sc[1].Emulator.Save();
-            ctrl.sc[2].Emulator.App = (App)cboEmulator3.SelectedItem;
+            ctrl.sc[2].Emulator.App = (DataObjects.App)cboEmulator3.SelectedItem;
             ctrl.sc[2].Emulator.Save();
-            ctrl.sc[3].Emulator.App = (App)cboEmulator4.SelectedItem;
+            ctrl.sc[3].Emulator.App = (DataObjects.App)cboEmulator4.SelectedItem;
             ctrl.sc[3].Emulator.Save();
         }
 

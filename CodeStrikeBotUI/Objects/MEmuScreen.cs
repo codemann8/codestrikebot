@@ -14,7 +14,8 @@ namespace CodeStrikeBot
     {
         public static new string PROCESSNAME = "MEmu";
 
-        public MEmuScreen(EmulatorInstance emulator) : base(emulator)
+        public MEmuScreen(DataObjects.EmulatorInstance emulator)
+            : base(emulator)
         {
             WINDOW_TITLEBAR_H = 34;
             WINDOW_MARGIN_L = 4;
@@ -82,7 +83,7 @@ namespace CodeStrikeBot
                 if (p.MainWindowTitle.StartsWith(windowName))
                 {
                     EmulatorProcess = p;
-                    Emulator = new EmulatorInstance(0, EmulatorType.Leapdroid, windowName, p.CommandLineArgs(EmulatorType.MEmu), new Account(0), new App(0));
+                    Emulator = new DataObjects.EmulatorInstance(0, EmulatorType.Leapdroid, windowName, p.CommandLineArgs(EmulatorType.MEmu), new DataObjects.Account(0), new DataObjects.App(0));
                     break;
                 }
             }

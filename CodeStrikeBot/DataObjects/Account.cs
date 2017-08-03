@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Data.Linq.Mapping;
 
-namespace CodeStrikeBot
+namespace CodeStrikeBot.DataObjects
 {
-    [Table(Name="accounts")]
+    [Table(Name = "accounts")]
     public class Account : DataObject
     {
         [Column(Name = "name")]
@@ -82,7 +82,10 @@ namespace CodeStrikeBot
             return accounts;
         }
     }
+}
 
+namespace CodeStrikeBot
+{
     public enum AccountPriority : ushort
     {
         NoMonitor = 0,

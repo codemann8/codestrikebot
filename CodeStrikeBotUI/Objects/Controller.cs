@@ -95,9 +95,9 @@ namespace CodeStrikeBot
 
         public Screen[] sc { get; private set; }
 
-        public List<App> apps;
-        public List<EmulatorInstance> emulators;
-        public List<Account> accounts;
+        public List<DataObjects.App> apps;
+        public List<DataObjects.EmulatorInstance> emulators;
+        public List<DataObjects.Account> accounts;
 
         public List<Messages.Objects.March> marches, endedMarches;
 
@@ -116,16 +116,16 @@ namespace CodeStrikeBot
             
             Database = new BotDatabase();
 
-            apps = App.GetApps();
-            accounts = Account.GetAccounts(apps);
-            emulators = EmulatorInstance.GetEmulators(accounts, apps);
+            apps = DataObjects.App.GetApps();
+            accounts = DataObjects.Account.GetAccounts(apps);
+            emulators = DataObjects.EmulatorInstance.GetEmulators(accounts, apps);
 
             bool restart = false;
 
             sc = new Screen[4];
             for (int i = 0; i < Database.Settings.ActiveEmulators.Length; i++)
             {
-                foreach (EmulatorInstance e in emulators)
+                foreach (DataObjects.EmulatorInstance e in emulators)
                 {
                     if (e.Id == Database.Settings.ActiveEmulators[i])
                     {
@@ -195,9 +195,9 @@ namespace CodeStrikeBot
             return null;
         }
 
-        public Account FindAccount(string name)
+        public DataObjects.Account FindAccount(string name)
         {
-            foreach (Account a in accounts)
+            foreach (DataObjects.Account a in accounts)
             {
                 if (a.Name.ToLower() == name.ToLower())
                 {
@@ -208,9 +208,9 @@ namespace CodeStrikeBot
             return null;
         }
 
-        public Account FindAccount(int id)
+        public DataObjects.Account FindAccount(int id)
         {
-            foreach (Account a in accounts)
+            foreach (DataObjects.Account a in accounts)
             {
                 if (a.Id == id)
                 {
@@ -221,9 +221,9 @@ namespace CodeStrikeBot
             return null;
         }
 
-        public EmulatorInstance[] GetEmulators()
+        public DataObjects.EmulatorInstance[] GetEmulators()
         {
-            EmulatorInstance[] emulators = new EmulatorInstance[sc.Length];
+            DataObjects.EmulatorInstance[] emulators = new DataObjects.EmulatorInstance[sc.Length];
 
             for (int s = 0; s < sc.Length; s++)
             {
@@ -306,11 +306,11 @@ namespace CodeStrikeBot
             return message;
         }
 
-        public ScheduleTask GetNextTask()
+        public DataObjects.ScheduleTask GetNextTask()
         {
-            List<ScheduleTask> tasks = ScheduleTask.GetTasks(accounts, apps);
+            List<DataObjects.ScheduleTask> tasks = DataObjects.ScheduleTask.GetTasks(accounts, apps);
 
-            foreach (ScheduleTask t in tasks)
+            foreach (DataObjects.ScheduleTask t in tasks)
             {
                 if (t.Type == ScheduleType.Shield || t.Type == ScheduleType.AntiScout || t.Type == ScheduleType.GhostRally)
                 {
@@ -324,7 +324,7 @@ namespace CodeStrikeBot
                 }
             }
 
-            foreach (ScheduleTask t in tasks)
+            foreach (DataObjects.ScheduleTask t in tasks)
             {
                 foreach (Screen s in sc)
                 {
@@ -335,7 +335,7 @@ namespace CodeStrikeBot
                 }
             }
 
-            foreach (ScheduleTask t in tasks)
+            foreach (DataObjects.ScheduleTask t in tasks)
             {
                 foreach (Screen s in sc)
                 {
@@ -349,7 +349,7 @@ namespace CodeStrikeBot
             return null;
         }
 
-        public Screen GetNextWindow(Account account)
+        public Screen GetNextWindow(DataObjects.Account account)
         {
             Screen screen = null;
 
@@ -425,7 +425,7 @@ namespace CodeStrikeBot
             return screen;
         }
 
-        public Screen GetNextWindow(ScheduleTask task)
+        public Screen GetNextWindow(DataObjects.ScheduleTask task)
         {
             Screen screen = null;
 
@@ -501,7 +501,7 @@ namespace CodeStrikeBot
             return screen;
         }
 
-        public void ExecuteTask(ScheduleTask task)
+        public void ExecuteTask(DataObjects.ScheduleTask task)
         {
             try
             {
@@ -907,7 +907,7 @@ namespace CodeStrikeBot
             }
         }
 
-        public void Login(Account account)
+        public void Login(DataObjects.Account account)
         {
             if (account != null && account.Email != null)
             {
@@ -915,7 +915,7 @@ namespace CodeStrikeBot
             }
         }
 
-        public void Login(Screen s, Account account)
+        public void Login(Screen s, DataObjects.Account account)
         {
             Stopwatch tmrRun = new Stopwatch();
 
@@ -1994,7 +1994,7 @@ namespace CodeStrikeBot
             }
         }
 
-        public static EmulatorInstance FindOrCreateEmulatorInstance(Process p)
+        public static DataObjects.EmulatorInstance FindOrCreateEmulatorInstance(Process p)
         {
             EmulatorType type = EmulatorType.MEmu;
             
@@ -2016,7 +2016,7 @@ namespace CodeStrikeBot
 
             string command = p.CommandLineArgs(type);
 
-            foreach (EmulatorInstance ei in Controller.Instance.emulators)
+            foreach (DataObjects.EmulatorInstance ei in Controller.Instance.emulators)
             {
                 if (ei.Type == type && ei.Command == command)
                 {
@@ -2024,7 +2024,7 @@ namespace CodeStrikeBot
                 }
             }
 
-            EmulatorInstance emulator = new EmulatorInstance(0, type, (p.MainWindowTitle.Contains(' ') ? p.MainWindowTitle.Substring(0, p.MainWindowTitle.IndexOf(' ')) : p.MainWindowTitle), command, new Account(0), new App(0));
+            DataObjects.EmulatorInstance emulator = new DataObjects.EmulatorInstance(0, type, (p.MainWindowTitle.Contains(' ') ? p.MainWindowTitle.Substring(0, p.MainWindowTitle.IndexOf(' ')) : p.MainWindowTitle), command, new DataObjects.Account(0), new DataObjects.App(0));
             emulator.Save();
 
             return emulator;

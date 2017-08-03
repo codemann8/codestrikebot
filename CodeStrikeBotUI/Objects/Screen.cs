@@ -19,7 +19,7 @@ namespace CodeStrikeBot
 
         public Process EmulatorProcess { get; set; }
         public Rect WindowRect { get; set; }
-        public EmulatorInstance Emulator { get; set; }
+        public DataObjects.EmulatorInstance Emulator { get; set; }
 
         public double TimeoutFactor;
         public SuperBitmap SuperBitmap;
@@ -34,7 +34,7 @@ namespace CodeStrikeBot
 
         public bool skipMissions, skipRewards, skipVault;
 
-        public Screen(EmulatorInstance emulator)
+        public Screen(DataObjects.EmulatorInstance emulator)
         {
             
         }
@@ -44,7 +44,7 @@ namespace CodeStrikeBot
 
         }
 
-        public static Screen CreateScreen(EmulatorInstance emulator)
+        public static Screen CreateScreen(DataObjects.EmulatorInstance emulator)
         {
             Screen s = null;
             switch (emulator.Type)
@@ -727,7 +727,7 @@ namespace CodeStrikeBot
             return success;
         }
 
-        public bool Login(Account account)
+        public bool Login(DataObjects.Account account)
         {
             bool success = false;
 
@@ -1712,7 +1712,7 @@ namespace CodeStrikeBot
             return missionsLeft;
         }
 
-        public bool ResourceTransfer(ScheduleTask task)
+        public bool ResourceTransfer(DataObjects.ScheduleTask task)
         {
             return ResourceTransfer(task.X, task.Y, task.Type, task.Amount, task.Count, task.BackupX, task.BackupY);
         }
@@ -2137,7 +2137,7 @@ namespace CodeStrikeBot
             return success;
         }
 
-        public bool ActivateBoost(ScheduleTask task)
+        public bool ActivateBoost(DataObjects.ScheduleTask task)
         {
             return ActivateBoost(task.Type, task.Amount);
         }

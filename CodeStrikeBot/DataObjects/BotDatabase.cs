@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Data.SqlServerCe;
 using System.Data;
+using CodeStrikeBot.DataObjects;
 
 namespace CodeStrikeBot
 {

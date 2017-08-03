@@ -14,7 +14,7 @@ namespace CodeStrikeBot
     {
         public static new string PROCESSNAME = "Droid4X";
 
-        public Droid4XScreen(EmulatorInstance emulator) : base(emulator) { }
+        public Droid4XScreen(DataObjects.EmulatorInstance emulator) : base(emulator) { }
 
         public override string ProcessName
         {
