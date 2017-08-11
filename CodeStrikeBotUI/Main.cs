@@ -1897,7 +1897,7 @@ namespace CodeStrikeBot
 
                                             if (s.ScreenState.Overlays.Contains(Overlay.Incomings.Attack))
                                             {
-                                                ctrl.SendNotification(String.Format("Incoming Attack at {1}", s.Emulator.LastKnownAccount.ToString()), NotificationType.IncomingAttack);
+                                                //ctrl.SendNotification(String.Format("Incoming Attack at {1}", s.Emulator.LastKnownAccount.ToString()), NotificationType.IncomingAttack);
                                             }
 
                                             if (s.ScreenState.Overlays.Contains(Overlay.Incomings.Rally))
