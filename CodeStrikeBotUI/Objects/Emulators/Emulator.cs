@@ -2546,6 +2546,8 @@ namespace CodeStrikeBot
                 }
                 else if (ScreenState.CurrentArea == Area.MainBases.Main)
                 {
+                    skipMissions = true; //TODO: Eventually remove
+
                     if (ScreenState.Overlays.Contains(Overlay.Widgets.AmmoFreeAttack))
                     {
                         tasksLeft = true;
