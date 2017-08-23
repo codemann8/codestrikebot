@@ -168,7 +168,7 @@ namespace CodeStrikeBot
 
                     if (ScreenState.CurrentArea == Area.Others.Login)
                     {
-                        Emulator.LastKnownAccount = null;
+                        //Emulator.LastKnownAccount = null;
                     }
                 }
                 else

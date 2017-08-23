@@ -724,6 +724,11 @@ namespace CodeStrikeBot
                 }
             }
 
+            if (success)
+            {
+                Emulator.LastKnownAccount = null;
+            }
+
             return success;
         }
 
