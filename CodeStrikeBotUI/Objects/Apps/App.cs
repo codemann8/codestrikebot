@@ -65,7 +65,7 @@ namespace CodeStrikeBot
         private readonly uint mID;
     }
 
-    public abstract class ScreenState
+    public abstract class ScreenState 
     {
         public ID CurrentArea;
         public List<ID> Overlays;
