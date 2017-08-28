@@ -1868,7 +1868,8 @@ namespace CodeStrikeBot
                                     if (s.ScreenState.Overlays.Contains(Overlay.Widgets.AllianceHelp)
                                         || s.ScreenState.Overlays.Contains(Overlay.Widgets.AmmoFreeAttack)
                                         || s.ScreenState.CurrentArea == Area.Menus.ShootingRanges.Main
-                                        || s.ScreenState.CurrentArea == Area.Menus.ShootingRanges.NormalCrate)
+                                        || s.ScreenState.CurrentArea == Area.Menus.ShootingRanges.NormalCrate
+                                        || s.ScreenState.CurrentArea == Area.Menus.Casino)
                                     {
                                         ctrl.BeginTask();
                                         s.RegularTasksStep();

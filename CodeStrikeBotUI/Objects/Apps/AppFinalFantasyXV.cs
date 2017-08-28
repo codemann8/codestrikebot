@@ -369,7 +369,9 @@ namespace CodeStrikeBot
                 case 0x6aad:
                     CurrentArea = Area.MainBases.BlueCrateCollect;
                     break;
-                case 0xa4b5: //world map without CP button
+                case 0xa4b5: //blank menu
+                    CurrentArea = Area.Menus.Casino;
+                    break;
                 case 0x4ea5: //world map with CP button
                     CurrentArea = Area.StateMaps.Main;
                     break;
@@ -395,7 +397,7 @@ namespace CodeStrikeBot
                             else
                             {
                                 chksum2 = ScreenState.GetScreenChecksum(bmp, 60, 120, 20);
-                                if (chksum2 == 0x994e)
+                                if (chksum2 == 0x994e || chksum2 == 0x0e05) //shooting range crate collect or casino jackpot crate collect
                                 {
                                     CurrentArea = Area.Menus.ShootingRanges.NormalCrate;
                                 }

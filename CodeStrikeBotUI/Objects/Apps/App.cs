@@ -450,6 +450,7 @@ namespace CodeStrikeBot
             public static readonly ID Gear = Menu[28];
             public static readonly ID Deployment = Menu[29];
             public static readonly ID BuildingBoost = Menu[30];
+            public static readonly ID Casino = Menu[31];
         }
 
         public static readonly ID Emulator = 98;

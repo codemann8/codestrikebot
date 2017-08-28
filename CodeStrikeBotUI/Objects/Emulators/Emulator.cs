@@ -2646,6 +2646,21 @@ namespace CodeStrikeBot
                         this.ClickBack(300);
                     }
                 }
+                else if (ScreenState.CurrentArea == Area.Menus.Casino)
+                {
+                    tasksLeft = true;
+
+                    ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 192, 412, 20);
+
+                    if (chksum == 0x7980) //Free Spin
+                    {
+                        Controller.SendClick(this, 200, 420, 5000);
+                    }
+                    else
+                    {
+                        this.ClickBack(300);
+                    }
+                }
                 else if (ScreenState.CurrentArea == Area.Menus.ShootingRanges.Main)
                 {
                     tasksLeft = true;
@@ -2689,7 +2704,7 @@ namespace CodeStrikeBot
 
                     //ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 185, 225, 10);
                     ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 188, 388, 20); //DIFF ff
-                    if (chksum == 0xe2f2) //if Collect Button (doesn't account for animated button)
+                    if (chksum == 0xe2f2) //if shooting range Collect Button (doesn't account for animated button)
                     {
                         //Random r = new Random();
                         //Controller.SendClick(this, 188, 415 + r.Next(0, 20), 1000); //click Collect
@@ -2698,8 +2713,19 @@ namespace CodeStrikeBot
                     }
                     else
                     {
-                        int r = new Random().Next(0, 2);
-                        Controller.SendClick(this, 75 + 120 * r, 285, 1500); //click Crate
+                        chksum = ScreenState.GetScreenChecksum(SuperBitmap, 188, 476, 20); //DIFF ff
+                        if (chksum == 0xe2f2) //if casino jackpot crate Collect Button (doesn't account for animated button)
+                        {
+                            //Random r = new Random();
+                            //Controller.SendClick(this, 188, 415 + r.Next(0, 20), 1000); //click Collect
+                            Controller.SendClick(this, 188, 388, 1000); //click Collect
+                            Controller.SendClick(this, 40, 680, 300); //Click Base
+                        }
+                        else
+                        {
+                            int r = new Random().Next(0, 2);
+                            Controller.SendClick(this, 75 + 120 * r, 295, 1500); //click Crate
+                        }
                     }
 
                     /* DIFF MS
