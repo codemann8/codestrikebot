@@ -92,13 +92,13 @@ namespace CodeStrikeBot
                         {
                             ret += "H";
                         }
-                        else if (overlay == Overlay.Widgets.BlueCrate)
-                        {
-                            ret += "C";
-                        }
-                        else if (overlay == Overlay.Widgets.SilverCrate)
+                        else if (overlay == Overlay.Widgets.SecretGift)
                         {
                             ret += "S";
+                        }
+                        else if (overlay == Overlay.Widgets.GlobalGift)
+                        {
+                            ret += "L";
                         }
                         else if (overlay == Overlay.Widgets.AmmoFreeAttack)
                         {
@@ -110,15 +110,11 @@ namespace CodeStrikeBot
                         }
                         else if (overlay == Overlay.Widgets.DailyLogin)
                         {
-                            ret += "L";
+                            ret += "D";
                         }
                         else if (overlay == Overlay.Widgets.MissionsAvailable)
                         {
                             ret += "M";
-                        }
-                        else if (overlay == Overlay.Widgets.Deployments)
-                        {
-                            ret += "D";
                         }
                         else if (overlay == Overlay.Widgets.BoostsActive)
                         {
@@ -333,8 +329,8 @@ namespace CodeStrikeBot
         public static class MainBases
         {
             public static readonly ID Main = MainBase[0];
-            public static readonly ID BlueCrateCollect = MainBase[1];
-            public static readonly ID SilverCrateCollect = MainBase[2];
+            public static readonly ID SecretGiftCollect = MainBase[1];
+            public static readonly ID GlobalGiftCollect = MainBase[2];
             public static readonly ID DailyLogin = MainBase[3];
             public static readonly ID DailyLoginClaimed = MainBase[4];
         }
@@ -523,8 +519,8 @@ namespace CodeStrikeBot
         {
             public static readonly ID AllianceHelp = Widget[0];
             public static readonly ID Blog = Widget[1];
-            public static readonly ID BlueCrate = Widget[2];
-            public static readonly ID SilverCrate = Widget[3];
+            public static readonly ID SecretGift = Widget[2];
+            public static readonly ID GlobalGift = Widget[3];
             public static readonly ID RewardsCrate = Widget[4];
             public static readonly ID Challenge = Widget[5];
             public static readonly ID BoostsActive = Widget[6];

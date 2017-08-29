@@ -377,7 +377,7 @@ namespace CodeStrikeBot
                 {
                     foreach (Screen s in sc)
                     {
-                        if (s != null && !s.PreventFromOpening && !s.IsFucked && s.EmulatorProcess != null && s.Emulator.LastKnownAccount != null && (int)s.Emulator.LastKnownAccount.Priority < 3 && !s.ScreenState.Overlays.Contains(Overlay.Widgets.MissionsAvailable) && !s.ScreenState.Overlays.Contains(Overlay.Widgets.SilverCrate) && !s.ScreenState.Overlays.Contains(Overlay.Widgets.AllianceHelp))
+                        if (s != null && !s.PreventFromOpening && !s.IsFucked && s.EmulatorProcess != null && s.Emulator.LastKnownAccount != null && (int)s.Emulator.LastKnownAccount.Priority < 3 && !s.ScreenState.Overlays.Contains(Overlay.Widgets.MissionsAvailable) && !s.ScreenState.Overlays.Contains(Overlay.Widgets.GlobalGift) && !s.ScreenState.Overlays.Contains(Overlay.Widgets.AllianceHelp))
                         {
                             screen = s;
                             break;
@@ -453,7 +453,7 @@ namespace CodeStrikeBot
                 {
                     foreach (Screen s in sc)
                     {
-                        if (s != null && !s.PreventFromOpening && !s.IsFucked && s.EmulatorProcess != null && s.Emulator.App.Id == task.App.Id && s.Emulator.LastKnownAccount != null && (int)s.Emulator.LastKnownAccount.Priority < 3 && !s.ScreenState.Overlays.Contains(Overlay.Widgets.MissionsAvailable) && !s.ScreenState.Overlays.Contains(Overlay.Widgets.SilverCrate) && !s.ScreenState.Overlays.Contains(Overlay.Widgets.AllianceHelp))
+                        if (s != null && !s.PreventFromOpening && !s.IsFucked && s.EmulatorProcess != null && s.Emulator.App.Id == task.App.Id && s.Emulator.LastKnownAccount != null && (int)s.Emulator.LastKnownAccount.Priority < 3 && !s.ScreenState.Overlays.Contains(Overlay.Widgets.MissionsAvailable) && !s.ScreenState.Overlays.Contains(Overlay.Widgets.GlobalGift) && !s.ScreenState.Overlays.Contains(Overlay.Widgets.AllianceHelp))
                         {
                             screen = s;
                             break;

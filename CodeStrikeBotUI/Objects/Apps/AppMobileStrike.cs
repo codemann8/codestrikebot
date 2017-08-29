@@ -440,11 +440,11 @@ namespace CodeStrikeBot
                                 case 0x76a1: //"Supply Crate"
                                 case 0x8770: //"Supply Crate"
                                 case 0x57d2: //nox congrats
-                                    CurrentArea = Area.MainBases.BlueCrateCollect;
+                                    CurrentArea = Area.MainBases.SecretGiftCollect;
                                     break;
                                 case 0xc5ca:
                                 case 0x220f: //nox
-                                    CurrentArea = Area.MainBases.SilverCrateCollect;
+                                    CurrentArea = Area.MainBases.GlobalGiftCollect;
                                     break;
                                 default:
                                     chksum = ScreenState.GetScreenChecksum(bmp, 180, 190, 10);
@@ -608,7 +608,7 @@ namespace CodeStrikeBot
                 if (ScreenState.BlackBoxExists(bmp, new Rectangle(253, 562, 63, 18), Color.FromArgb(74, 77, 74), 10)
                 && !c.Equals(57, 85, 140))
                 {
-                    Overlays.Add(Overlay.Widgets.SilverCrate);
+                    Overlays.Add(Overlay.Widgets.GlobalGift);
                 }
 
                 chksum = ScreenState.GetScreenChecksum(bmp, 275, 532, 10);
@@ -650,7 +650,7 @@ namespace CodeStrikeBot
 
                             if (n > 7)
                             {
-                                Overlays.Add(Overlay.Widgets.BlueCrate);
+                                Overlays.Add(Overlay.Widgets.SecretGift);
                             }
                         }
                     }

@@ -367,7 +367,7 @@ namespace CodeStrikeBot
                     CurrentArea = Area.Others.Ad;
                     break;
                 case 0x6aad:
-                    CurrentArea = Area.MainBases.BlueCrateCollect;
+                    CurrentArea = Area.MainBases.SecretGiftCollect;
                     break;
                 case 0xa4b5: //blank menu
                     CurrentArea = Area.Menus.Casino;
@@ -562,13 +562,13 @@ namespace CodeStrikeBot
                 if (ScreenState.BlackBoxExists(bmp, new Rectangle(253, 562, 63, 18), Color.FromArgb(74, 77, 74), 10)
                 && !c.Equals(57, 85, 140))
                 {
-                    Overlays.Add(Overlay.Widgets.SilverCrate);
+                    Overlays.Add(Overlay.Widgets.GlobalGift);
                 }
 
                 //DIFF ff
                 if (!ScreenState.BlackBoxExists(bmp, new Rectangle(64, 588, 51, 18), Color.FromArgb(74, 77, 74)))
                 {
-                    Overlays.Add(Overlay.Widgets.BlueCrate);
+                    Overlays.Add(Overlay.Widgets.SecretGift);
                 }
 
                 chksum = ScreenState.GetScreenChecksum(bmp, 275, 532, 10);
@@ -610,7 +610,7 @@ namespace CodeStrikeBot
 
                             if (n > 7)
                             {
-                                Overlays.Add(Overlay.Widgets.BlueCrate);
+                                Overlays.Add(Overlay.Widgets.SecretGift);
                             }
                         }
                     }

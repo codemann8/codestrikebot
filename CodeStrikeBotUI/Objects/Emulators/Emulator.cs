@@ -2559,16 +2559,16 @@ namespace CodeStrikeBot
                         //Controller.SendClick(this, 210, 558, 1200); //click Free Attack
                         Controller.SendClick(this, 275, 600, 2000); //click Free Attack DIFF ff
                     }
-                    /*else if (state.Overlays.Contains(Overlay.Widgets.SilverCrate))
+                    /*else if (state.Overlays.Contains(Overlay.Widgets.GlobalGift))
                     {
                         tasksLeft = true;
 
-                        this.SendClick(40, 465, 200); //click Silver Crate
+                        this.SendClick(40, 465, 200); //click Global Gift
                     }*/
-                    else if (ScreenState.Overlays.Contains(Overlay.Widgets.BlueCrate) || ScreenState.Overlays.Contains(Overlay.Widgets.SilverCrate))
+                    else if (ScreenState.Overlays.Contains(Overlay.Widgets.SecretGift) || ScreenState.Overlays.Contains(Overlay.Widgets.GlobalGift))
                     {
                         tasksLeft = true;
-                        Controller.SendClick(this, 285, 558, 200); //click Blue Crate
+                        Controller.SendClick(this, 285, 558, 200); //click Secret/Global Gift
                     }
                     else if (ScreenState.Overlays.Contains(Overlay.Widgets.DailyLogin))
                     {
@@ -2620,12 +2620,12 @@ namespace CodeStrikeBot
 
                     }
                 }
-                else if (ScreenState.CurrentArea == Area.MainBases.BlueCrateCollect)
+                else if (ScreenState.CurrentArea == Area.MainBases.SecretGiftCollect)
                 {
                     tasksLeft = true;
                     Controller.SendClick(this, 140, 395, 500); //click Collect
                 }
-                else if (ScreenState.CurrentArea == Area.MainBases.SilverCrateCollect)
+                else if (ScreenState.CurrentArea == Area.MainBases.GlobalGiftCollect)
                 {
                     tasksLeft = true;
                     Controller.SendClick(this, 140, 425, 500); //click Collect
