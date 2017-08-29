@@ -1608,18 +1608,6 @@ namespace CodeStrikeBot
                             }
                         }
 
-                        /* //keeping to know how to close ActivateVIP screen when Back button is broken
-                        chksum = ScreenState.GetScreenChecksum(SuperBitmap, 190, 115, 20); //DIFF FF
-                        if (chksum == 0x4739) //DIFF FF
-                        {
-                            Controller.SendClick(this, 348, 122, 300); //close VIP inactive modal popup //DIFF FF
-                            missionsLeft = false;
-                        }
-                        else if (!clicked)
-                        {
-                            this.ClickBack(200); //click Back
-                        }*/
-
                         Controller.CaptureApplication(this);
 
                         //c = SuperBitmap.GetPixel(355, 445); //DIFF MS

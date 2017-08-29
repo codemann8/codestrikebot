@@ -103,7 +103,27 @@ namespace CodeStrikeBot
 
         public override void ClickBack(int timeout)
         {
-            Controller.SendClick(this, 420, 582, timeout);
+            if (ScreenState.CurrentArea == Area.Menus.Missions.ActivateVIP)
+            {
+                Controller.SendClick(this, 348, 122, timeout);
+            }
+            else if (ScreenState.CurrentArea == Area.Others.Ad)
+            {
+                Controller.SendClick(this, 380, 12, timeout);
+            }
+            else
+            {
+                ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 15, 4, 20);
+
+                if (chksum == 0xa8be) //if screen is a menu
+                {
+                    Controller.SendClick(this, 25, 14, timeout);
+                }
+                else
+                {
+                    Controller.SendClick(this, 420, 582, timeout);
+                }
+            }
         }
 
         public override void ClickHome(int timeout)
