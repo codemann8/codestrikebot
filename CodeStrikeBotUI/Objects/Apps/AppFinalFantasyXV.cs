@@ -372,7 +372,7 @@ namespace CodeStrikeBot
                 case 0xa4b5: //blank menu
                     CurrentArea = Area.Menus.Casino;
                     break;
-                case 0x4ea5: //world map with CP button
+                case 0xd1a4: //world map with compass button
                     CurrentArea = Area.StateMaps.Main;
                     break;
                 default:
@@ -649,8 +649,8 @@ namespace CodeStrikeBot
                 Overlays.Add(Overlay.Widgets.AllianceGift);
             }
 
-            c = bmp.GetPixel(134, 668);
-            if (c.Equals(231, 8, 33))
+            c = bmp.GetPixel(128, 653);
+            if (c.Equals(231, 4, 82))
             {
                 Overlays.Add(Overlay.Widgets.MissionsAvailable);
             }

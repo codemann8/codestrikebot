@@ -1583,13 +1583,16 @@ namespace CodeStrikeBot
 
                         for (int m = 0; m < 3; m++)
                         {
-                            Main.CurrentForm.UpdateBmpChk(SuperBitmap, 347, (int)Math.Round(292 + 91.5 * m), 8);
-                            chksum = ScreenState.GetScreenChecksum(SuperBitmap, 347, (int)Math.Round(292 + 91.5 * m), 8);
+                            //Main.CurrentForm.UpdateBmpChk(SuperBitmap, 347, (int)Math.Round(292 + 91.5 * m), 8);
+                            //chksum = ScreenState.GetScreenChecksum(SuperBitmap, 347, (int)Math.Round(292 + 91.5 * m), 8); //DIFF MS
+                            chksum = ScreenState.GetScreenChecksum(SuperBitmap, 355, 462 + 53 * m, 8); //DIFF FF
 
                             //if (chksum != 0x2995 && chksum != 0x1583) //missions available
-                            if (chksum != 0x3900 && chksum != 0x5f0f && chksum != 0xfc2d) //nox
+                            //if (chksum != 0x3900 && chksum != 0x5f0f && chksum != 0xfc2d) //DIFF MS
+                            if (chksum != 0x2459) //DIFF FF
                             {
-                                c = SuperBitmap.GetPixel(101, (int)Math.Round(240 + 91.5 * m));
+                                //c = SuperBitmap.GetPixel(101, (int)Math.Round(240 + 91.5 * m)); //DIFF MS
+                                c = SuperBitmap.GetPixel(330, 492 + 53 * m); //DIFF FF
 
                                 //0x5960 2287
                                 if (!c.Equals(0, 0, 0))
@@ -1598,23 +1601,44 @@ namespace CodeStrikeBot
                                     clicked = true;
 
                                     //no missions running
-                                    Controller.SendClick(this, 200, 250 + 91 * m, 300);
+                                    //Controller.SendClick(this, 200, 250 + 91 * m, 300); //DIFF MS
+                                    Controller.SendClick(this, 200, 490 + 53 * m, 300); //DIFF FF
                                     break;
                                 }
                             }
                         }
 
-                        c = SuperBitmap.GetPixel(355, 445);
-                        if (c.Equals(90, 219, 156))
+                        /* //keeping to know how to close ActivateVIP screen when Back button is broken
+                        chksum = ScreenState.GetScreenChecksum(SuperBitmap, 190, 115, 20); //DIFF FF
+                        if (chksum == 0x4739) //DIFF FF
                         {
-                            Controller.SendClick(this, 200, 432, 300);
+                            Controller.SendClick(this, 348, 122, 300); //close VIP inactive modal popup //DIFF FF
+                            missionsLeft = false;
                         }
-                        else if (c.Equals(49, 56, 57))
+                        else if (!clicked)
+                        {
+                            this.ClickBack(200); //click Back
+                        }*/
+
+                        Controller.CaptureApplication(this);
+
+                        //c = SuperBitmap.GetPixel(355, 445); //DIFF MS
+                        c = SuperBitmap.GetPixel(193, 249); //DIFF FF
+                        //if (c.Equals(90, 219, 156)) //DIFF MS
+                        if (c.Equals(123, 121, 132)) //if no quests available //DIFF FF
+                        {
+                            //Controller.SendClick(this, 200, 432, 300); //DIFF MS
+                            skipMissions = true;
+                            this.ClickBack(300); //DIFF FF
+                        }
+                        //else if (c.Equals(49, 56, 57)) //if loading //DIFF MS
+                        else if (c.Equals(57, 56, 66)) //if loading //DIFF FF
                         {
                             Thread.Sleep(50);
                         }
                         else if (!clicked)
                         {
+                            skipMissions = true;
                             this.ClickBack(200); //click Back
                         }
                     }
@@ -1624,7 +1648,78 @@ namespace CodeStrikeBot
 
                         missionsLeft = true;
 
-                        for (int m = 128; m < 521; m++)
+                        //138,191,243,295,347 //FF verified y coords
+
+                        for (int m = 0; m < 8; m++) //DIFF FF
+                        {
+                            chksum = ScreenState.GetScreenChecksum(SuperBitmap, 363, (int)Math.Round(138.45 + 52.1 * m), 10);
+
+                            if (chksum == 0x89b8) //quest in progress
+                            {
+                                break;
+                            }
+                            else if (chksum == 0x399b)
+                            {
+                                //collect quest
+                                clicked = true;
+
+                                Controller.SendClick(this, 350, 145 + 53 * m, 500);
+                                break;
+                            }
+                            //else if (c.Equals(90, 89, 90))
+                            //{
+                            //    clicked = true;
+                            //    Thread.Sleep(50);
+                            //    break;
+                            //}
+                            else if (chksum == 0x739b)
+                            {
+                                //start mission
+                                clicked = true;
+
+                                c = SuperBitmap.GetPixel(52, (int)Math.Round(144.45 + 52.1 * m));
+
+                                if (c.Equals(8, 8, 8)) //black
+                                {
+
+                                }
+                                else if (c.Equals(0, 8, 57)) //blue
+                                {
+
+                                }
+                                else if (c.Equals(115, 117, 115)) //white
+                                {
+
+                                }
+                                /*else if (c.Equals(222, 182, 255)) //purple
+                                {
+
+                                }*/
+                                else if (c.Equals(0, 56, 0)) //green
+                                {
+
+                                }
+                                /*else if (c.Equals(255, 247, 189)) //orange
+                                {
+
+                                }*/
+                                else
+                                {
+                                    SuperBitmap.Bitmap.Save(String.Format("{0}\\{1}.bmp", Controller.Instance.GetFullScreenshotDir(), c.Name.Replace("#", "")), System.Drawing.Imaging.ImageFormat.Bmp);
+                                }
+
+                                Controller.SendClick(this, 350, 145 + 53 * m, 400);
+                                break;
+                            }
+                            else if (chksum == 0xfe80) //loading
+                            {
+                                clicked = true;
+                                Thread.Sleep(50);
+                                break;
+                            }
+                        }
+
+                        /*for (int m = 128; m < 521; m++)
                         {
                             c = SuperBitmap.GetPixel(282, m);
 
@@ -1636,12 +1731,12 @@ namespace CodeStrikeBot
                                 Controller.SendClick(this, 300, m, 500);
                                 break;
                             }
-                            /*else if (c.Equals(90, 89, 90))
-                            {
-                                clicked = true;
-                                Thread.Sleep(50);
-                                break;
-                            }*/
+                            //else if (c.Equals(90, 89, 90))
+                            //{
+                            //    clicked = true;
+                            //    Thread.Sleep(50);
+                            //    break;
+                            //}
                             else if (c.Equals(57, 121, 140))
                             {
                                 //start mission
@@ -1681,7 +1776,7 @@ namespace CodeStrikeBot
                                 Controller.SendClick(this, 300, m, 400);
                                 break;
                             }
-                        }
+                        }*/ //DIFF MS
 
                         if (!clicked)
                         {
@@ -1692,7 +1787,7 @@ namespace CodeStrikeBot
                     {
                         missionsLeft = true;
 
-                        Controller.SendClick(this, 110, 670, 200); //click Missions
+                        Controller.SendClick(this, 110, 670, 200); //click Missions/Quests
                     }
                 }
                 else if (ScreenState.CurrentArea == Area.Menus.Missions.VIPStreak)
@@ -1710,6 +1805,8 @@ namespace CodeStrikeBot
                 }
                 else if (ScreenState.CurrentArea != Area.MainBases.Main)
                 {
+                    missionsLeft = true;
+                    skipMissions = true;
                     this.ClickBack(100); //click Back
                 }
             }
@@ -2551,8 +2648,6 @@ namespace CodeStrikeBot
                 }
                 else if (ScreenState.CurrentArea == Area.MainBases.Main)
                 {
-                    skipMissions = true; //TODO: Eventually remove
-
                     if (ScreenState.Overlays.Contains(Overlay.Widgets.AmmoFreeAttack))
                     {
                         tasksLeft = true;
@@ -2793,9 +2888,11 @@ namespace CodeStrikeBot
                 {
                     tasksLeft = this.CollectGiftsStep(); //Collect Gifts
                 }
-                else if (ScreenState.CurrentArea == Area.Menus.Mission || ScreenState.CurrentArea == Area.Menus.Missions.Daily || ScreenState.CurrentArea == Area.Menus.Missions.Alliance || ScreenState.CurrentArea == Area.Menus.Missions.VIP || ScreenState.CurrentArea == Area.Menus.Missions.VIPStreak)
+                else if (ScreenState.CurrentArea == Area.Menus.Mission
+                    || ScreenState.CurrentArea == Area.Menus.Missions.Daily || ScreenState.CurrentArea == Area.Menus.Missions.Alliance || ScreenState.CurrentArea == Area.Menus.Missions.VIP
+                    || ScreenState.CurrentArea == Area.Menus.Missions.VIPStreak)
                 {
-                    if (ScreenState.CurrentArea == Area.Menus.Mission)
+                    /*if (ScreenState.CurrentArea == Area.Menus.Mission)
                     {
                         Color c = SuperBitmap.GetPixel(138, 298);
 
@@ -2820,12 +2917,12 @@ namespace CodeStrikeBot
                             }
                         }
 
-                        /*c = bmp.GetPixel(355, 445);
-                        if (c.Equals(90, 219, 156))
-                        {
-                            tasksLeft = true;
-                            this.CompleteMissions(i);
-                        }*/
+                        //c = bmp.GetPixel(355, 445);
+                        //if (c.Equals(90, 219, 156))
+                        //{
+                        //    tasksLeft = true;
+                        //    this.CompleteMissions(i);
+                        //}
 
                         if (!tasksLeft)
                         {
@@ -2833,7 +2930,7 @@ namespace CodeStrikeBot
                             this.ClickBack(200);
                         }
                     }
-                    else
+                    else*/
                     {
                         tasksLeft = this.CompleteMissionsStep(); //Complete Missions
                     }

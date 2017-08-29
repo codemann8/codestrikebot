@@ -196,7 +196,7 @@ namespace CodeStrikeBot
             }
 
             //chkScheduler.Checked = true;
-            //chkTasks.Checked = true;
+            chkTasks.Checked = true;
 
             bckScreenState.RunWorkerAsync();
 
