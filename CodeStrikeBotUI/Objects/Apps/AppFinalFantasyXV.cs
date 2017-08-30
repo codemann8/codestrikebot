@@ -365,7 +365,15 @@ namespace CodeStrikeBot
                     CurrentArea = Area.Others.Ad;
                     break;
                 case 0x6aad:
-                    CurrentArea = Area.MainBases.SecretGiftCollect;
+                    c = bmp.GetPixel(190, 425);
+                    if (c.R < 80 && c.G < 80 && c.B < 80)
+                    {
+                        CurrentArea = Area.MainBases.GlobalGiftCollect;
+                    }
+                    else
+                    {
+                        CurrentArea = Area.MainBases.SecretGiftCollect;
+                    }
                     break;
                 case 0xa4b5: //blank menu
                     CurrentArea = Area.Menus.Casino;
@@ -569,13 +577,11 @@ namespace CodeStrikeBot
                 c = bmp.GetPixel(275, 535);
                 //Rectangle(4, 489, 63, 18)
                 //if (Math.Abs(c.R - c.G) <= 11 && (c.Within(157, 156, 155, 28) || c2.Within(165, 162, 156, 28)) && 
-                if (ScreenState.BlackBoxExists(bmp, new Rectangle(253, 562, 63, 18), Color.FromArgb(74, 77, 74), 10)
-                && !c.Equals(57, 85, 140))
+                if (ScreenState.BlackBoxExists(bmp, new Rectangle(4, 588, 51, 18), Color.FromArgb(74, 77, 74)))
                 {
                     Overlays.Add(Overlay.Widgets.GlobalGift);
                 }
 
-                //DIFF ff
                 if (!ScreenState.BlackBoxExists(bmp, new Rectangle(64, 588, 51, 18), Color.FromArgb(74, 77, 74)))
                 {
                     Overlays.Add(Overlay.Widgets.SecretGift);

@@ -2660,16 +2660,15 @@ namespace CodeStrikeBot
                         //Controller.SendClick(this, 210, 558, 1200); //click Free Attack
                         Controller.SendClick(this, 275, 600, 2000); //click Free Attack DIFF ff
                     }
-                    /*else if (state.Overlays.Contains(Overlay.Widgets.GlobalGift))
+                    else if (ScreenState.Overlays.Contains(Overlay.Widgets.GlobalGift))
                     {
                         tasksLeft = true;
-
-                        this.SendClick(40, 465, 200); //click Global Gift
-                    }*/
-                    else if (ScreenState.Overlays.Contains(Overlay.Widgets.SecretGift) || ScreenState.Overlays.Contains(Overlay.Widgets.GlobalGift))
+                        Controller.SendClick(this, 30, 575, 200); //click Global Gift
+                    }
+                    else if (ScreenState.Overlays.Contains(Overlay.Widgets.SecretGift))
                     {
                         tasksLeft = true;
-                        Controller.SendClick(this, 285, 558, 200); //click Secret/Global Gift
+                        Controller.SendClick(this, 90, 575, 200); //click Secret Gift
                     }
                     else if (ScreenState.Overlays.Contains(Overlay.Widgets.DailyLogin))
                     {
@@ -2724,12 +2723,12 @@ namespace CodeStrikeBot
                 else if (ScreenState.CurrentArea == Area.MainBases.SecretGiftCollect)
                 {
                     tasksLeft = true;
-                    Controller.SendClick(this, 140, 395, 500); //click Collect
+                    Controller.SendClick(this, 140, 425, 500); //click Collect
                 }
                 else if (ScreenState.CurrentArea == Area.MainBases.GlobalGiftCollect)
                 {
                     tasksLeft = true;
-                    Controller.SendClick(this, 140, 425, 500); //click Collect
+                    Controller.SendClick(this, 140, 440, 500); //click Collect
                 }
                 else if (ScreenState.CurrentArea == Area.Menus.RewardCrate)
                 {

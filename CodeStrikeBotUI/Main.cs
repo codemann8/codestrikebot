@@ -1858,7 +1858,11 @@ namespace CodeStrikeBot
                                     }
                                     else if (s.ScreenState.CurrentArea == Area.MainBases.SecretGiftCollect)
                                     {
-                                        Controller.SendClick(s, 190, 420, 2000);
+                                        Controller.SendClick(s, 190, 425, 2000);
+                                    }
+                                    else if (s.ScreenState.CurrentArea == Area.MainBases.GlobalGiftCollect)
+                                    {
+                                        Controller.SendClick(s, 190, 440, 2000);
                                     }
                                     else if (s.ScreenState.CurrentArea == Area.Unknown)
                                     {
@@ -1891,6 +1895,17 @@ namespace CodeStrikeBot
                                         if (s.ScreenState.Overlays.Contains(Overlay.Widgets.SecretGift))
                                         {
                                             Controller.SendClick(s, 90, 575, 1000);
+                                        }
+                                    }
+
+                                    if (s.ScreenState.Overlays.Contains(Overlay.Widgets.GlobalGift))
+                                    {
+                                        System.Threading.Thread.Sleep(5000);
+                                        Controller.CaptureApplication(s);
+
+                                        if (s.ScreenState.Overlays.Contains(Overlay.Widgets.GlobalGift))
+                                        {
+                                            Controller.SendClick(s, 30, 575, 1000);
                                         }
                                     }
 
