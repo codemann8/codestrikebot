@@ -958,12 +958,12 @@ namespace CodeStrikeBot
 
                     do
                     {
-                        Controller.SendClick(this, 202, 194, (int)(225 * (retryCount / 2.0 + 1))); //click X
+                        Controller.SendClick(this, 182, 194, (int)(225 * (retryCount / 2.0 + 1))); //click X
                         Controller.SendKey(this, x.ToString());
                         Thread.Sleep((int)((180 + x.ToString().Length * 80) * TimeoutFactor * (retryCount / 2.0 + 1)));
 
                         Controller.CaptureApplication(this);
-                        chksum = ScreenState.GetScreenChecksum(this.SuperBitmap, 186, 184, 10);
+                        chksum = ScreenState.GetScreenChecksum(this.SuperBitmap, 118, 184, 10);
                     }
                     while (chksum == 0xfde4 && tmrRun.ElapsedMilliseconds < 5000);
 
@@ -976,22 +976,24 @@ namespace CodeStrikeBot
                         Thread.Sleep((int)((180 + y.ToString().Length * 80) * TimeoutFactor * (retryCount / 2.0 + 1)));
 
                         Controller.CaptureApplication(this);
-                        chksum = ScreenState.GetScreenChecksum(this.SuperBitmap, 281, 184, 10);
+                        chksum = ScreenState.GetScreenChecksum(this.SuperBitmap, 230, 184, 10);
                     }
                     while (chksum == 0xfde4 && tmrRun.ElapsedMilliseconds < 5000);
 
                     do
                     {
                         Thread.Sleep((int)((180 + y.ToString().Length * 80) * TimeoutFactor * (retryCount / 2.0 + 1)));
-                        Controller.SendClick(this, 278, 283, (int)(400 * (retryCount / 2.0 + 1))); //click Go to
+                        Controller.SendClick(this, 278, 250, (int)(450 * (retryCount / 2.0 + 1))); //click Go to
 
                         Controller.CaptureApplication(this);
                     }
                     while (ScreenState.CurrentArea == Area.StateMaps.Coordinate);
 
+                    chksum = ScreenState.GetScreenChecksum(this.SuperBitmap, 230, 184, 10);
+
                     if (ScreenState.CurrentArea == Area.StateMaps.CoordinateError)
                     {
-                        Controller.SendClick(this, 112, 294, (int)(300 * (retryCount / 2.0 + 1))); //click Cancel
+                        Controller.SendClick(this, 112, 264, (int)(300 * (retryCount / 2.0 + 1))); //click Cancel
                         retryCount++;
                     }
                     else

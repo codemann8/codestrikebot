@@ -394,6 +394,18 @@ namespace CodeStrikeBot
                             {
                                 CurrentArea = Area.StateMaps.FullScreen;
                             }
+                            else if (chksum2 == 0xc465)
+                            {
+                                chksum2 = ScreenState.GetScreenChecksum(bmp, 215, 235, 10);
+                                if (chksum2 == 0x3702)
+                                {
+                                    CurrentArea = Area.StateMaps.CoordinateError;
+                                }
+                                else
+                                {
+                                    CurrentArea = Area.StateMaps.Coordinate;
+                                }
+                            }
                             else
                             {
                                 chksum2 = ScreenState.GetScreenChecksum(bmp, 60, 120, 20);

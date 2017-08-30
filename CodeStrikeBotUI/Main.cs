@@ -1508,7 +1508,9 @@ namespace CodeStrikeBot
 
                 //Controller.SendKeyTest(ctrl.sc[0], "ok");
 
-                ctrl.sc[0].KillApp();
+                //ctrl.sc[0].KillApp();
+
+                ctrl.sc[0].GoToCoordinate(50, 78);
 
                 //sc.SendClick(375, 20, 300); //click exit fullscreen
                 //sc.SendClick(150, 610, 300); //click chat bar
