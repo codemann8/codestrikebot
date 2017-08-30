@@ -611,7 +611,8 @@ namespace CodeStrikeBot
                     tmrRun.Start();
                     ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 350, 655, 10);
 
-                    while ((chksum != 0x56c9 && chksum != 0xa0ba && chksum != 0x1ae8) && tmrRun.ElapsedMilliseconds < 5000)
+                    //while ((chksum != 0x56c9 && chksum != 0xa0ba && chksum != 0x1ae8) && tmrRun.ElapsedMilliseconds < 5000) //DIFF MS
+                    while (chksum != 0x4fba && tmrRun.ElapsedMilliseconds < 5000) //DIFF FF
                     {
                         if (ScreenState.CurrentArea == Area.Others.Splash)
                         {
@@ -623,20 +624,21 @@ namespace CodeStrikeBot
                         chksum = ScreenState.GetScreenChecksum(SuperBitmap, 350, 655, 10);
                     }
 
-                    if (chksum == 0x56c9 || chksum == 0xa0ba)
+                    //if (chksum == 0x56c9 || chksum == 0xa0ba) //DIFF MS
+                    if (chksum == 0x4fba) //DIFF FF
                     {
                         tmrRun.Restart();
 
                         do
                         {
-                            Controller.SendClick(this, 360, 680, 300); //click More
+                            Controller.SendClick(this, 360, 680, 500); //click More
                             Controller.CaptureApplication(this);
                         }
                         while (ScreenState.CurrentArea != Area.Menus.More && tmrRun.ElapsedMilliseconds < 3000);
 
                         if (tmrRun.ElapsedMilliseconds > 3000 && ScreenState.CurrentArea == Area.Unknown)
                         {
-                            //TODO: Revisit why this is Unknown, screenshot
+                            //TODO: Revisit why this is Unknown, screenshot, probably loading More menu
                             if (!KillApp())
                             {
                                 Controller.Instance.RestartEmulator(this);
@@ -649,9 +651,9 @@ namespace CodeStrikeBot
 
                             do
                             {
-                                Controller.SendClick(this, 245, 200, 300); //click EW
+                                //Controller.SendClick(this, 245, 200, 300); //click EW //DIFF MS
+                                Controller.SendClick(this, 335, 200, 300); //click EW //DIFF FF
                                 Controller.CaptureApplication(this);
-
                             }
                             while (ScreenState.CurrentArea != Area.Menus.Account && tmrRun.ElapsedMilliseconds < 3000);
 
@@ -662,25 +664,25 @@ namespace CodeStrikeBot
                                 Color c = new Color();
                                 do
                                 {
-                                    Controller.SendClick(this, 200, 550, 300); //click Logout
+                                    Controller.SendClick(this, 200, 555, 300); //click Logout
                                     Controller.CaptureApplication(this);
-                                    c = SuperBitmap.GetPixel(110, 545);
+                                    c = SuperBitmap.GetPixel(110, 555);
                                 }
-                                while (c.Equals(231, 20, 41) && tmrRun.ElapsedMilliseconds < 5000);
+                                while (c.Equals(189, 40, 41) && tmrRun.ElapsedMilliseconds < 5000);
 
-                                if (!c.Equals(231, 20, 41))
+                                if (!c.Equals(189, 40, 41))
                                 {
                                     tmrRun.Restart();
 
                                     do
                                     {
-                                        Controller.SendClick(this, 120, 225); //click Yes
+                                        Controller.SendClick(this, 120, 265); //click Yes
                                         Controller.CaptureApplication(this);
-                                        c = SuperBitmap.GetPixel(60, 224);
+                                        c = SuperBitmap.GetPixel(60, 265);
                                     }
-                                    while (!c.Equals(57, 121, 140) && tmrRun.ElapsedMilliseconds < 3000);
+                                    while (c.Equals(0, 101, 214) && tmrRun.ElapsedMilliseconds < 3000);
 
-                                    if (c.Equals(57, 121, 140))
+                                    if (!c.Equals(0, 101, 214))
                                     {
                                         tmrRun.Restart();
 
@@ -707,7 +709,7 @@ namespace CodeStrikeBot
                             }
                         }
                     }
-                    else if (chksum == 0x1ae8)
+                    else if (chksum == 0x1ae8) //TODO: Figure out what this case means
                     {
                         if (!KillApp())
                         {
