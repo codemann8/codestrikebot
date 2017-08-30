@@ -1898,7 +1898,7 @@ namespace CodeStrikeBot
                     catch (ArgumentException e) { failure--; }
                     catch (System.ComponentModel.Win32Exception e)
                     {
-                        failure--;;
+                        failure--;
                     }
                     catch (InvalidOperationException e)
                     {
@@ -1926,7 +1926,20 @@ namespace CodeStrikeBot
 
                     using (Graphics g = Graphics.FromImage(bmp))
                     {
-                        g.DrawImage(s.SuperBitmap.Bitmap, x, y, w, h);
+                        int failure = 100;
+                        do
+                        {
+                            try
+                            {
+                                g.DrawImage(s.SuperBitmap.Bitmap, 0, 0, new Rectangle(x, y, w, h), GraphicsUnit.Pixel);
+                                failure = 0;
+                            }
+                            catch (InvalidOperationException ex)
+                            {
+                                failure--;
+                            }
+                        }
+                        while (failure > 0);
                     }
                 }
                 catch (System.ComponentModel.Win32Exception e)

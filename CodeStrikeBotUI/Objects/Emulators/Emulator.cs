@@ -951,6 +951,8 @@ namespace CodeStrikeBot
                 }
                 while (ScreenState.CurrentArea == Area.StateMaps.Main || ScreenState.CurrentArea == Area.StateMaps.FullScreen);
 
+                System.Windows.Forms.Application.DoEvents();
+
                 if (ScreenState.CurrentArea == Area.StateMaps.Coordinate)
                 {
                     ushort chksum;
@@ -967,6 +969,7 @@ namespace CodeStrikeBot
                     }
                     while (chksum == 0xfde4 && tmrRun.ElapsedMilliseconds < 5000);
 
+                    System.Windows.Forms.Application.DoEvents();
                     tmrRun.Restart();
 
                     do
@@ -980,6 +983,8 @@ namespace CodeStrikeBot
                     }
                     while (chksum == 0xfde4 && tmrRun.ElapsedMilliseconds < 5000);
 
+                    System.Windows.Forms.Application.DoEvents();
+
                     do
                     {
                         Thread.Sleep((int)((180 + y.ToString().Length * 80) * TimeoutFactor * (retryCount / 2.0 + 1)));
@@ -989,6 +994,7 @@ namespace CodeStrikeBot
                     }
                     while (ScreenState.CurrentArea == Area.StateMaps.Coordinate);
 
+                    System.Windows.Forms.Application.DoEvents();
                     chksum = ScreenState.GetScreenChecksum(this.SuperBitmap, 230, 184, 10);
 
                     if (ScreenState.CurrentArea == Area.StateMaps.CoordinateError)
@@ -1178,7 +1184,8 @@ namespace CodeStrikeBot
                     Controller.CaptureApplication(this);
                 }
 
-                Controller.ZoomOut(this);
+                //Controller.ZoomOut(this); //DIFF MS
+                System.Windows.Forms.Application.DoEvents();
 
                 int numX = 102, numY = 54;//102/54
                 int numSlicesX = 3, numSlicesY = 3;
@@ -1249,6 +1256,8 @@ namespace CodeStrikeBot
 
                                             int wX = newX * 5 + 3 - (newY % 2), wY = newY * 19 + 9 - (newX % 2); //wX and wY determine the coordinates within the game map
 
+                                            System.Windows.Forms.Application.DoEvents();
+
                                             if (this.GoToCoordinate(wX, wY))
                                             {
                                                 //tmrTimeout.Start();
@@ -1258,6 +1267,8 @@ namespace CodeStrikeBot
                                                 System.Windows.Forms.Timer tmrContinue = new System.Windows.Forms.Timer();
                                                 tmrContinue.Interval = 2500;
                                                 tmrContinue.Start();
+                                                Stopwatch tmrContinue2 = new Stopwatch();
+                                                tmrContinue2.Start();
                                                 Bitmap bmp, bmp2;
                                                 do
                                                 {
@@ -1273,7 +1284,8 @@ namespace CodeStrikeBot
                                                         bmp2.Save(String.Format("{0}\\pic2.jpg", Controller.Instance.GetFullScreenshotDir()), ImageFormat.Jpeg);
                                                     }
                                                 }
-                                                while (this.CompareBitmaps(bmp, bmp2) < 94 && true);
+                                                while (this.CompareBitmaps(bmp, bmp2) < 94 && tmrContinue2.ElapsedMilliseconds > 2500);
+                                                tmrContinue2.Stop();
                                                 tmrContinue.Stop();
 
                                                 bmp.Dispose();
@@ -1302,7 +1314,7 @@ namespace CodeStrikeBot
                                             graphics.DrawLine(new Pen(Color.Black, (gridX % 100 == 0 ? 5 : 1)), new Point(gridX * 1665 / 25 + 65, (((y + sY * (numY / numSlicesY)) * 19) % (1024 / numSlicesY)) * 602 / 18), new Point(gridX * 1665 / 25 + 65, (((y + sY * (numY / numSlicesY)) * 19) % (1024 / numSlicesY)) * 602 / 18 + 682));
                                         }
 
-                                        worldMap.Save(String.Format("{0}\\worldMap{1}.jpg", Controller.Instance.GetFullScreenshotDir(), filename), ImageFormat.Jpeg);
+                                        worldMap.Save(String.Format("{0}\\{1}.jpg", Controller.Instance.GetFullScreenshotDir(), filename), ImageFormat.Jpeg);
                                     }
                                 }
                             }
@@ -1589,7 +1601,7 @@ namespace CodeStrikeBot
                         {
                             //Main.CurrentForm.UpdateBmpChk(SuperBitmap, 347, (int)Math.Round(292 + 91.5 * m), 8);
                             //chksum = ScreenState.GetScreenChecksum(SuperBitmap, 347, (int)Math.Round(292 + 91.5 * m), 8); //DIFF MS
-                            chksum = ScreenState.GetScreenChecksum(SuperBitmap, 355, 462 + 53 * m, 8); //DIFF FF
+                            chksum = ScreenState.GetScreenChecksum(SuperBitmap, 355, 462 + 53 * m + (m == 2 ? 60 : 0), 8); //DIFF FF
 
                             //if (chksum != 0x2995 && chksum != 0x1583) //missions available
                             //if (chksum != 0x3900 && chksum != 0x5f0f && chksum != 0xfc2d) //DIFF MS
@@ -1638,13 +1650,15 @@ namespace CodeStrikeBot
                     {
                         bool clicked = false;
 
+                        int vipOffset = (ScreenState.CurrentArea == Area.Menus.Missions.VIP ? 60 : 0);
+
                         missionsLeft = true;
 
                         //138,191,243,295,347 //FF verified y coords
 
                         for (int m = 0; m < 8; m++) //DIFF FF
                         {
-                            chksum = ScreenState.GetScreenChecksum(SuperBitmap, 363, (int)Math.Round(138.45 + 52.1 * m), 10);
+                            chksum = ScreenState.GetScreenChecksum(SuperBitmap, 363, (int)Math.Round(138.45 + 52.1 * m) + vipOffset, 10);
 
                             if (chksum == 0x89b8) //quest in progress
                             {
@@ -1655,7 +1669,7 @@ namespace CodeStrikeBot
                                 //collect quest
                                 clicked = true;
 
-                                Controller.SendClick(this, 350, 145 + 53 * m, 500);
+                                Controller.SendClick(this, 350, 145 + 53 * m + vipOffset, 500);
                                 break;
                             }
                             //else if (c.Equals(90, 89, 90))
@@ -1669,7 +1683,7 @@ namespace CodeStrikeBot
                                 //start mission
                                 clicked = true;
 
-                                c = SuperBitmap.GetPixel(52, (int)Math.Round(144.45 + 52.1 * m));
+                                c = SuperBitmap.GetPixel(52, (int)Math.Round(144.45 + 52.1 * m) + vipOffset);
 
                                 if (c.Equals(8, 8, 8)) //black
                                 {
@@ -1700,7 +1714,7 @@ namespace CodeStrikeBot
                                     SuperBitmap.Bitmap.Save(String.Format("{0}\\{1}.bmp", Controller.Instance.GetFullScreenshotDir(), c.Name.Replace("#", "")), System.Drawing.Imaging.ImageFormat.Bmp);
                                 }
 
-                                Controller.SendClick(this, 350, 145 + 53 * m, 400);
+                                Controller.SendClick(this, 350, 145 + 53 * m + vipOffset, 400);
                                 break;
                             }
                             else if (chksum == 0xfe80) //loading
@@ -2929,7 +2943,8 @@ namespace CodeStrikeBot
                 }
                 else if (ScreenState.CurrentArea == Area.Menus.Missions.ActivateVIP)
                 {
-                    this.ClickBack(100);
+                    this.skipMissions = true;
+                    this.ClickBack(300);
                     this.ClickBack(300);
                 }
                 else if (ScreenState.CurrentArea == Area.Others.Quit || ScreenState.CurrentArea == Area.Menus.Resources)

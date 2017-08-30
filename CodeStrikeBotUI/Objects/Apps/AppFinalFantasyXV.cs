@@ -139,10 +139,8 @@ namespace CodeStrikeBot
                 case 0xe273:
                     CurrentArea = Area.Menus.Missions.Alliance;
                     break;
-                /*case 0x4262:
-                case 0x6074: //nox
-                case 0x7067: //nox new
-                    CurrentArea = Area.Menus.Missions.VIP;*/
+                case 0x7333:
+                    CurrentArea = Area.Menus.Missions.VIP;
                     break;
                 case 0x6e83:
                     CurrentArea = Area.Menus.Missions.ActivateVIP;

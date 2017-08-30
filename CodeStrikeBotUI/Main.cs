@@ -1510,7 +1510,11 @@ namespace CodeStrikeBot
 
                 //ctrl.sc[0].KillApp();
 
-                ctrl.sc[0].GoToCoordinate(50, 78);
+                //ctrl.sc[0].GoToCoordinate(50, 78);
+
+                Bitmap bmp = Controller.CaptureApplication(ctrl.sc[0], 0, 32, 394, 648);
+                bmp.Save(String.Format("{0}\\pic1.jpg", Controller.Instance.GetFullScreenshotDir()), ImageFormat.Jpeg);
+                                                        
 
                 //sc.SendClick(375, 20, 300); //click exit fullscreen
                 //sc.SendClick(150, 610, 300); //click chat bar
