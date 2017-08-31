@@ -1856,14 +1856,6 @@ namespace CodeStrikeBot
                                             ctrl.Login(s.Emulator.LastKnownAccount);
                                         }
                                     }
-                                    else if (s.ScreenState.CurrentArea == Area.MainBases.SecretGiftCollect)
-                                    {
-                                        Controller.SendClick(s, 190, 425, 2000);
-                                    }
-                                    else if (s.ScreenState.CurrentArea == Area.MainBases.GlobalGiftCollect)
-                                    {
-                                        Controller.SendClick(s, 190, 440, 2000);
-                                    }
                                     else if (s.ScreenState.CurrentArea == Area.Unknown)
                                     {
                                         System.Threading.Thread.Sleep(10000);
@@ -1875,19 +1867,7 @@ namespace CodeStrikeBot
                                         }
                                     }
 
-                                    if (s.ScreenState.Overlays.Contains(Overlay.Widgets.AllianceHelp)
-                                        || s.ScreenState.Overlays.Contains(Overlay.Widgets.AmmoFreeAttack)
-                                        || s.ScreenState.CurrentArea == Area.Menus.ShootingRanges.Main
-                                        || s.ScreenState.CurrentArea == Area.Menus.ShootingRanges.NormalCrate
-                                        || s.ScreenState.CurrentArea == Area.Menus.Casino)
-                                    {
-                                        ctrl.BeginTask();
-                                        s.RegularTasksStep();
-                                        ctrl.EndTask();
-                                    }
-
-
-                                    if (s.ScreenState.Overlays.Contains(Overlay.Widgets.SecretGift))
+                                    /*if (s.ScreenState.Overlays.Contains(Overlay.Widgets.SecretGift))
                                     {
                                         System.Threading.Thread.Sleep(5000);
                                         Controller.CaptureApplication(s);
@@ -1907,7 +1887,7 @@ namespace CodeStrikeBot
                                         {
                                             Controller.SendClick(s, 30, 575, 1000);
                                         }
-                                    }
+                                    }*/
 
                                     if ((s.ScreenState.Overlays.Contains(Overlay.Incomings.Attack) || s.ScreenState.Overlays.Contains(Overlay.Incomings.Rally)))
                                     {
@@ -1929,7 +1909,16 @@ namespace CodeStrikeBot
                                         }
                                     }
 
-                                    if (s.ScreenState.CurrentArea == Area.Menus.AllianceHelp)
+                                    if (s.ScreenState.Overlays.Contains(Overlay.Widgets.AllianceHelp)
+                                        || s.ScreenState.CurrentArea == Area.Menus.AllianceHelp
+                                        || s.ScreenState.Overlays.Contains(Overlay.Widgets.AmmoFreeAttack)
+                                        || s.ScreenState.CurrentArea == Area.Menus.ShootingRanges.Main
+                                        || s.ScreenState.CurrentArea == Area.Menus.ShootingRanges.NormalCrate
+                                        || s.ScreenState.CurrentArea == Area.Menus.Casino
+                                        || s.ScreenState.Overlays.Contains(Overlay.Widgets.GlobalGift)
+                                        || s.ScreenState.Overlays.Contains(Overlay.Widgets.SecretGift)
+                                        || s.ScreenState.CurrentArea == Area.MainBases.GlobalGiftCollect
+                                        || s.ScreenState.CurrentArea == Area.MainBases.SecretGiftCollect)
                                     {
                                         ctrl.BeginTask();
                                         s.RegularTasksStep();

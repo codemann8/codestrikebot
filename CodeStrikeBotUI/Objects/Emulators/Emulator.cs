@@ -2650,7 +2650,7 @@ namespace CodeStrikeBot
                 if (ScreenState.Overlays.Contains(Overlay.Widgets.AllianceHelp))
                 {
                     tasksLeft = true;
-                    Controller.SendClick(this, 365, 565, 200); //click Alliance Help
+                    Controller.SendClick(this, 365, 565, 250); //click Alliance Help
                 }
                 else if (ScreenState.CurrentArea == Area.MainBases.Main)
                 {
