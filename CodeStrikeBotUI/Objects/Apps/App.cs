@@ -573,6 +573,13 @@ namespace CodeStrikeBot
                 public static readonly ID Warzone = Tile[9];
                 public static readonly ID ControlPoint = Tile[10];
             }
+            public static readonly ID Popup = Dialog[1];
+            public static class Popups
+            {
+                public static readonly ID Generic = Popup[0];
+                public static readonly ID WarningOutsideAttack = Popup[1];
+                public static readonly ID ScoutNotUnlocked = Popup[2];
+            }
         }
     }
 

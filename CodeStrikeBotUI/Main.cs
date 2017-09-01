@@ -1928,13 +1928,25 @@ namespace CodeStrikeBot
                                         || s.ScreenState.CurrentArea == Area.Menus.ShootingRanges.NormalCrate
                                         || s.ScreenState.CurrentArea == Area.Menus.Casino
                                         || s.ScreenState.Overlays.Contains(Overlay.Widgets.GlobalGift)
-                                        || s.ScreenState.Overlays.Contains(Overlay.Widgets.SecretGift)
                                         || s.ScreenState.CurrentArea == Area.MainBases.GlobalGiftCollect
                                         || s.ScreenState.CurrentArea == Area.MainBases.SecretGiftCollect)
                                     {
                                         ctrl.BeginTask();
                                         s.RegularTasksStep();
                                         ctrl.EndTask();
+                                    }
+
+                                    if (s.ScreenState.Overlays.Contains(Overlay.Widgets.SecretGift))
+                                    {
+                                        System.Threading.Thread.Sleep(5000);
+                                        Controller.CaptureApplication(s);
+
+                                        if (s.ScreenState.Overlays.Contains(Overlay.Widgets.SecretGift))
+                                        {
+                                            ctrl.BeginTask();
+                                            s.RegularTasksStep();
+                                            ctrl.EndTask();
+                                        }
                                     }
                                 }
                             }

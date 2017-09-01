@@ -944,9 +944,7 @@ namespace CodeStrikeBot
             {
                 do
                 {
-                    //this.SendClick(133, 15); //click magnify glass
-                    Controller.SendClick(this, 117, 15, (int)(150 * (retryCount / 2.0 + 1))); //click magnify glass
-
+                    Controller.SendClick(this, 117, 18, (int)(150 * (retryCount / 2.0 + 1))); //click magnify glass
                     Controller.CaptureApplication(this);
                 }
                 while (ScreenState.CurrentArea == Area.StateMaps.Main || ScreenState.CurrentArea == Area.StateMaps.FullScreen);
@@ -1286,18 +1284,7 @@ namespace CodeStrikeBot
                                                 
                                                 tmrContinue.Stop();
 
-                                                if (ScreenState.CurrentArea == Area.StateMaps.Coordinate
-                                                    || ScreenState.Overlays.Contains(Overlay.Dialogs.Tiles.Empty)
-                                                    || ScreenState.Overlays.Contains(Overlay.Dialogs.Tiles.Blocked)
-                                                    || ScreenState.Overlays.Contains(Overlay.Dialogs.Tiles.RssOpen)
-                                                    || ScreenState.Overlays.Contains(Overlay.Dialogs.Tiles.PlayerEnemy)
-                                                    || ScreenState.Overlays.Contains(Overlay.Dialogs.Tiles.ControlPoint)
-                                                    || ScreenState.Overlays.Contains(Overlay.Dialogs.Tiles.Warzone))
-                                                {
-                                                    this.ClickBack(300);
-                                                    x--;
-                                                }
-                                                else if (ScreenState.Overlays.Contains(Overlay.Dialogs.Tiles.Rebel))
+                                                if (ScreenState.Overlays.Contains(Overlay.Dialogs.Tiles.Rebel))
                                                 {
                                                     this.ClickBack(300);
                                                     Controller.CaptureApplication(this);
@@ -1316,10 +1303,17 @@ namespace CodeStrikeBot
 
                                                     x--;
                                                 }
+                                                else if (ScreenState.CurrentArea == Area.StateMaps.Coordinate
+                                                    || ScreenState.CurrentArea == Area.StateMaps.CoordinateError
+                                                    || ScreenState.Overlays.Count > 0)
+                                                {
+                                                    this.ClickBack(300);
+                                                    x--;
+                                                }
                                                 else if (ScreenState.CurrentArea == Area.StateMaps.FullScreen)
                                                 {
                                                     //graphics.DrawImage(bmp, x * 334 - ((y % 2) * 67) + 67, y * 636 - ((x % 2) * 34) + 34, bmp.Width, bmp.Height);
-                                                    graphics.DrawImage(bmp2, ((wX - 2) % (512 / numSlicesX)) * 467 / 7, ((wY - 8) % (1024 / numSlicesY)) * 602 / 18, bmp2.Width, bmp2.Height);
+                                                    graphics.DrawImage(bmp2, ((wX - 2) % (512 / numSlicesX)) * 467 / 7, ((wY - 8) % (1024 / numSlicesY)) * 601 / 18, bmp2.Width, bmp2.Height);
                                                 }
                                                 else
                                                 {
@@ -1343,18 +1337,10 @@ namespace CodeStrikeBot
 
                                                     worldMap.Save(String.Format("{0}\\{1}.jpg", Controller.Instance.GetFullScreenshotDir(), filename), ImageFormat.Jpeg);
 
-                                                    while (ScreenState.CurrentArea != Area.MainBases.Main)
+                                                    while (ScreenState.CurrentArea == Area.Unknown)
                                                     {
-                                                        System.Windows.Forms.Application.DoEvents();
-                                                        Thread.Sleep(50);
-                                                    }
-
-                                                    Thread.Sleep(3000);
-
-                                                    while (ScreenState.CurrentArea != Area.MainBases.Main)
-                                                    {
-                                                        System.Windows.Forms.Application.DoEvents();
-                                                        Thread.Sleep(50);
+                                                        ClickBack();
+                                                        Thread.Sleep(300);
                                                     }
                                                     
                                                     Map(sX, sY, y, x);
@@ -2595,12 +2581,18 @@ namespace CodeStrikeBot
             {
                 Controller.CaptureApplication(this);
 
+                while ((ScreenState.CurrentArea == Area.StateMaps.FullScreen || ScreenState.CurrentArea == Area.StateMaps.Main)
+                    && ScreenState.Overlays.Count > 0)
+                {
+                    this.ClickBack(300);
+                    Controller.CaptureApplication(this);
+                }
+
                 //Exit fullscreen
                 if (ScreenState.CurrentArea == Area.StateMaps.FullScreen)
                 {
                     tasksLeft = false;
-
-                    Controller.SendClick(this, 375, 10, 100); //click Fullscreen
+                    Controller.SendClick(this, 375, 10, 200); //click Fullscreen
                 }
 
                 Controller.CaptureApplication(this);
@@ -2797,7 +2789,16 @@ namespace CodeStrikeBot
                 else if (ScreenState.CurrentArea == Area.MainBases.SecretGiftCollect)
                 {
                     tasksLeft = true;
-                    Controller.SendClick(this, 140, 425, 500); //click Collect
+
+                    ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 190, 225, 20);
+                    if (chksum == 0x4f25) //gift not ready
+                    {
+                        Controller.SendClick(this, 190, 370, 500); //click OK
+                    }
+                    else
+                    {
+                        Controller.SendClick(this, 140, 425, 500); //click Collect
+                    }
                 }
                 else if (ScreenState.CurrentArea == Area.MainBases.GlobalGiftCollect)
                 {

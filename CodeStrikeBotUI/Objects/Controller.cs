@@ -1192,7 +1192,6 @@ namespace CodeStrikeBot
 
         public static void SendKey(Screen s, string keys, bool escape = false)
         {
-            
             if (keys != null && s != null && s.EmulatorProcess != null && !s.EmulatorProcess.HasExited && s.ScreenState.CurrentArea != Area.Emulators.Loading)
             {
                 if (s.Emulator.Type == EmulatorType.Leapdroid)
@@ -1201,7 +1200,18 @@ namespace CodeStrikeBot
                 }
                 else
                 {
-                    if (!s.ClipboardFailed)
+                    if (keys.All(c => "1234567890".Contains(c)))
+                    {
+                        if (Main.CurrentForm.InvokeRequired)
+                        {
+                            Main.CurrentForm.Invoke(new Action(() => SendKeyDirect(s, keys)));
+                        }
+                        else
+                        {
+                            SendKeyDirect(s, keys);
+                        }
+                    }
+                    else if (!s.ClipboardFailed)
                     {
                         if (Main.CurrentForm.InvokeRequired)
                         {

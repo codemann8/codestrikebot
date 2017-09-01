@@ -340,9 +340,25 @@ namespace CodeStrikeBot
                     {
                         CurrentArea = Area.StateMaps.CoordinateError;
                     }
-                    else
+                    else if (chksum2 == 0xeb3d)
                     {
                         CurrentArea = Area.StateMaps.Coordinate;
+                    }
+                    else
+                    {
+                        chksum3 = ScreenState.GetScreenChecksum(bmp, 366, 16, 10);
+                        if (chksum3 == 0x630e)
+                        {
+                            CurrentArea = Area.StateMaps.Main;
+                        }
+                        else if (chksum3 == 0x2a78)
+                        {
+                            CurrentArea = Area.StateMaps.FullScreen;
+                        }
+                        else
+                        {
+                            enteredGeneric = true;
+                        }
                     }
                     break;
                 case 0x6dcb: //black screen
@@ -546,14 +562,38 @@ namespace CodeStrikeBot
             else if (CurrentArea == Area.StateMaps.Main || CurrentArea == Area.StateMaps.FullScreen)
             {
                 chksum = ScreenState.GetScreenChecksum(bmp, 352, 545, 20);
-
                 if (chksum == 0xab54)
                 {
                     Overlays.Add(Overlay.Widgets.AllianceHelp);
                 }
 
-                chksum = ScreenState.GetScreenChecksum(bmp, 54, 198, 10);
+                chksum = ScreenState.GetScreenChecksum(bmp, 190, 115, 20);
+                if (chksum == 0xce2f) //tip!
+                {
+                    chksum = ScreenState.GetScreenChecksum(bmp, 190, 150, 20);
+                    if (chksum == 0x8772) //warning troops attacking outside base are not saved by hospital
+                    {
+                        Overlays.Add(Overlay.Dialogs.Popups.WarningOutsideAttack);
+                    }
+                    else
+                    {
+                        Overlays.Add(Overlay.Dialogs.Popups.Generic);
+                    }
+                }
+                else if (chksum == 0xd856) //scout
+                {
+                    chksum = ScreenState.GetScreenChecksum(bmp, 190, 150, 20);
+                    if (chksum == 0x68e1) //scout not unlocked 
+                    {
+                        Overlays.Add(Overlay.Dialogs.Popups.ScoutNotUnlocked);
+                    }
+                    else
+                    {
+                        Overlays.Add(Overlay.Dialogs.Popups.Generic);
+                    }
+                }
 
+                chksum = ScreenState.GetScreenChecksum(bmp, 54, 198, 10);
                 if (chksum == 0xce01)
                 {
                     Overlays.Add(Overlay.Dialogs.Tiles.Empty);
@@ -561,7 +601,6 @@ namespace CodeStrikeBot
                 else
                 {
                     chksum = ScreenState.GetScreenChecksum(bmp, 40, 107, 10);
-
                     if (chksum == 0x0ce0)
                     {
                         Overlays.Add(Overlay.Dialogs.Tiles.PlayerEnemy);
@@ -569,7 +608,6 @@ namespace CodeStrikeBot
                     else
                     {
                         chksum = ScreenState.GetScreenChecksum(bmp, 54, 71, 10);
-
                         if (chksum == 0xce01)
                         {
                             Overlays.Add(Overlay.Dialogs.Tiles.RssOpen);
@@ -577,7 +615,6 @@ namespace CodeStrikeBot
                         else
                         {
                             chksum = ScreenState.GetScreenChecksum(bmp, 23, 18, 10);
-
                             if (chksum == 0x10f3)
                             {
                                 Overlays.Add(Overlay.Dialogs.Tiles.Rebel);
@@ -585,24 +622,21 @@ namespace CodeStrikeBot
                             else
                             {
                                 chksum = ScreenState.GetScreenChecksum(bmp, 54, 128, 10);
-
                                 if (chksum == 0x8fdc)
                                 {
                                     Overlays.Add(Overlay.Dialogs.Tiles.Warzone);
                                 }
                                 else
                                 {
-                                    chksum = ScreenState.GetScreenChecksum(bmp, 54, 128, 10); ;
-
+                                    chksum = ScreenState.GetScreenChecksum(bmp, 54, 128, 10);
                                     if (chksum == 0xce01)
                                     {
                                         Overlays.Add(Overlay.Dialogs.Tiles.ControlPoint);
                                     }
                                     else
                                     {
-                                        chksum = ScreenState.GetScreenChecksum(bmp, 192, 120, 10); ;
-
-                                        if (chksum == 0xad61)
+                                        chksum = ScreenState.GetScreenChecksum(bmp, 192, 120, 10);
+                                        if (chksum == 0xad61) //crystal no occupy allowed
                                         {
                                             Overlays.Add(Overlay.Dialogs.Tiles.Blocked);
                                         }
