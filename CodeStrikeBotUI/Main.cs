@@ -1463,7 +1463,7 @@ namespace CodeStrikeBot
                 stsState.Text = System.DateTime.Now.ToLongTimeString();
 
                 ctrl.BeginTask(2000);
-                ctrl.ActiveScreen.Map(Int32.Parse(txtSliceStartX.Text), Int32.Parse(txtSliceStartY.Text), Int32.Parse(txtRowStart.Text));
+                ctrl.ActiveScreen.Map(Int32.Parse(txtSliceStartX.Text), Int32.Parse(txtSliceStartY.Text), Int32.Parse(txtRowStart.Text), Int32.Parse(txtColStart.Text));
                 ctrl.EndTask();
 
                 stsState.Text = stsState.Text + " - " + System.DateTime.Now.ToLongTimeString();
@@ -1530,6 +1530,14 @@ namespace CodeStrikeBot
             }
         }
         #endregion
+
+        public void SetLastMapParameters(int x, int y, int r, int c)
+        {
+            txtSliceStartX.Text = x.ToString();
+            txtSliceStartY.Text = y.ToString();
+            txtRowStart.Text = r.ToString();
+            txtColStart.Text = c.ToString();
+        }
 
         private void lstAccounts_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -1856,6 +1864,10 @@ namespace CodeStrikeBot
                                             ctrl.Login(s.Emulator.LastKnownAccount);
                                         }
                                     }
+                                    else if (s.ScreenState.CurrentArea == Area.Others.Ad)
+                                    {
+                                        s.ClickBack();
+                                    }
                                     else if (s.ScreenState.CurrentArea == Area.Unknown)
                                     {
                                         System.Threading.Thread.Sleep(10000);
@@ -1863,7 +1875,7 @@ namespace CodeStrikeBot
 
                                         if (s.ScreenState.CurrentArea == Area.Unknown)
                                         {
-                                            s.ClickBack();
+                                            //s.ClickBack();
                                         }
                                     }
 

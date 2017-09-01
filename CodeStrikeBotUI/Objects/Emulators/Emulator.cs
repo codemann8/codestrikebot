@@ -1161,26 +1161,28 @@ namespace CodeStrikeBot
             }
         }
 
-        public void Map(int sXStartAt, int sYStartAt, int rowStartAt)
+        public void Map(int sXStartAt, int sYStartAt, int rowStartAt, int colStartAt)
         {
             if (EmulatorProcess != null)
             {
                 Controller.CaptureApplication(this);
-                SuperBitmap.Bitmap.Save(String.Format("{0}\\file.bmp", Controller.Instance.GetFullScreenshotDir()), ImageFormat.Bmp);
-
-                do
+                //SuperBitmap.Bitmap.Save(String.Format("{0}\\file.bmp", Controller.Instance.GetFullScreenshotDir()), ImageFormat.Bmp);
+                
+                while (this.GoToBaseOrMapStep())
                 {
-                    Thread.Sleep(500);
-
+                    Thread.Sleep(300);
                     Controller.CaptureApplication(this);
                 }
 
-                while (ScreenState.CurrentArea != Area.StateMaps.Main && ScreenState.CurrentArea != Area.StateMaps.FullScreen);
+                while (ScreenState.CurrentArea != Area.StateMaps.Main && ScreenState.CurrentArea != Area.StateMaps.FullScreen)
+                {
+                    Controller.SendClick(this, 30, 675, 300);
+                    Controller.CaptureApplication(this);
+                }
 
                 while (ScreenState.CurrentArea != Area.StateMaps.FullScreen)
                 {
                     Controller.SendClick(this, 370, 15, 300);
-
                     Controller.CaptureApplication(this);
                 }
 
@@ -1248,7 +1250,7 @@ namespace CodeStrikeBot
                             {
                                 using (Graphics graphics = Graphics.FromImage(worldMap))
                                 {
-                                    for (int x = 0; x < numX / numSlicesX; x++) //x and y determine which screenshot within a slice
+                                    for (int x = (sY == sYStartAt && sX == sXStartAt && y == rowStartAt ? colStartAt : 0); x < numX / numSlicesX; x++) //x and y determine which screenshot within a slice
                                     {
                                         if (this.CheckPause())
                                         {
@@ -1260,21 +1262,17 @@ namespace CodeStrikeBot
 
                                             if (this.GoToCoordinate(wX, wY))
                                             {
-                                                //tmrTimeout.Start();
-                                                while (!this.CheckIfSSReady()) { }
-                                                //tmrTimeout.Stop();
-
-                                                System.Windows.Forms.Timer tmrContinue = new System.Windows.Forms.Timer();
-                                                tmrContinue.Interval = 2500;
+                                                Stopwatch tmrContinue = new Stopwatch();
                                                 tmrContinue.Start();
-                                                Stopwatch tmrContinue2 = new Stopwatch();
-                                                tmrContinue2.Start();
+
+                                                while (!this.CheckIfSSReady() && tmrContinue.ElapsedMilliseconds < 8000) { }
+
+                                                tmrContinue.Restart();
+
                                                 Bitmap bmp, bmp2;
                                                 do
                                                 {
                                                     bmp = Controller.CaptureApplication(this, 0, 32, 394, 648);
-                                                    //graphics.DrawImage(bmp, x * 334 - ((y % 2) * 67) + 67, y * 636 - ((x % 2) * 34) + 34, bmp.Width, bmp.Height);
-                                                    graphics.DrawImage(bmp, ((wX - 2) % (512 / numSlicesX)) * 467 / 7, ((wY - 8) % (1024 / numSlicesY)) * 602 / 18, bmp.Width, bmp.Height);
                                                     Thread.Sleep(200);
                                                     bmp2 = Controller.CaptureApplication(this, 0, 32, 394, 648);
 
@@ -1284,9 +1282,85 @@ namespace CodeStrikeBot
                                                         bmp2.Save(String.Format("{0}\\pic2.jpg", Controller.Instance.GetFullScreenshotDir()), ImageFormat.Jpeg);
                                                     }
                                                 }
-                                                while (this.CompareBitmaps(bmp, bmp2) < 94 && tmrContinue2.ElapsedMilliseconds > 2500);
-                                                tmrContinue2.Stop();
+                                                while (this.CompareBitmaps(bmp, bmp2) < 94 && tmrContinue.ElapsedMilliseconds < 2500);
+                                                
                                                 tmrContinue.Stop();
+
+                                                if (ScreenState.CurrentArea == Area.StateMaps.Coordinate
+                                                    || ScreenState.Overlays.Contains(Overlay.Dialogs.Tiles.Empty)
+                                                    || ScreenState.Overlays.Contains(Overlay.Dialogs.Tiles.Blocked)
+                                                    || ScreenState.Overlays.Contains(Overlay.Dialogs.Tiles.RssOpen)
+                                                    || ScreenState.Overlays.Contains(Overlay.Dialogs.Tiles.PlayerEnemy)
+                                                    || ScreenState.Overlays.Contains(Overlay.Dialogs.Tiles.ControlPoint)
+                                                    || ScreenState.Overlays.Contains(Overlay.Dialogs.Tiles.Warzone))
+                                                {
+                                                    this.ClickBack(300);
+                                                    x--;
+                                                }
+                                                else if (ScreenState.Overlays.Contains(Overlay.Dialogs.Tiles.Rebel))
+                                                {
+                                                    this.ClickBack(300);
+                                                    Controller.CaptureApplication(this);
+
+                                                    while (ScreenState.CurrentArea != Area.StateMaps.Main)
+                                                    {
+                                                        Controller.SendClick(this, 370, 15, 300);
+                                                        Controller.CaptureApplication(this);
+                                                    }
+
+                                                    while (ScreenState.CurrentArea != Area.StateMaps.FullScreen)
+                                                    {
+                                                        Controller.SendClick(this, 370, 15, 300);
+                                                        Controller.CaptureApplication(this);
+                                                    }
+
+                                                    x--;
+                                                }
+                                                else if (ScreenState.CurrentArea == Area.StateMaps.FullScreen)
+                                                {
+                                                    //graphics.DrawImage(bmp, x * 334 - ((y % 2) * 67) + 67, y * 636 - ((x % 2) * 34) + 34, bmp.Width, bmp.Height);
+                                                    graphics.DrawImage(bmp2, ((wX - 2) % (512 / numSlicesX)) * 467 / 7, ((wY - 8) % (1024 / numSlicesY)) * 602 / 18, bmp2.Width, bmp2.Height);
+                                                }
+                                                else
+                                                {
+                                                    bmp2.Save(String.Format("{0}\\file.bmp", Controller.Instance.GetFullScreenshotDir()), ImageFormat.Bmp);
+                                                    SuperBitmap.Bitmap.Save(String.Format("{0}\\file2.bmp", Controller.Instance.GetFullScreenshotDir()), ImageFormat.Bmp); 
+                                                    
+                                                    Main.CurrentForm.SetLastMapParameters(sX, sY, y, x);
+
+                                                    int minY = Math.Max((y + sY * (numY / numSlicesY)) * 19 + 9 - 11, 0), maxY = minY + 20;
+                                                    int gridY = maxY / 25 * 25;
+
+                                                    if (gridY > minY)
+                                                    {
+                                                        graphics.DrawLine(new Pen(Color.Black, (gridY % 100 == 0 ? 5 : 1)), new Point(0, ((gridY - 10) % (1024 / numSlicesY)) * 602 / 18 + 384), new Point(334 * (numX / numSlicesX - 1) + 461, ((gridY - 10) % (1024 / numSlicesY)) * 602 / 18 + 384));
+                                                    }
+
+                                                    for (int gridX = Math.Max((sX * (numX / numSlicesX)) * 5 / 25 * 25, 25); gridX < ((sX + 1) * (numX / numSlicesX)) * 5 + 3; gridX += 25)
+                                                    {
+                                                        graphics.DrawLine(new Pen(Color.Black, (gridX % 100 == 0 ? 5 : 1)), new Point(gridX * 1665 / 25 + 65, (((y + sY * (numY / numSlicesY)) * 19) % (1024 / numSlicesY)) * 602 / 18), new Point(gridX * 1665 / 25 + 65, (((y + sY * (numY / numSlicesY)) * 19) % (1024 / numSlicesY)) * 602 / 18 + 682));
+                                                    }
+
+                                                    worldMap.Save(String.Format("{0}\\{1}.jpg", Controller.Instance.GetFullScreenshotDir(), filename), ImageFormat.Jpeg);
+
+                                                    while (ScreenState.CurrentArea != Area.MainBases.Main)
+                                                    {
+                                                        System.Windows.Forms.Application.DoEvents();
+                                                        Thread.Sleep(50);
+                                                    }
+
+                                                    Thread.Sleep(3000);
+
+                                                    while (ScreenState.CurrentArea != Area.MainBases.Main)
+                                                    {
+                                                        System.Windows.Forms.Application.DoEvents();
+                                                        Thread.Sleep(50);
+                                                    }
+                                                    
+                                                    Map(sX, sY, y, x);
+                                                    
+                                                    return;
+                                                }
 
                                                 bmp.Dispose();
                                                 bmp2.Dispose();

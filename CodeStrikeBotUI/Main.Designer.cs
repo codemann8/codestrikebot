@@ -166,6 +166,7 @@ namespace CodeStrikeBot
             this.btnExportMarch = new System.Windows.Forms.Button();
             this.lstRadar = new System.Windows.Forms.ListBox();
             this.dataGridViewComboBoxColumn2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.txtColStart = new System.Windows.Forms.TextBox();
             this.stsStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bsColorCustom)).BeginInit();
             this.tabSettings.SuspendLayout();
@@ -898,11 +899,13 @@ namespace CodeStrikeBot
             this.hexData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.hexData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.Dock = System.Windows.Forms.DockStyle.Fill;
             this.hexData.Location = new System.Drawing.Point(0, 0);
             this.hexData.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.hexData.Name = "hexData";
             this.hexData.RowCount = 1;
+            this.hexData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -1428,6 +1431,7 @@ namespace CodeStrikeBot
             // 
             // groupBox6
             // 
+            this.groupBox6.Controls.Add(this.txtColStart);
             this.groupBox6.Controls.Add(this.btnRestart);
             this.groupBox6.Controls.Add(this.btnMap);
             this.groupBox6.Controls.Add(this.btnGrowXP);
@@ -1768,6 +1772,15 @@ namespace CodeStrikeBot
             this.dataGridViewComboBoxColumn2.Name = "dataGridViewComboBoxColumn2";
             this.dataGridViewComboBoxColumn2.Width = 68;
             // 
+            // txtColStart
+            // 
+            this.txtColStart.Location = new System.Drawing.Point(146, 77);
+            this.txtColStart.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.txtColStart.Name = "txtColStart";
+            this.txtColStart.Size = new System.Drawing.Size(42, 20);
+            this.txtColStart.TabIndex = 12;
+            this.txtColStart.Text = "0";
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1979,6 +1992,7 @@ namespace CodeStrikeBot
         private System.Windows.Forms.ComboBox cboEmulator2;
         private System.Windows.Forms.ComboBox cboEmulator1;
         private System.Windows.Forms.Label lblAccountApp;
+        private System.Windows.Forms.TextBox txtColStart;
     }
 }
 

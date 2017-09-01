@@ -148,6 +148,16 @@ namespace CodeStrikeBot
                         {
                             ret += "V";
                         }
+                        else if (overlay == Overlay.Dialogs.Tiles.Empty
+                            || overlay == Overlay.Dialogs.Tiles.Blocked
+                            || overlay == Overlay.Dialogs.Tiles.RssOpen
+                            || overlay == Overlay.Dialogs.Tiles.Rebel
+                            || overlay == Overlay.Dialogs.Tiles.PlayerEnemy
+                            || overlay == Overlay.Dialogs.Tiles.ControlPoint
+                            || overlay == Overlay.Dialogs.Tiles.Warzone)
+                        {
+                            ret += "P";
+                        }
                     }
 
                     ret += "]";
@@ -543,6 +553,26 @@ namespace CodeStrikeBot
         public static class Statuses
         {
             public static readonly ID VIPInactive = Status[0];
+        }
+
+        public static readonly ID Dialog = 8;
+        public static class Dialogs
+        {
+            public static readonly ID Tile = Dialog[0];
+            public static class Tiles
+            {
+                public static readonly ID Empty = Tile[0];
+                public static readonly ID Blocked = Tile[1];
+                public static readonly ID RssOpen = Tile[2];
+                public static readonly ID RssOccupied = Tile[3];
+                public static readonly ID RebelOpen = Tile[4];
+                public static readonly ID RebelOccupied = Tile[5];
+                public static readonly ID Rebel = Tile[6];
+                public static readonly ID PlayerFriend = Tile[7];
+                public static readonly ID PlayerEnemy = Tile[8];
+                public static readonly ID Warzone = Tile[9];
+                public static readonly ID ControlPoint = Tile[10];
+            }
         }
     }
 
