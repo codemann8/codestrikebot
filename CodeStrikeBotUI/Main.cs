@@ -1832,7 +1832,7 @@ namespace CodeStrikeBot
                                     //TODO: Finish later
                                 }
 
-                                if (s.ScreenState != null)
+                                if (s.ScreenState != null && !s.ScreenState.Overlays.Contains(Overlay.Statuses.Loading))
                                 {
                                     if (!s.PreventFromOpening && s.ScreenState.CurrentArea == Area.Emulators.Android)
                                     {

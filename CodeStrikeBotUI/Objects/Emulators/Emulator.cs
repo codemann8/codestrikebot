@@ -659,6 +659,11 @@ namespace CodeStrikeBot
 
                             if (ScreenState.CurrentArea == Area.Menus.Account)
                             {
+                                while (ScreenState.Overlays.Contains(Overlay.Statuses.Loading))
+                                {
+                                    Thread.Sleep(50);
+                                }
+
                                 tmrRun.Restart();
 
                                 Color c = new Color();
@@ -839,51 +844,27 @@ namespace CodeStrikeBot
 
                         success = true;
 
-                        while (ScreenState.CurrentArea == Area.Others.Login && tmrRun.ElapsedMilliseconds < 30000)
+                        while (success && ScreenState.CurrentArea == Area.Others.Login && tmrRun.ElapsedMilliseconds < 30000)
                         {
-                            //success = true;
+                            //chksum = ScreenState.GetScreenChecksum(SuperBitmap, 190, 116, 20);
+                            //SuperBitmap.Bitmap.Save(String.Format("{0}\\login.bmp", Controller.Instance.GetFullScreenshotDir()), ImageFormat.Bmp);
 
-                            chksum = ScreenState.GetScreenChecksum(SuperBitmap, 190, 116, 20);
-                            SuperBitmap.Bitmap.Save(String.Format("{0}\\login.bmp", Controller.Instance.GetFullScreenshotDir()), ImageFormat.Bmp);
+                            if (ScreenState.Overlays.Contains(Overlay.Dialogs.Popups.LoginFailed))
+                            {
+                                if (!KillApp())
+                                {
+                                    Controller.Instance.RestartEmulator(this);
+                                }
+                                this.StartApp();
 
-                            switch (chksum)
+                                success = false;
+                            }
+                            /*switch (chksum)
                             {
                                 case 0x16d1: //loading/wait
                                     success = true;
                                     break;
-                                case 0xbebc: //login failed
-                                //case 0xc995: //notice (server under maintenence)
-                                    //this.SendClick(120, 110, 300);
-
-                                    //backspace fields
-                                    /*this.SendClick(310, 260, 250);
-                                    this.SendKey(new String('\b', account.Email.Length));
-
-                                    this.SendClick(310, 305, 250);
-                                    this.SendKey(new String('\b', account.Password.Length));
-                                    */
-
-                                    if (!KillApp())
-                                    {
-                                        Controller.Instance.RestartEmulator(this);
-                                    }
-                                    this.StartApp();
-
-                                    success = false;
-                                    break;
-                                /*case 0x5e3e: //device not registered
-                                    //Controller.SendClick(this, 100, 275, 300); //click Retry
-
-                                    if (!KillApp())
-                                    {
-                                        Controller.Instance.RestartEmulator(this);
-                                    }
-                                    this.StartApp();
-
-                                    return false;*/
-                                default:
-                                    break;
-                            }
+                            }*/
                            
                             System.Windows.Forms.Application.DoEvents();
 
@@ -1386,172 +1367,211 @@ namespace CodeStrikeBot
 
         public void GrowXP()
         {
-            //int lotX = 162, lotY = 463;
-            int lotX = 270, lotY = 205;
-            Color c, c2;
+            int lotX = 40, lotY = 225;
+            //int lotX = 85, lotY = 263;
+            int desiredLevel = 2;
+
+            Color c;
             while (CheckPause())
             {
+                while (this.GoToBaseOrMapStep())
+                {
+                    Thread.Sleep(300);
+                    Controller.CaptureApplication(this);
+                }
+
+                while (ScreenState.CurrentArea != Area.MainBases.Main)
+                {
+                    Controller.SendClick(this, 30, 675, 300);
+                    Controller.CaptureApplication(this);
+                }
+
+                //TODO: Fix click and drag, but assume starting at main base in the lower right corner
+                /*ushort chksum = ScreenState.GetScreenChecksum(this.SuperBitmap, 330, 65, 20);
+                do
+                {
+                    Controller.SendClickDrag(this, 315, 480, 25, 355, 100, false, 1200);
+                    //Controller.SendClickDrag(this, 315, 480, 25, 355, 1000, false, 2000);
+                    Controller.CaptureApplication(this);
+                }
+                while (chksum != ScreenState.GetScreenChecksum(this.SuperBitmap, 330, 65, 20));*/
+
                 //if base screen, click empty lot
                 do
                 {
                     Controller.SendClick(this, lotX, lotY, 1000);
                     Controller.CaptureApplication(this);
-                    c = SuperBitmap.GetPixel(255, 125);
                 }
-                while (c.R != 57 && c.G != 60 && c.B != 66);
+                while (ScreenState.CurrentArea != Area.Menus.BuildingList);
 
                 //click Farm
                 do
                 {
                     Controller.SendClick(this, 60, 210, 500);
                     Controller.CaptureApplication(this);
-                    c = SuperBitmap.GetPixel(255, 125);
                 }
-                while (c.R == 57 && c.G == 60 && c.B == 66);
-
-                Controller.CaptureApplication(this);
-                c = SuperBitmap.GetPixel(245, 90);
+                while (ScreenState.CurrentArea != Area.Menus.Buildings.Farm);
 
                 //click Build
-                while (c.R != 66 && c.G != 134 && c.B != 165)
-                {
-                    Controller.SendClick(this, 237, 125, 280);
-                    Controller.CaptureApplication(this);
-                    c = SuperBitmap.GetPixel(245, 90);
-                }
-
-                Controller.CaptureApplication(this);
-                c = SuperBitmap.GetPixel(245, 90);
-
-                //click Free
-                while (c.R == 132 && c.G == 105 && c.B == 255)
-                {
-                    Controller.SendClick(this, 270, 90, 280);
-                    do
-                    {
-                        Thread.Sleep(1500);
-                        Controller.CaptureApplication(this);
-                        c = SuperBitmap.GetPixel(245, 90);
-                    }
-                    while (c.R == 82 && c.G == 85 && c.B == 90);
-                }
-
-                Thread.Sleep(1500);
-
-                for (int i = 0; i < 4; i++)
-                {
-                    //click Farm2
-                    do
-                    {
-                        Controller.SendClick(this, lotX, lotY, 1000);
-                        Controller.CaptureApplication(this);
-                        c = SuperBitmap.GetPixel(255, 125);
-                    }
-                    while (c.R != 57 && c.G != 134 && c.B != 165);
-
-                    //click Upgrade twice
-                    do
-                    {
-                        Controller.SendClick(this, 237, 125, 280);
-                        Controller.CaptureApplication(this);
-                        c = SuperBitmap.GetPixel(245, 90);
-                        c2 = SuperBitmap.GetPixel(40, 670);
-                        while (c2.R == 222 && c2.G == 223 && c2.B == 222)
-                        {
-                            Controller.SendClick(this, 40, 670, 1000);
-                            Controller.CaptureApplication(this);
-                            c2 = SuperBitmap.GetPixel(40, 670);
-                        }
-                        Controller.CaptureApplication(this);
-                        c = SuperBitmap.GetPixel(245, 90);
-                    }
-                    while ((c.R != 132 && c.G != 105 && c.B != 255) && (c.R != 66 && c.G != 134 && c.B != 165) && (c.R != 239 && c.G != 150 && c.B != 0));
-
-                    Controller.CaptureApplication(this);
-                    c = SuperBitmap.GetPixel(245, 90);
-
-                    //click Help
-                    while (c.R == 239 && c.G == 150 && c.B == 0)
-                    {
-                        Controller.SendClick(this, 270, 90, 1000);
-                        Controller.CaptureApplication(this);
-                        c = SuperBitmap.GetPixel(245, 90);
-                    }
-
-                    //wait for Help
-                    /*do
-                    {
-                        bmp = this.CaptureApplication();
-                        c = bmp.GetPixel(245, 90);
-                        Thread.Sleep(1000);
-                    }
-                    while (c.R != 132 && c.G != 105 && c.B != 255);
-
-                    bmp = this.CaptureApplication();
-                    c = bmp.GetPixel(245, 90);
-
-                    //click Free
-                    while (c.R == 132 && c.G == 105 && c.B == 255)
-                    {
-                        this.SendClick(270, 90);
-                        Thread.Sleep(280);
-                        do
-                        {
-                            Thread.Sleep(1500);
-                            bmp = this.CaptureApplication();
-                            c = bmp.GetPixel(245, 90);
-                        }
-                        while (c.R == 82 && c.G == 85 && c.B == 90);
-                    }*/
-                }
-
-                //click Farm5
                 do
                 {
-                    Controller.SendClick(this, lotX, lotY, 1000);
+                    Controller.SendClick(this, 237, 145, 280);
                     Controller.CaptureApplication(this);
-                    c = SuperBitmap.GetPixel(255, 125);
                 }
-                while (c.R != 57 && c.G != 134 && c.B != 165);
+                while (ScreenState.CurrentArea != Area.MainBases.Main && ScreenState.CurrentArea != Area.Menus.Resources);
+
+                if (ScreenState.CurrentArea != Area.Menus.Resources)
+                {
+                    ClickBack(300);
+                    ClickBack(300);
+                    ClickBack(300);
+                }
+
+                Thread.Sleep(800);
+                Controller.CaptureApplication(this);
+                c = SuperBitmap.GetPixel(235, 82);
+
+                while (!c.Within(185, 95, 33, 10))
+                {
+                    Thread.Sleep(50);
+                    Controller.CaptureApplication(this);
+                    c = SuperBitmap.GetPixel(235, 82);
+                }
+
+                //click Free
+                while (c.Within(185, 95, 33, 10))
+                {
+                    Controller.SendClick(this, 235, 82, 280);
+                    Controller.CaptureApplication(this);
+                    c = SuperBitmap.GetPixel(235, 82);
+                }
+
+                while (c.Within(82, 81, 82, 3))
+                {
+                    Thread.Sleep(50);
+                    Controller.CaptureApplication(this);
+                    c = SuperBitmap.GetPixel(235, 82);
+                }
+
+                for (int i = 0; i < desiredLevel - 1; i++)
+                {
+                    //double click Farm
+                    do
+                    {
+                        Controller.SendClick(this, lotX, lotY, 80);
+                        Controller.SendClick(this, lotX, lotY, 500);
+                        Controller.CaptureApplication(this);
+                    }
+                    while (ScreenState.CurrentArea != Area.Menus.Buildings.Farm && ScreenState.CurrentArea != Area.Menus.BuildingList);
+
+                    //click Upgrade if necessary
+                    while (ScreenState.CurrentArea == Area.Menus.Buildings.Farm)
+                    {
+                        Controller.SendClick(this, 237, 145, 280);
+                        Controller.CaptureApplication(this);
+                    }
+
+                    //click Upgrade
+                    do
+                    {
+                        Controller.SendClick(this, 237, 145, 280);
+                        Controller.CaptureApplication(this);
+                    }
+                    while (ScreenState.CurrentArea != Area.MainBases.Main && ScreenState.CurrentArea != Area.Menus.Resources);
+
+                    if (ScreenState.CurrentArea != Area.Menus.Resources)
+                    {
+                        ClickBack(300);
+                        ClickBack(300);
+                    }
+
+                    Thread.Sleep(800);
+                    Controller.CaptureApplication(this);
+                    c = SuperBitmap.GetPixel(245, 90);
+
+                    c = SuperBitmap.GetPixel(235, 82);
+
+                    while (!c.Within(185, 95, 33, 10))
+                    {
+                        Thread.Sleep(50);
+                        Controller.CaptureApplication(this);
+                        c = SuperBitmap.GetPixel(235, 82);
+                    }
+
+                    //click Free
+                    while (c.Within(185, 95, 33, 10))
+                    {
+                        Controller.SendClick(this, 235, 82, 1280);
+                        Controller.CaptureApplication(this);
+                        c = SuperBitmap.GetPixel(235, 82);
+                    }
+
+                    while (c.Within(82, 81, 82, 3))
+                    {
+                        Thread.Sleep(50);
+                        Controller.CaptureApplication(this);
+                        c = SuperBitmap.GetPixel(235, 82);
+                    }
+                }
+
+                //click completed Farm
+                do
+                {
+                    Controller.SendClick(this, lotX, lotY, 500);
+                    Controller.CaptureApplication(this);
+                }
+                while (ScreenState.CurrentArea != Area.Menus.Buildings.Farm);
 
                 //click Demolish
                 do
                 {
-                    Controller.SendClick(this, 160, 130, 280);
+                    Controller.SendClick(this, 80, 160, 280);
                     Controller.CaptureApplication(this);
-                    c = SuperBitmap.GetPixel(240, 355);
                 }
-                while (c.R != 57 && c.G != 134 && c.B != 165);
+                while (!ScreenState.Overlays.Contains(Overlay.Dialogs.Popups.DemolishBuilding));
 
                 //click Use
                 do
                 {
-                    Controller.SendClick(this, 275, 360, 280);
+                    Controller.SendClick(this, 225, 315, 280);
                     Controller.CaptureApplication(this);
-                    c = SuperBitmap.GetPixel(240, 235);
                 }
-                while (c.R != 57 && c.G != 134 && c.B != 165);
+                while (ScreenState.Overlays.Contains(Overlay.Dialogs.Popups.DemolishBuilding));
 
                 //click Yes
                 do
                 {
-                    Controller.SendClick(this, 275, 240, 350);
+                    Controller.SendClick(this, 225, 280, 280);
                     Controller.CaptureApplication(this);
                     c = SuperBitmap.GetPixel(245, 90);
                 }
-                while ((c.R != 132 && c.G != 105 && c.B != 255) && (c.R != 66 && c.G != 134 && c.B != 165));
+                while (ScreenState.Overlays.Contains(Overlay.Dialogs.Popups.AreYouSure));
 
-                /*bmp = this.CaptureApplication();
-                c = bmp.GetPixel(245, 90);
+                Thread.Sleep(800);
+                Controller.CaptureApplication(this);
+                c = SuperBitmap.GetPixel(245, 90);
+
+                while (!c.Within(185, 95, 33, 10))
+                {
+                    Thread.Sleep(50);
+                    Controller.CaptureApplication(this);
+                    c = SuperBitmap.GetPixel(235, 82);
+                }
 
                 //click Free
-                while (c.R == 132 && c.G == 105 && c.B == 255)
+                while (c.Within(185, 95, 33, 10))
                 {
-                    this.SendClick(270, 90);
-                    Thread.Sleep(1600);
-                    bmp = this.CaptureApplication();
-                    c = bmp.GetPixel(245, 90);
-                }*/
+                    Controller.SendClick(this, 235, 82, 280);
+                    Controller.CaptureApplication(this);
+                    c = SuperBitmap.GetPixel(235, 82);
+                }
+
+                while (c.Within(82, 81, 82, 3))
+                {
+                    Thread.Sleep(50);
+                    Controller.CaptureApplication(this);
+                    c = SuperBitmap.GetPixel(235, 82);
+                }
 
                 Thread.Sleep(1500);
             }
@@ -2764,7 +2784,7 @@ namespace CodeStrikeBot
                         Controller.SendClick(this, 110, 670, 200); //click Missions
                     }
                 }
-                else if (ScreenState.CurrentArea == Area.Menus.AllianceHelp)
+                else if (ScreenState.CurrentArea == Area.Menus.AllianceHelp && !ScreenState.Overlays.Contains(Overlay.Statuses.Loading))
                 {
                     tasksLeft = true;
 
@@ -2976,52 +2996,11 @@ namespace CodeStrikeBot
                 {
                     tasksLeft = this.CollectGiftsStep(); //Collect Gifts
                 }
-                else if (ScreenState.CurrentArea == Area.Menus.Mission
+                else if ((ScreenState.CurrentArea == Area.Menus.Mission && !ScreenState.Overlays.Contains(Overlay.Statuses.Loading))
                     || ScreenState.CurrentArea == Area.Menus.Missions.Daily || ScreenState.CurrentArea == Area.Menus.Missions.Alliance || ScreenState.CurrentArea == Area.Menus.Missions.VIP
                     || ScreenState.CurrentArea == Area.Menus.Missions.VIPStreak)
                 {
-                    /*if (ScreenState.CurrentArea == Area.Menus.Mission)
-                    {
-                        Color c = SuperBitmap.GetPixel(138, 298);
-
-                        if (c.Equals(181, 178, 181))
-                        {
-                            //TODO: logout and login
-                        }
-
-                        for (int m = 0; m < 3; m++)
-                        {
-                            ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 347, 292 + 91 * m, 9);
-
-                            if (chksum != 0x2995 && chksum != 0x1583) //missions available
-                            {
-                                c = SuperBitmap.GetPixel(101, 240 + 91 * m);
-
-                                if (!c.Equals(0, 0, 0))
-                                {
-                                    tasksLeft = this.CompleteMissionsStep(); //Complete Missions
-                                    break;
-                                }
-                            }
-                        }
-
-                        //c = bmp.GetPixel(355, 445);
-                        //if (c.Equals(90, 219, 156))
-                        //{
-                        //    tasksLeft = true;
-                        //    this.CompleteMissions(i);
-                        //}
-
-                        if (!tasksLeft)
-                        {
-                            skipMissions = true;
-                            this.ClickBack(200);
-                        }
-                    }
-                    else*/
-                    {
-                        tasksLeft = this.CompleteMissionsStep(); //Complete Missions
-                    }
+                    tasksLeft = this.CompleteMissionsStep(); //Complete Missions
                 }
                 else if (ScreenState.CurrentArea == Area.Menus.Missions.ActivateVIP)
                 {

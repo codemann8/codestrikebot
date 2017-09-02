@@ -35,15 +35,7 @@ namespace CodeStrikeBot
                             CurrentArea = Area.Menus.Gifts;
                             break;
                         case 0xdd22:
-                            chksum3 = ScreenState.GetScreenChecksum(bmp, 36, 225, 20);
-                            if (chksum3 == 0xeeab)
-                            {
-                                CurrentArea = Area.Menus.AllianceHelpLoading;
-                            }
-                            else
-                            {
-                                CurrentArea = Area.Menus.AllianceHelp;
-                            }
+                            CurrentArea = Area.Menus.AllianceHelp;
                             break;
                         case 0x53d3:
                             CurrentArea = Area.Menus.AllianceWar;
@@ -274,10 +266,12 @@ namespace CodeStrikeBot
                     }
                     break;
                 case 0x0cde: //menu modal
+                case 0x57ca: //menu double modal
                     chksum2 = ScreenState.GetScreenChecksum(bmp, 160, 16, 14);
                     switch (chksum2)
                     {
                         case 0x6e83:
+                            //TODO: Convert this to overlay popup, see unknown0cde-6e83
                             CurrentArea = Area.Menus.Missions.ActivateVIP;
                             break;
                         case 0x770c:
@@ -289,12 +283,35 @@ namespace CodeStrikeBot
                         case 0x49ef: //donation confirmation
                             CurrentArea = Area.Menus.ResourceHelp;
                             break;
+                        case 0xec6f: //rss use confirmation
+                            CurrentArea = Area.Menus.Resources;
+                            break;
                         case 0xddf8: //economics
+                        case 0xf417: //economics
                         case 0xd6b2: //combat
                         case 0x0792: //defense
                         case 0x9b6b: //hero
                         case 0x1477: //hero mastered
                             CurrentArea = Area.Menus.Buildings.Research;
+                            break;
+                        case 0x84e5:
+                            CurrentArea = Area.Menus.Buildings.Farm;
+                            break;
+                        case 0x1fe2:
+                            CurrentArea = Area.Menus.Buildings.OilWell;
+                            break;
+                        case 0x1537:
+                            CurrentArea = Area.Menus.Buildings.Quarry;
+                            break;
+                        case 0x8731:
+                            CurrentArea = Area.Menus.Buildings.IronMine;
+                            break;
+                        case 0x54cd:
+                            CurrentArea = Area.Menus.Buildings.Bank;
+                            break;
+                        case 0xdb75:
+                        case 0x8f88: //absolute black //TODO this scenario when demo building confirmation screen
+                            CurrentArea = Area.Menus.BuildingList;
                             break;
                         default:
                             enteredGeneric = true;
@@ -325,10 +342,10 @@ namespace CodeStrikeBot
                     break;
                 case 0x814a:
                 case 0xbf1b: //loading
-                case 0x3790: //login loading
                     CurrentArea = Area.Others.Splash;
                     break;
                 case 0xf2bf:
+                case 0x3790: //modal
                     CurrentArea = Area.Others.Login;
                     break;
                 case 0x7daa: //main base modal
@@ -436,8 +453,7 @@ namespace CodeStrikeBot
             {
                 if (CurrentArea == Area.Unknown)
                 {
-                    //chksum = ScreenState.GetScreenChecksum(bmp, 160, 16, 14);
-                    //chksum2 = ScreenState.GetScreenChecksum(bmp, 373, 16, 10);
+                    //chksum3 = ScreenState.GetScreenChecksum(bmp, 190, 115, 20);
                     if (!System.IO.File.Exists(String.Format("{0}\\unknown\\unknown{1}-{2}.bmp", Controller.Instance.GetFullScreenshotDir(), chksum.ToString("X4"), chksum2.ToString("X4"))))
                     {
                         bmp.Bitmap.Save(String.Format("{0}\\unknown\\unknown{1}-{2}.bmp", Controller.Instance.GetFullScreenshotDir(), chksum.ToString("X4"), chksum2.ToString("X4")), System.Drawing.Imaging.ImageFormat.Bmp);
@@ -471,8 +487,13 @@ namespace CodeStrikeBot
             //Overlays
             if (CurrentArea == Area.MainBases.Main)
             {
-                chksum = ScreenState.GetScreenChecksum(bmp, 352, 545, 20);//DIFF
+                chksum = ScreenState.GetScreenChecksum(bmp, 67, 16, 6);
+                if (chksum == 0x95ca)
+                {
+                    Overlays.Add(Overlay.Statuses.Loading);
+                }
 
+                chksum = ScreenState.GetScreenChecksum(bmp, 352, 545, 20);
                 if (chksum == 0xab54)
                 {
                     Overlays.Add(Overlay.Widgets.AllianceHelp);
@@ -585,7 +606,7 @@ namespace CodeStrikeBot
                     }
                     else
                     {
-                        Overlays.Add(Overlay.Dialogs.Popups.Generic);
+                        Overlays.Add(Overlay.Dialogs.Popups.Unknown);
                     }
                 }
                 else if (chksum == 0xd856) //scout
@@ -597,7 +618,7 @@ namespace CodeStrikeBot
                     }
                     else
                     {
-                        Overlays.Add(Overlay.Dialogs.Popups.Generic);
+                        Overlays.Add(Overlay.Dialogs.Popups.Unknown);
                     }
                 }
 
@@ -655,6 +676,43 @@ namespace CodeStrikeBot
                     }
                 }
             }
+            else if (CurrentArea == Area.Others.Login)
+            {
+                chksum = ScreenState.GetScreenChecksum(bmp, 190, 115, 20);
+                if (chksum == 0x5065)
+                {
+                    Overlays.Add(Overlay.Dialogs.Popups.LoginFailed);
+                }
+            }
+            else if (CurrentArea == Area.Menus.Alliance || CurrentArea == Area.Menus.Mission || CurrentArea == Area.Menus.Account)
+            {
+                chksum = ScreenState.GetScreenChecksum(bmp, 67, 16, 6);
+                if (chksum == 0x041e)
+                {
+                    Overlays.Add(Overlay.Statuses.Loading);
+                }
+            }
+            else if (CurrentArea == Area.Menus.AllianceHelp)
+            {
+                chksum = ScreenState.GetScreenChecksum(bmp, 36, 225, 20);
+                if (chksum == 0xeeab)
+                {
+                    Overlays.Add(Overlay.Statuses.Loading);
+                }
+            }
+            else
+            {
+                chksum = ScreenState.GetScreenChecksum(bmp, 190, 115, 20);
+                switch (chksum)
+                {
+                    case 0x7a0f:
+                        Overlays.Add(Overlay.Dialogs.Popups.DemolishBuilding);
+                        break;
+                    case 0xff64:
+                        Overlays.Add(Overlay.Dialogs.Popups.AreYouSure);
+                        break;
+                }
+            }
 
             c = bmp.GetPixel(213, 664);
             if (c.Equals(24, 130, 16) || c.Equals(0, 28, 0))
@@ -687,6 +745,25 @@ namespace CodeStrikeBot
             //    case 0xe405:
             //        Overlays.Add(Overlay.Incomings.Reinforcement);
             //        break;
+            }
+
+            if (Overlays.Count == 0 && CurrentArea != Area.Unknown && CurrentArea != Area.MainBases.Main
+                && CurrentArea != Area.StateMaps.Main && CurrentArea != Area.StateMaps.FullScreen
+                && CurrentArea != Area.Emulators.Loading && CurrentArea != Area.Emulators.Android
+                && CurrentArea != Area.Others.Login && CurrentArea != Area.Others.Splash && CurrentArea != Area.Others.Ad
+                && CurrentArea != Area.Others.Chat && CurrentArea != Area.Others.SessionTimeout)
+            {
+                chksum = ScreenState.GetScreenChecksum(bmp, 67, 16, 6);
+                ushort chksum2 = ScreenState.GetScreenChecksum(bmp, 160, 16, 14);
+                ushort chksum3 = ScreenState.GetScreenChecksum(bmp, 190, 115, 20);
+
+                if (chksum == 0x0cde || chksum == 0x57ca) //modal or double modal on a menu
+                {
+                    if (!System.IO.File.Exists(String.Format("{0}\\unknown\\unknown{1}-{2}-{3}.bmp", Controller.Instance.GetFullScreenshotDir(), chksum.ToString("X4"), chksum2.ToString("X4"), chksum3.ToString("X4"))))
+                    {
+                        bmp.Bitmap.Save(String.Format("{0}\\unknown\\unknown{1}-{2}-{3}.bmp", Controller.Instance.GetFullScreenshotDir(), chksum.ToString("X4"), chksum2.ToString("X4"), chksum3.ToString("X4")), System.Drawing.Imaging.ImageFormat.Bmp);
+                    }
+                }
             }
         }
     }

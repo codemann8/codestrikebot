@@ -435,7 +435,7 @@ namespace CodeStrikeBot
             }
             public static readonly ID Gifts = Menu[13];
             public static readonly ID AllianceHelp = Menu[14];
-            public static readonly ID AllianceHelpLoading = Menu[15];
+            public static readonly ID UNUSED = Menu[15];
             public static readonly ID ShootingRange = Menu[16];
             public static class ShootingRanges
             {
@@ -497,12 +497,13 @@ namespace CodeStrikeBot
         public static readonly ID Notification = 2;
         public static class Notifications
         {
-            public static readonly ID AllianceHelp = Notification[0];
-            public static readonly ID War = Notification[1];
-            public static readonly ID ItemUse = Notification[2];
-            public static readonly ID Gift = Notification[3];
-            public static readonly ID ItemReceived = Notification[4];
-            public static readonly ID MissionComplete = Notification[5];
+            public static readonly ID Unknown = Notification[0];
+            public static readonly ID AllianceHelp = Notification[1];
+            public static readonly ID War = Notification[2];
+            public static readonly ID ItemUse = Notification[3];
+            public static readonly ID Gift = Notification[4];
+            public static readonly ID ItemReceived = Notification[5];
+            public static readonly ID MissionComplete = Notification[6];
         }
 
         public static readonly ID Incoming = 3;
@@ -552,7 +553,8 @@ namespace CodeStrikeBot
         public static readonly ID Status = 7;
         public static class Statuses
         {
-            public static readonly ID VIPInactive = Status[0];
+            public static readonly ID Loading = Status[0];
+            public static readonly ID VIPInactive = Status[1];
         }
 
         public static readonly ID Dialog = 8;
@@ -576,9 +578,12 @@ namespace CodeStrikeBot
             public static readonly ID Popup = Dialog[1];
             public static class Popups
             {
-                public static readonly ID Generic = Popup[0];
+                public static readonly ID Unknown = Popup[0];
                 public static readonly ID WarningOutsideAttack = Popup[1];
                 public static readonly ID ScoutNotUnlocked = Popup[2];
+                public static readonly ID DemolishBuilding = Popup[3];
+                public static readonly ID AreYouSure = Popup[4];
+                public static readonly ID LoginFailed = Popup[5];
             }
         }
     }
