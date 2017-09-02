@@ -1420,11 +1420,12 @@ namespace CodeStrikeBot
                 }
                 while (ScreenState.CurrentArea != Area.MainBases.Main && ScreenState.CurrentArea != Area.Menus.Resources);
 
-                if (ScreenState.CurrentArea != Area.Menus.Resources)
+                if (ScreenState.CurrentArea == Area.Menus.Resources)
                 {
                     ClickBack(300);
                     ClickBack(300);
                     ClickBack(300);
+                    return;
                 }
 
                 Thread.Sleep(800);
@@ -1479,10 +1480,11 @@ namespace CodeStrikeBot
                     }
                     while (ScreenState.CurrentArea != Area.MainBases.Main && ScreenState.CurrentArea != Area.Menus.Resources);
 
-                    if (ScreenState.CurrentArea != Area.Menus.Resources)
+                    if (ScreenState.CurrentArea == Area.Menus.Resources)
                     {
                         ClickBack(300);
                         ClickBack(300);
+                        return;
                     }
 
                     Thread.Sleep(800);
