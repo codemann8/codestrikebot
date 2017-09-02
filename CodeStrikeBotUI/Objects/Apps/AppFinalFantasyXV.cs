@@ -35,7 +35,15 @@ namespace CodeStrikeBot
                             CurrentArea = Area.Menus.Gifts;
                             break;
                         case 0xdd22:
-                            CurrentArea = Area.Menus.AllianceHelp;
+                            chksum3 = ScreenState.GetScreenChecksum(bmp, 36, 225, 20);
+                            if (chksum3 == 0xeeab)
+                            {
+                                CurrentArea = Area.Menus.AllianceHelpLoading;
+                            }
+                            else
+                            {
+                                CurrentArea = Area.Menus.AllianceHelp;
+                            }
                             break;
                         case 0x53d3:
                             CurrentArea = Area.Menus.AllianceWar;

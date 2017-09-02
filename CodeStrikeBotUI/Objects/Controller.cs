@@ -615,7 +615,7 @@ namespace CodeStrikeBot
                     s.EmulatorProcess.Kill();
                     s.EmulatorProcess.WaitForExit();
                 }
-                Thread.Sleep(2000);
+                Thread.Sleep(5000);
                 //TOD  Slow mode
                 //s.TimeoutFactor = 1.0;
                 s.TimeoutFactor = 5;

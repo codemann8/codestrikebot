@@ -2581,7 +2581,8 @@ namespace CodeStrikeBot
             {
                 Controller.CaptureApplication(this);
 
-                while ((ScreenState.CurrentArea == Area.StateMaps.FullScreen || ScreenState.CurrentArea == Area.StateMaps.Main)
+                //back out of any popups
+                while (ScreenState.CurrentArea == Area.StateMaps.FullScreen
                     && ScreenState.Overlays.Count > 0)
                 {
                     this.ClickBack(300);
@@ -2593,6 +2594,13 @@ namespace CodeStrikeBot
                 {
                     tasksLeft = false;
                     Controller.SendClick(this, 375, 10, 200); //click Fullscreen
+                }
+
+                //exit monster screen
+                if (ScreenState.Overlays.Contains(Overlay.Dialogs.Tiles.Rebel))
+                {
+                    this.ClickBack(300);
+                    Controller.CaptureApplication(this);
                 }
 
                 Controller.CaptureApplication(this);
