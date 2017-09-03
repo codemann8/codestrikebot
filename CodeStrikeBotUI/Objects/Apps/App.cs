@@ -154,7 +154,13 @@ namespace CodeStrikeBot
                             || overlay == Overlay.Dialogs.Tiles.Rebel
                             || overlay == Overlay.Dialogs.Tiles.PlayerEnemy
                             || overlay == Overlay.Dialogs.Tiles.ControlPoint
-                            || overlay == Overlay.Dialogs.Tiles.Warzone)
+                            || overlay == Overlay.Dialogs.Tiles.Warzone
+                            || overlay == Overlay.Dialogs.Popups.ConnectionInterrupted
+                            || overlay == Overlay.Dialogs.Popups.ScoutNotUnlocked
+                            || overlay == Overlay.Dialogs.Popups.WarningOutsideAttack
+                            || overlay == Overlay.Dialogs.Popups.LoginFailed
+                            || overlay == Overlay.Dialogs.Popups.DemolishBuilding
+                            || overlay == Overlay.Dialogs.Popups.AreYouSure)
                         {
                             ret += "P";
                         }
@@ -584,6 +590,7 @@ namespace CodeStrikeBot
                 public static readonly ID DemolishBuilding = Popup[3];
                 public static readonly ID AreYouSure = Popup[4];
                 public static readonly ID LoginFailed = Popup[5];
+                public static readonly ID ConnectionInterrupted = Popup[6];
             }
         }
     }

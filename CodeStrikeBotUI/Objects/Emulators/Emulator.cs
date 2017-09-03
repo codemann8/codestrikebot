@@ -1372,30 +1372,33 @@ namespace CodeStrikeBot
             int desiredLevel = 2;
 
             Color c;
-            while (CheckPause())
+
+            while (this.GoToBaseOrMapStep())
             {
-                while (this.GoToBaseOrMapStep())
-                {
-                    Thread.Sleep(300);
-                    Controller.CaptureApplication(this);
-                }
+                Thread.Sleep(300);
+                Controller.CaptureApplication(this);
+            }
 
-                while (ScreenState.CurrentArea != Area.MainBases.Main)
-                {
-                    Controller.SendClick(this, 30, 675, 300);
-                    Controller.CaptureApplication(this);
-                }
+            while (ScreenState.CurrentArea != Area.MainBases.Main)
+            {
+                Controller.SendClick(this, 30, 675, 300);
+                Controller.CaptureApplication(this);
+            }
 
-                //TODO: Fix click and drag, but assume starting at main base in the lower right corner
-                /*ushort chksum = ScreenState.GetScreenChecksum(this.SuperBitmap, 330, 65, 20);
-                do
-                {
-                    Controller.SendClickDrag(this, 315, 480, 25, 355, 100, false, 1200);
-                    //Controller.SendClickDrag(this, 315, 480, 25, 355, 1000, false, 2000);
-                    Controller.CaptureApplication(this);
-                }
-                while (chksum != ScreenState.GetScreenChecksum(this.SuperBitmap, 330, 65, 20));*/
+            //TODO: Fix click and drag, but assume starting at main base in the lower right corner
+            ushort chksum = ScreenState.GetScreenChecksum(this.SuperBitmap, 330, 65, 20), finalChksum;
+            /*do
+            {
+                Controller.SendClickDrag(this, 315, 480, 25, 355, 100, false, 1200);
+                //Controller.SendClickDrag(this, 315, 480, 25, 355, 1000, false, 2000);
+                Controller.CaptureApplication(this);
+            }
+            while (chksum != ScreenState.GetScreenChecksum(this.SuperBitmap, 330, 65, 20));*/
 
+            finalChksum = chksum;
+
+            while (CheckPause() && chksum == finalChksum)
+            {
                 //if base screen, click empty lot
                 do
                 {
@@ -1447,7 +1450,7 @@ namespace CodeStrikeBot
                     c = SuperBitmap.GetPixel(235, 82);
                 }
 
-                while (c.Within(82, 81, 82, 3))
+                while (c.Within(82, 81, 82, 3) || c.Within(185, 95, 33, 10))
                 {
                     Thread.Sleep(50);
                     Controller.CaptureApplication(this);
@@ -1508,7 +1511,7 @@ namespace CodeStrikeBot
                         c = SuperBitmap.GetPixel(235, 82);
                     }
 
-                    while (c.Within(82, 81, 82, 3))
+                    while (c.Within(82, 81, 82, 3) || c.Within(185, 95, 33, 10))
                     {
                         Thread.Sleep(50);
                         Controller.CaptureApplication(this);
@@ -1568,7 +1571,7 @@ namespace CodeStrikeBot
                     c = SuperBitmap.GetPixel(235, 82);
                 }
 
-                while (c.Within(82, 81, 82, 3))
+                while (c.Within(82, 81, 82, 3) || c.Within(185, 95, 33, 10))
                 {
                     Thread.Sleep(50);
                     Controller.CaptureApplication(this);
@@ -1576,6 +1579,8 @@ namespace CodeStrikeBot
                 }
 
                 Thread.Sleep(1500);
+
+                chksum = ScreenState.GetScreenChecksum(this.SuperBitmap, 330, 65, 20);
             }
         }
 

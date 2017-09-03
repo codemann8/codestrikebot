@@ -349,14 +349,26 @@ namespace CodeStrikeBot
                     CurrentArea = Area.Others.Login;
                     break;
                 case 0x7daa: //main base modal
-                    c = bmp.GetPixel(190, 425);
-                    if (c.R < 80 && c.G < 80 && c.B < 80)
+                    chksum2 = ScreenState.GetScreenChecksum(bmp, 190, 115, 20);
+                    switch (chksum2)
                     {
-                        CurrentArea = Area.MainBases.GlobalGiftCollect;
-                    }
-                    else
-                    {
-                        CurrentArea = Area.MainBases.SecretGiftCollect;
+                        case 0xda08: //secret gift uncollectable
+                            CurrentArea = Area.MainBases.SecretGiftCollect;
+                            break;
+                        case 0x18e3:
+                            c = bmp.GetPixel(190, 425);
+                            if (c.R < 80 && c.G < 80 && c.B < 80)
+                            {
+                                CurrentArea = Area.MainBases.GlobalGiftCollect;
+                            }
+                            else
+                            {
+                                CurrentArea = Area.MainBases.SecretGiftCollect;
+                            }
+                            break;
+                        default:
+                            CurrentArea = Area.MainBases.Main;
+                            break;
                     }
                     break;
                 case 0x86d2: //realm map modal
@@ -596,32 +608,6 @@ namespace CodeStrikeBot
                     Overlays.Add(Overlay.Widgets.AllianceHelp);
                 }
 
-                chksum = ScreenState.GetScreenChecksum(bmp, 190, 115, 20);
-                if (chksum == 0xce2f) //tip!
-                {
-                    chksum = ScreenState.GetScreenChecksum(bmp, 190, 150, 20);
-                    if (chksum == 0x8772) //warning troops attacking outside base are not saved by hospital
-                    {
-                        Overlays.Add(Overlay.Dialogs.Popups.WarningOutsideAttack);
-                    }
-                    else
-                    {
-                        Overlays.Add(Overlay.Dialogs.Popups.Unknown);
-                    }
-                }
-                else if (chksum == 0xd856) //scout
-                {
-                    chksum = ScreenState.GetScreenChecksum(bmp, 190, 150, 20);
-                    if (chksum == 0x68e1) //scout not unlocked 
-                    {
-                        Overlays.Add(Overlay.Dialogs.Popups.ScoutNotUnlocked);
-                    }
-                    else
-                    {
-                        Overlays.Add(Overlay.Dialogs.Popups.Unknown);
-                    }
-                }
-
                 chksum = ScreenState.GetScreenChecksum(bmp, 54, 198, 10);
                 if (chksum == 0xce01)
                 {
@@ -676,14 +662,6 @@ namespace CodeStrikeBot
                     }
                 }
             }
-            else if (CurrentArea == Area.Others.Login)
-            {
-                chksum = ScreenState.GetScreenChecksum(bmp, 190, 115, 20);
-                if (chksum == 0x5065)
-                {
-                    Overlays.Add(Overlay.Dialogs.Popups.LoginFailed);
-                }
-            }
             else if (CurrentArea == Area.Menus.Alliance || CurrentArea == Area.Menus.Mission || CurrentArea == Area.Menus.Account)
             {
                 chksum = ScreenState.GetScreenChecksum(bmp, 67, 16, 6);
@@ -700,7 +678,9 @@ namespace CodeStrikeBot
                     Overlays.Add(Overlay.Statuses.Loading);
                 }
             }
-            else
+
+            chksum = ScreenState.GetScreenChecksum(bmp, 190, 105, 10);
+            if (chksum == 0xaea3) //popup
             {
                 chksum = ScreenState.GetScreenChecksum(bmp, 190, 115, 20);
                 switch (chksum)
@@ -710,6 +690,42 @@ namespace CodeStrikeBot
                         break;
                     case 0xff64:
                         Overlays.Add(Overlay.Dialogs.Popups.AreYouSure);
+                        break;
+                    case 0x5065:
+                        Overlays.Add(Overlay.Dialogs.Popups.LoginFailed);
+                        break;
+                    case 0x1d4c: //notice
+                        chksum = ScreenState.GetScreenChecksum(bmp, 190, 150, 20);
+                        if (chksum == 0xaae6)
+                        {
+                            Overlays.Add(Overlay.Dialogs.Popups.ConnectionInterrupted);
+                        }
+                        else
+                        {
+                            Overlays.Add(Overlay.Dialogs.Popups.Unknown);
+                        }
+                        break;
+                    case 0xce2f: //tip!
+                        chksum = ScreenState.GetScreenChecksum(bmp, 190, 150, 20);
+                        if (chksum == 0x8772) //warning troops attacking outside base are not saved by hospital
+                        {
+                            Overlays.Add(Overlay.Dialogs.Popups.WarningOutsideAttack);
+                        }
+                        else
+                        {
+                            Overlays.Add(Overlay.Dialogs.Popups.Unknown);
+                        }
+                        break;
+                    case 0xd856: //scout
+                        chksum = ScreenState.GetScreenChecksum(bmp, 190, 150, 20);
+                        if (chksum == 0x68e1) //scout not unlocked 
+                        {
+                            Overlays.Add(Overlay.Dialogs.Popups.ScoutNotUnlocked);
+                        }
+                        else
+                        {
+                            Overlays.Add(Overlay.Dialogs.Popups.Unknown);
+                        }
                         break;
                 }
             }
@@ -747,24 +763,42 @@ namespace CodeStrikeBot
             //        break;
             }
 
-            if (Overlays.Count == 0 && CurrentArea != Area.Unknown && CurrentArea != Area.MainBases.Main
-                && CurrentArea != Area.StateMaps.Main && CurrentArea != Area.StateMaps.FullScreen
-                && CurrentArea != Area.Emulators.Loading && CurrentArea != Area.Emulators.Android
-                && CurrentArea != Area.Others.Login && CurrentArea != Area.Others.Splash && CurrentArea != Area.Others.Ad
-                && CurrentArea != Area.Others.Chat && CurrentArea != Area.Others.SessionTimeout)
+            try
             {
-                chksum = ScreenState.GetScreenChecksum(bmp, 67, 16, 6);
-                ushort chksum2 = ScreenState.GetScreenChecksum(bmp, 160, 16, 14);
-                ushort chksum3 = ScreenState.GetScreenChecksum(bmp, 190, 115, 20);
-
-                if (chksum == 0x0cde || chksum == 0x57ca) //modal or double modal on a menu
+                if (Overlays.Count == 0 && CurrentArea != Area.Unknown && CurrentArea != Area.MainBases.Main
+                    && CurrentArea != Area.StateMaps.Main && CurrentArea != Area.StateMaps.FullScreen
+                    && CurrentArea != Area.Emulators.Loading && CurrentArea != Area.Emulators.Android
+                    && CurrentArea != Area.Others.Login && CurrentArea != Area.Others.Splash && CurrentArea != Area.Others.Ad
+                    && CurrentArea != Area.Others.Chat && CurrentArea != Area.Others.SessionTimeout)
                 {
-                    if (!System.IO.File.Exists(String.Format("{0}\\unknown\\unknown{1}-{2}-{3}.bmp", Controller.Instance.GetFullScreenshotDir(), chksum.ToString("X4"), chksum2.ToString("X4"), chksum3.ToString("X4"))))
+                    chksum = ScreenState.GetScreenChecksum(bmp, 67, 16, 6);
+                    ushort chksum2 = ScreenState.GetScreenChecksum(bmp, 160, 16, 14);
+                    ushort chksum3 = ScreenState.GetScreenChecksum(bmp, 190, 115, 20);
+
+                    if (chksum == 0x0cde || chksum == 0x57ca) //modal or double modal on a menu
                     {
-                        bmp.Bitmap.Save(String.Format("{0}\\unknown\\unknown{1}-{2}-{3}.bmp", Controller.Instance.GetFullScreenshotDir(), chksum.ToString("X4"), chksum2.ToString("X4"), chksum3.ToString("X4")), System.Drawing.Imaging.ImageFormat.Bmp);
+                        if (!System.IO.File.Exists(String.Format("{0}\\unknown\\unknown{1}-{2}-{3}.bmp", Controller.Instance.GetFullScreenshotDir(), chksum.ToString("X4"), chksum2.ToString("X4"), chksum3.ToString("X4"))))
+                        {
+                            bmp.Bitmap.Save(String.Format("{0}\\unknown\\unknown{1}-{2}-{3}.bmp", Controller.Instance.GetFullScreenshotDir(), chksum.ToString("X4"), chksum2.ToString("X4"), chksum3.ToString("X4")), System.Drawing.Imaging.ImageFormat.Bmp);
+                        }
+                    }
+                }
+
+                if (Overlays.Contains(Overlay.Dialogs.Popups.Unknown))
+                {
+                    chksum = ScreenState.GetScreenChecksum(bmp, 190, 115, 20);
+                    ushort chksum2 = ScreenState.GetScreenChecksum(bmp, 190, 150, 20);
+
+                    if (chksum == 0x0cde || chksum == 0x57ca) //modal or double modal on a menu
+                    {
+                        if (!System.IO.File.Exists(String.Format("{0}\\unknown\\popup{1}-{2}.bmp", Controller.Instance.GetFullScreenshotDir(), chksum.ToString("X4"), chksum2.ToString("X4"))))
+                        {
+                            bmp.Bitmap.Save(String.Format("{0}\\unknown\\popup{1}-{2}.bmp", Controller.Instance.GetFullScreenshotDir(), chksum.ToString("X4"), chksum2.ToString("X4")), System.Drawing.Imaging.ImageFormat.Bmp);
+                        }
                     }
                 }
             }
+            catch (InvalidOperationException ex) { }
         }
     }
 }
