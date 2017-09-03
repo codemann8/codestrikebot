@@ -343,9 +343,17 @@ namespace CodeStrikeBot
                 case 0xbf1b: //loading
                     CurrentArea = Area.Others.Splash;
                     break;
-                case 0xf2bf:
-                case 0x3790: //modal
-                    CurrentArea = Area.Others.Login;
+                case 0xf2bf: //login
+                case 0x3790: //login modal
+                    chksum2 = ScreenState.GetScreenChecksum(bmp, 60, 120, 20);
+                    if (chksum2 == 0x0e05) //casino jackpot crate collect
+                    {
+                        CurrentArea = Area.Menus.ShootingRanges.NormalCrate;
+                    }
+                    else
+                    {
+                        CurrentArea = Area.Others.Login;
+                    }
                     break;
                 case 0x7daa: //main base modal
                     chksum2 = ScreenState.GetScreenChecksum(bmp, 190, 115, 20);
@@ -434,7 +442,7 @@ namespace CodeStrikeBot
                         switch (chksum3)
                         {
                             case 0x994e: //shooting range crate collect
-                            case 0x0e05: //casino jackpot crate collect
+                            case 0x0e05: //casino jackpot crate collect TODO this never hits due to chksum collision with login modal screen
                                 CurrentArea = Area.Menus.ShootingRanges.NormalCrate;
                                 break;
                             default:
