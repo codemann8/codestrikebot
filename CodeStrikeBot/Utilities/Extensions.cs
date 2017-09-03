@@ -15,9 +15,22 @@ namespace CodeStrikeBot
 
         public static ushort Checksum(this SuperBitmap bitmap)
         {
-            //return Checksum(bitmap, 0, 0, bitmap.Bitmap.Width, bitmap.Bitmap.Height);
+            ushort chksum = 0;
+            try
+            {
+                bool success = false;
+                do
+                {
+                    //chksum = Checksum(bitmap, 0, 0, bitmap.Bitmap.Width, bitmap.Bitmap.Height);
 
-            return CRC16.ComputeChecksum((byte[])(new ImageConverter()).ConvertTo(bitmap.Bitmap, typeof(byte[])));
+                    chksum = CRC16.ComputeChecksum((byte[])(new ImageConverter()).ConvertTo(bitmap.Bitmap, typeof(byte[])));
+                    success = true;
+                }
+                while (!success);
+            }
+            catch (InvalidOperationException e) { }
+
+            return chksum;
         }
 
         public static ushort Checksum(this Bitmap bitmap, int x, int y, int w, int h)

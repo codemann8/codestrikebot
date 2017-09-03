@@ -130,10 +130,9 @@ namespace CodeStrikeBot
                         case 0xab66:
                             CurrentArea = Area.Menus.ResourceHelp;
                             break;
-                        /*case 0x6c9f: //nox
-                        case 0x7ef5: //nox new
+                        case 0x7307:
                             CurrentArea = Area.Menus.Resources;
-                            break;*/
+                            break;
                         case 0x5417:
                             CurrentArea = Area.Menus.Commander;
                             break;
@@ -334,7 +333,7 @@ namespace CodeStrikeBot
                         CurrentArea = Area.StateMaps.FullScreen;
                     }
                     break;
-                case 0x06d9: //memu
+                case 0x9b25: //memu
                     CurrentArea = Area.Emulators.Loading;
                     break;
                 case 0x2230:
@@ -798,7 +797,7 @@ namespace CodeStrikeBot
                     }
                 }
             }
-            catch (InvalidOperationException ex) { }
+            catch (InvalidOperationException e) { }
         }
     }
 }
