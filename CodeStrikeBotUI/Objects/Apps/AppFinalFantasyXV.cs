@@ -484,7 +484,11 @@ namespace CodeStrikeBot
                 }
                 else if (enteredGeneric && CurrentArea != Area.Others.Quit)
                 {
-                    Controller.Instance.SendNotification(string.Format("ScreenState found but missed above\n{0}-{1}-{2}", chksum.ToString("X4"), chksum2.ToString("X4"), this.ToString()), NotificationType.General);
+                    if (!System.IO.File.Exists(String.Format("{0}\\unknown\\genericCase-{1}-{2}-{3}.bmp", Controller.Instance.GetFullScreenshotDir(), this.ToString(), chksum.ToString("X4"), chksum2.ToString("X4"))))
+                    {
+                        bmp.Bitmap.Save(String.Format("{0}\\unknown\\genericCase-{1}-{2}-{3}.bmp", Controller.Instance.GetFullScreenshotDir(), this.ToString(), chksum.ToString("X4"), chksum2.ToString("X4")), System.Drawing.Imaging.ImageFormat.Bmp);
+                    }
+                    //Controller.Instance.SendNotification(string.Format("ScreenState found but missed above\n{0}-{1}-{2}", this.ToString(), chksum.ToString("X4"), chksum2.ToString("X4")), NotificationType.General);
                 }
 
                 /*chksum = ScreenState.GetScreenChecksum(bmp, 67, 16, 7);
