@@ -591,6 +591,8 @@ namespace CodeStrikeBot
                 public static readonly ID AreYouSure = Popup[4];
                 public static readonly ID LoginFailed = Popup[5];
                 public static readonly ID ConnectionInterrupted = Popup[6];
+                public static readonly ID MaxDeployments = Popup[7];
+                public static readonly ID TransferConfirmation = Popup[8];
             }
         }
     }

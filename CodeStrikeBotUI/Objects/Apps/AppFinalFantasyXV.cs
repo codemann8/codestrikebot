@@ -627,7 +627,15 @@ namespace CodeStrikeBot
                     chksum = ScreenState.GetScreenChecksum(bmp, 40, 107, 10);
                     if (chksum == 0x0ce0)
                     {
-                        Overlays.Add(Overlay.Dialogs.Tiles.PlayerEnemy);
+                        c = bmp.GetPixel(195, 233);
+                        if (c.Equals(8, 235, 255))
+                        {
+                            Overlays.Add(Overlay.Dialogs.Tiles.PlayerFriend);
+                        }
+                        else
+                        {
+                            Overlays.Add(Overlay.Dialogs.Tiles.PlayerEnemy);
+                        }
                     }
                     else
                     {
@@ -694,6 +702,12 @@ namespace CodeStrikeBot
                 chksum = ScreenState.GetScreenChecksum(bmp, 190, 115, 20);
                 switch (chksum)
                 {
+                    case 0x8259:
+                        Overlays.Add(Overlay.Dialogs.Popups.TransferConfirmation);
+                        break;
+                    case 0x043b:
+                        Overlays.Add(Overlay.Dialogs.Popups.MaxDeployments);
+                        break;
                     case 0x7a0f:
                         Overlays.Add(Overlay.Dialogs.Popups.DemolishBuilding);
                         break;

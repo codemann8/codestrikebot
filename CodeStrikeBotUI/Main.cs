@@ -195,7 +195,7 @@ namespace CodeStrikeBot
                 lstAccounts.SelectedIndex = 0;
             }
 
-            //chkScheduler.Checked = true;
+            chkScheduler.Checked = true;
             chkTasks.Checked = true;
 
             bckScreenState.RunWorkerAsync();
