@@ -528,16 +528,16 @@ namespace CodeStrikeBot
 
                     watch.Restart();
                     Controller.SendClick(this, 196, 382); //click on own base
+                    Controller.CaptureApplication(this);
 
-                    while (chksum != 0x30b4 && chksum != 0x961c && watch.ElapsedMilliseconds < 10000)
+                    while (!ScreenState.Overlays.Contains(Overlay.Dialogs.Tiles.PlayerFriend) && watch.ElapsedMilliseconds < 10000)
                     {
                         Controller.CaptureApplication(this);
-                        chksum = ScreenState.GetScreenChecksum(SuperBitmap, 37, 90, 20);
                     }
 
                     int elapsed = (int)watch.ElapsedMilliseconds;
 
-                    if (chksum == 0x30b4 || chksum == 0x961c)
+                    if (ScreenState.Overlays.Contains(Overlay.Dialogs.Tiles.PlayerFriend))
                     {
                         TimeoutFactor = Math.Max(1.001, (double)watch.ElapsedMilliseconds / 400);
 
