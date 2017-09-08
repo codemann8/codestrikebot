@@ -719,6 +719,8 @@ namespace CodeStrikeBot
 
             bool tasksLeft = true;
 
+            bool failed = false;
+
             SpeedTest();
 
             tmrRun.Start();
@@ -842,22 +844,15 @@ namespace CodeStrikeBot
                 }
                 else
                 {
-                    foreach (Screen s in sc)
-                    {
-                        if (s != null && s.EmulatorProcess != null)
-                        {
-                            Controller.CaptureApplication(s);
-
-                            if (s.ScreenState.CurrentArea != Area.StateMaps.Main && !(s.ScreenState.CurrentArea == Area.Others.Login || s.ScreenState.CurrentArea == Area.Emulators.Android || s.ScreenState.CurrentArea == Area.Emulators.Loading || s.ScreenState.CurrentArea == Area.Others.Splash || s.ScreenState.CurrentArea == Area.Emulators.Crash || s.ScreenState.CurrentArea == Area.Emulators.TaskManager || s.ScreenState.CurrentArea == Area.Emulators.TaskManagerApp || s.ScreenState.CurrentArea == Area.Emulators.TaskManagerRemove))
-                            {
-                                RestartEmulator(s);
-                                s.Login(s.Emulator.LastKnownAccount);
-                            }
-                        }
-                    }
+                    failed = true;
                 }
             }
             else
+            {
+                failed = true;
+            }
+
+            if (failed)
             {
                 foreach (Screen s in sc)
                 {
@@ -1784,6 +1779,8 @@ namespace CodeStrikeBot
                         case NotificationType.Offline:
                         case NotificationType.BoostActivationFail:
                         case NotificationType.IncomingRally:
+                        case NotificationType.IncomingAttack:
+                        case NotificationType.TasksPastDue:
                             priority = 1;
                             break;
 

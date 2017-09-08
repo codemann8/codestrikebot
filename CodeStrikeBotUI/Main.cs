@@ -979,7 +979,7 @@ namespace CodeStrikeBot
 
                                 if (warMessage.timer <= 900 && tmrSupressAction.ElapsedMilliseconds > 1000)
                                 {
-                                    if (warMessage.defender.AllianceTag == "(FuKT)") //TODO: Move this hard-coded value to user-defined Settings
+                                    if (warMessage.defender.AllianceTag == "(Bad4)") //TODO: Move this hard-coded value to user-defined Settings
                                     {
                                         if (warMessage.timer == 60)
                                         {
@@ -1572,13 +1572,12 @@ namespace CodeStrikeBot
                     {
                         foreach (DataObjects.ScheduleTask task in BotDatabase.GetObjects<DataObjects.ScheduleTask>())
                         {
-                            if (DateTime.Now.Subtract(task.NextAction).Minutes > 15)
+                            if (task.App.Id == 2 && DateTime.Now.Subtract(task.NextAction).Minutes > 15)
                             {
+                                ctrl.SendNotification("Scheduled tasks are past due", NotificationType.TasksPastDue);
+
                                 if (DateTime.Now.Subtract(task.NextAction).Minutes < 30)
                                 {
-                                    //TODO: Vacation mode, revert back to priority alert
-                                    ctrl.SendNotification("Scheduled tasks are past due", NotificationType.TasksPastDue);
-
                                     foreach (Screen s in ctrl.sc)
                                     {
                                         ctrl.KillEmulator(s, false);

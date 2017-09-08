@@ -2216,6 +2216,7 @@ namespace CodeStrikeBot
                                         }*/
                                         else if (ScreenState.Overlays.Contains(Overlay.Dialogs.Popups.Unknown)) //nsf?
                                         {
+                                            SuperBitmap.Bitmap.Save(String.Format("{0}{1}\\rss{2}.bmp", AppDomain.CurrentDomain.BaseDirectory, "output\\ss\\unknown", chksum.ToString("X4")), ImageFormat.Bmp);
                                             Controller.Instance.SendNotification(String.Format("Rss Transfer NSF {0}", chksum.ToString("X4")), NotificationType.General);
                                             Controller.SendClick(this, 250, 215, 400); //Click OK
                                             this.ClickBack(300); //Click back
@@ -2255,8 +2256,6 @@ namespace CodeStrikeBot
                                 success = deploymentsSent > 0 && tmrRun.ElapsedMilliseconds < 60000;
 
                                 tmrRun.Stop();
-
-                                this.ClickBack(300);
                             }
                         }
                     }
@@ -2676,25 +2675,30 @@ namespace CodeStrikeBot
                 if (ScreenState.Overlays.Contains(Overlay.Dialogs.Tiles.Rebel))
                 {
                     this.ClickBack(300);
-                    Controller.CaptureApplication(this);
                 }
 
                 Controller.CaptureApplication(this);
 
-                //get back until base or map screen
-                if (!(ScreenState.CurrentArea == Area.StateMaps.Main || ScreenState.CurrentArea == Area.MainBases.Main || ScreenState.CurrentArea == Area.Others.Login || ScreenState.CurrentArea == Area.Emulators.Android || ScreenState.CurrentArea == Area.Emulators.Loading || ScreenState.CurrentArea == Area.Others.Splash || ScreenState.CurrentArea == Area.Emulators.Crash || ScreenState.CurrentArea == Area.Emulators.TaskManager || ScreenState.CurrentArea == Area.Emulators.TaskManagerApp || ScreenState.CurrentArea == Area.Emulators.TaskManagerRemove))
+                if (ScreenState.CurrentArea == Area.Others.Quit)
                 {
                     tasksLeft = true;
-
-                    if (ScreenState.CurrentArea == Area.Others.Quit)
-                    {
-                        TimeoutFactor += 0.1;
-                    }
-
-                    this.ClickBack(500); //click Back
+                    this.ClickBack(300);
                 }
+                else
+                {
+                    //get back until base or map screen
+                    if (!(ScreenState.CurrentArea == Area.StateMaps.Main || ScreenState.CurrentArea == Area.MainBases.Main || ScreenState.CurrentArea == Area.Others.Login || ScreenState.CurrentArea == Area.Emulators.Android || ScreenState.CurrentArea == Area.Emulators.Loading || ScreenState.CurrentArea == Area.Others.Splash || ScreenState.CurrentArea == Area.Emulators.Crash || ScreenState.CurrentArea == Area.Emulators.TaskManager || ScreenState.CurrentArea == Area.Emulators.TaskManagerApp || ScreenState.CurrentArea == Area.Emulators.TaskManagerRemove))
+                    {
+                        tasksLeft = true;
 
-                //bmp.Dispose();
+                        if (ScreenState.CurrentArea == Area.Others.Quit)
+                        {
+                            TimeoutFactor += 0.1;
+                        }
+
+                        this.ClickBack(500); //click Back
+                    }
+                }
             }
 
             return tasksLeft;
@@ -2909,11 +2913,11 @@ namespace CodeStrikeBot
                 {
                     tasksLeft = true;
 
-                    ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 192, 412, 20);
+                    ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 192, 438, 20);
 
-                    if (chksum == 0x7980) //Free Spin
+                    if (chksum == 0x2e9b) //Free Spin
                     {
-                        Controller.SendClick(this, 200, 420, 5000);
+                        Controller.SendClick(this, 200, 490, 5000);
                     }
                     else
                     {
@@ -3056,6 +3060,16 @@ namespace CodeStrikeBot
                     || ScreenState.CurrentArea == Area.Menus.Missions.Daily || ScreenState.CurrentArea == Area.Menus.Missions.Alliance || ScreenState.CurrentArea == Area.Menus.Missions.VIP
                     || ScreenState.CurrentArea == Area.Menus.Missions.VIPStreak)
                 {
+                    if (ScreenState.CurrentArea == Area.Menus.Mission && !ScreenState.Overlays.Contains(Overlay.Statuses.Loading))
+                    {
+                        ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 125, 470, 20);
+                        if (chksum == 0x09ac) //missions at 00:00
+                        {
+                            DataObjects.Account account = Emulator.LastKnownAccount;
+                            while (!this.Logout()) { }
+                            Emulator.LastKnownAccount = account;
+                        }
+                    }
                     tasksLeft = this.CompleteMissionsStep(); //Complete Missions
                 }
                 else if (ScreenState.CurrentArea == Area.Menus.Missions.ActivateVIP)

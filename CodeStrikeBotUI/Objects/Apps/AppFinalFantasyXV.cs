@@ -324,7 +324,7 @@ namespace CodeStrikeBot
                     }
                     break;
                 case 0x09ab:
-                //case 0x95ca: //loading
+                case 0x97aa: //loading
                     CurrentArea = Area.MainBases.Main;
                     break;
                 case 0xbcd1: //realm map
@@ -702,7 +702,7 @@ namespace CodeStrikeBot
                 chksum = ScreenState.GetScreenChecksum(bmp, 190, 115, 20);
                 switch (chksum)
                 {
-                    case 0x8259:
+                    case 0x3795:
                         Overlays.Add(Overlay.Dialogs.Popups.TransferConfirmation);
                         break;
                     case 0x043b:
@@ -749,6 +749,9 @@ namespace CodeStrikeBot
                         {
                             Overlays.Add(Overlay.Dialogs.Popups.Unknown);
                         }
+                        break;
+                    default:
+                        Overlays.Add(Overlay.Dialogs.Popups.Unknown);
                         break;
                 }
             }
