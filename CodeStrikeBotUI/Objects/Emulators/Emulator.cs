@@ -2917,7 +2917,7 @@ namespace CodeStrikeBot
 
                     if (chksum == 0x2e9b) //Free Spin
                     {
-                        Controller.SendClick(this, 200, 490, 5000);
+                        Controller.SendClick(this, 200, 445, 5000);
                     }
                     else
                     {

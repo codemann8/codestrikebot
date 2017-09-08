@@ -703,6 +703,16 @@ namespace CodeStrikeBot
                 switch (chksum)
                 {
                     case 0x3795:
+                    case 0xbf0a:
+                        // TODO: Remove, debugging
+                        chksum = ScreenState.GetScreenChecksum(bmp, 67, 16, 4);
+                        ushort chksum2 = ScreenState.GetScreenChecksum(bmp, 160, 16, 14);
+                        ushort chksum3 = ScreenState.GetScreenChecksum(bmp, 190, 115, 20);
+
+                        if (!System.IO.File.Exists(String.Format("{0}\\unknown\\rss{1}-{2}-{3}.bmp", Controller.Instance.GetFullScreenshotDir(), chksum.ToString("X4"), chksum2.ToString("X4"), chksum3.ToString("X4"))))
+                        {
+                            bmp.Bitmap.Save(String.Format("{0}\\unknown\\rss{1}-{2}-{3}.bmp", Controller.Instance.GetFullScreenshotDir(), chksum.ToString("X4"), chksum2.ToString("X4"), chksum3.ToString("X4")), System.Drawing.Imaging.ImageFormat.Bmp);
+                        }
                         Overlays.Add(Overlay.Dialogs.Popups.TransferConfirmation);
                         break;
                     case 0x043b:
