@@ -825,12 +825,9 @@ namespace CodeStrikeBot
                     chksum = ScreenState.GetScreenChecksum(bmp, 190, 115, 20);
                     ushort chksum2 = ScreenState.GetScreenChecksum(bmp, 190, 150, 20);
 
-                    if (chksum == 0x0cde || chksum == 0x57ca) //modal or double modal on a menu
+                    if (!System.IO.File.Exists(String.Format("{0}\\unknown\\popup{1}-{2}.bmp", Controller.Instance.GetFullScreenshotDir(), chksum.ToString("X4"), chksum2.ToString("X4"))))
                     {
-                        if (!System.IO.File.Exists(String.Format("{0}\\unknown\\popup{1}-{2}.bmp", Controller.Instance.GetFullScreenshotDir(), chksum.ToString("X4"), chksum2.ToString("X4"))))
-                        {
-                            bmp.Bitmap.Save(String.Format("{0}\\unknown\\popup{1}-{2}.bmp", Controller.Instance.GetFullScreenshotDir(), chksum.ToString("X4"), chksum2.ToString("X4")), System.Drawing.Imaging.ImageFormat.Bmp);
-                        }
+                        bmp.Bitmap.Save(String.Format("{0}\\unknown\\popup{1}-{2}.bmp", Controller.Instance.GetFullScreenshotDir(), chksum.ToString("X4"), chksum2.ToString("X4")), System.Drawing.Imaging.ImageFormat.Bmp);
                     }
                 }
             }

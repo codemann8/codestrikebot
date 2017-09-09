@@ -2214,12 +2214,10 @@ namespace CodeStrikeBot
                                             Controller.SendClick(this, 250, 215, 1000); //Click OK
                                             pending = false;
                                         }*/
-                                        else if (ScreenState.Overlays.Contains(Overlay.Dialogs.Popups.Unknown)) //nsf?
+                                        else if (ScreenState.Overlays.Contains(Overlay.Dialogs.Popups.InsufficientResources))
                                         {
-                                            SuperBitmap.Bitmap.Save(String.Format("{0}{1}\\rss{2}.bmp", AppDomain.CurrentDomain.BaseDirectory, "output\\ss\\unknown", chksum.ToString("X4")), ImageFormat.Bmp);
-                                            Controller.Instance.SendNotification(String.Format("Rss Transfer NSF {0}", chksum.ToString("X4")), NotificationType.General);
                                             Controller.SendClick(this, 250, 215, 400); //Click OK
-                                            this.ClickBack(300); //Click back
+                                            this.ClickBack(300);
                                             deployments = 1;
                                             if (type == ScheduleType.FoodTransfer && Emulator.LastKnownAccount.FoodNegativeAmount > 0)
                                             {
@@ -2230,6 +2228,14 @@ namespace CodeStrikeBot
                                         }
                                         else if (ScreenState.CurrentArea == Area.StateMaps.Main || ScreenState.CurrentArea == Area.StateMaps.FullScreen)
                                         {
+                                            pending = false;
+                                        }
+                                        else if (ScreenState.Overlays.Contains(Overlay.Dialogs.Popups.Unknown))
+                                        {
+                                            SuperBitmap.Bitmap.Save(String.Format("{0}{1}\\rss{2}.bmp", AppDomain.CurrentDomain.BaseDirectory, "output\\ss\\unknown", chksum.ToString("X4")), ImageFormat.Bmp);
+                                            Controller.Instance.SendNotification(String.Format("Rss Transfer Unknown dialog {0}", chksum.ToString("X4")), NotificationType.General);
+
+                                            this.ClickBack(300);
                                             pending = false;
                                         }
                                         else
@@ -3063,7 +3069,11 @@ namespace CodeStrikeBot
                     if (ScreenState.CurrentArea == Area.Menus.Mission && !ScreenState.Overlays.Contains(Overlay.Statuses.Loading))
                     {
                         ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 125, 470, 20);
-                        if (chksum == 0x09ac) //missions at 00:00
+                        if (chksum == 0xccb2) //missions at 00:00
+                        {
+                            Controller.Instance.SendNotification("Mission 00:00 old checksum found", NotificationType.General);
+                        }
+                        else if (chksum == 0x09ac) //old chksum
                         {
                             DataObjects.Account account = Emulator.LastKnownAccount;
                             while (!this.Logout()) { }

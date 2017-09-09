@@ -593,6 +593,7 @@ namespace CodeStrikeBot
                 public static readonly ID ConnectionInterrupted = Popup[6];
                 public static readonly ID MaxDeployments = Popup[7];
                 public static readonly ID TransferConfirmation = Popup[8];
+                public static readonly ID InsufficientResources = Popup[9];
             }
         }
     }
