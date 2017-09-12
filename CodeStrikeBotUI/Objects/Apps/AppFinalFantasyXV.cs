@@ -424,6 +424,9 @@ namespace CodeStrikeBot
                 case 0xe5d3: //contacts
                     CurrentArea = Area.Others.Chat;
                     break;
+                case 0x1f46: //trial of the titan
+                    CurrentArea = Area.Menus.ShootingRanges.Main;
+                    break;
             }
 
             if (CurrentArea == Area.Unknown)
@@ -739,6 +742,7 @@ namespace CodeStrikeBot
                             Overlays.Add(Overlay.Dialogs.Popups.ConnectionInterrupted);
                         }
                             //91f8 //google play error
+                            //057d //quest timer not completed
                         else
                         {
                             Overlays.Add(Overlay.Dialogs.Popups.Unknown);
