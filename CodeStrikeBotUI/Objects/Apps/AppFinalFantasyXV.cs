@@ -350,8 +350,18 @@ namespace CodeStrikeBot
                     CurrentArea = Area.Others.Splash;
                     break;
                 case 0x33e2: //login
-                case 0xc7bd: //login modal/loading
                     CurrentArea = Area.Others.Login;
+                    break;
+                case 0xc7bd: //login modal/loading
+                    chksum2 = ScreenState.GetScreenChecksum(bmp, 60, 120, 20);
+                    if (chksum2 == 0xbe30) //TODO: collision case: casino jackpot crate collect
+                    {
+                        CurrentArea = Area.Others.Login;
+                    }
+                    else
+                    {
+                        CurrentArea = Area.Menus.ShootingRanges.NormalCrate;
+                    }
                     break;
                 case 0x49c2: //main base modal
                     chksum2 = ScreenState.GetScreenChecksum(bmp, 190, 115, 20);
@@ -361,15 +371,10 @@ namespace CodeStrikeBot
                             CurrentArea = Area.MainBases.SecretGiftCollect;
                             break;
                         case 0x18e3:
-                            c = bmp.GetPixel(190, 425);
-                            if (c.R < 80 && c.G < 80 && c.B < 80)
-                            {
-                                CurrentArea = Area.MainBases.GlobalGiftCollect;
-                            }
-                            else
-                            {
-                                CurrentArea = Area.MainBases.SecretGiftCollect;
-                            }
+                            CurrentArea = Area.MainBases.SecretGiftCollect;
+                            break;
+                        case 0x7448:
+                            CurrentArea = Area.MainBases.GlobalGiftCollect;
                             break;
                         default:
                             CurrentArea = Area.MainBases.Main;
@@ -733,6 +738,7 @@ namespace CodeStrikeBot
                         {
                             Overlays.Add(Overlay.Dialogs.Popups.ConnectionInterrupted);
                         }
+                            //91f8 //google play error
                         else
                         {
                             Overlays.Add(Overlay.Dialogs.Popups.Unknown);

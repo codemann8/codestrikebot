@@ -15,6 +15,7 @@ namespace CodeStrikeBot.Messages
         public int war_id { get; set; }
         public int role { get; set; }
         public int state { get; set; }
+        public int war { get; set; }
         public Objects.Rally.SharedCounts shared_counts { get; set; }
 
         public WarRallyEndedMessage(JsonMessage message)
@@ -36,6 +37,7 @@ namespace CodeStrikeBot.Messages
                             case "war_id": this.war_id = (int)war.Value; break;
                             case "role": this.role = (int)war.Value; break;
                             case "state": this.state = (int)war.Value; break;
+                            case "war": this.war = (int)war.Value; break;
                             case "shared_counts":
                                 this.shared_counts = new Objects.Rally.SharedCounts();
 

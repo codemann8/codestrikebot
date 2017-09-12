@@ -91,6 +91,8 @@
     <Compile Include="Messages\AllianceGiftCreatedMessage.cs" />
     <Compile Include="Messages\AllianceStoreHistoryUpdateMessage.cs" />
     <Compile Include="Messages\ChatMessage.cs" />
+    <Compile Include="Messages\TileUpdatedMessage.cs" />
+    <Compile Include="Messages\Objects\Tile.cs" />
     <Compile Include="Messages\Objects\March.cs" />
     <Compile Include="Messages\Objects\Rally.cs">
       <SubType>Code</SubType>

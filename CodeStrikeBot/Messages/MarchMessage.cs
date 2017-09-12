@@ -26,6 +26,7 @@ namespace CodeStrikeBot.Messages
         public DateTime dest_time { get; set; }
         public Objects.March.MarchType type { get; set; }
         public int alliance_id { get; set; }
+        public string alliance_tag { get; set; }
         public Objects.March.MarchEmoji emoji { get; set; }
         public DateTime emoji_starttime { get; set; }
         public string type_data { get; set; }
@@ -39,6 +40,7 @@ namespace CodeStrikeBot.Messages
         public string dest_name { get; set; }
         public bool dest_name_need_localize { get; set; }
         public string from_name { get; set; }
+        public string companion_anims { get; set; }
 
         public MarchMessage(JsonMessage message)
             : base(message)
@@ -103,6 +105,7 @@ namespace CodeStrikeBot.Messages
                                     }
                                     break;
                                 case "alliance_id": this.alliance_id = (int)m.Value; break;
+                                case "alliance_tag": this.alliance_tag = m.Value.ToString(); break;
                                 case "emoji":
                                     switch (m.Value.ToString())
                                     {
@@ -122,6 +125,7 @@ namespace CodeStrikeBot.Messages
                                 case "dest_name": this.dest_name = m.Value.ToString(); break;
                                 case "dest_name_need_localize": this.dest_name_need_localize = (bool)m.Value; break;
                                 case "from_name": this.from_name = m.Value.ToString(); break;
+                                case "companion_anims": this.companion_anims = null; if (((JValue)m.Value).Type != JTokenType.Null) this.Error = true; break;
                                 default: this.Error = true; break;
                             }
                         }

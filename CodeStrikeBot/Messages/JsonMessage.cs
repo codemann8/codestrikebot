@@ -101,6 +101,9 @@ namespace CodeStrikeBot.Messages
                             case "EVENT_ALLIANCE_STORE_HISTORY_UPDATE":
                                 ret = new AllianceStoreHistoryUpdateMessage(ret);
                                 break;
+                            case "EVENT_TILE_UPDATED":
+                                ret = new TileUpdatedMessage(ret);
+                                break;
                             default:
                                 System.IO.Directory.CreateDirectory(String.Format(".\\output\\debug\\unknownJson"));
                                 System.IO.File.WriteAllText(String.Format(".\\output\\debug\\unknownJson\\{0}-{1}.txt", node.Attributes["node"].Value, ret.Id), Utilities.FormatJSON(ret.RawJson));

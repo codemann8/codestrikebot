@@ -28,30 +28,43 @@ namespace CodeStrikeBot.Messages
                         {
                             case "event": this._event = root.Value.ToString(); break;
                             case "help_data":
-                                if (root.Value is JObject)
+
+                                JObject helpDataStart;
+
+                                if (root.Value is JArray)
                                 {
-                                    this.help_data = new List<HelpData>();
-                                    foreach (KeyValuePair<string, JToken> help in (JObject)root.Value)
+                                    if (((JArray)root.Value).Count > 1)
                                     {
-                                        HelpData data = new HelpData();
-                                        data.help_id = help.Key;
-
-                                        foreach (KeyValuePair<string, JToken> d in (JObject)help.Value)
-                                        {
-                                            switch (d.Key)
-                                            {
-                                                case "help_count": data.help_count = (int)d.Value; break;
-                                                case "helper_user_id": data.helper_userid = (int)d.Value; break;
-                                                default: this.Error = true; break;
-                                            }
-                                        }
-
-                                        this.help_data.Add(data);
+                                        this.Error = true;
+                                        return;
+                                    }
+                                    else
+                                    {
+                                        helpDataStart = (JObject)((JArray)root.Value)[0];
                                     }
                                 }
                                 else
                                 {
-                                    this.Error = true;
+                                    helpDataStart = (JObject)root.Value;
+                                }
+                                
+                                this.help_data = new List<HelpData>();
+                                foreach (KeyValuePair<string, JToken> help in helpDataStart)
+                                {
+                                    HelpData data = new HelpData();
+                                    data.help_id = help.Key;
+
+                                    foreach (KeyValuePair<string, JToken> d in (JObject)help.Value)
+                                    {
+                                        switch (d.Key)
+                                        {
+                                            case "help_count": data.help_count = (int)d.Value; break;
+                                            case "helper_user_id": data.helper_userid = (int)d.Value; break;
+                                            default: this.Error = true; break;
+                                        }
+                                    }
+
+                                    this.help_data.Add(data);
                                 }
                                 break;
                             default: this.Error = true; break;
@@ -64,6 +77,10 @@ namespace CodeStrikeBot.Messages
                 this.Error = true;
             }
             catch (ArgumentOutOfRangeException ex)
+            {
+                this.Error = true;
+            }
+            catch (InvalidCastException ex)
             {
                 this.Error = true;
             }

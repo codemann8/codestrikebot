@@ -33,6 +33,8 @@ namespace CodeStrikeBot.Messages
         public Objects.Rally.Defender defender { get; set; }
         public List<Objects.Rally.RallySlot> slots { get; set; }
         public Objects.Rally.SharedCounts shared_counts { get; set; }
+        public bool bypass_final_confirmation { get; set; }
+        public bool war_commission_required { get; set; }
 
         public WarRallyMessage(JsonMessage message)
             : base(message)
@@ -89,6 +91,8 @@ namespace CodeStrikeBot.Messages
                             case "trap_count": this.troop_count = (int)war.Value; break;
                             case "monster_count": this.monster_count = (int)war.Value; break;
                             case "copy_leader_ratio_enabled": this.copy_leader_ratio_enabled = (bool)war.Value; break;
+                            case "bypass_final_confirmation": this.bypass_final_confirmation = (bool)war.Value; break;
+                            case "war_comission_required": this.war_commission_required = (bool)war.Value; break;
                             case "attacker":
                                 this.attacker = new Objects.Rally.Attacker();
 
@@ -119,6 +123,7 @@ namespace CodeStrikeBot.Messages
                                                         this.attacker.Tile.Y += Utilities.TileId2YCoordinate((int)tile.Value);
                                                         break;
                                                     case "overlay": this.attacker.TileOverlay = (int)tile.Value; break;
+                                                    case "rank": this.attacker.TileRank = (int)tile.Value; break;
                                                     default: this.Error = true; break;
                                                 }
                                             }
@@ -164,6 +169,7 @@ namespace CodeStrikeBot.Messages
                                                         this.defender.Tile.X += Utilities.TileId2XCoordinate((int)tile.Value);
                                                         this.defender.Tile.Y += Utilities.TileId2YCoordinate((int)tile.Value);
                                                         break;
+                                                    case "wonder_id": this.defender.TileControlPointId = (int)tile.Value; break;
                                                     case "overlay": this.defender.TileOverlay = (int)tile.Value; break;
                                                     default: this.Error = true; break;
                                                 }

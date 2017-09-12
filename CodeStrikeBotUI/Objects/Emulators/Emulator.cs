@@ -2982,12 +2982,12 @@ namespace CodeStrikeBot
                     }
                     else
                     {
-                        chksum = ScreenState.GetScreenChecksum(SuperBitmap, 188, 476, 20); //DIFF ff
-                        if (chksum == 0xe2f2) //if casino jackpot crate Collect Button (doesn't account for animated button)
+                        chksum = ScreenState.GetScreenChecksum(SuperBitmap, 188, 486, 20); //DIFF ff
+                        if (chksum == 0x6782) //if casino jackpot crate Collect Button (doesn't account for animated button)
                         {
                             //Random r = new Random();
                             //Controller.SendClick(this, 188, 415 + r.Next(0, 20), 1000); //click Collect
-                            Controller.SendClick(this, 188, 388, 1000); //click Collect
+                            Controller.SendClick(this, 188, 488, 1000); //click Collect
                             Controller.SendClick(this, 40, 680, 300); //Click Base
                         }
                         else
@@ -3069,11 +3069,7 @@ namespace CodeStrikeBot
                     if (ScreenState.CurrentArea == Area.Menus.Mission && !ScreenState.Overlays.Contains(Overlay.Statuses.Loading))
                     {
                         ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 125, 470, 20);
-                        if (chksum == 0xccb2) //missions at 00:00
-                        {
-                            Controller.Instance.SendNotification("Mission 00:00 old checksum found", NotificationType.General);
-                        }
-                        else if (chksum == 0x09ac) //old chksum
+                        if (chksum == 0x09ac || chksum == 0xccb2) //missions at 00:00
                         {
                             DataObjects.Account account = Emulator.LastKnownAccount;
                             while (!this.Logout()) { }
