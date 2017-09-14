@@ -157,6 +157,7 @@ namespace CodeStrikeBot
                             CurrentArea = Area.Others.Ad;
                             break;
                         case 0xd0b4: //attack of the flan
+                        case 0x857c: //the gem dungeon
                             CurrentArea = Area.Menus.ShootingRanges.Main;
                             break;
                         case 0x5272:
