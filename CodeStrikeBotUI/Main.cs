@@ -896,7 +896,6 @@ namespace CodeStrikeBot
 
             PacketDotNet.TcpPacket tcpPacket = (PacketDotNet.TcpPacket)PacketDotNet.Packet.ParsePacket(packet.LinkLayerType, packet.Data).PayloadPacket.PayloadPacket;
 
-
             bool found = false;
 
             //TODO: Debug - remove
@@ -1037,8 +1036,43 @@ namespace CodeStrikeBot
 
                             ctrl.marches.Sort();
 
-                            lstRadar.Items.Clear();
-                            lstRadar.Items.AddRange(ctrl.marches.ToArray());
+                            lstMarches.Items.Clear();
+                            lstMarches.Items.AddRange(ctrl.marches.ToArray());
+                        }
+                        else if (message is Messages.TileUpdatedMessage)
+                        {
+                            Messages.TileUpdatedMessage tileMessage = (Messages.TileUpdatedMessage)message;
+
+                            foreach (Messages.TileUpdatedMessage.Chunk c in tileMessage.chunks)
+                            {
+                                foreach (Messages.TileUpdatedMessage.Tile t in c.tiles)
+                                {
+                                    System.Web.UI.DataVisualization.Charting.Point3D coord = Utilities.ProvinceChunkTile2Point3D(c.p_id, c.c_id, t.tile_id);
+
+                                    Messages.Objects.Tile tile = ctrl.tiles.Where(tl => tl.Coordinate.X == coord.X && tl.Coordinate.Y == coord.Y && tl.Coordinate.Z == coord.Z).FirstOrDefault();
+
+                                    if (tile == null)
+                                    {
+                                        tile = new Messages.Objects.Tile(t, coord, tileMessage);
+                                        ctrl.tiles.Add(tile);
+                                    }
+                                    else
+                                    {
+                                        tile.Update(tileMessage);
+                                    }
+
+                                    /*foreach (Messages.Objects.Tile t in ctrl.tiles.Where(tl => tl.RCustomExpireTime <= DateTime.Now.ToUniversalTime()).ToList())
+                                    {
+                                        ctrl.tiles.Remove(t);
+                                    }*/
+
+                                }
+                            }
+
+                            //ctrl.tiles.Sort();
+
+                            lstTiles.Items.Clear();
+                            lstTiles.Items.AddRange(ctrl.tiles.ToArray());
                         }
                         else if (message is Messages.SyncedDataMessage)
                         {
@@ -2149,12 +2183,24 @@ namespace CodeStrikeBot
         {
             if (tabControlMonitor.SelectedTab == tabMarches)
             {
-                Messages.Objects.March march = (Messages.Objects.March)lstRadar.SelectedItem;
+                Messages.Objects.March march = (Messages.Objects.March)lstMarches.SelectedItem;
 
+                System.IO.Directory.CreateDirectory(String.Format("{0}\\output\\debug\\marches", System.Windows.Forms.Application.StartupPath));
+                
                 foreach (Messages.MarchMessage message in march.Messages)
                 {
-                    System.IO.Directory.CreateDirectory(String.Format("{0}\\output\\debug\\marches", System.Windows.Forms.Application.StartupPath));
-                    System.IO.File.WriteAllText(String.Format("{0}\\output\\debug\\marches\\{1}{2}.txt", System.Windows.Forms.Application.StartupPath, march.Id, message.Id), message.RawJson);
+                    System.IO.File.WriteAllText(String.Format("{0}\\output\\debug\\marches\\{1}-{2}.txt", System.Windows.Forms.Application.StartupPath, march.Id, message.Id), Utilities.FormatJSON(message.RawJson));
+                }
+            }
+            else if (tabControlMonitor.SelectedTab == tabTiles)
+            {
+                Messages.Objects.Tile tile = (Messages.Objects.Tile)lstTiles.SelectedItem;
+
+                System.IO.Directory.CreateDirectory(String.Format("{0}\\output\\debug\\tiles", System.Windows.Forms.Application.StartupPath));
+
+                foreach (Messages.TileUpdatedMessage message in tile.Messages)
+                {
+                    System.IO.File.WriteAllText(String.Format("{0}\\output\\debug\\tiles\\{1}-{2}.txt", System.Windows.Forms.Application.StartupPath, tile.ObjectId, message.Id), Utilities.FormatJSON(message.RawJson));
                 }
             }
         }
@@ -2163,9 +2209,19 @@ namespace CodeStrikeBot
         {
             if (tabControlMonitor.SelectedTab == tabMarches)
             {
-                Messages.Objects.March march = (Messages.Objects.March)lstRadar.SelectedItem;
-
-                ctrl.ActiveScreen.GoToCoordinate(march.DestCoordinate);
+                Messages.Objects.March march = (Messages.Objects.March)lstMarches.SelectedItem;
+                if (march != null)
+                {
+                    ctrl.ActiveScreen.GoToCoordinate(march.DestCoordinate);
+                }
+            }
+            else if (tabControlMonitor.SelectedTab == tabTiles)
+            {
+                Messages.Objects.Tile tile = (Messages.Objects.Tile)lstTiles.SelectedItem;
+                if (tile != null)
+                {
+                    ctrl.ActiveScreen.GoToCoordinate(tile.Coordinate);
+                }
             }
         }
     }

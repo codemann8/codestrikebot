@@ -118,15 +118,8 @@ namespace CodeStrikeBot.Messages.Objects
 
         public override string ToString()
         {
-            /*if (this.Watchtower != null)
-            {
-                return String.Format("{6} {0}: {1}:{2}:{3} {4}->{5}", Enum.GetName(typeof(MarchType), this.Type).Replace("CodeStrikeBot.Messages.Data.MarchType", ""), this.DestCoordinate.Z, this.DestCoordinate.X, this.DestCoordinate.Y, this.FromName, this.DestName, this.Watchtower.ActualTotalUnits);
-            }
-            else
-            {
-                return String.Format("{0}: {1}:{2}:{3} {4}->{5}", Enum.GetName(typeof(MarchType), this.Type).Replace("CodeStrikeBot.Messages.Data.MarchType", ""), this.DestCoordinate.Z, this.DestCoordinate.X, this.DestCoordinate.Y, this.FromName, this.DestName);
-            }*/
-            return "";
+            //Enum.GetName(typeof(MarchType), this.Type).Replace("CodeStrikeBot.Messages.Data.MarchType", "")
+            return String.Format("{0} {1}: {2}:{3} {4} {5}->{6}", this.ObjectId, this.Overlay, this.Coordinate.X, this.Coordinate.Y, this.State, this.EventId, this.CreatureType);
         }
 
         public enum TileState
@@ -168,16 +161,19 @@ namespace CodeStrikeBot.Messages.Objects
 
             public TileCity(Messages.TileUpdatedMessage.City c)
             {
-                this.UserId = c.user_id;
-                this.EmpireId = c.empire_id;
-                this.CityId = c.city_id;
-                this.ScoutCost = c.scout_cost;
-                this.CityName = c.city_name;
-                this.LastState = c.last_state;
-                this.IsLastStateACWar = c.is_last_state_ac_war;
-                this.StateTimestamp = c.state_timestamp;
-                this.DefeatedVanityId = c.defeated_vanity_id;
-                this.CityLevel = c.city_level;
+                if (c != null)
+                {
+                    this.UserId = c.user_id;
+                    this.EmpireId = c.empire_id;
+                    this.CityId = c.city_id;
+                    this.ScoutCost = c.scout_cost;
+                    this.CityName = c.city_name;
+                    this.LastState = c.last_state;
+                    this.IsLastStateACWar = c.is_last_state_ac_war;
+                    this.StateTimestamp = c.state_timestamp;
+                    this.DefeatedVanityId = c.defeated_vanity_id;
+                    this.CityLevel = c.city_level;
+                }
             }
         }
 
@@ -192,12 +188,15 @@ namespace CodeStrikeBot.Messages.Objects
 
             public TileArmy(Messages.TileUpdatedMessage.Army a)
             {
-                this.UserId = a.user_id;
-                this.EmpireId = a.empire_id;
-                this.CityId = a.city_id;
-                this.ArmyId = a.army_id;
-                this.ScoutCost = a.scout_cost;
-                this.ArmyLoad = a.army_load;
+                if (a != null)
+                {
+                    this.UserId = a.user_id;
+                    this.EmpireId = a.empire_id;
+                    this.CityId = a.city_id;
+                    this.ArmyId = a.army_id;
+                    this.ScoutCost = a.scout_cost;
+                    this.ArmyLoad = a.army_load;
+                }
             }
         }
     }

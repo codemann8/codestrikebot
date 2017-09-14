@@ -164,11 +164,12 @@ namespace CodeStrikeBot
             this.splitContainer4 = new System.Windows.Forms.SplitContainer();
             this.tabControlMonitor = new System.Windows.Forms.TabControl();
             this.tabMarches = new System.Windows.Forms.TabPage();
-            this.grpRadar = new System.Windows.Forms.GroupBox();
-            this.lstRadar = new System.Windows.Forms.ListBox();
+            this.lstMarches = new System.Windows.Forms.ListBox();
             this.btnGoTo = new System.Windows.Forms.Button();
             this.btnExport = new System.Windows.Forms.Button();
             this.dataGridViewComboBoxColumn2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.tabTiles = new System.Windows.Forms.TabPage();
+            this.lstTiles = new System.Windows.Forms.ListBox();
             this.stsStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bsColorCustom)).BeginInit();
             this.tabSettings.SuspendLayout();
@@ -221,7 +222,7 @@ namespace CodeStrikeBot
             this.splitContainer4.SuspendLayout();
             this.tabControlMonitor.SuspendLayout();
             this.tabMarches.SuspendLayout();
-            this.grpRadar.SuspendLayout();
+            this.tabTiles.SuspendLayout();
             this.SuspendLayout();
             // 
             // stsStrip
@@ -909,11 +910,13 @@ namespace CodeStrikeBot
             this.hexData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.hexData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.Dock = System.Windows.Forms.DockStyle.Fill;
             this.hexData.Location = new System.Drawing.Point(0, 0);
             this.hexData.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.hexData.Name = "hexData";
             this.hexData.RowCount = 1;
+            this.hexData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -1752,6 +1755,7 @@ namespace CodeStrikeBot
             // tabControlMonitor
             // 
             this.tabControlMonitor.Controls.Add(this.tabMarches);
+            this.tabControlMonitor.Controls.Add(this.tabTiles);
             this.tabControlMonitor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlMonitor.Location = new System.Drawing.Point(0, 0);
             this.tabControlMonitor.Margin = new System.Windows.Forms.Padding(2);
@@ -1762,7 +1766,7 @@ namespace CodeStrikeBot
             // 
             // tabMarches
             // 
-            this.tabMarches.Controls.Add(this.grpRadar);
+            this.tabMarches.Controls.Add(this.lstMarches);
             this.tabMarches.Location = new System.Drawing.Point(4, 22);
             this.tabMarches.Margin = new System.Windows.Forms.Padding(2);
             this.tabMarches.Name = "tabMarches";
@@ -1772,27 +1776,14 @@ namespace CodeStrikeBot
             this.tabMarches.Text = "Marches";
             this.tabMarches.UseVisualStyleBackColor = true;
             // 
-            // grpRadar
+            // lstMarches
             // 
-            this.grpRadar.Controls.Add(this.lstRadar);
-            this.grpRadar.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpRadar.Location = new System.Drawing.Point(2, 2);
-            this.grpRadar.Margin = new System.Windows.Forms.Padding(2);
-            this.grpRadar.Name = "grpRadar";
-            this.grpRadar.Padding = new System.Windows.Forms.Padding(2);
-            this.grpRadar.Size = new System.Drawing.Size(355, 184);
-            this.grpRadar.TabIndex = 0;
-            this.grpRadar.TabStop = false;
-            this.grpRadar.Text = "Radar";
-            // 
-            // lstRadar
-            // 
-            this.lstRadar.FormattingEnabled = true;
-            this.lstRadar.Location = new System.Drawing.Point(4, 17);
-            this.lstRadar.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.lstRadar.Name = "lstRadar";
-            this.lstRadar.Size = new System.Drawing.Size(347, 134);
-            this.lstRadar.TabIndex = 11;
+            this.lstMarches.FormattingEnabled = true;
+            this.lstMarches.Location = new System.Drawing.Point(4, 6);
+            this.lstMarches.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.lstMarches.Name = "lstMarches";
+            this.lstMarches.Size = new System.Drawing.Size(348, 173);
+            this.lstMarches.TabIndex = 11;
             // 
             // btnGoTo
             // 
@@ -1822,6 +1813,26 @@ namespace CodeStrikeBot
             this.dataGridViewComboBoxColumn2.HeaderText = "Type";
             this.dataGridViewComboBoxColumn2.Name = "dataGridViewComboBoxColumn2";
             this.dataGridViewComboBoxColumn2.Width = 68;
+            // 
+            // tabTiles
+            // 
+            this.tabTiles.Controls.Add(this.lstTiles);
+            this.tabTiles.Location = new System.Drawing.Point(4, 22);
+            this.tabTiles.Name = "tabTiles";
+            this.tabTiles.Padding = new System.Windows.Forms.Padding(3);
+            this.tabTiles.Size = new System.Drawing.Size(359, 188);
+            this.tabTiles.TabIndex = 1;
+            this.tabTiles.Text = "Tiles";
+            this.tabTiles.UseVisualStyleBackColor = true;
+            // 
+            // lstTiles
+            // 
+            this.lstTiles.FormattingEnabled = true;
+            this.lstTiles.Location = new System.Drawing.Point(5, 6);
+            this.lstTiles.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.lstTiles.Name = "lstTiles";
+            this.lstTiles.Size = new System.Drawing.Size(347, 173);
+            this.lstTiles.TabIndex = 12;
             // 
             // Main
             // 
@@ -1897,7 +1908,7 @@ namespace CodeStrikeBot
             this.splitContainer4.ResumeLayout(false);
             this.tabControlMonitor.ResumeLayout(false);
             this.tabMarches.ResumeLayout(false);
-            this.grpRadar.ResumeLayout(false);
+            this.tabTiles.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2028,8 +2039,7 @@ namespace CodeStrikeBot
         private System.Windows.Forms.DataGridViewComboBoxColumn dataGridViewComboBoxColumn2;
         private System.Windows.Forms.TabControl tabControlMonitor;
         private System.Windows.Forms.TabPage tabMarches;
-        private System.Windows.Forms.GroupBox grpRadar;
-        private System.Windows.Forms.ListBox lstRadar;
+        private System.Windows.Forms.ListBox lstMarches;
         private System.Windows.Forms.Button btnExport;
         private System.Windows.Forms.SplitContainer splitContainer3;
         private System.Windows.Forms.ComboBox cboAccountAppFilter;
@@ -2041,6 +2051,8 @@ namespace CodeStrikeBot
         private System.Windows.Forms.TextBox txtColStart;
         private System.Windows.Forms.SplitContainer splitContainer4;
         private System.Windows.Forms.Button btnGoTo;
+        private System.Windows.Forms.TabPage tabTiles;
+        private System.Windows.Forms.ListBox lstTiles;
     }
 }
 

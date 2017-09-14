@@ -15,7 +15,7 @@ namespace CodeStrikeBot.Messages
         public TileUpdatedMessage(JsonMessage message)
             : base(message)
         {
-            this.Type = MessageType.March;
+            this.Type = MessageType.TileUpdate;
 
             try
             {
