@@ -2145,12 +2145,28 @@ namespace CodeStrikeBot
             FormContainer.Panel2Collapsed = current.Text == "Activity";
         }
 
-        private void btnExportMarch_Click(object sender, EventArgs e)
+        private void btnExport_Click(object sender, EventArgs e)
         {
-            Messages.MarchMessage message = (Messages.MarchMessage)lstRadar.SelectedItem;
+            if (tabControlMonitor.SelectedTab == tabMarches)
+            {
+                Messages.Objects.March march = (Messages.Objects.March)lstRadar.SelectedItem;
 
-            System.IO.Directory.CreateDirectory(String.Format("{0}\\output\\debug\\marches", System.Windows.Forms.Application.StartupPath));
-            System.IO.File.WriteAllText(String.Format("{0}\\output\\debug\\marches\\{1}.txt", System.Windows.Forms.Application.StartupPath, message.Id), message.RawJson);
+                foreach (Messages.MarchMessage message in march.Messages)
+                {
+                    System.IO.Directory.CreateDirectory(String.Format("{0}\\output\\debug\\marches", System.Windows.Forms.Application.StartupPath));
+                    System.IO.File.WriteAllText(String.Format("{0}\\output\\debug\\marches\\{1}{2}.txt", System.Windows.Forms.Application.StartupPath, march.Id, message.Id), message.RawJson);
+                }
+            }
+        }
+
+        private void btnGoTo_Click(object sender, EventArgs e)
+        {
+            if (tabControlMonitor.SelectedTab == tabMarches)
+            {
+                Messages.Objects.March march = (Messages.Objects.March)lstRadar.SelectedItem;
+
+                ctrl.ActiveScreen.GoToCoordinate(march.DestCoordinate);
+            }
         }
     }
 }

@@ -914,85 +914,112 @@ namespace CodeStrikeBot
             return success;
         }
 
+        public bool GoToCoordinate(System.Web.UI.DataVisualization.Charting.Point3D coord)
+        {
+            return GoToCoordinate((int)coord.X, (int)coord.Y);
+        }
+
         public bool GoToCoordinate(int x, int y)
         {
             bool success = false;
             int retryCount = 0;
 
             Stopwatch tmrRun = new Stopwatch();
+            tmrRun.Start();
 
-            do
+            while (this.GoToBaseOrMapStep() && tmrRun.ElapsedMilliseconds < 3000) { };
+
+            Controller.CaptureApplication(this);
+
+            if (ScreenState.CurrentArea == Area.Unknown)
+            {
+                IsFucked = true;
+                return false;
+            }
+
+            tmrRun.Restart();
+
+            while (ScreenState.CurrentArea == Area.MainBases.Main && tmrRun.ElapsedMilliseconds < 2600)
+            {
+                Controller.SendClick(this, 20, 680, 1200);
+                Controller.CaptureApplication(this);
+            }
+
+            if (ScreenState.CurrentArea == Area.StateMaps.Main || ScreenState.CurrentArea == Area.StateMaps.FullScreen)
             {
                 do
                 {
-                    Controller.SendClick(this, 117, 18, (int)(150 * (retryCount / 2.0 + 1))); //click magnify glass
-                    Controller.CaptureApplication(this);
-                }
-                while (ScreenState.CurrentArea == Area.StateMaps.Main || ScreenState.CurrentArea == Area.StateMaps.FullScreen);
-
-                System.Windows.Forms.Application.DoEvents();
-
-                if (ScreenState.CurrentArea == Area.StateMaps.Coordinate)
-                {
-                    ushort chksum;
-                    tmrRun.Start();
-
                     do
                     {
-                        Controller.SendClick(this, 182, 194, (int)(225 * (retryCount / 2.0 + 1))); //click X
-                        Controller.SendKey(this, x.ToString());
-                        Thread.Sleep((int)((180 + x.ToString().Length * 80) * TimeoutFactor * (retryCount / 2.0 + 1)));
-
+                        Controller.SendClick(this, 117, 18, (int)(150 * (retryCount / 2.0 + 1))); //click magnify glass
                         Controller.CaptureApplication(this);
-                        chksum = ScreenState.GetScreenChecksum(this.SuperBitmap, 118, 184, 10);
                     }
-                    while (chksum == 0xfde4 && tmrRun.ElapsedMilliseconds < 5000);
+                    while (ScreenState.CurrentArea == Area.StateMaps.Main || ScreenState.CurrentArea == Area.StateMaps.FullScreen);
 
                     System.Windows.Forms.Application.DoEvents();
-                    tmrRun.Restart();
 
-                    do
+                    if (ScreenState.CurrentArea == Area.StateMaps.Coordinate)
                     {
-                        Controller.SendClick(this, 298, 194, (int)(225 * (retryCount / 2.0 + 1))); //click Y
-                        Controller.SendKey(this, y.ToString());
-                        Thread.Sleep((int)((180 + y.ToString().Length * 80) * TimeoutFactor * (retryCount / 2.0 + 1)));
+                        ushort chksum;
+                        tmrRun.Start();
 
-                        Controller.CaptureApplication(this);
+                        do
+                        {
+                            Controller.SendClick(this, 182, 194, (int)(225 * (retryCount / 2.0 + 1))); //click X
+                            Controller.SendKey(this, x.ToString());
+                            Thread.Sleep((int)((180 + x.ToString().Length * 80) * TimeoutFactor * (retryCount / 2.0 + 1)));
+
+                            Controller.CaptureApplication(this);
+                            chksum = ScreenState.GetScreenChecksum(this.SuperBitmap, 118, 184, 10);
+                        }
+                        while (chksum == 0xfde4 && tmrRun.ElapsedMilliseconds < 5000);
+
+                        System.Windows.Forms.Application.DoEvents();
+                        tmrRun.Restart();
+
+                        do
+                        {
+                            Controller.SendClick(this, 298, 194, (int)(225 * (retryCount / 2.0 + 1))); //click Y
+                            Controller.SendKey(this, y.ToString());
+                            Thread.Sleep((int)((180 + y.ToString().Length * 80) * TimeoutFactor * (retryCount / 2.0 + 1)));
+
+                            Controller.CaptureApplication(this);
+                            chksum = ScreenState.GetScreenChecksum(this.SuperBitmap, 230, 184, 10);
+                        }
+                        while (chksum == 0xfde4 && tmrRun.ElapsedMilliseconds < 5000);
+
+                        System.Windows.Forms.Application.DoEvents();
+
+                        do
+                        {
+                            Thread.Sleep((int)((180 + y.ToString().Length * 80) * TimeoutFactor * (retryCount / 2.0 + 1)));
+                            Controller.SendClick(this, 278, 250, (int)(450 * (retryCount / 2.0 + 1))); //click Go to
+
+                            Controller.CaptureApplication(this);
+                        }
+                        while (ScreenState.CurrentArea == Area.StateMaps.Coordinate);
+
+                        System.Windows.Forms.Application.DoEvents();
                         chksum = ScreenState.GetScreenChecksum(this.SuperBitmap, 230, 184, 10);
-                    }
-                    while (chksum == 0xfde4 && tmrRun.ElapsedMilliseconds < 5000);
 
-                    System.Windows.Forms.Application.DoEvents();
-
-                    do
-                    {
-                        Thread.Sleep((int)((180 + y.ToString().Length * 80) * TimeoutFactor * (retryCount / 2.0 + 1)));
-                        Controller.SendClick(this, 278, 250, (int)(450 * (retryCount / 2.0 + 1))); //click Go to
-
-                        Controller.CaptureApplication(this);
-                    }
-                    while (ScreenState.CurrentArea == Area.StateMaps.Coordinate);
-
-                    System.Windows.Forms.Application.DoEvents();
-                    chksum = ScreenState.GetScreenChecksum(this.SuperBitmap, 230, 184, 10);
-
-                    if (ScreenState.CurrentArea == Area.StateMaps.CoordinateError)
-                    {
-                        Controller.SendClick(this, 112, 264, (int)(300 * (retryCount / 2.0 + 1))); //click Cancel
-                        retryCount++;
+                        if (ScreenState.CurrentArea == Area.StateMaps.CoordinateError)
+                        {
+                            Controller.SendClick(this, 112, 264, (int)(300 * (retryCount / 2.0 + 1))); //click Cancel
+                            retryCount++;
+                        }
+                        else
+                        {
+                            retryCount = 0;
+                            success = true;
+                        }
                     }
                     else
                     {
                         retryCount = 0;
-                        success = true;
                     }
                 }
-                else
-                {
-                    retryCount = 0;
-                }
+                while (retryCount > 0);
             }
-            while (retryCount > 0);
 
             return success;
         }

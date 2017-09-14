@@ -31,9 +31,9 @@ namespace CodeStrikeBot
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.stsStrip = new System.Windows.Forms.StatusStrip();
             this.stsStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.stsSpacer = new System.Windows.Forms.ToolStripStatusLabel();
@@ -90,7 +90,7 @@ namespace CodeStrikeBot
             this.bsPacket = new System.Windows.Forms.BindingSource(this.components);
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.btnCopyText = new System.Windows.Forms.Button();
-            this.btnExport = new System.Windows.Forms.Button();
+            this.btnExportHex = new System.Windows.Forms.Button();
             this.rdoRaw = new System.Windows.Forms.RadioButton();
             this.rdoPayload = new System.Windows.Forms.RadioButton();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -161,11 +161,13 @@ namespace CodeStrikeBot
             this.btnClearGifts = new System.Windows.Forms.Button();
             this.tabControlMain = new System.Windows.Forms.TabControl();
             this.FormContainer = new System.Windows.Forms.SplitContainer();
+            this.splitContainer4 = new System.Windows.Forms.SplitContainer();
             this.tabControlMonitor = new System.Windows.Forms.TabControl();
-            this.tabMonitor = new System.Windows.Forms.TabPage();
+            this.tabMarches = new System.Windows.Forms.TabPage();
             this.grpRadar = new System.Windows.Forms.GroupBox();
-            this.btnExportMarch = new System.Windows.Forms.Button();
             this.lstRadar = new System.Windows.Forms.ListBox();
+            this.btnGoTo = new System.Windows.Forms.Button();
+            this.btnExport = new System.Windows.Forms.Button();
             this.dataGridViewComboBoxColumn2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.stsStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bsColorCustom)).BeginInit();
@@ -213,8 +215,12 @@ namespace CodeStrikeBot
             this.FormContainer.Panel1.SuspendLayout();
             this.FormContainer.Panel2.SuspendLayout();
             this.FormContainer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer4)).BeginInit();
+            this.splitContainer4.Panel1.SuspendLayout();
+            this.splitContainer4.Panel2.SuspendLayout();
+            this.splitContainer4.SuspendLayout();
             this.tabControlMonitor.SuspendLayout();
-            this.tabMonitor.SuspendLayout();
+            this.tabMarches.SuspendLayout();
             this.grpRadar.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -240,7 +246,7 @@ namespace CodeStrikeBot
             // stsSpacer
             // 
             this.stsSpacer.Name = "stsSpacer";
-            this.stsSpacer.Size = new System.Drawing.Size(882, 17);
+            this.stsSpacer.Size = new System.Drawing.Size(913, 17);
             this.stsSpacer.Spring = true;
             // 
             // stsState
@@ -676,14 +682,14 @@ namespace CodeStrikeBot
             this.gridPacket.AccessibleRole = System.Windows.Forms.AccessibleRole.TitleBar;
             this.gridPacket.AllowDrop = true;
             this.gridPacket.AutoGenerateColumns = false;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gridPacket.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridPacket.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
             this.gridPacket.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gridPacket.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.timestampDataGridViewTextBoxColumn,
@@ -691,26 +697,26 @@ namespace CodeStrikeBot
             this.lengthDataGridViewTextBoxColumn,
             this.Id});
             this.gridPacket.DataSource = this.bsPacket;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.gridPacket.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.gridPacket.DefaultCellStyle = dataGridViewCellStyle5;
             this.gridPacket.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridPacket.Location = new System.Drawing.Point(0, 0);
             this.gridPacket.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.gridPacket.Name = "gridPacket";
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gridPacket.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridPacket.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
             this.gridPacket.Size = new System.Drawing.Size(270, 221);
             this.gridPacket.TabIndex = 17;
             // 
@@ -758,7 +764,7 @@ namespace CodeStrikeBot
             // splitContainer2.Panel1
             // 
             this.splitContainer2.Panel1.Controls.Add(this.btnCopyText);
-            this.splitContainer2.Panel1.Controls.Add(this.btnExport);
+            this.splitContainer2.Panel1.Controls.Add(this.btnExportHex);
             this.splitContainer2.Panel1.Controls.Add(this.rdoRaw);
             this.splitContainer2.Panel1.Controls.Add(this.rdoPayload);
             // 
@@ -780,15 +786,15 @@ namespace CodeStrikeBot
             this.btnCopyText.UseVisualStyleBackColor = true;
             this.btnCopyText.Click += new System.EventHandler(this.btnCopyText_Click);
             // 
-            // btnExport
+            // btnExportHex
             // 
-            this.btnExport.Location = new System.Drawing.Point(126, 4);
-            this.btnExport.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.btnExport.Name = "btnExport";
-            this.btnExport.Size = new System.Drawing.Size(74, 23);
-            this.btnExport.TabIndex = 2;
-            this.btnExport.Text = "Export";
-            this.btnExport.UseVisualStyleBackColor = true;
+            this.btnExportHex.Location = new System.Drawing.Point(126, 4);
+            this.btnExportHex.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.btnExportHex.Name = "btnExportHex";
+            this.btnExportHex.Size = new System.Drawing.Size(74, 23);
+            this.btnExportHex.TabIndex = 2;
+            this.btnExportHex.Text = "Export";
+            this.btnExportHex.UseVisualStyleBackColor = true;
             // 
             // rdoRaw
             // 
@@ -900,11 +906,17 @@ namespace CodeStrikeBot
             this.hexData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.hexData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.hexData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.hexData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.Dock = System.Windows.Forms.DockStyle.Fill;
             this.hexData.Location = new System.Drawing.Point(0, 0);
             this.hexData.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.hexData.Name = "hexData";
             this.hexData.RowCount = 1;
+            this.hexData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.hexData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.hexData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -1712,59 +1724,66 @@ namespace CodeStrikeBot
             // 
             // FormContainer.Panel2
             // 
-            this.FormContainer.Panel2.Controls.Add(this.tabControlMonitor);
+            this.FormContainer.Panel2.Controls.Add(this.splitContainer4);
             this.FormContainer.Size = new System.Drawing.Size(962, 253);
             this.FormContainer.SplitterDistance = 593;
             this.FormContainer.SplitterWidth = 2;
             this.FormContainer.TabIndex = 17;
             // 
+            // splitContainer4
+            // 
+            this.splitContainer4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer4.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer4.Name = "splitContainer4";
+            this.splitContainer4.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer4.Panel1
+            // 
+            this.splitContainer4.Panel1.Controls.Add(this.tabControlMonitor);
+            // 
+            // splitContainer4.Panel2
+            // 
+            this.splitContainer4.Panel2.Controls.Add(this.btnGoTo);
+            this.splitContainer4.Panel2.Controls.Add(this.btnExport);
+            this.splitContainer4.Size = new System.Drawing.Size(367, 253);
+            this.splitContainer4.SplitterDistance = 214;
+            this.splitContainer4.TabIndex = 1;
+            // 
             // tabControlMonitor
             // 
-            this.tabControlMonitor.Controls.Add(this.tabMonitor);
+            this.tabControlMonitor.Controls.Add(this.tabMarches);
             this.tabControlMonitor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlMonitor.Location = new System.Drawing.Point(0, 0);
             this.tabControlMonitor.Margin = new System.Windows.Forms.Padding(2);
             this.tabControlMonitor.Name = "tabControlMonitor";
             this.tabControlMonitor.SelectedIndex = 0;
-            this.tabControlMonitor.Size = new System.Drawing.Size(367, 253);
+            this.tabControlMonitor.Size = new System.Drawing.Size(367, 214);
             this.tabControlMonitor.TabIndex = 0;
             // 
-            // tabMonitor
+            // tabMarches
             // 
-            this.tabMonitor.Controls.Add(this.grpRadar);
-            this.tabMonitor.Location = new System.Drawing.Point(4, 22);
-            this.tabMonitor.Margin = new System.Windows.Forms.Padding(2);
-            this.tabMonitor.Name = "tabMonitor";
-            this.tabMonitor.Padding = new System.Windows.Forms.Padding(2);
-            this.tabMonitor.Size = new System.Drawing.Size(359, 227);
-            this.tabMonitor.TabIndex = 0;
-            this.tabMonitor.Text = "Monitor";
-            this.tabMonitor.UseVisualStyleBackColor = true;
+            this.tabMarches.Controls.Add(this.grpRadar);
+            this.tabMarches.Location = new System.Drawing.Point(4, 22);
+            this.tabMarches.Margin = new System.Windows.Forms.Padding(2);
+            this.tabMarches.Name = "tabMarches";
+            this.tabMarches.Padding = new System.Windows.Forms.Padding(2);
+            this.tabMarches.Size = new System.Drawing.Size(359, 188);
+            this.tabMarches.TabIndex = 0;
+            this.tabMarches.Text = "Marches";
+            this.tabMarches.UseVisualStyleBackColor = true;
             // 
             // grpRadar
             // 
-            this.grpRadar.Controls.Add(this.btnExportMarch);
             this.grpRadar.Controls.Add(this.lstRadar);
             this.grpRadar.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grpRadar.Location = new System.Drawing.Point(2, 2);
             this.grpRadar.Margin = new System.Windows.Forms.Padding(2);
             this.grpRadar.Name = "grpRadar";
             this.grpRadar.Padding = new System.Windows.Forms.Padding(2);
-            this.grpRadar.Size = new System.Drawing.Size(355, 223);
+            this.grpRadar.Size = new System.Drawing.Size(355, 184);
             this.grpRadar.TabIndex = 0;
             this.grpRadar.TabStop = false;
             this.grpRadar.Text = "Radar";
-            // 
-            // btnExportMarch
-            // 
-            this.btnExportMarch.Location = new System.Drawing.Point(4, 193);
-            this.btnExportMarch.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.btnExportMarch.Name = "btnExportMarch";
-            this.btnExportMarch.Size = new System.Drawing.Size(74, 23);
-            this.btnExportMarch.TabIndex = 12;
-            this.btnExportMarch.Text = "Export";
-            this.btnExportMarch.UseVisualStyleBackColor = true;
-            this.btnExportMarch.Click += new System.EventHandler(this.btnExportMarch_Click);
             // 
             // lstRadar
             // 
@@ -1772,8 +1791,30 @@ namespace CodeStrikeBot
             this.lstRadar.Location = new System.Drawing.Point(4, 17);
             this.lstRadar.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.lstRadar.Name = "lstRadar";
-            this.lstRadar.Size = new System.Drawing.Size(347, 173);
+            this.lstRadar.Size = new System.Drawing.Size(347, 134);
             this.lstRadar.TabIndex = 11;
+            // 
+            // btnGoTo
+            // 
+            this.btnGoTo.Location = new System.Drawing.Point(84, 6);
+            this.btnGoTo.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.btnGoTo.Name = "btnGoTo";
+            this.btnGoTo.Size = new System.Drawing.Size(74, 23);
+            this.btnGoTo.TabIndex = 13;
+            this.btnGoTo.Text = "Go To";
+            this.btnGoTo.UseVisualStyleBackColor = true;
+            this.btnGoTo.Click += new System.EventHandler(this.btnGoTo_Click);
+            // 
+            // btnExport
+            // 
+            this.btnExport.Location = new System.Drawing.Point(6, 6);
+            this.btnExport.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.btnExport.Name = "btnExport";
+            this.btnExport.Size = new System.Drawing.Size(74, 23);
+            this.btnExport.TabIndex = 12;
+            this.btnExport.Text = "Export";
+            this.btnExport.UseVisualStyleBackColor = true;
+            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
             // 
             // dataGridViewComboBoxColumn2
             // 
@@ -1850,8 +1891,12 @@ namespace CodeStrikeBot
             this.FormContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.FormContainer)).EndInit();
             this.FormContainer.ResumeLayout(false);
+            this.splitContainer4.Panel1.ResumeLayout(false);
+            this.splitContainer4.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer4)).EndInit();
+            this.splitContainer4.ResumeLayout(false);
             this.tabControlMonitor.ResumeLayout(false);
-            this.tabMonitor.ResumeLayout(false);
+            this.tabMarches.ResumeLayout(false);
             this.grpRadar.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -1908,7 +1953,7 @@ namespace CodeStrikeBot
         private System.Windows.Forms.DataGridViewTextBoxColumn Id;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.Button btnCopyText;
-        private System.Windows.Forms.Button btnExport;
+        private System.Windows.Forms.Button btnExportHex;
         private System.Windows.Forms.RadioButton rdoRaw;
         private System.Windows.Forms.RadioButton rdoPayload;
         private System.Windows.Forms.SplitContainer splitContainer1;
@@ -1982,10 +2027,10 @@ namespace CodeStrikeBot
         private System.Windows.Forms.SplitContainer FormContainer;
         private System.Windows.Forms.DataGridViewComboBoxColumn dataGridViewComboBoxColumn2;
         private System.Windows.Forms.TabControl tabControlMonitor;
-        private System.Windows.Forms.TabPage tabMonitor;
+        private System.Windows.Forms.TabPage tabMarches;
         private System.Windows.Forms.GroupBox grpRadar;
         private System.Windows.Forms.ListBox lstRadar;
-        private System.Windows.Forms.Button btnExportMarch;
+        private System.Windows.Forms.Button btnExport;
         private System.Windows.Forms.SplitContainer splitContainer3;
         private System.Windows.Forms.ComboBox cboAccountAppFilter;
         private System.Windows.Forms.ComboBox cboEmulator4;
@@ -1994,6 +2039,8 @@ namespace CodeStrikeBot
         private System.Windows.Forms.ComboBox cboEmulator1;
         private System.Windows.Forms.Label lblAccountApp;
         private System.Windows.Forms.TextBox txtColStart;
+        private System.Windows.Forms.SplitContainer splitContainer4;
+        private System.Windows.Forms.Button btnGoTo;
     }
 }
 
