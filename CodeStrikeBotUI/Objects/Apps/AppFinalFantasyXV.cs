@@ -645,7 +645,7 @@ namespace CodeStrikeBot
                     chksum = ScreenState.GetScreenChecksum(bmp, 40, 107, 10);
                     if (chksum == 0x0ce0)
                     {
-                        c = bmp.GetPixel(195, 237);
+                        c = bmp.GetPixel(195, 233);
                         if (c.Equals(8, 235, 255))
                         {
                             Overlays.Add(Overlay.Dialogs.Tiles.PlayerFriend);
