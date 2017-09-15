@@ -2470,16 +2470,20 @@ namespace CodeStrikeBot
                         switch (type)
                         {
                             case ScheduleType.Shield:
-                                chkType = 0x4b1a;
+                                //chkType = 0x4b1a; //DIFF MS
+                                chkType = 0x89de;
                                 break;
                             case ScheduleType.AntiScout:
-                                chkType = 0x1dd5;
+                                //chkType = 0x1dd5; //DIFF MS
+                                chkType = 0x02d5;
                                 break;
                             case ScheduleType.UpkeepReduction:
-                                chkType = 0xdb1e;
+                                //chkType = 0xdb1e; //DIFF MS
+                                chkType = 0xe629;
                                 break;
                             case ScheduleType.Health:
-                                chkType = 0x656a;
+                                //chkType = 0x656a; //DIFF MS
+                                chkType = 0x13d8;
                                 break;
                             case ScheduleType.Defense:
                                 chkType = 0x3d9e;
@@ -2498,10 +2502,13 @@ namespace CodeStrikeBot
                         do
                         {
                             Controller.CaptureApplication(this);
-                            for (y = 90; y < 455; y++)
+                            //for (y = 90; y < 455; y++) //DIFF MS
+                            for (y = 115; y < 580; y++)
                             {
-                                chksum = ScreenState.GetScreenChecksum(SuperBitmap, 44, y, 2);
-                                Main.CurrentForm.UpdateBmpChk(SuperBitmap, 44, y, 2);
+                                //chksum = ScreenState.GetScreenChecksum(SuperBitmap, 44, y, 2); //DIFF MS
+                                //Main.CurrentForm.UpdateBmpChk(SuperBitmap, 44, y, 2); //DIFF MS
+                                chksum = ScreenState.GetScreenChecksum(SuperBitmap, 26, y, 2);
+                                Main.CurrentForm.UpdateBmpChk(SuperBitmap, 26, y, 2);
 
                                 if (chksum == chkType)
                                 {
@@ -2520,7 +2527,8 @@ namespace CodeStrikeBot
                         while (!found && tries < 20);
                     }
 
-                    if (found && ScreenState.CurrentArea == Area.Menus.Boost && SuperBitmap.GetPixel(312, y + 20).Within(49, 117, 148, 15))
+                    //if (found && ScreenState.CurrentArea == Area.Menus.Boost && SuperBitmap.GetPixel(312, y + 20).Within(49, 117, 148, 15)) //DIFF MS
+                    if (found && ScreenState.CurrentArea == Area.Menus.Boost && SuperBitmap.GetPixel(80, y + 20).Within(0, 0, 0, 5))
                     {
                         success = true;
                     }
@@ -2552,7 +2560,8 @@ namespace CodeStrikeBot
                                         offset = 3;
                                         break;
                                     default:
-                                        offset = 2;
+                                        //offset = 2; //DIFF MS
+                                        offset = 0;
                                         break;
                                 }
                                 break;
@@ -2576,20 +2585,27 @@ namespace CodeStrikeBot
                                 break;
                         }
 
-                        Controller.SendClick(this, 300, 190 + 116 * offset, 300); //Click on item
+                        //Controller.SendClick(this, 300, 190 + 116 * offset, 300); //Click on item //DIFF MS
+                        Controller.SendClick(this, 300, 140 + 111 * offset, 300); //Click on item
 
                         Controller.CaptureApplication(this);
-                        chksum = ScreenState.GetScreenChecksum(SuperBitmap, 190, 115, 20);
+                        //chksum = ScreenState.GetScreenChecksum(SuperBitmap, 190, 115, 20);
                         //if (chksum == 0x4d8d || chksum == 0x3375) //Purchase Confirmation or Replace Boosts
-                        if (chksum == 0x45c7)
+                        if (ScreenState.Overlays.Contains(Overlay.Dialogs.Popups.ReplaceBoost))
                         {
-                            Controller.SendClick(this, 275, 220, 300); //Click Yes
+                            //Controller.SendClick(this, 275, 220, 300); //Click Yes //DIFF MS
+                            Controller.SendClick(this, 275, 280, 300); //Click Yes
+                        }
+                        else if (ScreenState.Overlays.Contains(Overlay.Dialogs.Popups.Unknown)) //TODO: remove this check after purchase confirm dialog box is tracked
+                        {
+                            Controller.Instance.SendNotification("Boost fail, suspected purchase confirm", NotificationType.BoostActivationFail);
                         }
 
                         Thread.Sleep((int)(3500 * TimeoutFactor));
                         Controller.CaptureApplication(this);
 
-                        if (ScreenState.CurrentArea == Area.Menus.Boost && SuperBitmap.GetPixel(312, y + 20).Within(49, 117, 148, 15))
+                        //if (ScreenState.CurrentArea == Area.Menus.Boost && SuperBitmap.GetPixel(312, y + 20).Within(49, 117, 148, 15)) //DIFF MS
+                        if (ScreenState.CurrentArea == Area.Menus.Boost && SuperBitmap.GetPixel(80, y + 20).Within(0, 0, 0, 5))
                         {
                             success = true;
                         }

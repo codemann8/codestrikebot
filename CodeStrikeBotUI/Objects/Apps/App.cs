@@ -594,6 +594,8 @@ namespace CodeStrikeBot
                 public static readonly ID MaxDeployments = Popup[7];
                 public static readonly ID TransferConfirmation = Popup[8];
                 public static readonly ID InsufficientResources = Popup[9];
+                public static readonly ID ReplaceBoost = Popup[10];
+                public static readonly ID PurchaseConfirmation = Popup[11];
             }
         }
     }

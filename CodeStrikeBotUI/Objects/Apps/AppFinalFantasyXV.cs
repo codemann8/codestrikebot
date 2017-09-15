@@ -771,6 +771,9 @@ namespace CodeStrikeBot
                             Overlays.Add(Overlay.Dialogs.Popups.Unknown);
                         }
                         break;
+                    case 0xa3f7:
+                        Overlays.Add(Overlay.Dialogs.Popups.ReplaceBoost);
+                        break;
                     default:
                         Overlays.Add(Overlay.Dialogs.Popups.Unknown);
                         break;
