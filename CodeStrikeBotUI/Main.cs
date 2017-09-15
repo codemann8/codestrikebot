@@ -1974,10 +1974,8 @@ namespace CodeStrikeBot
 
                                     if (s.ScreenState.Overlays.Contains(Overlay.Widgets.AllianceHelp)
                                         || s.ScreenState.CurrentArea == Area.Menus.AllianceHelp
-                                        || s.ScreenState.Overlays.Contains(Overlay.Widgets.AmmoFreeAttack)
                                         || s.ScreenState.CurrentArea == Area.Menus.ShootingRanges.Main
                                         || s.ScreenState.CurrentArea == Area.Menus.ShootingRanges.NormalCrate
-                                        || s.ScreenState.CurrentArea == Area.Menus.Casino
                                         || s.ScreenState.Overlays.Contains(Overlay.Widgets.GlobalGift)
                                         || s.ScreenState.CurrentArea == Area.MainBases.GlobalGiftCollect
                                         || s.ScreenState.CurrentArea == Area.MainBases.SecretGiftCollect)

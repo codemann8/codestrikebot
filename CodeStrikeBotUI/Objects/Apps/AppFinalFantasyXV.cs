@@ -124,6 +124,9 @@ namespace CodeStrikeBot
                         case 0xead2:
                             CurrentArea = Area.Menus.Account;
                             break;
+                        case 0xc90f:
+                            CurrentArea = Area.Menus.CasinoLobby;
+                            break;
                         case 0xa4b5: //blank menu
                             CurrentArea = Area.Menus.Casino;
                             break;
@@ -318,6 +321,9 @@ namespace CodeStrikeBot
                             break;
                         case 0x3e5c:
                             CurrentArea = Area.Menus.Deployment;
+                            break;
+                        case 0xbe95:
+                            CurrentArea = Area.Menus.Casino;
                             break;
                         default:
                             enteredGeneric = true;
@@ -773,6 +779,9 @@ namespace CodeStrikeBot
                         break;
                     case 0xa3f7:
                         Overlays.Add(Overlay.Dialogs.Popups.ReplaceBoost);
+                        break;
+                    case 0xe495:
+                        Overlays.Add(Overlay.Dialogs.Popups.NewEvent);
                         break;
                     default:
                         Overlays.Add(Overlay.Dialogs.Popups.Unknown);

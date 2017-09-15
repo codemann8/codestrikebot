@@ -463,6 +463,7 @@ namespace CodeStrikeBot
             public static readonly ID Deployment = Menu[29];
             public static readonly ID BuildingBoost = Menu[30];
             public static readonly ID Casino = Menu[31];
+            public static readonly ID CasinoLobby = Menu[32];
         }
 
         public static readonly ID Emulator = 98;
@@ -596,6 +597,7 @@ namespace CodeStrikeBot
                 public static readonly ID InsufficientResources = Popup[9];
                 public static readonly ID ReplaceBoost = Popup[10];
                 public static readonly ID PurchaseConfirmation = Popup[11];
+                public static readonly ID NewEvent = Popup[12];
             }
         }
     }

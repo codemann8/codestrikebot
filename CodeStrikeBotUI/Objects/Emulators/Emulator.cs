@@ -2962,16 +2962,29 @@ namespace CodeStrikeBot
                 {
                     tasksLeft = true;
 
-                    ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 192, 438, 20);
-
-                    if (chksum == 0x6734) //Free Spin
+                    if (ScreenState.Overlays.Contains(Overlay.Dialogs.Popups.NewEvent))
                     {
-                        Controller.SendClick(this, 200, 445, 5000);
+                        Controller.SendClick(this, 190, 340, 300);
                     }
                     else
                     {
-                        this.ClickBack(300);
+                        ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 192, 438, 20);
+                        if (chksum == 0x6734) //Free Spin
+                        {
+                            Controller.SendClick(this, 200, 445, 5000);
+                        }
+                        else
+                        {
+                            this.ClickBack(500);
+                            this.ClickBack(300);
+                        }
                     }
+                }
+                else if (ScreenState.CurrentArea == Area.Menus.CasinoLobby || ScreenState.CurrentArea == Area.Menus.ShootingRanges.Lobby)
+                {
+                    tasksLeft = true;
+
+                    Controller.SendClick(this, 190, 300, 5000);
                 }
                 else if (ScreenState.CurrentArea == Area.Menus.ShootingRanges.Main)
                 {
