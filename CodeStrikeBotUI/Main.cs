@@ -1018,7 +1018,7 @@ namespace CodeStrikeBot
                                 ctrl.marches.Add(march);
 
                                 //notify attacks on specific users
-                                if (march.Type == Messages.Objects.March.MarchType.Attack)
+                                if (march.Type == Messages.Objects.March.MarchType.Attack && march.State != Messages.Objects.March.MarchState.Returning)
                                 {
                                     string playerName = march.DestName.Substring(march.DestName.IndexOf(") ") + 1).Trim();
                                     
