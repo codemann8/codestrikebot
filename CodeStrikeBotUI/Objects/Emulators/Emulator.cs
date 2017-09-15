@@ -2526,9 +2526,9 @@ namespace CodeStrikeBot
                         }
                         while (!found && tries < 20);
                     }
-
+                    Color c = SuperBitmap.GetPixel(80, y + 20);
                     //if (found && ScreenState.CurrentArea == Area.Menus.Boost && SuperBitmap.GetPixel(312, y + 20).Within(49, 117, 148, 15)) //DIFF MS
-                    if (found && ScreenState.CurrentArea == Area.Menus.Boost && SuperBitmap.GetPixel(80, y + 20).Within(0, 0, 0, 5))
+                    if (found && ScreenState.CurrentArea == Area.Menus.Boost && SuperBitmap.GetPixel(80, y + 15).Within(0, 0, 0, 5))
                     {
                         success = true;
                     }
@@ -2605,7 +2605,7 @@ namespace CodeStrikeBot
                         Controller.CaptureApplication(this);
 
                         //if (ScreenState.CurrentArea == Area.Menus.Boost && SuperBitmap.GetPixel(312, y + 20).Within(49, 117, 148, 15)) //DIFF MS
-                        if (ScreenState.CurrentArea == Area.Menus.Boost && SuperBitmap.GetPixel(80, y + 20).Within(0, 0, 0, 5))
+                        if (ScreenState.CurrentArea == Area.Menus.Boost && SuperBitmap.GetPixel(80, y + 15).Within(0, 0, 0, 5))
                         {
                             success = true;
                         }
