@@ -201,7 +201,15 @@ namespace CodeStrikeBot
         {
             foreach (DataObjects.Account a in accounts)
             {
-                if (a.Name.ToLower() == name.ToLower())
+                if (a.App.ShortName == "FFXV" && a.Name.ToLower() == name.ToLower())
+                {
+                    return a;
+                }
+            }
+
+            foreach (DataObjects.Account a in accounts)
+            {
+                if (a.App.ShortName == "FFXV" && a.UserName.ToLower() == name.ToLower())
                 {
                     return a;
                 }

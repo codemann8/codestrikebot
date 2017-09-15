@@ -58,7 +58,7 @@ namespace CodeStrikeBot
                     CurrentArea = Area.Menus.Challenge;
                     break;
                 case 0xfddf:
-                    CurrentArea = Area.Menus.Deployment;
+                    CurrentArea = Area.Menus.Deployments;
                     break;
                 case 0x4e34:
                 case 0xe9f1: //nox

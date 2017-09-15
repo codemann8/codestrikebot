@@ -1021,20 +1021,23 @@ namespace CodeStrikeBot
                                 if (march.Type == Messages.Objects.March.MarchType.Attack && march.State != Messages.Objects.March.MarchState.Returning)
                                 {
                                     string playerName = march.DestName.Substring(march.DestName.IndexOf(") ") + 1).Trim();
+
+                                    DataObjects.Account a;
+                                    bool success;
                                     
                                     //TODO: Make this a checkbox parameter on Account record
                                     switch (playerName)
                                     {
                                         case "codemann8":
-                                            DataObjects.Account a = ctrl.FindAccount("code");
-
                                             if (march.Watchtower != null && march.Watchtower.ActualTotalUnits != 0 && march.Watchtower.ActualTotalUnits < 15000)
                                             {
                                                 ctrl.SendNotification(String.Format("Attack on {0}", march.DestName), NotificationType.IncomingAttack);
                                             }
                                             else
                                             {
-                                                bool success = false;
+                                                a = ctrl.FindAccount(playerName);
+
+                                                success = false;
 
                                                 if (a != null)
                                                 {
@@ -1073,6 +1076,120 @@ namespace CodeStrikeBot
                                         case "codeboy8":
                                         case "codepuppy8":
                                             ctrl.SendNotification(String.Format("Attack on {0}", march.DestName), NotificationType.IncomingAttack);
+
+                                            a = ctrl.FindAccount(playerName);
+
+                                            success = false;
+
+                                            if (a != null)
+                                            {
+                                                Screen s = ctrl.GetNextWindow(a);
+
+                                                if (s != null)
+                                                {
+                                                    ctrl.BeginTask();
+                                                    while (s.Emulator.LastKnownAccount == null || s.Emulator.LastKnownAccount.Id != a.Id)
+                                                    {
+                                                        ctrl.Logout(s);
+                                                        ctrl.StartApp(s);
+                                                        ctrl.Login(s, a);
+                                                    }
+                                                    if (s.Emulator.LastKnownAccount != null && s.Emulator.LastKnownAccount.Id == a.Id)
+                                                    {
+                                                        System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch(), tmrRun = new System.Diagnostics.Stopwatch();
+                                                        watch.Start();
+
+                                                        while (s.GoToBaseOrMapStep() && watch.ElapsedMilliseconds < 3000) { };
+
+                                                        Controller.CaptureApplication(s);
+
+                                                        if (s.ScreenState.CurrentArea == Area.Unknown)
+                                                        {
+                                                            s.IsFucked = true;
+                                                            break;
+                                                        }
+
+                                                        watch.Restart();
+
+                                                        while (s.ScreenState.CurrentArea == Area.MainBases.Main && watch.ElapsedMilliseconds < 2600)
+                                                        {
+                                                            Controller.SendClick(s, 20, 680, 1200);
+                                                            Controller.CaptureApplication(s);
+                                                        }
+
+                                                        if (s.ScreenState.CurrentArea == Area.StateMaps.Main || s.ScreenState.CurrentArea == Area.StateMaps.FullScreen)
+                                                        {
+                                                            int tries = 0;
+                                                            bool targetSelected = false;
+                                                            Color c;
+                                                            ushort chksum;
+
+                                                            do
+                                                            {
+                                                                tries++;
+
+                                                                bool coordSuccess;
+                                                                if (tries > 2)
+                                                                {
+                                                                    coordSuccess = s.GoToCoordinate(163, 185);
+                                                                }
+                                                                else
+                                                                {
+                                                                    coordSuccess = s.GoToCoordinate(220, 346);
+                                                                }
+
+                                                                if (coordSuccess)
+                                                                {
+                                                                    System.Threading.Thread.Sleep((int)(400 * s.TimeoutFactor));
+
+                                                                    watch.Restart();
+                                                                    do
+                                                                    {
+                                                                        Controller.SendClick(s, 196, 382, 1000); //click on destination base
+                                                                        Controller.CaptureApplication(s);
+                                                                    }
+                                                                    while (!s.ScreenState.Overlays.Contains(Overlay.Dialogs.Tiles.PlayerEnemy) && watch.ElapsedMilliseconds < 2500);
+
+                                                                    if (s.ScreenState.Overlays.Contains(Overlay.Dialogs.Tiles.PlayerEnemy))
+                                                                    {
+                                                                        targetSelected = true;
+                                                                    }
+                                                                }
+                                                            }
+                                                            while (!targetSelected && tries < 5);
+
+                                                            if (targetSelected)
+                                                            {
+                                                                if (s.ClickUntil(280, 298, Area.Menus.March, 400, 2000))
+                                                                {
+                                                                    chksum = ScreenState.GetScreenChecksum(s.SuperBitmap, 250, 270, 20);
+                                                                    if (chksum == 0x4dad) //commander is present
+                                                                    {
+                                                                        if (s.ClickUntil(20, 590, 345, 265, 20, 0x8ed1, 100, 2000)) //click Queue Max until com is selected
+                                                                        {
+                                                                            if (s.ClickUntil(250, 590, Area.StateMaps.Main, 1000, 4300))
+                                                                            {
+                                                                                success = true;
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        success = true;
+                                                                    }
+                                                                    
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    ctrl.EndTask();
+                                                }
+                                            }
+
+                                            if (!success)
+                                            {
+                                                ctrl.SendNotification(String.Format("Auto march failed, attack on {0}", march.DestName), NotificationType.IncomingAttack);
+                                            }
                                             break;
                                     }
                                 }

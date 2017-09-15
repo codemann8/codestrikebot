@@ -44,7 +44,10 @@ namespace CodeStrikeBot
                             CurrentArea = Area.Menus.Challenge;
                             break;
                         case 0x229a:
-                            CurrentArea = Area.Menus.Deployment;
+                            CurrentArea = Area.Menus.Deployments;
+                            break;
+                        case 0x9bd4:
+                            CurrentArea = Area.Menus.March;
                             break;
                         case 0x4901:
                             CurrentArea = Area.Menus.Boost;
@@ -264,7 +267,7 @@ namespace CodeStrikeBot
                             CurrentArea = Area.Menus.Account;
                             break;
                         case 0x6caf:
-                            CurrentArea = Area.Menus.Deployment;
+                            CurrentArea = Area.Menus.Deployments;
                             break;
                         default:
                             enteredGeneric = true;
@@ -320,7 +323,7 @@ namespace CodeStrikeBot
                             CurrentArea = Area.Menus.BuildingList;
                             break;
                         case 0x3e5c:
-                            CurrentArea = Area.Menus.Deployment;
+                            CurrentArea = Area.Menus.Deployments;
                             break;
                         case 0xbe95:
                             CurrentArea = Area.Menus.Casino;

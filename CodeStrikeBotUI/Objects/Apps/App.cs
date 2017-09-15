@@ -441,7 +441,7 @@ namespace CodeStrikeBot
             }
             public static readonly ID Gifts = Menu[13];
             public static readonly ID AllianceHelp = Menu[14];
-            public static readonly ID UNUSED = Menu[15];
+            public static readonly ID March = Menu[15];
             public static readonly ID ShootingRange = Menu[16];
             public static class ShootingRanges
             {
@@ -460,7 +460,7 @@ namespace CodeStrikeBot
             public static readonly ID AllianceStore = Menu[26];
             public static readonly ID AllianceWar = Menu[27];
             public static readonly ID Gear = Menu[28];
-            public static readonly ID Deployment = Menu[29];
+            public static readonly ID Deployments = Menu[29];
             public static readonly ID BuildingBoost = Menu[30];
             public static readonly ID Casino = Menu[31];
             public static readonly ID CasinoLobby = Menu[32];
