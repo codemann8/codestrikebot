@@ -1026,6 +1026,48 @@ namespace CodeStrikeBot
                                     switch (playerName)
                                     {
                                         case "codemann8":
+                                            DataObjects.Account a = ctrl.FindAccount("code");
+
+                                            if (march.Watchtower != null && march.Watchtower.ActualTotalUnits != 0 && march.Watchtower.ActualTotalUnits < 15000)
+                                            {
+                                                ctrl.SendNotification(String.Format("Attack on {0}", march.DestName), NotificationType.IncomingAttack);
+                                            }
+                                            else
+                                            {
+                                                bool success = false;
+
+                                                if (a != null)
+                                                {
+                                                    Screen s = ctrl.GetNextWindow(a);
+
+                                                    if (s != null)
+                                                    {
+                                                        ctrl.BeginTask();
+                                                        while (s.Emulator.LastKnownAccount == null || s.Emulator.LastKnownAccount.Id != a.Id)
+                                                        {
+                                                            ctrl.Logout(s);
+                                                            ctrl.StartApp(s);
+                                                            ctrl.Login(s, a);
+                                                        }
+                                                        if (s.Emulator.LastKnownAccount != null && s.Emulator.LastKnownAccount.Id == a.Id)
+                                                        {
+                                                            //success = s.ActivateBoost(ScheduleType.Shield, 3); //DIFF MS
+                                                            success = s.ActivateBoost(ScheduleType.Shield, 8);
+                                                        }
+                                                        ctrl.EndTask();
+                                                    }
+                                                }
+
+                                                if (success)
+                                                {
+                                                    ctrl.SendNotification(String.Format("Attack on {0}", march.DestName), NotificationType.IncomingAttack);
+                                                }
+                                                else
+                                                {
+                                                    ctrl.SendNotification(String.Format("Failed to activate {0} on {1}", ScheduleType.Shield.ToString(), a.ToString()), NotificationType.BoostActivationFail);
+                                                }
+                                            }
+                                            break;
                                         case "codelady8":
                                         case "codegirl8":
                                         case "codeboy8":
@@ -1256,15 +1298,16 @@ namespace CodeStrikeBot
                                             }
                                             if (s.Emulator.LastKnownAccount != null && s.Emulator.LastKnownAccount.Id == a.Id)
                                             {
-                                                success = s.ActivateBoost(ScheduleType.Shield, 3);
+                                                //success = s.ActivateBoost(ScheduleType.Shield, 3); //DIFF MS
+                                                success = s.ActivateBoost(ScheduleType.Shield, 8);
                                             }
                                             ctrl.EndTask();
                                         }
+                                    }
 
-                                        if (!success)
-                                        {
-                                            ctrl.SendNotification(String.Format("Failed to activate {0} on {1}", ScheduleType.Shield.ToString(), a.ToString()), NotificationType.BoostActivationFail);
-                                        }
+                                    if (!success)
+                                    {
+                                        ctrl.SendNotification(String.Format("Failed to activate {0} on {1}", ScheduleType.Shield.ToString(), a.ToString()), NotificationType.BoostActivationFail);
                                     }
                                 }
                                 else if (command.StartsWith("ss"))
