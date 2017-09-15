@@ -1016,6 +1016,24 @@ namespace CodeStrikeBot
                             {
                                 march = new Messages.Objects.March(marchMessage);
                                 ctrl.marches.Add(march);
+
+                                //notify attacks on specific users
+                                if (march.Type == Messages.Objects.March.MarchType.Attack)
+                                {
+                                    string playerName = march.DestName.Substring(march.DestName.IndexOf(") ") + 1).Trim();
+                                    
+                                    //TODO: Make this a checkbox parameter on Account record
+                                    switch (playerName)
+                                    {
+                                        case "codemann8":
+                                        case "codelady8":
+                                        case "codegirl8":
+                                        case "codeboy8":
+                                        case "codepuppy8":
+                                            ctrl.SendNotification(String.Format("Attack on {0}", march.DestName), NotificationType.IncomingAttack);
+                                            break;
+                                    }
+                                }
                             }
                             else
                             {
