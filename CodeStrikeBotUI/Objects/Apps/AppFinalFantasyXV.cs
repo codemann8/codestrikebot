@@ -250,10 +250,20 @@ namespace CodeStrikeBot
                             {
                                 enteredGeneric = true;
                             }
-                            chksum3 = ScreenState.GetScreenChecksum(bmp, 20, 76, 10);
-                            if (chksum3 == 0x8e0a)
+
+                            //proving ground check
+                            for (int y = 60; y < 90; y++)
                             {
-                                CurrentArea = Area.Menus.ShootingRanges.Main;
+                                c = bmp.GetPixel(20, y);
+                                if (c.Equals(173, 4, 24))
+                                {
+                                    c = bmp.GetPixel(20, y + 10);
+                                    if (c.Equals(173, 4, 24))
+                                    {
+                                        CurrentArea = Area.Menus.ShootingRanges.Main;
+                                        break;
+                                    }
+                                }
                             }
                             break;
                     }
