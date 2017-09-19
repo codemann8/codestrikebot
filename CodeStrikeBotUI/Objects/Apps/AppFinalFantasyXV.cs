@@ -250,6 +250,11 @@ namespace CodeStrikeBot
                             {
                                 enteredGeneric = true;
                             }
+                            chksum3 = ScreenState.GetScreenChecksum(bmp, 20, 76, 10);
+                            if (chksum3 == 0x8e0a)
+                            {
+                                CurrentArea = Area.Menus.ShootingRanges.Main;
+                            }
                             break;
                     }
                     break;
