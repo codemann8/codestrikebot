@@ -1981,37 +1981,7 @@ namespace CodeStrikeBot
                             {
                                 Controller.CaptureApplication(s);
 
-                                //TODO: These are debug lines, can be removed
-                                DateTime lastChange = s.TimeSinceChecksumChanged;
-                                int diff = DateTime.Now.Subtract(s.TimeSinceChecksumChanged).Seconds;
-
-                                if (s.IsFucked || (s.ScreenState.CurrentArea != Area.StateMaps.FullScreen && s.ScreenState.CurrentArea != Area.Others.Login && s.ScreenState.CurrentArea != Area.Others.Chat
-                                    && DateTime.Now.Subtract(s.TimeSinceChecksumChanged).Seconds > 30))
-                                {
-                                    //ctrl.RefreshWindows();
-                                    //ctrl.UpdateWindowInfo();
-                                    System.Threading.Thread.Sleep(1000);
-                                    Controller.CaptureApplication(s);
-                                    //TODO Slow mode
-                                    if (s.IsFucked || (s.ScreenState.CurrentArea != Area.StateMaps.FullScreen && s.ScreenState.CurrentArea != Area.Others.Login && s.ScreenState.CurrentArea != Area.Others.Chat
-                                        && DateTime.Now.Subtract(s.TimeSinceChecksumChanged).Seconds > 60))
-                                    {
-                                        if (s.ScreenState.CurrentArea != Area.Emulators.Android)
-                                        {
-                                            BotDatabase.InsertLog(2, String.Format("Emulator frozen: {0}", s.Emulator.WindowName), s.LastChecksum.ToString("X4"), new byte[1] { 0x0 });
-                                            System.IO.Directory.CreateDirectory(String.Format("{0}\\auto", Controller.Instance.GetFullScreenshotDir()));
-                                            s.SuperBitmap.Bitmap.Save(String.Format("{0}\\crash{1}.bmp", ctrl.GetFullScreenshotDir(), s.LastChecksum.ToString("X4")), ImageFormat.Bmp);
-                                            ctrl.RestartEmulator(s, false);
-                                            ctrl.Login(s, s.Emulator.LastKnownAccount);
-                                        }
-                                        else
-                                        {
-                                            s.ClickHome(5000);
-                                        }
-                                    }
-                                }
-
-                                if (s.ScreenState.CurrentArea == Area.Menus.RewardCrate && DateTime.Now.Subtract(s.TimeSinceAreaChanged).Seconds > 30)
+                                if (s.IsFucked)
                                 {
                                     BotDatabase.InsertLog(2, String.Format("Emulator frozen: {0}", s.Emulator.WindowName), s.LastChecksum.ToString("X4"), new byte[1] { 0x0 });
                                     System.IO.Directory.CreateDirectory(String.Format("{0}\\auto", Controller.Instance.GetFullScreenshotDir()));
@@ -2020,14 +1990,35 @@ namespace CodeStrikeBot
                                     ctrl.Login(s, s.Emulator.LastKnownAccount);
                                 }
 
+                                if (DateTime.Now.Subtract(s.TimeSinceChecksumChanged).TotalSeconds > 30)
+                                {
+                                    if (DateTime.Now.Subtract(s.TimeSinceChecksumChanged).TotalSeconds > 75)
+                                    {
+                                        if (s.ScreenState.CurrentArea != Area.StateMaps.FullScreen && s.ScreenState.CurrentArea != Area.Others.Login && s.ScreenState.CurrentArea != Area.Others.Chat)
+                                        {
+                                            BotDatabase.InsertLog(2, String.Format("Emulator frozen: {0}", s.Emulator.WindowName), s.LastChecksum.ToString("X4"), new byte[1] { 0x0 });
+                                            System.IO.Directory.CreateDirectory(String.Format("{0}\\auto", Controller.Instance.GetFullScreenshotDir()));
+                                            s.SuperBitmap.Bitmap.Save(String.Format("{0}\\crash{1}.bmp", ctrl.GetFullScreenshotDir(), s.LastChecksum.ToString("X4")), ImageFormat.Bmp);
+                                            ctrl.RestartEmulator(s, false);
+                                            ctrl.Login(s, s.Emulator.LastKnownAccount); 
+                                            
+                                            Controller.CaptureApplication(s);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        s.ClickHome(5000);
+                                        Controller.CaptureApplication(s);
+                                    }
+                                }
+
                                 //TODO Slow mode
-                                /*
                                 if (s.TimeoutFactor > 3.0)
                                 {
                                     BotDatabase.InsertLog(2, String.Format("Emulator slow: {0}", s.Emulator.WindowName), s.LastChecksum.ToString("X4"), new byte[1] { 0x0 });
                                     ctrl.RestartEmulator(s, false);
                                     ctrl.Login(s, s.Emulator.LastKnownAccount);
-                                }*/
+                                }
 
                                 ushort chksum = ScreenState.GetScreenChecksum(s.SuperBitmap, 190, 115, 20);
 

@@ -625,10 +625,9 @@ namespace CodeStrikeBot
                     s.EmulatorProcess.Kill();
                     s.EmulatorProcess.WaitForExit();
                 }
-                Thread.Sleep(5000);
-                //TOD  Slow mode
-                //s.TimeoutFactor = 1.0;
-                s.TimeoutFactor = 5;
+                Thread.Sleep(7000);
+                //TODO Slow mode
+                s.TimeoutFactor = 1.0;
 
                 if (restart)
                 {
@@ -716,7 +715,7 @@ namespace CodeStrikeBot
             foreach (Screen s in sc)
             {
                 //TODO Slow mode
-                if (s != null && s.ScreenState != null && s.TimeoutFactor == 5.0 && s.ScreenState.CurrentArea != Area.Others.Login && s.ScreenState.CurrentArea != Area.Others.Splash && s.ScreenState.CurrentArea != Area.Emulators.Android && s.ScreenState.CurrentArea != Area.Emulators.Crash && s.ScreenState.CurrentArea != Area.Emulators.Loading && s.ScreenState.CurrentArea != Area.Emulators.TaskManager && s.ScreenState.CurrentArea != Area.Emulators.TaskManagerApp && s.ScreenState.CurrentArea != Area.Emulators.TaskManagerRemove)
+                if (s != null && s.ScreenState != null && s.TimeoutFactor == 1.0 && s.ScreenState.CurrentArea != Area.Others.Login && s.ScreenState.CurrentArea != Area.Others.Splash && s.ScreenState.CurrentArea != Area.Emulators.Android && s.ScreenState.CurrentArea != Area.Emulators.Crash && s.ScreenState.CurrentArea != Area.Emulators.Loading && s.ScreenState.CurrentArea != Area.Emulators.TaskManager && s.ScreenState.CurrentArea != Area.Emulators.TaskManagerApp && s.ScreenState.CurrentArea != Area.Emulators.TaskManagerRemove)
                 {
                     s.SpeedTest();
                 }

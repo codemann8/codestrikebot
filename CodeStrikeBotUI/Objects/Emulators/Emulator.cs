@@ -542,7 +542,7 @@ namespace CodeStrikeBot
                         TimeoutFactor = Math.Max(1.001, (double)watch.ElapsedMilliseconds / 400);
 
                         //TODO Slow mode
-                        if (TimeoutFactor != 5.0)
+                        if (TimeoutFactor != 1.0)
                         {
                             success = true;
                         }
