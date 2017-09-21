@@ -2071,7 +2071,7 @@ namespace CodeStrikeBot
                         {
                             int p = 0;
 
-                            //Color coinColor = Color.FromArgb(206, 207, 198); //coin color
+                            Color coinColor = Color.FromArgb(165, 162, 165); //coin color
                             //Color foodColor = Color.FromArgb(198, 125, 16);
 
                             watch.Restart();
@@ -2086,7 +2086,28 @@ namespace CodeStrikeBot
                                         break;
                                     case ScheduleType.CoinTransfer:
                                         //p = 195; //DIFF MS
-                                        p = 380;
+                                        bool found = false;
+
+                                        do
+                                        {
+                                            for (p = 80; p < 420; p++)
+                                            {
+                                                c = SuperBitmap.GetPixel(40, p);
+
+                                                if (c.Equals(coinColor.R, coinColor.G, coinColor.B))
+                                                {
+                                                    found = true;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (!found)
+                                            {
+                                                Controller.SendClickDrag(this, 40, 400, 40, 140, 800, false, 1200);
+                                                Controller.CaptureApplication(this);
+                                            }
+                                        }
+                                        while (!found && watch.ElapsedMilliseconds < 7000);
                                         break;
                                     case ScheduleType.StoneTransfer:
                                         //p = 270; //DIFF MS
@@ -2159,7 +2180,7 @@ namespace CodeStrikeBot
                                                     }*/
 
                                                     //Controller.SendClick(this, 285, p, 100); //click white box
-                                                    Controller.SendClick(this, 300, p, 100); //click white box
+                                                    Controller.SendClick(this, 300, p, 150); //click white box
                                                     Controller.CaptureApplication(this);
                                                     c = SuperBitmap.GetPixel(230, 675);
                                                 }
