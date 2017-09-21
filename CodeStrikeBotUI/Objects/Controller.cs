@@ -584,8 +584,7 @@ namespace CodeStrikeBot
                         else
                         {
                             //TODO Slow mode
-                            //screen.TimeoutFactor = 1.0;
-                            screen.TimeoutFactor = 5.0;
+                            screen.TimeoutFactor = 1.0;
                         }
                     }
 

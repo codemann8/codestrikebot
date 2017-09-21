@@ -503,48 +503,56 @@ namespace CodeStrikeBot
 
                 Controller.CaptureApplication(this);
 
-                if (ScreenState.CurrentArea == Area.Unknown)
+                if (ScreenState.CurrentArea == Area.Others.Login || ScreenState.CurrentArea == Area.Emulators.Android)
                 {
-                    return false;
+                    TimeoutFactor = 1.0;
+                    success = true;
                 }
-
-                if (ScreenState.CurrentArea == Area.MainBases.Main)
+                else
                 {
-                    Controller.SendClick(this, 20, 680, 2000); //click on world view
-                    Controller.CaptureApplication(this);
-                }
-
-                if (ScreenState.CurrentArea == Area.StateMaps.FullScreen)
-                {
-                    Controller.SendClick(this, 385, 10, 500); //exit fullscreen
-                    Controller.CaptureApplication(this);
-                }
-
-                if (ScreenState.CurrentArea == Area.StateMaps.Main)
-                {
-                    Controller.SendClick(this, 10, 10, 500); //go to your base
-
-                    ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 32, 90, 20);
-
-                    watch.Restart();
-                    Controller.SendClick(this, 196, 382); //click on own base
-                    Controller.CaptureApplication(this);
-
-                    while (!ScreenState.Overlays.Contains(Overlay.Dialogs.Tiles.PlayerFriend) && watch.ElapsedMilliseconds < 10000)
+                    if (ScreenState.CurrentArea == Area.Unknown)
                     {
+                        return false;
+                    }
+
+                    if (ScreenState.CurrentArea == Area.MainBases.Main)
+                    {
+                        Controller.SendClick(this, 20, 680, 2000); //click on world view
                         Controller.CaptureApplication(this);
                     }
 
-                    int elapsed = (int)watch.ElapsedMilliseconds;
-
-                    if (ScreenState.Overlays.Contains(Overlay.Dialogs.Tiles.PlayerFriend))
+                    if (ScreenState.CurrentArea == Area.StateMaps.FullScreen)
                     {
-                        TimeoutFactor = Math.Max(1.001, (double)watch.ElapsedMilliseconds / 400);
+                        Controller.SendClick(this, 385, 10, 500); //exit fullscreen
+                        Controller.CaptureApplication(this);
+                    }
 
-                        //TODO Slow mode
-                        if (TimeoutFactor != 1.0)
+                    if (ScreenState.CurrentArea == Area.StateMaps.Main)
+                    {
+                        Controller.SendClick(this, 10, 10, 500); //go to your base
+
+                        ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 32, 90, 20);
+
+                        watch.Restart();
+                        Controller.SendClick(this, 196, 382); //click on own base
+                        Controller.CaptureApplication(this);
+
+                        while (!ScreenState.Overlays.Contains(Overlay.Dialogs.Tiles.PlayerFriend) && watch.ElapsedMilliseconds < 10000)
                         {
-                            success = true;
+                            Controller.CaptureApplication(this);
+                        }
+
+                        int elapsed = (int)watch.ElapsedMilliseconds;
+
+                        if (ScreenState.Overlays.Contains(Overlay.Dialogs.Tiles.PlayerFriend))
+                        {
+                            TimeoutFactor = Math.Max(1.001, (double)watch.ElapsedMilliseconds / 330);
+
+                            //TODO Slow mode
+                            if (TimeoutFactor != 1.0)
+                            {
+                                success = true;
+                            }
                         }
                     }
                 }

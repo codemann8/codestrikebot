@@ -1947,10 +1947,54 @@ namespace CodeStrikeBot
                         }
 
                         //check MEmu failed to start
-                        chksum = bmpScreenCapture.Checksum(510, 442, 20, 20);
-                        if (chksum == 0x0474)
+                        bool foundMemuError = false;
+                        //TODO: Should programmatically find the start menu width instead
+                        int StartMenuSizeOnLeft = 60;
+                        for (int y = 50; y < Controller.SCREEN_H; y += 10)
                         {
-                            Controller.SendClick(null, 965, 620, 1000);
+                            Color c1 = bmpScreenCapture.GetPixel(910 + StartMenuSizeOnLeft, y);
+
+                            if (c1.Equals(255, 255, 255))
+                            {
+                                Controller.SendClick(null, 910 + StartMenuSizeOnLeft, y, 300);
+                                foundMemuError = true;
+                                break;
+                            }
+                        }
+
+                        using (Graphics g = Graphics.FromImage(bmpScreenCapture))
+                        {
+                            g.CopyFromScreen(System.Windows.Forms.Screen.PrimaryScreen.Bounds.X, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Y, 0, 0, bmpScreenCapture.Size, CopyPixelOperation.SourceCopy);
+                        }
+
+                        for (int y = 50; y < Controller.SCREEN_H && foundMemuError; y += 10)
+                        {
+                            Color c1 = bmpScreenCapture.GetPixel(910 + StartMenuSizeOnLeft, y);
+
+                            if (c1.Equals(255, 255, 255))
+                            {
+                                do
+                                {
+                                    y--;
+                                    c1 = bmpScreenCapture.GetPixel(910 + StartMenuSizeOnLeft, y);
+                                }
+                                while (c1.Equals(255, 255, 255));
+
+                                y++;
+
+                                int x = 910;
+
+                                do
+                                {
+                                    x--;
+                                    c1 = bmpScreenCapture.GetPixel(x + StartMenuSizeOnLeft, y);
+                                }
+                                while (c1.Equals(255, 255, 255));
+
+                                x++;
+
+                                Controller.SendClick(null, x + 460 + StartMenuSizeOnLeft, y + 160, 300);
+                            }
                         }
 
                         //check LINE update dialog
@@ -1990,9 +2034,9 @@ namespace CodeStrikeBot
                                     ctrl.Login(s, s.Emulator.LastKnownAccount);
                                 }
 
-                                if (DateTime.Now.Subtract(s.TimeSinceChecksumChanged).TotalSeconds > 30)
+                                if (DateTime.Now.Subtract(s.TimeSinceChecksumChanged).TotalSeconds > 65)
                                 {
-                                    if (DateTime.Now.Subtract(s.TimeSinceChecksumChanged).TotalSeconds > 75)
+                                    if (DateTime.Now.Subtract(s.TimeSinceChecksumChanged).TotalSeconds > 120)
                                     {
                                         if (s.ScreenState.CurrentArea != Area.StateMaps.FullScreen && s.ScreenState.CurrentArea != Area.Others.Login && s.ScreenState.CurrentArea != Area.Others.Chat)
                                         {
@@ -2005,7 +2049,7 @@ namespace CodeStrikeBot
                                             Controller.CaptureApplication(s);
                                         }
                                     }
-                                    else
+                                    else if (s.ScreenState.CurrentArea != Area.StateMaps.FullScreen && s.ScreenState.CurrentArea != Area.Others.Login && s.ScreenState.CurrentArea != Area.Others.Chat)
                                     {
                                         s.ClickHome(5000);
                                         Controller.CaptureApplication(s);
