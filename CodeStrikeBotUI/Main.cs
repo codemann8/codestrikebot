@@ -1994,6 +1994,7 @@ namespace CodeStrikeBot
                                 x++;
 
                                 Controller.SendClick(null, x + 460 + StartMenuSizeOnLeft, y + 160, 300);
+                                break;
                             }
                         }
 
