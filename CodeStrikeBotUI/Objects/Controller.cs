@@ -791,9 +791,14 @@ namespace CodeStrikeBot
                             {
                                 Controller.CaptureApplication(s);
 
-                                //go to base view
-                                if (s.ScreenState.CurrentArea != Area.MainBases.Main && !(s.ScreenState.CurrentArea == Area.Others.Login || s.ScreenState.CurrentArea == Area.Emulators.Android || s.ScreenState.CurrentArea == Area.Emulators.Loading || s.ScreenState.CurrentArea == Area.Others.Splash || s.ScreenState.CurrentArea == Area.Emulators.Crash || s.ScreenState.CurrentArea == Area.Emulators.TaskManager || s.ScreenState.CurrentArea == Area.Emulators.TaskManagerApp || s.ScreenState.CurrentArea == Area.Emulators.TaskManagerRemove))
+                                if (s.ScreenState.CurrentArea == Area.Others.Quit)
                                 {
+                                    tasksLeft = true;
+                                    s.ClickBack(500);
+                                }
+                                else if (s.ScreenState.CurrentArea != Area.MainBases.Main && !(s.ScreenState.CurrentArea == Area.Others.Login || s.ScreenState.CurrentArea == Area.Emulators.Android || s.ScreenState.CurrentArea == Area.Emulators.Loading || s.ScreenState.CurrentArea == Area.Others.Splash || s.ScreenState.CurrentArea == Area.Emulators.Crash || s.ScreenState.CurrentArea == Area.Emulators.TaskManager || s.ScreenState.CurrentArea == Area.Emulators.TaskManagerApp || s.ScreenState.CurrentArea == Area.Emulators.TaskManagerRemove))
+                                {
+                                    //go to base view
                                     tasksLeft = true;
                                     Controller.SendClick(s, 40, 675, 300); //click Base
                                 }
