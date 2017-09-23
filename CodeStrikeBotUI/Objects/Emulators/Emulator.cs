@@ -2738,7 +2738,7 @@ namespace CodeStrikeBot
                 while (ScreenState.CurrentArea == Area.StateMaps.FullScreen
                     && ScreenState.Overlays.Count > 0)
                 {
-                    this.ClickBack(300);
+                    this.ClickBack(400);
                     Controller.CaptureApplication(this);
                 }
 
@@ -2757,25 +2757,17 @@ namespace CodeStrikeBot
 
                 Controller.CaptureApplication(this);
 
-                if (ScreenState.CurrentArea == Area.Others.Quit)
+                //get back until base or map screen
+                if (!(ScreenState.CurrentArea == Area.StateMaps.Main || ScreenState.CurrentArea == Area.MainBases.Main || ScreenState.CurrentArea == Area.Others.Login || ScreenState.CurrentArea == Area.Emulators.Android || ScreenState.CurrentArea == Area.Emulators.Loading || ScreenState.CurrentArea == Area.Others.Splash || ScreenState.CurrentArea == Area.Emulators.Crash || ScreenState.CurrentArea == Area.Emulators.TaskManager || ScreenState.CurrentArea == Area.Emulators.TaskManagerApp || ScreenState.CurrentArea == Area.Emulators.TaskManagerRemove))
                 {
                     tasksLeft = true;
-                    this.ClickBack(300);
-                }
-                else
-                {
-                    //get back until base or map screen
-                    if (!(ScreenState.CurrentArea == Area.StateMaps.Main || ScreenState.CurrentArea == Area.MainBases.Main || ScreenState.CurrentArea == Area.Others.Login || ScreenState.CurrentArea == Area.Emulators.Android || ScreenState.CurrentArea == Area.Emulators.Loading || ScreenState.CurrentArea == Area.Others.Splash || ScreenState.CurrentArea == Area.Emulators.Crash || ScreenState.CurrentArea == Area.Emulators.TaskManager || ScreenState.CurrentArea == Area.Emulators.TaskManagerApp || ScreenState.CurrentArea == Area.Emulators.TaskManagerRemove))
+
+                    if (ScreenState.CurrentArea == Area.Others.Quit)
                     {
-                        tasksLeft = true;
-
-                        if (ScreenState.CurrentArea == Area.Others.Quit)
-                        {
-                            TimeoutFactor += 0.1;
-                        }
-
-                        this.ClickBack(500); //click Back
+                        TimeoutFactor += 0.1;
                     }
+
+                    this.ClickBack(500); //click Back
                 }
             }
 
@@ -2890,7 +2882,7 @@ namespace CodeStrikeBot
                     {
                         tasksLeft = true;
                         //Controller.SendClick(this, 210, 558, 1200); //click Free Attack
-                        Controller.SendClick(this, 275, 600, 2000); //click Free Attack DIFF ff
+                        Controller.SendClick(this, 275, 600, 1500); //click Free Attack DIFF ff
                     }
                     else if (ScreenState.Overlays.Contains(Overlay.Widgets.GlobalGift))
                     {
@@ -2997,10 +2989,10 @@ namespace CodeStrikeBot
                     }
                     else
                     {
-                        ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 192, 438, 20);
+                        ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 192, 397, 20);
                         if (chksum == 0x6734) //Free Spin
                         {
-                            Controller.SendClick(this, 200, 445, 5000);
+                            Controller.SendClick(this, 200, 405, 5000);
                         }
                         else
                         {
@@ -3012,14 +3004,16 @@ namespace CodeStrikeBot
                 else if (ScreenState.CurrentArea == Area.Menus.CasinoLobby || ScreenState.CurrentArea == Area.Menus.ShootingRanges.Lobby)
                 {
                     tasksLeft = true;
-
-                    Controller.SendClick(this, 190, 300, 5000);
+                    Controller.SendClick(this, 190, 300, 500);
                 }
                 else if (ScreenState.CurrentArea == Area.Menus.ShootingRanges.Main)
                 {
                     tasksLeft = true;
 
                     //seasonal shooting range modal dialog
+                    Thread.Sleep(5000);
+                    Controller.CaptureApplication(this);
+
                     ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 189, 435, 20);
 
                     if (chksum == 0x0c9b)

@@ -111,6 +111,10 @@ namespace CodeStrikeBot
             {
                 Controller.SendClick(this, 380, 12, timeout);
             }
+            else if (ScreenState.CurrentArea == Area.Others.Quit)
+            {
+                Controller.SendClick(this, 255, 390, timeout);
+            }
             else
             {
                 ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 15, 4, 20);
