@@ -503,7 +503,7 @@ namespace CodeStrikeBot
 
                 Controller.CaptureApplication(this);
 
-                if (ScreenState.CurrentArea == Area.Others.Login || ScreenState.CurrentArea == Area.Emulators.Android)
+                if (ScreenState.CurrentArea == Area.Others.Login || ScreenState.CurrentArea == Area.Emulators.Android || ScreenState.CurrentArea == Area.Others.Quit)
                 {
                     TimeoutFactor = 1.0;
                     success = true;

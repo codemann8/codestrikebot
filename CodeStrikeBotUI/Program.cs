@@ -71,7 +71,7 @@ namespace CodeStrikeBot
             System.Threading.Thread.Sleep(5000);
             //Controller.SendPushoverStatic("Bot shutdown");
             System.Diagnostics.ProcessStartInfo Info = new System.Diagnostics.ProcessStartInfo();
-            Info.Arguments = "/C ping 127.0.0.1 -n 2 && \"" + Application.ExecutablePath + "\"";
+            Info.Arguments = "/C ping 127.0.0.1 -n 2 && ping 127.0.0.1 -n 2 && \"" + Application.ExecutablePath + "\"";
             Info.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
             Info.CreateNoWindow = true;
             Info.FileName = "cmd.exe";

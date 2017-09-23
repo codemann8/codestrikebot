@@ -547,6 +547,7 @@ namespace CodeStrikeBot
                     {
                         if (s.ScreenState.CurrentArea == Area.Unknown)
                         {
+                            //TODO: Change to Kill and Reopen app instead of killing emulator
                             ctrl.RestartEmulator(s);
                         }
                     }
