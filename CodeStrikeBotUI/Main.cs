@@ -542,6 +542,14 @@ namespace CodeStrikeBot
                     ctrl.StartTasks = DateTime.Now;
                     ctrl.RegularTasks();
                     ctrl.EndTask();
+
+                    foreach (Screen s in ctrl.sc)
+                    {
+                        if (s.ScreenState.CurrentArea == Area.Unknown)
+                        {
+                            ctrl.RestartEmulator(s);
+                        }
+                    }
                 }
 
                 bckRegularTasks.ReportProgress(100);
