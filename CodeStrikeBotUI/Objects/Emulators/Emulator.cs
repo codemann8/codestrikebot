@@ -3169,6 +3169,11 @@ namespace CodeStrikeBot
                     //this.ClickBack(1000);
                     Controller.SendClick(this, 145, 480, 1000);
                 }
+                else if (ScreenState.CurrentArea == Area.Unknown)
+                {
+                    tasksLeft = true;
+                    this.ClickBack(500);
+                }
             }
 
             return tasksLeft;
