@@ -2878,13 +2878,8 @@ namespace CodeStrikeBot
                 }
                 else if (ScreenState.CurrentArea == Area.MainBases.Main)
                 {
-                    if (ScreenState.Overlays.Contains(Overlay.Widgets.AmmoFreeAttack))
-                    {
-                        tasksLeft = true;
-                        //Controller.SendClick(this, 210, 558, 1200); //click Free Attack
-                        Controller.SendClick(this, 275, 600, 1500); //click Free Attack DIFF ff
-                    }
-                    else if (ScreenState.Overlays.Contains(Overlay.Widgets.GlobalGift))
+                    
+                    if (ScreenState.Overlays.Contains(Overlay.Widgets.GlobalGift))
                     {
                         tasksLeft = true;
                         Controller.SendClick(this, 30, 575, 200); //click Global Gift
@@ -2907,6 +2902,12 @@ namespace CodeStrikeBot
                     else if (ScreenState.Overlays.Contains(Overlay.Widgets.AllianceGift))
                     {
                         tasksLeft = this.CollectGiftsStep(); //Collect Gifts
+                    }
+                    else if (ScreenState.Overlays.Contains(Overlay.Widgets.AmmoFreeAttack))
+                    {
+                        tasksLeft = true;
+                        //Controller.SendClick(this, 210, 558, 1200); //click Free Attack
+                        Controller.SendClick(this, 275, 600, 1500); //click Free Attack DIFF ff
                     }
                     else if (!skipMissions)
                     {
