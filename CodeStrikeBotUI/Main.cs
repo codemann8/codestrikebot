@@ -160,7 +160,7 @@ namespace CodeStrikeBot
                 //System.Threading.Thread.Sleep(5000);
                 //Program.RestartApp();
             }
-            //Controller.SendPushoverStatic("Start");
+            Controller.Instance.SendNotification("Bot start", NotificationType.General);
 
             ReloadAccountList();
 

@@ -3172,8 +3172,14 @@ namespace CodeStrikeBot
                 }
                 else if (ScreenState.CurrentArea == Area.Unknown)
                 {
-                    tasksLeft = true;
-                    this.ClickBack(500);
+                    System.Threading.Thread.Sleep(1000);
+                    Controller.CaptureApplication(this);
+
+                    if (ScreenState.CurrentArea == Area.Unknown)
+                    {
+                        tasksLeft = true;
+                        this.ClickBack(500);
+                    }
                 }
             }
 
