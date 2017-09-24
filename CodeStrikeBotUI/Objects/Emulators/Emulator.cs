@@ -1935,7 +1935,7 @@ namespace CodeStrikeBot
                 {
                     missionsLeft = true;
                     skipMissions = true;
-                    this.ClickBack(100); //click Back
+                    this.ClickBack(300); //click Back
                 }
             }
 
