@@ -3164,11 +3164,15 @@ namespace CodeStrikeBot
                     this.ClickBack(300);
                     this.ClickBack(300);
                 }
-                else if (ScreenState.CurrentArea == Area.Others.Quit || ScreenState.CurrentArea == Area.Menus.Resources)
+                else if (ScreenState.CurrentArea == Area.Others.Quit)
                 {
                     tasksLeft = true;
-                    //this.ClickBack(1000);
-                    Controller.SendClick(this, 145, 480, 1000);
+                    this.ClickBack(1500);
+                }
+                else if (ScreenState.CurrentArea == Area.Menus.Resources)
+                {
+                    tasksLeft = true;
+                    Controller.SendClick(this, 145, 480, 1500);
                 }
                 else if (ScreenState.CurrentArea == Area.Unknown)
                 {

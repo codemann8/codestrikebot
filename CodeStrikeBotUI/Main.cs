@@ -547,8 +547,14 @@ namespace CodeStrikeBot
                     {
                         if (s.ScreenState.CurrentArea == Area.Unknown)
                         {
-                            //TODO: Change to Kill and Reopen app instead of killing emulator
-                            ctrl.RestartEmulator(s);
+                            System.Threading.Thread.Sleep((int)(1000 * s.TimeoutFactor));
+                            Controller.CaptureApplication(s);
+
+                            if (s.ScreenState.CurrentArea == Area.Unknown)
+                            {
+                                //TODO: Change to Kill and Reopen app instead of killing emulator
+                                ctrl.RestartEmulator(s, false);
+                            }
                         }
                     }
                 }
@@ -559,7 +565,6 @@ namespace CodeStrikeBot
                 while (i > 0 && !bckRegularTasks.CancellationPending)
                 {
                     System.Threading.Thread.Sleep(1000);
-
                     i--;
                 }
             }
@@ -2067,7 +2072,7 @@ namespace CodeStrikeBot
                                 }
 
                                 //TODO Slow mode
-                                if (s.TimeoutFactor > 3.0)
+                                if (s.TimeoutFactor > 4.0)
                                 {
                                     BotDatabase.InsertLog(2, String.Format("Emulator slow: {0}", s.Emulator.WindowName), s.LastChecksum.ToString("X4"), new byte[1] { 0x0 });
                                     ctrl.RestartEmulator(s, false);
@@ -2107,7 +2112,7 @@ namespace CodeStrikeBot
                                     {
                                         //s.ClickBack(800); //click Back
                                         //Controller.SendClick(s, 145, 480, 3000); //DIFF
-                                        Controller.SendClick(s, 254, 393, 3000); //DIFF ff
+                                        Controller.SendClick(s, 254, 393, 1000); //DIFF ff
                                     }
                                     else if (s.ScreenState.CurrentArea == Area.Emulators.Crash)
                                     {
@@ -2126,12 +2131,12 @@ namespace CodeStrikeBot
                                     }
                                     else if (s.ScreenState.CurrentArea == Area.Unknown)
                                     {
-                                        System.Threading.Thread.Sleep(10000);
+                                        System.Threading.Thread.Sleep((int)(10000 * s.TimeoutFactor));
                                         Controller.CaptureApplication(s);
 
                                         if (s.ScreenState.CurrentArea == Area.Unknown)
                                         {
-                                            //s.ClickBack();
+                                            s.ClickBack();
                                         }
                                     }
 

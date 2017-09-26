@@ -604,7 +604,7 @@ namespace CodeStrikeBot
 
         public void RestartEmulator(Screen s, bool restart = true)
         {
-            KillEmulator(s, restart);
+            KillEmulator(s, false);
             StartEmulator(s);
 
             if (restart)
@@ -875,8 +875,7 @@ namespace CodeStrikeBot
 
                         if (s.ScreenState.CurrentArea != Area.StateMaps.Main && s.ScreenState.CurrentArea != Area.StateMaps.FullScreen && s.ScreenState.CurrentArea != Area.MainBases.Main && !(s.ScreenState.CurrentArea == Area.Others.Login || s.ScreenState.CurrentArea == Area.Emulators.Android || s.ScreenState.CurrentArea == Area.Emulators.Loading || s.ScreenState.CurrentArea == Area.Others.Splash || s.ScreenState.CurrentArea == Area.Emulators.Crash || s.ScreenState.CurrentArea == Area.Emulators.TaskManager || s.ScreenState.CurrentArea == Area.Emulators.TaskManagerApp || s.ScreenState.CurrentArea == Area.Emulators.TaskManagerRemove))
                         {
-                            RestartEmulator(s);
-                            s.Login(s.Emulator.LastKnownAccount);
+                            s.TimeoutFactor = 1.0;
                         }
                     }
                 }
