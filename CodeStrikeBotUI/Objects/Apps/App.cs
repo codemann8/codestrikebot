@@ -173,8 +173,13 @@ namespace CodeStrikeBot
             return ret;
         }
 
-        public static ushort GetScreenChecksum(SuperBitmap bmp, int x, int y, int size)
+        public static ushort GetScreenChecksum(SuperBitmap bmp, int x, int y, int width, int height = 0)
         {
+            if (height == 0)
+            {
+                height = width;
+            }
+
             ushort ret;
             //Bitmap icon = new Bitmap(size, size);
 
@@ -198,7 +203,7 @@ namespace CodeStrikeBot
 
             //ret = icon.Checksum();
 
-            ret = bmp.Checksum(x, y, size, size);
+            ret = bmp.Checksum(x, y, width, height);
 
             //icon.Dispose();
 

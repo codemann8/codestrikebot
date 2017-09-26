@@ -17,14 +17,14 @@ namespace CodeStrikeBot
         {
             //Y-axis 485-551 notification area
             //menu area
-            ushort chksum = ScreenState.GetScreenChecksum(bmp, 67, 16, 4);
+            ushort chksum = ScreenState.GetScreenChecksum(bmp, 67, 19, 1, 4);
             ushort chksum2 = 0, chksum3 = 0;
             bool enteredGeneric = false;
             Color c, c2, c3;
 
             switch (chksum)
             {
-                case 0x76fb: //menu
+                case 0x0781: //menu
                     chksum2 = ScreenState.GetScreenChecksum(bmp, 160, 16, 14);
                     switch (chksum2)
                     {
@@ -268,7 +268,7 @@ namespace CodeStrikeBot
                             break;
                     }
                     break;
-                case 0x7f20: //menu loading
+                case 0xc86c: //menu loading
                     chksum2 = ScreenState.GetScreenChecksum(bmp, 160, 16, 14);
                     switch (chksum2)
                     {
@@ -289,7 +289,7 @@ namespace CodeStrikeBot
                             break;
                     }
                     break;
-                case 0xcfeb: //menu modal
+                case 0x09f5: //menu modal
                 case 0xb191: //large modal
                     chksum2 = ScreenState.GetScreenChecksum(bmp, 160, 16, 14);
                     switch (chksum2)
@@ -348,12 +348,12 @@ namespace CodeStrikeBot
                             break;
                     }
                     break;
-                case 0x09ab:
-                case 0x97aa: //loading
+                case 0xf362:
+                case 0x2f94: //loading
                     CurrentArea = Area.MainBases.Main;
                     break;
-                case 0xbcd1: //realm map
-                case 0xbf65: //monster modal
+                case 0x35a3: //realm map
+                case 0xf9e3: //monster modal
                     chksum2 = ScreenState.GetScreenChecksum(bmp, 366, 16, 10);
                     if (chksum2 == 0xa71b)
                     {
@@ -364,31 +364,22 @@ namespace CodeStrikeBot
                         CurrentArea = Area.StateMaps.FullScreen;
                     }
                     break;
-                case 0x0a49: //memu
+                case 0xeebc: //memu
                     CurrentArea = Area.Emulators.Loading;
                     break;
-                case 0x88c8:
+                case 0xf07d:
                     CurrentArea = Area.Emulators.Android;
                     break;
-                case 0x2274:
-                case 0x07b8: //loading
+                case 0x3dfc:
+                case 0xcf9d: //loading
+                case 0x643b: //gray screen
                     CurrentArea = Area.Others.Splash;
                     break;
-                case 0x33e2: //login
+                case 0x2e95: //login
+                case 0x8952: //login modal/loading
                     CurrentArea = Area.Others.Login;
                     break;
-                case 0xc7bd: //login modal/loading
-                    chksum2 = ScreenState.GetScreenChecksum(bmp, 60, 120, 20);
-                    if (chksum2 == 0xbe30) //TODO: collision case: casino jackpot crate collect
-                    {
-                        CurrentArea = Area.Others.Login;
-                    }
-                    else
-                    {
-                        CurrentArea = Area.Menus.ShootingRanges.NormalCrate;
-                    }
-                    break;
-                case 0x49c2: //main base modal
+                case 0x15ef: //main base modal
                     chksum2 = ScreenState.GetScreenChecksum(bmp, 190, 115, 20);
                     switch (chksum2)
                     {
@@ -406,7 +397,7 @@ namespace CodeStrikeBot
                             break;
                     }
                     break;
-                case 0x4a40: //realm map modal
+                case 0x69ce: //realm map modal
                     chksum2 = ScreenState.GetScreenChecksum(bmp, 215, 235, 10);
                     if (chksum2 == 0x3702)
                     {
@@ -433,7 +424,7 @@ namespace CodeStrikeBot
                         }
                     }
                     break;
-                case 0xd49a: //black screen
+                case 0x2c4c: //black screen
                     chksum2 = ScreenState.GetScreenChecksum(bmp, 190, 115, 20);
                     if (chksum2 == 0x4489) //notice
                     {
@@ -444,13 +435,10 @@ namespace CodeStrikeBot
                         }
                     }
                     break;
-                case 0x793a: //guild chat
-                case 0xaca3: //realm chat
-                case 0xe5d3: //contacts
+                case 0xef49: //guild chat
+                case 0x5fcf: //realm chat
+                case 0xc2a2: //contacts
                     CurrentArea = Area.Others.Chat;
-                    break;
-                case 0x1f46: //trial of the titan
-                    CurrentArea = Area.Menus.ShootingRanges.Main;
                     break;
             }
 
