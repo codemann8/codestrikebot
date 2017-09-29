@@ -795,8 +795,10 @@ namespace CodeStrikeBot
                 }
             }
 
-            c = bmp.GetPixel(213, 664);
-            if (c.Equals(24, 130, 16) || c.Equals(0, 28, 0))
+            chksum = ScreenState.GetScreenChecksum(bmp, 200, 660, 10);
+            //c = bmp.GetPixel(213, 664); //DIFF MS
+            //if (c.Equals(24, 130, 16) || c.Equals(0, 28, 0)) //DIFF MS
+            if (chksum == 0x980f || chksum == 0x5bf8)
             {
                 Overlays.Add(Overlay.Widgets.AllianceGift);
             }

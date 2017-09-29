@@ -1631,14 +1631,18 @@ namespace CodeStrikeBot
                 {
                     giftsLeft = true;
 
-                    Color c = SuperBitmap.GetPixel(335, 175);
+                    //Color c = SuperBitmap.GetPixel(335, 175); //DIFF MS
+                    ushort chksum = ScreenState.GetScreenChecksum(this.SuperBitmap, 190, 98, 20);
 
                     if (ScreenState.CurrentArea == Area.Menus.Alliance)
                     {
-                        Controller.SendClick(this, 321, 198, 600); //click gifts
+                        //Controller.SendClick(this, 321, 198, 600); //click gifts //DIFF MS
+                        Controller.SendClick(this, 345, 250, 600); //click gifts
                     }
-                    else if (ScreenState.CurrentArea == Area.Menus.Gifts && c.Equals(57, 121, 140)) //clear gifts button is available
+                    //else if (ScreenState.CurrentArea == Area.Menus.Gifts && c.Equals(57, 121, 140)) //clear gifts button is available //DIFF MS
+                    else if (ScreenState.CurrentArea == Area.Menus.Gifts && chksum == 0xa3c4) //clear gifts button is available
                     {
+                        /* //DIFF MS
                         c = SuperBitmap.GetPixel(200, 175);
 
                         if (c.Equals(33, 40, 49)) //open 50/All
@@ -1674,6 +1678,31 @@ namespace CodeStrikeBot
                                     Controller.SendClick(this, 335, 183, 100); //click Clear all
                                 }
                             }
+                        }*/
+                        for (int p = 165; p < 586; p += 62)
+                        {
+                            chksum = ScreenState.GetScreenChecksum(this.SuperBitmap, 344, p, 20);
+
+                            if (chksum == 0x6247)
+                            {
+                                //open
+                                Controller.SendClick(this, 335, p, 100);
+                                p = 586;
+                            }
+                            else if (chksum == 0x0447)
+                            {
+                                //clear
+                            }
+                            else if (p > 540)
+                            {
+                                Controller.SendClick(this, 335, 105, 100); //click Clear all
+                            }
+                            else
+                            {
+                                //loading
+                                Thread.Sleep((int)(100 * TimeoutFactor));
+                                p = 550;
+                            }
                         }
                     }
                     else
@@ -1685,11 +1714,11 @@ namespace CodeStrikeBot
                 {
                     SuperBitmap.Bitmap.Save(String.Format("{0}\\-save.bmp", Controller.Instance.GetFullScreenshotDir()), System.Drawing.Imaging.ImageFormat.Bmp);
 
-                    if (ScreenState.CurrentArea == Area.Menus.Gifts && SuperBitmap.GetPixel(335, 175).Equals(57, 121, 140)) //clear gifts button is available
+                    //if (ScreenState.CurrentArea == Area.Menus.Gifts && SuperBitmap.GetPixel(335, 175).Equals(57, 121, 140)) //clear gifts button is available //DIFF MS
+                    if (ScreenState.CurrentArea == Area.Menus.Gifts && ScreenState.GetScreenChecksum(this.SuperBitmap, 190, 98, 20) == 0xa3c4) //clear gifts button is available
                     {
                         giftsLeft = true;
-
-                        Controller.SendClick(this, 335, 183, 100); //click Clear all
+                        Controller.SendClick(this, 335, 105, 100); //click Clear all
                     }
                     else
                     {
