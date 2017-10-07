@@ -3019,8 +3019,8 @@ namespace CodeStrikeBot
                     }
                     else
                     {
-                        ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 192, 397, 20);
-                        if (chksum == 0x6734) //Free Spin
+                        ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 192, 394, 20);
+                        if (chksum == 0x5192) //Free Spin
                         {
                             Controller.SendClick(this, 200, 405, 5000);
                         }
