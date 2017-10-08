@@ -2162,6 +2162,9 @@ namespace CodeStrikeBot
                                         }*/
                                         p = 310;
                                         break;
+                                    case ScheduleType.WheatTransfer:
+                                        p = 386;
+                                        break;
                                 }
                             }
                             while (p >= 419 && p == 0 && watch.ElapsedMilliseconds < 5000);

@@ -756,6 +756,7 @@ namespace CodeStrikeBot
                         }
                             //91f8 //google play error
                             //057d //quest timer not completed
+                            //9fd6 //cannot attack allied base
                         else
                         {
                             Overlays.Add(Overlay.Dialogs.Popups.Unknown);

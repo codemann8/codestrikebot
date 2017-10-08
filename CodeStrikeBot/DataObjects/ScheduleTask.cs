@@ -123,5 +123,10 @@ namespace CodeStrikeBot
         Defense = 12,
         Milestone = 13,
         EliteRebelTarget = 14,
+        WheatTransfer = 15,
+        EssenseTransfer = 16,
+        GraniteTransfer = 17,
+        LeadTransfer = 18,
+        CoinT2Transfer = 19
     }
 }
