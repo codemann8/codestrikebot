@@ -1803,12 +1803,17 @@ namespace CodeStrikeBot
                     {
                         foreach (DataObjects.ScheduleTask task in BotDatabase.GetObjects<DataObjects.ScheduleTask>())
                         {
+                            if (task.App.Id == 2 && DateTime.Now.Subtract(task.NextAction).Minutes > 10)
+                            {
+                                task.Id = task.Id;
+                            }
+
                             if (task.App.Id == 2 && DateTime.Now.Subtract(task.NextAction).Minutes > 15)
                             {
-                                ctrl.SendNotification("Scheduled tasks are past due", NotificationType.TasksPastDue);
-
                                 if (DateTime.Now.Subtract(task.NextAction).Minutes < 30)
                                 {
+                                    ctrl.SendNotification("Scheduled tasks are past due", NotificationType.TasksPastDue);
+
                                     foreach (Screen s in ctrl.sc)
                                     {
                                         ctrl.KillEmulator(s, false);
@@ -2077,7 +2082,7 @@ namespace CodeStrikeBot
                                 }
 
                                 //TODO Slow mode
-                                if (s.TimeoutFactor > 4.0)
+                                if (s.TimeoutFactor > 5.0)
                                 {
                                     BotDatabase.InsertLog(2, String.Format("Emulator slow: {0}", s.Emulator.WindowName), s.LastChecksum.ToString("X4"), new byte[1] { 0x0 });
                                     ctrl.RestartEmulator(s, false);

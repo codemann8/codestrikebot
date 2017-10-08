@@ -34,112 +34,86 @@ namespace CodeStrikeBot.Messages
                                 }
                                 else
                                 {
-                                    foreach (JObject chk in (JArray)root.Value)
+                                    if (((JArray)root.Value).First.Type == JTokenType.Object)
                                     {
-                                        Chunk chunk = new Chunk();
-
-                                        foreach (KeyValuePair<string, JToken> c in chk)
+                                        foreach (JObject chk in (JArray)root.Value)
                                         {
-                                            switch (c.Key)
+                                            Chunk chunk = new Chunk();
+
+                                            foreach (KeyValuePair<string, JToken> c in chk)
                                             {
-                                                case "p_id": chunk.p_id = (int)c.Value; break;
-                                                case "c_id": chunk.c_id = (int)c.Value; break;
-                                                case "tiles":
-                                                    chunk.tiles = new List<Tile>();
+                                                switch (c.Key)
+                                                {
+                                                    case "p_id": chunk.p_id = (int)c.Value; break;
+                                                    case "c_id": chunk.c_id = (int)c.Value; break;
+                                                    case "tiles":
+                                                        chunk.tiles = new List<Tile>();
 
-                                                    JObject chunkStart;
+                                                        JObject chunkStart;
 
-                                                    if (c.Value.Type == JTokenType.Array)
-                                                    {
-                                                        if (((JArray)c.Value).Count > 1)
+                                                        if (c.Value.Type == JTokenType.Array)
                                                         {
-                                                            this.Error = true;
-                                                            return;
+                                                            Tile tile = new Tile();
+
+                                                            if (((JArray)c.Value).Count > 1)
+                                                            {
+                                                                this.Error = true;
+                                                                return;
+                                                            }
+                                                            else
+                                                            {
+                                                                tile = GetTileFromJson((JObject)((JArray)c.Value)[0]);
+
+                                                                chunk.tiles.Add(tile);
+                                                            }
                                                         }
                                                         else
                                                         {
-                                                            chunkStart = (JObject)((JArray)c.Value)[0];
-                                                        }
-                                                    }
-                                                    else
-                                                    {
-                                                        chunkStart = (JObject)c.Value;
-                                                    }
-
-                                                    foreach (KeyValuePair<string, JToken> tl in chunkStart)
-                                                    {
-                                                        Tile tile = new Tile();
-
-                                                        foreach (KeyValuePair<string, JToken> t in (JObject)tl.Value)
-                                                        {
-                                                            switch (t.Key)
+                                                            foreach (KeyValuePair<string, JToken> tl in (JObject)c.Value)
                                                             {
-                                                                case "id": tile.tile_id = (int)t.Value; break;
-                                                                case "overlay": tile.overlay = (int)t.Value; break;
-                                                                case "object_id": tile.object_id = (int)t.Value; break;
-                                                                case "last_updated": tile.last_updated = ((int)t.Value).ToDateTime(); break;
-                                                                case "health": tile.health = (int)t.Value; break;
-                                                                case "max_health": tile.max_health = (int)t.Value; break;
-                                                                case "creature_id": tile.creature_id = (int)t.Value; break;
-                                                                case "state": tile.state = (int)t.Value; break;
-                                                                case "event_id": tile.event_id = (int)t.Value; break;
-                                                                case "creature_type": tile.creature_type = (int)t.Value; break;
-                                                                case "death_time": tile.death_time = ((int)t.Value).ToDateTime(); break;
-                                                                case "city":
-                                                                    tile.city = new City();
-                                                                    foreach (KeyValuePair<string, JToken> city in (JObject)t.Value)
+                                                                Tile tile = new Tile();
+
+                                                                if (tl.Value.Type == JTokenType.Integer)
+                                                                {
+                                                                    this.Error = true;
+                                                                    return;
+                                                                }
+                                                                else
+                                                                {
+                                                                    if (((JObject)tl.Value).First.Type != JTokenType.Property)
                                                                     {
-                                                                        switch (city.Key)
-                                                                        {
-                                                                            case "user_id": tile.city.user_id = (int)city.Value; break;
-                                                                            case "empire_id": tile.city.empire_id = (int)city.Value; break;
-                                                                            case "city_id": tile.city.city_id = (int)city.Value; break;
-                                                                            case "scout_cost": tile.city.scout_cost = (int)city.Value; break;
-                                                                            case "city_name": tile.city.city_name = city.Value.ToString(); break;
-                                                                            case "last_state": tile.city.last_state = (int)city.Value; break;
-                                                                            case "is_last_state_ac_war": tile.city.is_last_state_ac_war = (bool)city.Value; break;
-                                                                            case "state_timestamp": tile.city.state_timestamp = ((int)city.Value).ToDateTime(); break;
-                                                                            case "defeated_vanity_id": tile.city.defeated_vanity_id = (int)city.Value; break;
-                                                                            case "city_level": tile.city.city_level = (int)city.Value; break;
-                                                                            default: break; //TODO: finish checking if incomplete
-                                                                        }
+                                                                        this.Error = true;
+                                                                        return;
                                                                     }
-                                                                    break;
-                                                                case "army":
-                                                                    tile.army = new Army();
-                                                                    foreach (KeyValuePair<string, JToken> army in (JObject)t.Value)
+
+                                                                    tile = GetTileFromJson((JObject)tl.Value);
+
+                                                                    if (tile == null)
                                                                     {
-                                                                        switch (army.Key)
-                                                                        {
-                                                                            case "user_id": tile.army.user_id = (int)army.Value; break;
-                                                                            case "empire_id": tile.army.empire_id = (int)army.Value; break;
-                                                                            case "city_id": tile.army.city_id = (int)army.Value; break;
-                                                                            case "army_id": tile.army.army_id = (int)army.Value; break;
-                                                                            case "scout_cost": tile.army.scout_cost = Int32.Parse(army.Value.ToString()); break;
-                                                                            case "army_load": tile.army.army_load = (int)army.Value; break;
-                                                                            default: break; //TODO: finish checking if incomplete
-                                                                        }
+                                                                        this.Error = true;
+                                                                        return;
                                                                     }
-                                                                    break;
-                                                                case "r_level": tile.r_level = (int)t.Value; break;
-                                                                case "r_amount": tile.r_amount = (int)t.Value; break;
-                                                                case "r_custom_expire_ts": tile.r_custom_expire_ts = ((int)t.Value).ToDateTime(); break;
-                                                                case "r_gather_start_time": tile.r_gather_start_time = ((int)t.Value).ToDateTime(); break;
-                                                                case "r_gather_duration": tile.r_gather_duration = (int)t.Value; break;
-                                                                case "r_truce_expire_ts": tile.r_truce_expire_ts = ((int)t.Value).ToDateTime(); break;
-                                                                case "r_tick_duration": tile.r_tick_duration = (double)t.Value; break;
-                                                                default: this.Error = true; break;
+                                                                }
+
+                                                                chunk.tiles.Add(tile);
                                                             }
                                                         }
-
-                                                        chunk.tiles.Add(tile);
-                                                    }
-                                                    break;
-                                                default: this.Error = true; break;
+                                                        break;
+                                                    default: this.Error = true; break;
+                                                }
                                             }
-                                        }
 
-                                        this.chunks.Add(chunk);
+                                            this.chunks.Add(chunk);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        this.Error = true;
+
+                                        if (((JArray)root.Value).First.Type == JTokenType.Integer)
+                                        {
+
+                                        }
                                     }
                                 }
                                 break;
@@ -165,6 +139,75 @@ namespace CodeStrikeBot.Messages
             {
                 this.Error = true;
             }
+        }
+
+        private Tile GetTileFromJson(JObject obj)
+        {
+            Tile tile = new Tile();
+
+            foreach (KeyValuePair<string, JToken> t in obj)
+            {
+                switch (t.Key)
+                {
+                    case "id": tile.tile_id = (int)t.Value; break;
+                    case "overlay": tile.overlay = (int)t.Value; break;
+                    case "object_id": tile.object_id = (int)t.Value; break;
+                    case "last_updated": tile.last_updated = ((int)t.Value).ToDateTime(); break;
+                    case "health": tile.health = (int)t.Value; break;
+                    case "max_health": tile.max_health = (int)t.Value; break;
+                    case "creature_id": tile.creature_id = (int)t.Value; break;
+                    case "state": tile.state = (int)t.Value; break;
+                    case "event_id": tile.event_id = (int)t.Value; break;
+                    case "creature_type": tile.creature_type = (int)t.Value; break;
+                    case "death_time": tile.death_time = ((int)t.Value).ToDateTime(); break;
+                    case "city":
+                        tile.city = new City();
+                        foreach (KeyValuePair<string, JToken> city in (JObject)t.Value)
+                        {
+                            switch (city.Key)
+                            {
+                                case "user_id": tile.city.user_id = (int)city.Value; break;
+                                case "empire_id": tile.city.empire_id = (int)city.Value; break;
+                                case "city_id": tile.city.city_id = (int)city.Value; break;
+                                case "scout_cost": tile.city.scout_cost = (int)city.Value; break;
+                                case "city_name": tile.city.city_name = city.Value.ToString(); break;
+                                case "last_state": tile.city.last_state = (int)city.Value; break;
+                                case "is_last_state_ac_war": tile.city.is_last_state_ac_war = (bool)city.Value; break;
+                                case "state_timestamp": tile.city.state_timestamp = ((int)city.Value).ToDateTime(); break;
+                                case "defeated_vanity_id": tile.city.defeated_vanity_id = (int)city.Value; break;
+                                case "city_level": tile.city.city_level = (int)city.Value; break;
+                                default: break; //TODO: finish checking if incomplete
+                            }
+                        }
+                        break;
+                    case "army":
+                        tile.army = new Army();
+                        foreach (KeyValuePair<string, JToken> army in (JObject)t.Value)
+                        {
+                            switch (army.Key)
+                            {
+                                case "user_id": tile.army.user_id = (int)army.Value; break;
+                                case "empire_id": tile.army.empire_id = (int)army.Value; break;
+                                case "city_id": tile.army.city_id = (int)army.Value; break;
+                                case "army_id": tile.army.army_id = (int)army.Value; break;
+                                case "scout_cost": tile.army.scout_cost = Int32.Parse(army.Value.ToString()); break;
+                                case "army_load": tile.army.army_load = (int)army.Value; break;
+                                default: break; //TODO: finish checking if incomplete
+                            }
+                        }
+                        break;
+                    case "r_level": tile.r_level = (int)t.Value; break;
+                    case "r_amount": tile.r_amount = (int)t.Value; break;
+                    case "r_custom_expire_ts": tile.r_custom_expire_ts = ((int)t.Value).ToDateTime(); break;
+                    case "r_gather_start_time": tile.r_gather_start_time = ((int)t.Value).ToDateTime(); break;
+                    case "r_gather_duration": tile.r_gather_duration = (int)t.Value; break;
+                    case "r_truce_expire_ts": tile.r_truce_expire_ts = ((int)t.Value).ToDateTime(); break;
+                    case "r_tick_duration": tile.r_tick_duration = (double)t.Value; break;
+                    default: return null; break;
+                }
+            }
+
+            return tile;
         }
 
         public override string ToString()
