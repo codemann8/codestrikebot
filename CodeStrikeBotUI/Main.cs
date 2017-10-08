@@ -1803,14 +1803,9 @@ namespace CodeStrikeBot
                     {
                         foreach (DataObjects.ScheduleTask task in BotDatabase.GetObjects<DataObjects.ScheduleTask>())
                         {
-                            if (task.App.Id == 2 && DateTime.Now.Subtract(task.NextAction).Minutes > 10)
+                            if (task.App.Id == 2 && DateTime.Now.Subtract(task.NextAction).Minutes < 30)
                             {
-                                task.Id = task.Id;
-                            }
-
-                            if (task.App.Id == 2 && DateTime.Now.Subtract(task.NextAction).Minutes > 15)
-                            {
-                                if (DateTime.Now.Subtract(task.NextAction).Minutes < 30)
+                                if (DateTime.Now.Subtract(task.NextAction).Minutes > 15)
                                 {
                                     ctrl.SendNotification("Scheduled tasks are past due", NotificationType.TasksPastDue);
 
@@ -1818,10 +1813,18 @@ namespace CodeStrikeBot
                                     {
                                         ctrl.KillEmulator(s, false);
                                     }
-                                }
 
-                                tmrLateSchedule.Restart();
-                                Program.RestartApp();
+                                    tmrLateSchedule.Restart();
+                                    Program.RestartApp();
+                                }
+                                else if (DateTime.Now.Subtract(task.NextAction).Minutes > 11)
+                                {
+                                    ctrl.KillEmulator(ctrl.GetNextWindow(task), false);
+                                }
+                                else if (DateTime.Now.Subtract(task.NextAction).Minutes > 8)
+                                {
+                                    ctrl.GetNextWindow(task).ClickHome();
+                                }
                             }
                         }
                     }
