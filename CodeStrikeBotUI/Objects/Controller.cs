@@ -558,6 +558,11 @@ namespace CodeStrikeBot
                             case ScheduleType.IronTransfer:
                             case ScheduleType.FoodTransfer:
                             case ScheduleType.CoinTransfer:
+                            case ScheduleType.WheatTransfer:
+                            case ScheduleType.EssenseTransfer:
+                            case ScheduleType.GraniteTransfer:
+                            case ScheduleType.LeadTransfer:
+                            case ScheduleType.CoinT2Transfer:
                                 success = screen.ResourceTransfer(task);
                                 break;
                             case ScheduleType.Shield:
