@@ -750,6 +750,11 @@ namespace CodeStrikeBot
                     case ScheduleType.IronTransfer:
                     case ScheduleType.FoodTransfer:
                     case ScheduleType.CoinTransfer:
+                    case ScheduleType.WheatTransfer:
+                    case ScheduleType.EssenseTransfer:
+                    case ScheduleType.GraniteTransfer:
+                    case ScheduleType.LeadTransfer:
+                    case ScheduleType.CoinT2Transfer:
                         shouldSave = task.X > 0 && task.Y > 0 && task.Amount > 0 && task.Count > 0;
                         break;
                     case ScheduleType.Login:
