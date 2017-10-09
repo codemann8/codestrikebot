@@ -511,8 +511,10 @@ namespace CodeStrikeBot
             return screen;
         }
 
-        public void ExecuteTask(DataObjects.ScheduleTask task)
+        public bool ExecuteTask(DataObjects.ScheduleTask task)
         {
+            bool success = false;
+
             try
             {
                 BeginTask();
@@ -549,8 +551,6 @@ namespace CodeStrikeBot
 
                     if (screen.Emulator.LastKnownAccount != null && screen.Emulator.LastKnownAccount.Id == task.Account.Id)
                     {
-                        bool success = false;
-
                         switch (task.Type)
                         {
                             case ScheduleType.StoneTransfer:
@@ -605,6 +605,8 @@ namespace CodeStrikeBot
             {
                 EndTask();
             }
+
+            return success;
         }
 
         public void RestartEmulator(Screen s, bool restart = true)

@@ -648,7 +648,10 @@ namespace CodeStrikeBot
                             {
                                 ctrl.StartScheduler = DateTime.Now;
                                 //BeginInvoke(new Action(() => ctrl.ExecuteTask(task)));
-                                ctrl.ExecuteTask(task);
+                                if (ctrl.ExecuteTask(task))
+                                {
+                                    tmrLateSchedule.Restart();
+                                }
                             }
                             catch (Exception ex)
                             {
@@ -1799,13 +1802,13 @@ namespace CodeStrikeBot
             {
                 try
                 {
-                    if (tmrLateSchedule.ElapsedMilliseconds > 1800000 && chkScheduler.Checked)
+                    if (chkScheduler.Checked)
                     {
                         foreach (DataObjects.ScheduleTask task in BotDatabase.GetObjects<DataObjects.ScheduleTask>())
                         {
-                            if (task.App.Id == 2 && DateTime.Now.Subtract(task.NextAction).Minutes < 30)
+                            if (task.App.Id == 2 && DateTime.Now.Subtract(task.NextAction).Minutes > 5)
                             {
-                                if (DateTime.Now.Subtract(task.NextAction).Minutes > 15)
+                                if (tmrLateSchedule.ElapsedMilliseconds > 900000)
                                 {
                                     ctrl.SendNotification("Scheduled tasks are past due", NotificationType.TasksPastDue);
 
@@ -1814,14 +1817,13 @@ namespace CodeStrikeBot
                                         ctrl.KillEmulator(s, false);
                                     }
 
-                                    tmrLateSchedule.Restart();
                                     Program.RestartApp();
                                 }
-                                else if (DateTime.Now.Subtract(task.NextAction).Minutes > 11)
+                                else if (tmrLateSchedule.ElapsedMilliseconds > 660000)
                                 {
                                     ctrl.KillEmulator(ctrl.GetNextWindow(task), false);
                                 }
-                                else if (DateTime.Now.Subtract(task.NextAction).Minutes > 8)
+                                else if (tmrLateSchedule.ElapsedMilliseconds > 48000)
                                 {
                                     ctrl.GetNextWindow(task).ClickHome();
                                 }
