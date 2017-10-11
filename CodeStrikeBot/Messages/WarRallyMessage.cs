@@ -235,6 +235,7 @@ namespace CodeStrikeBot.Messages
                                             case "trap_count": slot.TrapCount = (int)kvp.Value; break;
                                             case "total_trap_count": slot.TotalTrapCount = (int)kvp.Value; break;
                                             case "total_trap_max": slot.TotalTrapMax = (int)kvp.Value; break;
+                                            case "gathered_unittroops": this.Error = true; break; //TODO: figure out what this is
                                             default: this.Error = true; break;
                                         }
                                     }
