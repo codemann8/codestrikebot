@@ -1051,6 +1051,8 @@ namespace CodeStrikeBot
                                     switch (playerName)
                                     {
                                         case "codemann8":
+                                            ctrl.SendNotification(String.Format("Attack on {0}", march.DestName), NotificationType.IncomingAttack);
+
                                             if (march.Watchtower != null && march.Watchtower.ActualTotalUnits != 0 && march.Watchtower.ActualTotalUnits < 15000)
                                             {
                                                 ctrl.SendNotification(String.Format("Attack on {0}", march.DestName), NotificationType.IncomingAttack);
@@ -1182,12 +1184,21 @@ namespace CodeStrikeBot
 
                                                             if (targetSelected)
                                                             {
-                                                                if (s.ClickUntil(280, 298, Area.Menus.March, 400, 2000))
+                                                                if (!s.ClickUntil(280, 298, Area.Menus.March, 400, 2000))
+                                                                {
+                                                                    Controller.CaptureApplication(s);
+                                                                    if (s.ScreenState.Overlays.Contains(Overlay.Dialogs.Popups.WarningOutsideAttack))
+                                                                    {
+                                                                        s.ClickBack(400);
+                                                                    }
+                                                                }
+
+                                                                if (s.ScreenState.CurrentArea == Area.Menus.March)
                                                                 {
                                                                     chksum = ScreenState.GetScreenChecksum(s.SuperBitmap, 250, 270, 20);
-                                                                    if (chksum == 0x4dad) //commander is present
+                                                                    if (chksum == 0x6a26) //commander is present
                                                                     {
-                                                                        if (s.ClickUntil(20, 590, 345, 265, 20, 0x8ed1, 100, 2000)) //click Queue Max until com is selected
+                                                                        if (s.ClickUntil(20, 590, 300, 265, 20, 0xa3e1, 100, 2000)) //click Queue Max until com is selected
                                                                         {
                                                                             if (s.ClickUntil(250, 590, Area.StateMaps.Main, 1000, 4300))
                                                                             {
@@ -1746,9 +1757,10 @@ namespace CodeStrikeBot
 
                 //ctrl.sc[0].GoToCoordinate(50, 78);
 
-                Bitmap bmp = Controller.CaptureApplication(ctrl.sc[0], 0, 32, 394, 648);
-                bmp.Save(String.Format("{0}\\pic1.jpg", Controller.Instance.GetFullScreenshotDir()), ImageFormat.Jpeg);
-                                                        
+                //Bitmap bmp = Controller.CaptureApplication(ctrl.sc[0], 0, 32, 394, 648);
+                //bmp.Save(String.Format("{0}\\pic1.jpg", Controller.Instance.GetFullScreenshotDir()), ImageFormat.Jpeg);
+
+                //ctrl.ActiveScreen.ActivateBoost(ScheduleType.Shield, 8);
 
                 //sc.SendClick(375, 20, 300); //click exit fullscreen
                 //sc.SendClick(150, 610, 300); //click chat bar
@@ -1823,7 +1835,7 @@ namespace CodeStrikeBot
                                 {
                                     ctrl.KillEmulator(ctrl.GetNextWindow(task), false);
                                 }
-                                else if (tmrLateSchedule.ElapsedMilliseconds > 48000)
+                                else if (tmrLateSchedule.ElapsedMilliseconds > 480000)
                                 {
                                     ctrl.GetNextWindow(task).ClickHome();
                                 }
@@ -2202,25 +2214,13 @@ namespace CodeStrikeBot
                                         || s.ScreenState.CurrentArea == Area.Menus.ShootingRanges.Main
                                         || s.ScreenState.CurrentArea == Area.Menus.ShootingRanges.NormalCrate
                                         || s.ScreenState.Overlays.Contains(Overlay.Widgets.GlobalGift)
+                                        || s.ScreenState.Overlays.Contains(Overlay.Widgets.SecretGift)
                                         || s.ScreenState.CurrentArea == Area.MainBases.GlobalGiftCollect
                                         || s.ScreenState.CurrentArea == Area.MainBases.SecretGiftCollect)
                                     {
                                         ctrl.BeginTask();
                                         s.RegularTasksStep();
                                         ctrl.EndTask();
-                                    }
-
-                                    if (s.ScreenState.Overlays.Contains(Overlay.Widgets.SecretGift))
-                                    {
-                                        System.Threading.Thread.Sleep(5000);
-                                        Controller.CaptureApplication(s);
-
-                                        if (s.ScreenState.Overlays.Contains(Overlay.Widgets.SecretGift))
-                                        {
-                                            ctrl.BeginTask();
-                                            s.RegularTasksStep();
-                                            ctrl.EndTask();
-                                        }
                                     }
                                 }
                             }

@@ -17,48 +17,48 @@ namespace CodeStrikeBot
         {
             //Y-axis 485-551 notification area
             //menu area
-            ushort chksum = ScreenState.GetScreenChecksum(bmp, 67, 19, 1, 4);
+            ushort chksum = ScreenState.GetScreenChecksum(bmp, 67, 19, 4, 1);
             ushort chksum2 = 0, chksum3 = 0;
             bool enteredGeneric = false;
             Color c, c2, c3;
 
             switch (chksum)
             {
-                case 0x0781: //menu
+                case 0x8c30: //menu
                     chksum2 = ScreenState.GetScreenChecksum(bmp, 160, 16, 14);
                     switch (chksum2)
                     {
-                        case 0x79ed:
+                        case 0x7117:
                             CurrentArea = Area.Menus.Alliance;
                             break;
-                        case 0xf31c:
+                        case 0x42e3:
                             CurrentArea = Area.Menus.Gifts;
                             break;
-                        case 0xdd22:
+                        case 0x6b0d:
                             CurrentArea = Area.Menus.AllianceHelp;
                             break;
-                        case 0x53d3:
+                        case 0xc1a6:
                             CurrentArea = Area.Menus.AllianceWar;
                             break;
-                        case 0xbf5d:
+                        case 0xbb6b:
                             CurrentArea = Area.Menus.Challenge;
                             break;
-                        case 0x229a:
+                        case 0x474c:
                             CurrentArea = Area.Menus.Deployments;
                             break;
-                        case 0x9bd4:
+                        case 0xcecf:
                             CurrentArea = Area.Menus.March;
                             break;
-                        case 0x4901:
+                        case 0x3d9c:
                             CurrentArea = Area.Menus.Boost;
                             break;
-                        case 0xf0d5:
+                        case 0x628d:
                             CurrentArea = Area.Menus.Boosts.PeaceShield;
                             break;
-                        case 0xafea:
+                        case 0x9442:
                             CurrentArea = Area.Menus.Boosts.Attack;
                             break;
-                        case 0x7de9:
+                        case 0x548b:
                             CurrentArea = Area.Menus.Boosts.Health;
                             break;
                         case 0x0602:
@@ -67,16 +67,16 @@ namespace CodeStrikeBot
                         case 0x7c48:
                             CurrentArea = Area.Menus.Boosts.CommanderXP;
                             break;
-                        case 0x274c:
+                        case 0xe1ff:
                             CurrentArea = Area.Menus.Boosts.UpkeepReduction;
                             break;
                         case 0x464b:
                             CurrentArea = Area.Menus.Boosts.Gathering;
                             break;
-                        case 0x4f97:
+                        case 0xad7c:
                             CurrentArea = Area.Menus.Boosts.FakeForces;
                             break;
-                        case 0x5402:
+                        case 0x1586:
                             CurrentArea = Area.Menus.Boosts.AntiScout;
                             break;
                         case 0x19b3:
@@ -94,108 +94,107 @@ namespace CodeStrikeBot
                         case 0x2c0e:
                             CurrentArea = Area.Menus.Boosts.CoinProduction;
                             break;
+                        //case 0x5f49: //wheat production TODO: make new enum
                         case 0x4e99:
                             CurrentArea = Area.Menus.Boosts.TroopQueue;
                             break;
-                        case 0xee24:
+                        case 0x9b86:
                             CurrentArea = Area.Menus.Items;
                             break;
-                        case 0xc6d5:
+                        case 0xf41f:
                             CurrentArea = Area.Menus.Mission;
                             break;
                         case 0xce0f:
                             CurrentArea = Area.Menus.Missions.Base;
                             break;
-                        case 0x5b6f:
+                        case 0xe04e:
                             CurrentArea = Area.Menus.Missions.Daily;
                             break;
-                        case 0xe273:
+                        case 0x1ec8:
                             CurrentArea = Area.Menus.Missions.Alliance;
                             break;
                         case 0x7333:
                             CurrentArea = Area.Menus.Missions.VIP;
                             break;
-                        case 0x24c5:
+                        case 0x25d:
                             CurrentArea = Area.Menus.Mail;
                             break;
-                        case 0x4379:
+                        case 0x7687:
                             CurrentArea = Area.Menus.MailCompose;
                             break;
-                        case 0xf2b5:
+                        case 0x349a:
                             CurrentArea = Area.Menus.More;
                             break;
-                        case 0xead2:
+                        case 0xec89:
                             CurrentArea = Area.Menus.Account;
                             break;
-                        case 0xc90f:
+                        case 0xce7c:
                             CurrentArea = Area.Menus.CasinoLobby;
                             break;
                         case 0xa4b5: //blank menu
                             CurrentArea = Area.Menus.Casino;
                             break;
-                        case 0xab66:
+                        case 0xfd7c:
                             CurrentArea = Area.Menus.ResourceHelp;
                             break;
-                        case 0x7307:
+                        case 0x4345:
                             CurrentArea = Area.Menus.Resources;
                             break;
-                        case 0x5417:
+                        case 0xb27f:
+                        case 0x7bdc: //MP TODO: move to new enum
+                        case 0xeb6e: //hero boosts TODO: move to new enum
                             CurrentArea = Area.Menus.Commander;
                             break;
-                        case 0x3ff9:
+                        case 0x375f:
+                        case 0x5147: //comments TODO: move to new enum
                             CurrentArea = Area.Menus.Profile;
                             break;
-                        case 0x8657: //weapon
-                        case 0x29d0: //DO helmet
-                        case 0x8d23: //armor
-                        case 0x466d: //DO footwear
-                        case 0x67ce: //accessory
+                        case 0x2216: //weapon
+                        case 0x29d0: //TODO helmet
+                        case 0x8aa6: //armor
+                        case 0xbce9: //footwear
+                        case 0xd228: //accessory
                             CurrentArea = Area.Menus.Gear;
                             break;
-                        case 0xb898:
-                        case 0x45af: //vip points
+                        case 0x889e:
+                        case 0x3181: //vip points
                             CurrentArea = Area.Menus.VIP;
                             break;
-                        case 0x6db5:
+                        case 0x6224:
                             CurrentArea = Area.Menus.VIPSubscriptions;
                             break;
-                        case 0x0ed3: //get gold
-                            CurrentArea = Area.Others.Ad;
-                            break;
-                        case 0xd0b4: //attack of the flan
-                        case 0x857c: //the gem dungeon
-                            CurrentArea = Area.Menus.ShootingRanges.Main;
-                            break;
-                        case 0x5272:
-                        case 0x1a37: //upgrade building TODO move to new enum
+                        case 0x71bc:
+                        case 0xc6d7: //upgrade building TODO move to new enum
+                        case 0xafe0: //speed up building TODO move to new enum
+                        case 0x3ce3: //speed up research TODO move to new enum
                             CurrentArea = Area.Menus.BuildingList;
                             break;
-                        case 0x1224:
+                        case 0xa6c2:
                             CurrentArea = Area.Menus.Buildings.HQ;
                             break;
-                        case 0x7bfb:
+                        case 0x096f:
                             CurrentArea = Area.Menus.Buildings.Wall;
                             break;
-                        case 0x4bf0:
-                            CurrentArea = Area.Menus.Buildings.Warehouse;
-                            break;
-                        case 0xdc9b:
+                        //case 0xfd7c:
+                            //CurrentArea = Area.Menus.Buildings.Warehouse;
+                            //break;
+                        case 0x56b7:
                             CurrentArea = Area.Menus.Buildings.Radar;
                             break;
-                        case 0xeda1:
+                        case 0x5c18:
                             CurrentArea = Area.Menus.Buildings.TradingPost;
                             break;
-                        case 0xc307:
+                        case 0xfb3d:
                             CurrentArea = Area.Menus.Buildings.HallOfHeroes;
                             break;
-                        case 0xce86: //hospital ward
-                        case 0xed1d: //hospital
+                        case 0x37c5: //hospital ward
+                        case 0x4ec1: //hospital
                             CurrentArea = Area.Menus.Buildings.Hospital;
                             break;
-                        case 0x0f62: //barracks
-                        case 0xe46e: //training grounds
-                            chksum2 = ScreenState.GetScreenChecksum(bmp, 180, 240, 14);
-                            if (chksum2 == 0x4d6a)
+                        case 0x81c6: //barracks
+                        case 0x2a13: //training grounds
+                            chksum2 = ScreenState.GetScreenChecksum(bmp, 190, 85, 20);
+                            if (chksum2 == 0x54bc)
                             {
                                 CurrentArea = Area.Menus.ShootingRanges.Lobby;
                             }
@@ -204,49 +203,51 @@ namespace CodeStrikeBot
                                 CurrentArea = Area.Menus.Buildings.TrainingGrounds;
                             }
                             break;
-                        case 0x5af3:
+                        case 0x3119:
                             CurrentArea = Area.Menus.Buildings.Bank;
                             break;
-                        case 0x59f2: //research
-                        case 0xae91: //economics
-                        case 0x3ef6: //combat
-                        case 0x657a: //defense
-                        case 0x8d10: //hero
+                        case 0x9d5e: //research
+                        case 0x5648: //economics
+                        case 0xb13a: //combat
+                        case 0x5c17: //defense
+                        case 0x1803: //crafting
+                        case 0xa4dc: //hero
                             CurrentArea = Area.Menus.Buildings.Research;
                             break;
-                        case 0x70d7:
+                        case 0x121e:
                             CurrentArea = Area.Menus.Buildings.Armory;
                             break;
-                        case 0x51fa:
+                        case 0x86c3:
                             CurrentArea = Area.Menus.Buildings.Embassy;
                             break;
-                        case 0xd37c:
+                        case 0x50d2:
                             CurrentArea = Area.Menus.Buildings.WarRoom;
                             break;
-                        case 0xe17d:
+                        case 0x1c0a:
                             CurrentArea = Area.Menus.Buildings.Prison;
                             break;
-                        case 0x9dc8:
+                        case 0xfa15:
                             CurrentArea = Area.Menus.Buildings.DeathRow;
                             break;
-                        case 0xdab0:
+                        case 0x5cbb:
                             CurrentArea = Area.Menus.Buildings.Farm;
                             break;
-                        case 0x534c:
+                        case 0x730d:
                             CurrentArea = Area.Menus.Buildings.Quarry;
                             break;
-                        case 0xf4dd:
+                        case 0x70af:
                             CurrentArea = Area.Menus.Buildings.IronMine;
                             break;
-                        case 0x6600:
+                        case 0xffce:
                             CurrentArea = Area.Menus.Buildings.OilWell;
                             break;
-                        case 0x34cf:
+                        case 0xb9c6:
                             CurrentArea = Area.Menus.Buildings.Vault;
                             break;
+                        case 0x59a1: //blog TODO: make new enum
                         default:
                             chksum3 = ScreenState.GetScreenChecksum(bmp, 16, 16, 10);
-                            if (chksum3 != 0xa037)
+                            if (chksum3 != 0x3ca7)
                             {
                                 enteredGeneric = true;
                             }
@@ -268,43 +269,46 @@ namespace CodeStrikeBot
                             break;
                     }
                     break;
-                case 0xc86c: //menu loading
+                case 0xa21c: //menu loading
                     chksum2 = ScreenState.GetScreenChecksum(bmp, 160, 16, 14);
                     switch (chksum2)
                     {
-                        case 0x4169:
+                        case 0x26c1:
                             CurrentArea = Area.Menus.Alliance;
                             break;
-                        case 0x422f:
+                        case 0xb8a8:
                             CurrentArea = Area.Menus.Mission;
                             break;
-                        case 0xd29c: //logging out
+                        case 0x8af6: //logging out
                             CurrentArea = Area.Menus.Account;
                             break;
                         case 0x6caf:
                             CurrentArea = Area.Menus.Deployments;
+                            break;
+                        case 0x6b06:
+                            CurrentArea = Area.Menus.More;
                             break;
                         default:
                             enteredGeneric = true;
                             break;
                     }
                     break;
-                case 0x09f5: //menu modal
-                case 0xb191: //large modal
+                case 0xb3b7: //menu modal
+                case 0xc4a8: //large modal 
                     chksum2 = ScreenState.GetScreenChecksum(bmp, 160, 16, 14);
                     switch (chksum2)
                     {
-                        case 0x6e83:
+                        case 0xba6a:
                             //TODO: Convert this to overlay popup, see unknown0cde-6e83
                             CurrentArea = Area.Menus.Missions.ActivateVIP;
                             break;
-                        case 0x770c:
+                        case 0xef0c:
                             CurrentArea = Area.Menus.MailCompose;
                             break;
                         case 0x9e8c: //log out
                             CurrentArea = Area.Menus.Account;
                             break;
-                        case 0x49ef: //donation confirmation
+                        case 0x2e14: //donation confirmation
                             CurrentArea = Area.Menus.ResourceHelp;
                             break;
                         case 0xec6f: //rss use confirmation
@@ -343,19 +347,30 @@ namespace CodeStrikeBot
                         case 0xbe95:
                             CurrentArea = Area.Menus.Casino;
                             break;
+                        case 0xdccc:
+                            CurrentArea = Area.Menus.Profile;
+                            break;
                         default:
-                            enteredGeneric = true;
+                            chksum3 = ScreenState.GetScreenChecksum(bmp, 60, 120, 20);
+                            if (chksum3 == 0xf2c6)
+                            {
+                                CurrentArea = Area.Menus.ShootingRanges.NormalCrate;
+                            }
+                            else
+                            {
+                                enteredGeneric = true;
+                            }
                             break;
                     }
                     break;
-                case 0xf362:
-                case 0x2f94: //loading
+                case 0xfa80:
+                case 0x0: //syncing/loading
                     CurrentArea = Area.MainBases.Main;
                     break;
-                case 0x35a3: //realm map
-                case 0xf9e3: //monster modal
+                case 0xe608: //realm map
+                case 0x9aa8: //monster modal
                     chksum2 = ScreenState.GetScreenChecksum(bmp, 366, 16, 10);
-                    if (chksum2 == 0xa71b)
+                    if (chksum2 == 0x8687)
                     {
                         CurrentArea = Area.StateMaps.Main;
                     }
@@ -364,39 +379,29 @@ namespace CodeStrikeBot
                         CurrentArea = Area.StateMaps.FullScreen;
                     }
                     break;
-                case 0xeebc: //memu
+                case 0xcd83: //memu
                     CurrentArea = Area.Emulators.Loading;
                     break;
-                case 0xf07d:
+                case 0x452e:
                     CurrentArea = Area.Emulators.Android;
                     break;
-                case 0x3dfc:
-                case 0xcf9d: //loading
-                case 0x643b: //gray screen
+                case 0x3023:
+                case 0x79c7: //loading
+                case 0xfecf: //gray screen
                     CurrentArea = Area.Others.Splash;
                     break;
-                case 0x2e95: //login
+                case 0xa30f: //login
+                case 0xb82e: //login modal/loading
                     CurrentArea = Area.Others.Login;
                     break;
-                case 0x8952: //login modal/loading
-                    chksum2 = ScreenState.GetScreenChecksum(bmp, 60, 120, 20);
-                    if (chksum2 == 0xbe30) //TODO: collision case: casino jackpot crate collect
-                    {
-                        CurrentArea = Area.Others.Login;
-                    }
-                    else
-                    {
-                        CurrentArea = Area.Menus.ShootingRanges.NormalCrate;
-                    }
-                    break;
-                case 0x15ef: //main base modal
+                case 0x8b68: //main base modal
                     chksum2 = ScreenState.GetScreenChecksum(bmp, 190, 115, 20);
                     switch (chksum2)
                     {
-                        case 0xda08: //secret gift uncollectable
+                        case 0x8adf: //secret gift uncollectable
                             CurrentArea = Area.MainBases.SecretGiftCollect;
                             break;
-                        case 0x18e3:
+                        case 0xca7f:
                             CurrentArea = Area.MainBases.SecretGiftCollect;
                             break;
                         case 0x7448:
@@ -407,20 +412,20 @@ namespace CodeStrikeBot
                             break;
                     }
                     break;
-                case 0x69ce: //realm map modal
+                case 0xaa34: //realm map modal
                     chksum2 = ScreenState.GetScreenChecksum(bmp, 215, 235, 10);
                     if (chksum2 == 0x3702)
                     {
                         CurrentArea = Area.StateMaps.CoordinateError;
                     }
-                    else if (chksum2 == 0xeb3d)
+                    else if (chksum2 == 0x8924)
                     {
                         CurrentArea = Area.StateMaps.Coordinate;
                     }
                     else
                     {
                         chksum3 = ScreenState.GetScreenChecksum(bmp, 366, 16, 10);
-                        if (chksum3 == 0x630e)
+                        if (chksum3 == 0xe394)
                         {
                             CurrentArea = Area.StateMaps.Main;
                         }
@@ -434,20 +439,20 @@ namespace CodeStrikeBot
                         }
                     }
                     break;
-                case 0x2c4c: //black screen
+                case 0xbf9a: //black screen
                     chksum2 = ScreenState.GetScreenChecksum(bmp, 190, 115, 20);
-                    if (chksum2 == 0x4489) //notice
+                    if (chksum2 == 0xf1db) //notice
                     {
                         chksum3 = ScreenState.GetScreenChecksum(bmp, 190, 150, 20);
-                        if (chksum3 == 0x7bcf) //session timeout
+                        if (chksum3 == 0x2f3a) //session timeout
                         {
                             CurrentArea = Area.Others.SessionTimeout;
                         }
                     }
                     break;
-                case 0xef49: //guild chat
-                case 0x5fcf: //realm chat
-                case 0xc2a2: //contacts
+                case 0xdb15: //guild chat
+                case 0x59f8: //realm chat
+                case 0xcdf8: //contacts
                     CurrentArea = Area.Others.Chat;
                     break;
             }
@@ -546,7 +551,7 @@ namespace CodeStrikeBot
                 }
 
                 chksum = ScreenState.GetScreenChecksum(bmp, 352, 545, 20);
-                if (chksum == 0xab54)
+                if (chksum == 0xdd80)
                 {
                     Overlays.Add(Overlay.Widgets.AllianceHelp);
                 }
@@ -569,57 +574,22 @@ namespace CodeStrikeBot
                 c = bmp.GetPixel(275, 535);
                 //Rectangle(4, 489, 63, 18)
                 //if (Math.Abs(c.R - c.G) <= 11 && (c.Within(157, 156, 155, 28) || c2.Within(165, 162, 156, 28)) && 
-                if (ScreenState.BlackBoxExists(bmp, new Rectangle(4, 588, 51, 18), Color.FromArgb(74, 77, 74)))
+                if (ScreenState.BlackBoxExists(bmp, new Rectangle(3, 587, 51, 18), Color.FromArgb(74, 77, 74)))
                 {
                     Overlays.Add(Overlay.Widgets.GlobalGift);
                 }
 
-                if (!ScreenState.BlackBoxExists(bmp, new Rectangle(64, 588, 51, 18), Color.FromArgb(74, 77, 74)))
+                if (!ScreenState.BlackBoxExists(bmp, new Rectangle(63, 587, 51, 18), Color.FromArgb(74, 77, 74)))
                 {
-                    Overlays.Add(Overlay.Widgets.SecretGift);
-                }
-
-                chksum = ScreenState.GetScreenChecksum(bmp, 275, 532, 10);
-                c = bmp.GetPixel(275, 535);
-                if (chksum != 0x41fa && !ScreenState.BlackBoxExists(bmp, new Rectangle(253, 562, 63, 18), Color.FromArgb(74, 77, 74)))
-                {
-                    int n = 0;
-                    for (int i = 514; i <= 544; i++)
+                    for (int i = 552; i <= 570; i++)
                     {
-                        c = bmp.GetPixel(278, i);
-                        if (c.Within(49, 83, 155, 50))
+                        c = bmp.GetPixel(91, i);
+                        //int min = 99; //Useful for debugging
+                        //min = Math.Min(min, Math.Max(Math.Max(Math.Abs(c.R - 99), Math.Abs(c.G - 97)), Math.Abs(c.B - 99)));
+                        if (c.Within(99, 97, 99, 8))
                         {
-                            n++;
-                        }
-                    }
-                    if (n > 6)
-                    {
-                        n = 0;
-                        for (int i = 514; i <= 544; i++)
-                        {
-                            c = bmp.GetPixel(298, i);
-                            if (c.Within(49, 83, 155, 50))
-                            {
-                                n++;
-                            }
-                        }
-
-                        if (n > 6)
-                        {
-                            n = 0;
-                            for (int i = 514; i <= 544; i++)
-                            {
-                                c = bmp.GetPixel(286, i);
-                                if (Math.Abs(c.G - c.R) < 18 && Math.Abs(c.B - c.G) < 18 && c.R < 80 && c.G < 80 && c.B < 80)
-                                {
-                                    n++;
-                                }
-                            }
-
-                            if (n > 7)
-                            {
-                                Overlays.Add(Overlay.Widgets.SecretGift);
-                            }
+                            Overlays.Add(Overlay.Widgets.SecretGift);
+                            break;
                         }
                     }
                 }
@@ -635,7 +605,7 @@ namespace CodeStrikeBot
                     Overlays.Add(Overlay.Widgets.RewardsCrate);
                 }
                 
-                if (ScreenState.BlackBoxExists(bmp, new Rectangle(249, 590, 51, 16), Color.FromArgb(74, 77, 74))) //DIFF ff
+                if (ScreenState.BlackBoxExists(bmp, new Rectangle(248, 589, 51, 16), Color.FromArgb(74, 77, 74))) //DIFF ff
                 {
                     Overlays.Add(Overlay.Widgets.AmmoFreeAttack);
                 }
@@ -643,23 +613,23 @@ namespace CodeStrikeBot
             else if (CurrentArea == Area.StateMaps.Main || CurrentArea == Area.StateMaps.FullScreen)
             {
                 chksum = ScreenState.GetScreenChecksum(bmp, 352, 545, 20);
-                if (chksum == 0xab54)
+                if (chksum == 0xdd80)
                 {
                     Overlays.Add(Overlay.Widgets.AllianceHelp);
                 }
 
                 chksum = ScreenState.GetScreenChecksum(bmp, 54, 198, 10);
-                if (chksum == 0xce01)
+                if (chksum == 0xcadb)
                 {
                     Overlays.Add(Overlay.Dialogs.Tiles.Empty);
                 }
                 else
                 {
                     chksum = ScreenState.GetScreenChecksum(bmp, 40, 107, 10);
-                    if (chksum == 0x0ce0)
+                    if (chksum == 0x63bd)
                     {
                         c = bmp.GetPixel(195, 233);
-                        if (c.Equals(8, 235, 255))
+                        if (c.Equals(0, 186, 255))
                         {
                             Overlays.Add(Overlay.Dialogs.Tiles.PlayerFriend);
                         }
@@ -671,28 +641,28 @@ namespace CodeStrikeBot
                     else
                     {
                         chksum = ScreenState.GetScreenChecksum(bmp, 54, 71, 10);
-                        if (chksum == 0xce01)
+                        if (chksum == 0x3dec)
                         {
                             Overlays.Add(Overlay.Dialogs.Tiles.RssOpen);
                         }
                         else
                         {
                             chksum = ScreenState.GetScreenChecksum(bmp, 23, 18, 10);
-                            if (chksum == 0x10f3)
+                            if (chksum == 0x371b)
                             {
                                 Overlays.Add(Overlay.Dialogs.Tiles.Rebel);
                             }
                             else
                             {
                                 chksum = ScreenState.GetScreenChecksum(bmp, 54, 128, 10);
-                                if (chksum == 0x8fdc)
+                                if (chksum == 0x1b93)
                                 {
                                     Overlays.Add(Overlay.Dialogs.Tiles.Warzone);
                                 }
                                 else
                                 {
                                     chksum = ScreenState.GetScreenChecksum(bmp, 54, 128, 10);
-                                    if (chksum == 0xce01)
+                                    if (chksum == 0x6b6e)
                                     {
                                         Overlays.Add(Overlay.Dialogs.Tiles.ControlPoint);
                                     }
@@ -727,14 +697,13 @@ namespace CodeStrikeBot
                 }
             }
 
-            chksum = ScreenState.GetScreenChecksum(bmp, 190, 105, 10);
-            if (chksum == 0xaea3) //popup
+            chksum = ScreenState.GetScreenChecksum(bmp, 190, 104, 10);
+            if (chksum == 0x7cf6) //popup
             {
                 chksum = ScreenState.GetScreenChecksum(bmp, 190, 115, 20);
                 switch (chksum)
                 {
-                    case 0x3795:
-                    case 0xbf0a:
+                    case 0xf674:
                         // TODO: Remove, debugging
                         chksum = ScreenState.GetScreenChecksum(bmp, 67, 16, 4);
                         ushort chksum2 = ScreenState.GetScreenChecksum(bmp, 160, 16, 14);
@@ -746,7 +715,7 @@ namespace CodeStrikeBot
                         }
                         Overlays.Add(Overlay.Dialogs.Popups.TransferConfirmation);
                         break;
-                    case 0x043b:
+                    case 0xdc05: //max limit
                         Overlays.Add(Overlay.Dialogs.Popups.MaxDeployments);
                         break;
                     case 0x7a0f:
@@ -755,27 +724,28 @@ namespace CodeStrikeBot
                     case 0xff64:
                         Overlays.Add(Overlay.Dialogs.Popups.AreYouSure);
                         break;
-                    case 0x5065:
+                    case 0xfb47:
                         Overlays.Add(Overlay.Dialogs.Popups.LoginFailed);
                         break;
-                    case 0x1d4c: //notice
+                    case 0xba61: //notice
                         chksum = ScreenState.GetScreenChecksum(bmp, 190, 150, 20);
-                        if (chksum == 0xaae6)
+                        switch (chksum)
                         {
-                            Overlays.Add(Overlay.Dialogs.Popups.ConnectionInterrupted);
+                            case 0x8a67: //march may have not sent due to internet connection
+                                Overlays.Add(Overlay.Dialogs.Popups.ConnectionInterrupted);
+                                break;
+                            default:
+                                Overlays.Add(Overlay.Dialogs.Popups.Unknown);
+                                break;
                         }
-                            //91f8 //google play error
-                            //057d //quest timer not completed
-                            //9fd6 //cannot attack allied base
-                            //3884 //nsf rss
-                        else
-                        {
-                            Overlays.Add(Overlay.Dialogs.Popups.Unknown);
-                        }
+                             //google play error
+                             //quest timer not completed
+                             //cannot attack allied base
+                             //nsf rss
                         break;
-                    case 0xce2f: //tip!
+                    case 0xb3aa: //tip!
                         chksum = ScreenState.GetScreenChecksum(bmp, 190, 150, 20);
-                        if (chksum == 0x8772) //warning troops attacking outside base are not saved by hospital
+                        if (chksum == 0x003e) //warning troops attacking outside base are not saved by hospital
                         {
                             Overlays.Add(Overlay.Dialogs.Popups.WarningOutsideAttack);
                         }
@@ -784,7 +754,7 @@ namespace CodeStrikeBot
                             Overlays.Add(Overlay.Dialogs.Popups.Unknown);
                         }
                         break;
-                    case 0xd856: //scout
+                    case 0x49ac: //scout
                         chksum = ScreenState.GetScreenChecksum(bmp, 190, 150, 20);
                         if (chksum == 0x68e1) //scout not unlocked 
                         {
@@ -795,7 +765,7 @@ namespace CodeStrikeBot
                             Overlays.Add(Overlay.Dialogs.Popups.Unknown);
                         }
                         break;
-                    case 0xa3f7:
+                    case 0x54db:
                         Overlays.Add(Overlay.Dialogs.Popups.ReplaceBoost);
                         break;
                     case 0xe495:
@@ -810,12 +780,12 @@ namespace CodeStrikeBot
             chksum = ScreenState.GetScreenChecksum(bmp, 200, 660, 10);
             //c = bmp.GetPixel(213, 664); //DIFF MS
             //if (c.Equals(24, 130, 16) || c.Equals(0, 28, 0)) //DIFF MS
-            if (chksum == 0x980f || chksum == 0x5bf8)
+            if (chksum == 0x2bd0 || chksum == 0x4dde)
             {
                 Overlays.Add(Overlay.Widgets.AllianceGift);
             }
 
-            c = bmp.GetPixel(128, 653);
+            c = bmp.GetPixel(132, 652);
             if (c.Equals(231, 4, 82))
             {
                 Overlays.Add(Overlay.Widgets.MissionsAvailable);

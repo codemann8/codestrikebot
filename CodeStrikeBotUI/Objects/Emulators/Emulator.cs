@@ -620,7 +620,7 @@ namespace CodeStrikeBot
                     ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 350, 655, 10);
 
                     //while ((chksum != 0x56c9 && chksum != 0xa0ba && chksum != 0x1ae8) && tmrRun.ElapsedMilliseconds < 5000) //DIFF MS
-                    while (chksum != 0x4fba && tmrRun.ElapsedMilliseconds < 5000) //DIFF FF
+                    while (chksum != 0x9f3c && tmrRun.ElapsedMilliseconds < 5000) //DIFF FF
                     {
                         if (ScreenState.CurrentArea == Area.Others.Splash)
                         {
@@ -633,7 +633,7 @@ namespace CodeStrikeBot
                     }
 
                     //if (chksum == 0x56c9 || chksum == 0xa0ba) //DIFF MS
-                    if (chksum == 0x4fba) //DIFF FF
+                    if (chksum == 0x9f3c) //DIFF FF
                     {
                         tmrRun.Restart();
 
@@ -771,7 +771,7 @@ namespace CodeStrikeBot
                     Controller.CaptureApplication(this);
 
                     ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 88, 216, 20);//DIFF ff
-                    if (chksum != 0x5921) //nox, if email has been previously entered
+                    if (chksum != 0xaaf6 && chksum != 0xf8de) //nox, if email has been previously entered
                     {
                         while (!KillApp()) { }
                         {
@@ -782,7 +782,7 @@ namespace CodeStrikeBot
                     }
 
                     chksum = ScreenState.GetScreenChecksum(SuperBitmap, 88, 263, 20);//DIFF ff
-                    if (chksum != 0x5921) //nox, if password has been previously entered
+                    if (chksum != 0xaaf6 && chksum != 0xe48d) //nox, if password has been previously entered
                     {
                         while (!KillApp()) { }
                         {
@@ -801,9 +801,9 @@ namespace CodeStrikeBot
                         Controller.SendKey(this, account.Email);
                         Thread.Sleep((int)((500 * (tries / 2.0 + 1)) * TimeoutFactor));
                         Controller.CaptureApplication(this);
-                        chksum = ScreenState.GetScreenChecksum(SuperBitmap, 82, 216, 20);//DIFF ff
+                        chksum = ScreenState.GetScreenChecksum(SuperBitmap, 88, 216, 20);//DIFF ff
                     }
-                    while ((chksum == 0xe182 || chksum == 0x55ac) && tmrRun.ElapsedMilliseconds < 50000);//DIFF ff
+                    while ((chksum == 0xaaf6 || chksum == 0xf8de) && tmrRun.ElapsedMilliseconds < 50000);//DIFF ff
                     
                     tmrRun.Restart();
 
@@ -814,9 +814,9 @@ namespace CodeStrikeBot
                         Controller.SendKey(this, account.Password);
                         Thread.Sleep((int)((500 * (tries / 2.0 + 1)) * TimeoutFactor));
                         Controller.CaptureApplication(this);
-                        chksum = ScreenState.GetScreenChecksum(SuperBitmap, 82, 263, 20);//DIFF ff
+                        chksum = ScreenState.GetScreenChecksum(SuperBitmap, 88, 263, 20);//DIFF ff
                     }
-                    while ((chksum == 0xe182 || chksum == 0x55ac) && tmrRun.ElapsedMilliseconds < 50000);//DIFF ff
+                    while ((chksum == 0xaaf6 || chksum == 0xe48d) && tmrRun.ElapsedMilliseconds < 50000);//DIFF ff
 
                     Controller.CaptureApplication(this);
                     chksum = ScreenState.GetScreenChecksum(SuperBitmap, 188, 304, 20);
@@ -843,7 +843,7 @@ namespace CodeStrikeBot
                             Controller.CaptureApplication(this);
                             chksum = ScreenState.GetScreenChecksum(SuperBitmap, 188, 304, 20);
                         }
-                        while (chksum == 0x9dc3);
+                        while (chksum == 0xd0b2);
 
                         Thread.Sleep(300);
                         Controller.CaptureApplication(this);
@@ -1640,7 +1640,7 @@ namespace CodeStrikeBot
                         Controller.SendClick(this, 345, 250, 600); //click gifts
                     }
                     //else if (ScreenState.CurrentArea == Area.Menus.Gifts && c.Equals(57, 121, 140)) //clear gifts button is available //DIFF MS
-                    else if (ScreenState.CurrentArea == Area.Menus.Gifts && chksum == 0xa3c4) //clear gifts button is available
+                    else if (ScreenState.CurrentArea == Area.Menus.Gifts && chksum == 0xa788) //clear gifts button is available
                     {
                         /* //DIFF MS
                         c = SuperBitmap.GetPixel(200, 175);
@@ -1683,13 +1683,13 @@ namespace CodeStrikeBot
                         {
                             chksum = ScreenState.GetScreenChecksum(this.SuperBitmap, 344, p, 20);
 
-                            if (chksum == 0x6247)
+                            if (chksum == 0x5291)
                             {
                                 //open
                                 Controller.SendClick(this, 335, p, 100);
                                 p = 586;
                             }
-                            else if (chksum == 0x0447)
+                            else if (chksum == 0xa6e4)
                             {
                                 //clear
                             }
@@ -1715,7 +1715,7 @@ namespace CodeStrikeBot
                     SuperBitmap.Bitmap.Save(String.Format("{0}\\-save.bmp", Controller.Instance.GetFullScreenshotDir()), System.Drawing.Imaging.ImageFormat.Bmp);
 
                     //if (ScreenState.CurrentArea == Area.Menus.Gifts && SuperBitmap.GetPixel(335, 175).Equals(57, 121, 140)) //clear gifts button is available //DIFF MS
-                    if (ScreenState.CurrentArea == Area.Menus.Gifts && ScreenState.GetScreenChecksum(this.SuperBitmap, 190, 98, 20) == 0xa3c4) //clear gifts button is available
+                    if (ScreenState.CurrentArea == Area.Menus.Gifts && ScreenState.GetScreenChecksum(this.SuperBitmap, 190, 98, 20) == 0xa788) //clear gifts button is available
                     {
                         giftsLeft = true;
                         Controller.SendClick(this, 335, 105, 100); //click Clear all
@@ -1756,7 +1756,7 @@ namespace CodeStrikeBot
 
                             //if (chksum != 0x2995 && chksum != 0x1583) //missions available
                             //if (chksum != 0x3900 && chksum != 0x5f0f && chksum != 0xfc2d) //DIFF MS
-                            if (chksum != 0x2459) //DIFF FF
+                            if (chksum != 0x3793) //DIFF FF
                             {
                                 //c = SuperBitmap.GetPixel(101, (int)Math.Round(240 + 91.5 * m)); //DIFF MS
                                 c = SuperBitmap.GetPixel(330, 492 + 53 * m); //DIFF FF
@@ -1769,7 +1769,7 @@ namespace CodeStrikeBot
 
                                     //no missions running
                                     //Controller.SendClick(this, 200, 250 + 91 * m, 300); //DIFF MS
-                                    Controller.SendClick(this, 200, 490 + 53 * m, 300); //DIFF FF
+                                    Controller.SendClick(this, 200, 488 + 53 * m, 300); //DIFF FF
                                     break;
                                 }
                             }
@@ -1811,11 +1811,11 @@ namespace CodeStrikeBot
                         {
                             chksum = ScreenState.GetScreenChecksum(SuperBitmap, 363, (int)Math.Round(138.45 + 52.1 * m) + vipOffset, 10);
 
-                            if (chksum == 0x89b8) //quest in progress
+                            if (chksum == 0x1a65) //quest in progress
                             {
                                 break;
                             }
-                            else if (chksum == 0x399b)
+                            else if (chksum == 0x90ba)
                             {
                                 //collect quest
                                 clicked = true;
@@ -1829,7 +1829,7 @@ namespace CodeStrikeBot
                             //    Thread.Sleep(50);
                             //    break;
                             //}
-                            else if (chksum == 0x739b)
+                            else if (chksum == 0x0d86)
                             {
                                 //start mission
                                 clicked = true;
@@ -1872,6 +1872,10 @@ namespace CodeStrikeBot
                             {
                                 clicked = true;
                                 Thread.Sleep(50);
+                                break;
+                            }
+                            else
+                            {
                                 break;
                             }
                         }
@@ -2082,11 +2086,11 @@ namespace CodeStrikeBot
                         {
                             c = SuperBitmap.GetPixel(200, i);
 
-                            if (c.Equals(8, 235, 255))
+                            if (c.Equals(0, 186, 255))
                             {
                                 chksum = ScreenState.GetScreenChecksum(SuperBitmap, 195, i + 5, 20);
 
-                                if (chksum == 0x7899)
+                                if (chksum == 0x65be)
                                 {
                                     offset = i + 10;
                                 }
@@ -2100,7 +2104,7 @@ namespace CodeStrikeBot
                         {
                             int p = 0;
 
-                            Color coinColor = Color.FromArgb(165, 162, 165); //coin color
+                            Color coinColor = Color.FromArgb(115, 117, 115); //coin color
                             //Color foodColor = Color.FromArgb(198, 125, 16);
 
                             watch.Restart();
@@ -2144,7 +2148,8 @@ namespace CodeStrikeBot
                                         break;
                                     case ScheduleType.IronTransfer:
                                         //p = 350; //DIFF MS
-                                        p = 240;
+                                        //p = 240;
+                                        p = 310; //adjusting for lv16
                                         break;
                                     case ScheduleType.FoodTransfer:
                                         /* DIFF MS
@@ -2160,7 +2165,8 @@ namespace CodeStrikeBot
                                                 break;
                                             }
                                         }*/
-                                        p = 310;
+                                        //p = 310;
+                                        p = 386; //adjusting for lv16
                                         break;
                                     case ScheduleType.WheatTransfer:
                                         p = 386;
@@ -2212,7 +2218,7 @@ namespace CodeStrikeBot
                                                     }*/
 
                                                     //Controller.SendClick(this, 285, p, 100); //click white box
-                                                    Controller.SendClick(this, 300, p, 150); //click white box
+                                                    Controller.SendClick(this, 300, p, 180); //click white box
                                                     Controller.CaptureApplication(this);
                                                     c = SuperBitmap.GetPixel(230, 675);
                                                 }
@@ -2527,33 +2533,35 @@ namespace CodeStrikeBot
 
                     while (!found && watch.ElapsedMilliseconds < 2500)
                     {
-                        ushort chkType = 0;
+                        ushort chkType = 0, chkTypeOn = 0;
                         switch (type)
                         {
                             case ScheduleType.Shield:
                                 //chkType = 0x4b1a; //DIFF MS
-                                chkType = 0x89de;
+                                chkType = 0x76a3;
+                                chkTypeOn = 0x1792;
                                 break;
                             case ScheduleType.AntiScout:
                                 //chkType = 0x1dd5; //DIFF MS
-                                chkType = 0x02d5;
+                                chkType = 0x0b45;
+                                chkTypeOn = 0x4a79;
                                 break;
                             case ScheduleType.UpkeepReduction:
                                 //chkType = 0xdb1e; //DIFF MS
-                                chkType = 0xe629;
+                                chkType = 0x9359;
                                 break;
                             case ScheduleType.Health:
                                 //chkType = 0x656a; //DIFF MS
-                                chkType = 0x13d8;
+                                chkType = 0x2b15;
                                 break;
                             case ScheduleType.Defense:
-                                chkType = 0x3d9e;
+                                chkType = 0x0;
                                 break;
                             case ScheduleType.Milestone:
-                                chkType = 0xb5d2;
+                                chkType = 0x0;
                                 break;
                             case ScheduleType.EliteRebelTarget:
-                                chkType = 0x7831;
+                                chkType = 0x0;
                                 break;
                         }
 
@@ -2571,7 +2579,7 @@ namespace CodeStrikeBot
                                 chksum = ScreenState.GetScreenChecksum(SuperBitmap, 26, y, 2);
                                 Main.CurrentForm.UpdateBmpChk(SuperBitmap, 26, y, 2);
 
-                                if (chksum == chkType)
+                                if (chksum == chkType || chksum == chkTypeOn)
                                 {
                                     found = true;
                                     break;
@@ -2954,7 +2962,7 @@ namespace CodeStrikeBot
                     ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 290, 560, 10);
                     
                     //if (chksum == 0xe94d) //nox help //MS DIFF
-                    if (chksum == 0xa960) //ff DIFF
+                    if (chksum == 0x2c1f) //ff DIFF
                     {
                         //Controller.SendClick(this, 365, 565, 50); //click Help All DIFF MS
                         Controller.SendClick(this, 365, 568, 50); //click Help All DIFF ff
@@ -2982,7 +2990,7 @@ namespace CodeStrikeBot
                     tasksLeft = true;
 
                     ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 190, 225, 20);
-                    if (chksum == 0x4f25) //gift not ready
+                    if (chksum == 0x7092) //gift not ready
                     {
                         Controller.SendClick(this, 190, 370, 500); //click OK
                     }
@@ -3023,7 +3031,7 @@ namespace CodeStrikeBot
                     else
                     {
                         ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 192, 394, 20);
-                        if (chksum == 0x5192) //Free Spin
+                        if (chksum == 0x9574) //Free Spin
                         {
                             Controller.SendClick(this, 200, 405, 5000);
                         }
@@ -3085,7 +3093,7 @@ namespace CodeStrikeBot
 
                     //ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 185, 225, 10);
                     ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 188, 388, 20); //DIFF ff
-                    if (chksum == 0xe2f2) //if shooting range Collect Button (doesn't account for animated button)
+                    if (chksum == 0x674d) //if shooting range Collect Button (doesn't account for animated button)
                     {
                         //Random r = new Random();
                         //Controller.SendClick(this, 188, 415 + r.Next(0, 20), 1000); //click Collect

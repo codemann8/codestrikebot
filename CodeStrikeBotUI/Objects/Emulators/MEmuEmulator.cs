@@ -119,7 +119,7 @@ namespace CodeStrikeBot
             {
                 ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 15, 4, 20);
 
-                if (chksum == 0xa8be) //if screen is a menu
+                if (chksum == 0x133d) //if screen is a menu
                 {
                     Controller.SendClick(this, 25, 14, timeout);
                 }
