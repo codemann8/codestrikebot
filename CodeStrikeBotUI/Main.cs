@@ -2120,6 +2120,7 @@ namespace CodeStrikeBot
                                     else if (s.ScreenState.CurrentArea == Area.Others.SessionTimeout)
                                     {
                                         s.PreventFromOpening = true;
+                                        s.Emulator.LastKnownAccount = null;
                                         Controller.SendClick(s, 200, 205, 5000); //click
                                     }
                                     else if (s.ScreenState.CurrentArea == Area.Others.Quit)
