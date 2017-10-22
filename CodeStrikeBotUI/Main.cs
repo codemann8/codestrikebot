@@ -1824,10 +1824,10 @@ namespace CodeStrikeBot
                                 {
                                     ctrl.SendNotification("Scheduled tasks are past due", NotificationType.TasksPastDue);
 
-                                    foreach (Screen s in ctrl.sc)
+                                    /*foreach (Screen s in ctrl.sc)
                                     {
                                         ctrl.KillEmulator(s, false);
-                                    }
+                                    }*/
 
                                     Program.RestartApp();
                                 }
