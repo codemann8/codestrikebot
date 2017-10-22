@@ -1384,45 +1384,32 @@ namespace CodeStrikeBot
                                     command = command.Trim();
 
                                     DataObjects.Account acc = null;
+                                    Screen s = null;
 
                                     if (command.IndexOf(' ') > -1)
                                     {
                                         acc = ctrl.FindAccount(command.Substring(0, command.IndexOf(' ')));
-                                        command = command.Substring(0, command.IndexOf(' ') - 1);
+                                        command = command.Substring(command.IndexOf(' ') + 1).Trim();
+                                        int screenNum = Int32.Parse(command) - 1;
+
+                                        if (screenNum >= 0 && screenNum < ctrl.sc.Length)
+                                        {
+                                            s = ctrl.sc[screenNum];
+                                        }
                                     }
                                     else
                                     {
                                         acc = ctrl.FindAccount(command);
-                                        command = "";
+                                        s = ctrl.GetNextWindow(acc);
                                     }
 
-                                    if (acc != null)
+                                    if (acc != null && s != null && s.EmulatorProcess != null)
                                     {
-                                        Screen s = null;
-
-                                        if (command == "")
-                                        {
-                                            s = ctrl.GetNextWindow(acc);
-                                        }
-                                        else
-                                        {
-                                            command = command.Trim();
-                                            int screenNum = Int32.Parse(command) - 1;
-
-                                            if (screenNum >= 0 && screenNum < ctrl.sc.Length)
-                                            {
-                                                s = ctrl.sc[screenNum];
-                                            }
-                                        }
-
-                                        if (s != null && s.EmulatorProcess != null)
-                                        {
-                                            ctrl.BeginTask();
-                                            ctrl.Logout(s);
-                                            ctrl.StartApp(s);
-                                            ctrl.Login(s, acc);
-                                            ctrl.EndTask();
-                                        }
+                                        ctrl.BeginTask();
+                                        ctrl.Logout(s);
+                                        ctrl.StartApp(s);
+                                        ctrl.Login(s, acc);
+                                        ctrl.EndTask();
                                     }
                                 }
                                 else if (command.StartsWith("shield"))
