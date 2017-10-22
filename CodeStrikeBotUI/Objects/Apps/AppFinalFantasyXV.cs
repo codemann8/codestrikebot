@@ -398,13 +398,11 @@ namespace CodeStrikeBot
                     chksum2 = ScreenState.GetScreenChecksum(bmp, 190, 115, 20);
                     switch (chksum2)
                     {
+                        case 0xca7f:
                         case 0x8adf: //secret gift uncollectable
                             CurrentArea = Area.MainBases.SecretGiftCollect;
                             break;
-                        case 0xca7f:
-                            CurrentArea = Area.MainBases.SecretGiftCollect;
-                            break;
-                        case 0x7448:
+                        case 0xac19:
                             CurrentArea = Area.MainBases.GlobalGiftCollect;
                             break;
                         default:
@@ -574,7 +572,7 @@ namespace CodeStrikeBot
                 c = bmp.GetPixel(275, 535);
                 //Rectangle(4, 489, 63, 18)
                 //if (Math.Abs(c.R - c.G) <= 11 && (c.Within(157, 156, 155, 28) || c2.Within(165, 162, 156, 28)) && 
-                if (ScreenState.BlackBoxExists(bmp, new Rectangle(3, 587, 51, 18), Color.FromArgb(74, 77, 74)))
+                if (ScreenState.BlackBoxExists(bmp, new Rectangle(4, 587, 51, 18), Color.FromArgb(74, 77, 74)))
                 {
                     Overlays.Add(Overlay.Widgets.GlobalGift);
                 }
