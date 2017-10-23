@@ -391,8 +391,18 @@ namespace CodeStrikeBot
                     CurrentArea = Area.Others.Splash;
                     break;
                 case 0xa30f: //login
-                case 0xb82e: //login modal/loading
                     CurrentArea = Area.Others.Login;
+                    break;
+                case 0xb82e: //login modal/loading
+                    chksum2 = ScreenState.GetScreenChecksum(bmp, 70, 120, 20);
+                    if (chksum2 == 0x54e6) //TODO: collision case: casino jackpot crate collect
+                    {
+                        CurrentArea = Area.Menus.ShootingRanges.NormalCrate;
+                    }
+                    else
+                    {
+                        CurrentArea = Area.Others.Login;
+                    }
                     break;
                 case 0x8b68: //main base modal
                     chksum2 = ScreenState.GetScreenChecksum(bmp, 190, 115, 20);
@@ -702,6 +712,7 @@ namespace CodeStrikeBot
                 switch (chksum)
                 {
                     case 0xf674:
+                    case 0x0a72:
                         // TODO: Remove, debugging
                         chksum = ScreenState.GetScreenChecksum(bmp, 67, 16, 4);
                         ushort chksum2 = ScreenState.GetScreenChecksum(bmp, 160, 16, 14);
