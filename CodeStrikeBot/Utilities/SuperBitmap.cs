@@ -72,7 +72,6 @@ namespace CodeStrikeBot
 
         public ushort Checksum(int x, int y, int w, int h)
         {
-
             byte[] bytes;
             Bitmap bmp = new Bitmap(w, h);
 

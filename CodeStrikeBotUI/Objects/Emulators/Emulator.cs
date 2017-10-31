@@ -20,6 +20,7 @@ namespace CodeStrikeBot
         public Process EmulatorProcess { get; set; }
         public Rect WindowRect { get; set; }
         public DataObjects.EmulatorInstance Emulator { get; set; }
+        public Thread Thread { get; set; }
 
         public double TimeoutFactor;
         public SuperBitmap SuperBitmap;
@@ -34,14 +35,513 @@ namespace CodeStrikeBot
 
         public bool skipMissions, skipRewards, skipVault;
 
+        private bool AbortThread;
+
         public Screen(DataObjects.EmulatorInstance emulator)
         {
-            
+            CreateRoutine("AutoActions");
         }
 
         public Screen(string windowName)
         {
+            CreateRoutine("AutoActions");
+        }
 
+        public void AbortRoutine(int delay = 0)
+        {
+            Thread.Sleep(delay);
+            DateTime cur = DateTime.Now;
+
+            AbortThread = true;
+
+            while (Thread.IsAlive && DateTime.Now.Subtract(cur).TotalSeconds < 60)
+            {
+                Thread.Sleep(100);
+            }
+
+            if (Thread.IsAlive)
+            {
+                Thread.Abort();
+            }
+        }
+
+        public void CreateRoutine(string type)
+        {
+            switch (type)
+            {
+                case "AutoActions":
+                    Thread = new Thread(new ThreadStart(AutoActionsLoop));
+                    Thread.Name = "AutoActions";
+                    break;
+                case "RegularTasks":
+                    Thread = new Thread(new ThreadStart(RegularTasks));
+                    Thread.Name = "RegularTasks";
+                    break;
+                case "ScheduledTask":
+                    Thread = new Thread(new ParameterizedThreadStart(ExecuteTask));
+                    Thread.Name = "ScheduledTask";
+                    break;
+            }
+            Thread.IsBackground = true;
+            AbortThread = false;
+        }
+
+        public void ExecuteTask(object t)
+        {
+            DataObjects.ScheduleTask task = (DataObjects.ScheduleTask)t;
+            bool success = false;
+
+            try
+            {
+                SpeedTest();
+
+                Stopwatch tmrRun = new Stopwatch();
+
+                tmrRun.Start();
+
+                if (Emulator.LastKnownAccount != null && Emulator.LastKnownAccount.Id == task.Account.Id && PreventFromOpening)
+                {
+                    PreventFromOpening = false;
+                    Emulator.LastKnownAccount = null;
+                }
+
+                while ((Emulator.LastKnownAccount == null || Emulator.LastKnownAccount.Id != task.Account.Id) && tmrRun.ElapsedMilliseconds < 70000)
+                {
+                    //TODO: move this retry logic and Emulator save to logout logic
+                    while (!Logout() && tmrRun.ElapsedMilliseconds < 20000) { }
+
+                    if (tmrRun.ElapsedMilliseconds < 20000 && Emulator.LastKnownAccount != null && Emulator.LastKnownAccount.Id != 0)
+                    {
+                        Emulator.LastKnownAccount.LastLogout = DateTime.Now;
+                        Emulator.LastKnownAccount.Save();
+                        Emulator.LastKnownAccount = null;
+                        Emulator.Save();
+                    }
+
+                    StartApp();
+
+                    Controller.CaptureApplication(this);
+                    if (ScreenState.CurrentArea == Area.Others.Login)
+                    {
+                        //TODO: move below code block to login logic
+                        if (task.Account != null && task.Account.Email != null && Login(task.Account))
+                        {
+                            task.Account.LastLogin = DateTime.Now;
+                            task.Account.LastLogout = task.Account.LastLogin;
+                            task.Account.Save();
+                            Emulator.LastKnownAccount = task.Account;
+                            Emulator.Save();
+                        }
+                    }
+                    else
+                    {
+                        Emulator.LastKnownAccount = task.Account;
+                        Emulator.Save();
+                    }
+                }
+
+                if (Emulator.LastKnownAccount != null && Emulator.LastKnownAccount.Id == task.Account.Id)
+                {
+                    switch (task.Type)
+                    {
+                        case ScheduleType.StoneTransfer:
+                        case ScheduleType.OilTransfer:
+                        case ScheduleType.IronTransfer:
+                        case ScheduleType.FoodTransfer:
+                        case ScheduleType.CoinTransfer:
+                        case ScheduleType.WheatTransfer:
+                        case ScheduleType.EssenseTransfer:
+                        case ScheduleType.GraniteTransfer:
+                        case ScheduleType.LeadTransfer:
+                        case ScheduleType.CoinT2Transfer:
+                            success = ResourceTransfer(task);
+                            break;
+                        case ScheduleType.Shield:
+                        case ScheduleType.AntiScout:
+                            success = ActivateBoost(task);
+                            if (!success)
+                            {
+                                Controller.Instance.SendNotification(String.Format("Failed to activate {0} on {1}", task.Type.ToString(), task.Account.ToString()), NotificationType.BoostActivationFail);
+                            }
+                            break;
+                        case ScheduleType.ActivateVIP:
+                            success = ActivateVIP(task.Amount);
+                            break;
+                        case ScheduleType.Login:
+                            success = true;
+                            break;
+                    }
+
+                    if (success)
+                    {
+                        task.LastAction = DateTime.Now;
+                        task.Save();
+                    }
+                    else
+                    {
+                        //TODO Slow mode
+                        TimeoutFactor = 1.0;
+                    }
+                }
+
+                tmrRun.Stop();
+            }
+            catch (Exception e)
+            {
+                BotDatabase.InsertLog(0, String.Format("{0} {1}", e.GetType(), e.Message), e.StackTrace, new byte[1] { 0x0 });
+                Controller.Instance.SendNotification(String.Format("Scheduler Crash {0} {1}", e.GetType(), e.Message), NotificationType.Crash);
+            }
+        }
+
+        public void RegularTasks()
+        {
+            Stopwatch tmrRun = new Stopwatch();
+
+            bool tasksLeft = true;
+
+            bool failed = false;
+
+            if (TimeoutFactor == 1.0)
+            {
+                SpeedTest();
+            }
+
+            tmrRun.Start();
+
+            while (!AbortThread && tasksLeft && tmrRun.ElapsedMilliseconds < 10000)
+            {
+                tasksLeft = false;
+
+                if (this != null && EmulatorProcess != null)
+                {
+                    if (GoToBaseOrMapStep())
+                    {
+                        tasksLeft = true;
+                    }
+                }
+            }
+
+            if (tmrRun.ElapsedMilliseconds < 10000)
+            {
+                tasksLeft = true;
+
+                tmrRun.Restart();
+
+                while (!AbortThread && tasksLeft && tmrRun.ElapsedMilliseconds < 20000)
+                {
+                    tasksLeft = false;
+
+                    if (this != null && EmulatorProcess != null)
+                    {
+                        Controller.CaptureApplication(this);
+
+                        //go to world view
+                        if (ScreenState.CurrentArea != Area.StateMaps.Main && !(ScreenState.CurrentArea == Area.Others.Login || ScreenState.CurrentArea == Area.Emulators.Android || ScreenState.CurrentArea == Area.Emulators.Loading || ScreenState.CurrentArea == Area.Others.Splash || ScreenState.CurrentArea == Area.Emulators.Crash || ScreenState.CurrentArea == Area.Emulators.TaskManager || ScreenState.CurrentArea == Area.Emulators.TaskManagerApp || ScreenState.CurrentArea == Area.Emulators.TaskManagerRemove))
+                        {
+                            tasksLeft = true;
+                            Controller.SendClick(this, 40, 675, 400); //click World
+                        }
+                    }
+                }
+
+                if (tmrRun.ElapsedMilliseconds < 20000)
+                {
+                    tasksLeft = true;
+
+                    tmrRun.Restart();
+
+                    while (!AbortThread && tasksLeft && tmrRun.ElapsedMilliseconds < 10000)
+                    {
+                        tasksLeft = false;
+
+                        if (!AbortThread && this != null && EmulatorProcess != null)
+                        {
+                            Controller.CaptureApplication(this);
+
+                            if (ScreenState.CurrentArea == Area.Others.Quit)
+                            {
+                                tasksLeft = true;
+                                ClickBack(500);
+                            }
+                            else if (ScreenState.CurrentArea != Area.MainBases.Main && !(ScreenState.CurrentArea == Area.Others.Login || ScreenState.CurrentArea == Area.Emulators.Android || ScreenState.CurrentArea == Area.Emulators.Loading || ScreenState.CurrentArea == Area.Others.Splash || ScreenState.CurrentArea == Area.Emulators.Crash || ScreenState.CurrentArea == Area.Emulators.TaskManager || ScreenState.CurrentArea == Area.Emulators.TaskManagerApp || ScreenState.CurrentArea == Area.Emulators.TaskManagerRemove))
+                            {
+                                //go to base view
+                                tasksLeft = true;
+                                Controller.SendClick(this, 40, 675, 300); //click Base
+                            }
+                        }
+                    }
+
+                    if (tmrRun.ElapsedMilliseconds < 10000)
+                    {
+                        tasksLeft = true;
+
+                        tmrRun.Restart();
+
+                        if (this != null)
+                        {
+                            skipMissions = false;
+                            skipRewards = false;
+                            skipVault = false;
+                        }
+
+                        while (!AbortThread && tasksLeft && tmrRun.ElapsedMilliseconds < 60000)
+                        {
+                            tasksLeft = false;
+
+                            if (this != null)
+                            {
+                                if (!IsFucked && EmulatorProcess != null && !EmulatorProcess.HasExited && ScreenState.CurrentArea != Area.Emulators.Loading && RegularTasksStep())
+                                {
+                                    tasksLeft = true;
+                                }
+                            }
+                        }
+
+                        tasksLeft = true;
+
+                        while (!AbortThread && tasksLeft)
+                        {
+                            tasksLeft = false;
+
+                            if (this != null && EmulatorProcess != null)
+                            {
+                                if (GoToBaseOrMapStep())
+                                {
+                                    tasksLeft = true;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (!AbortThread && this != null && EmulatorProcess != null)
+                        {
+                            Controller.CaptureApplication(this);
+
+                            if (ScreenState.CurrentArea != Area.MainBases.Main && !(ScreenState.CurrentArea == Area.Others.Login || ScreenState.CurrentArea == Area.Emulators.Android || ScreenState.CurrentArea == Area.Emulators.Loading || ScreenState.CurrentArea == Area.Others.Splash || ScreenState.CurrentArea == Area.Emulators.Crash || ScreenState.CurrentArea == Area.Emulators.TaskManager || ScreenState.CurrentArea == Area.Emulators.TaskManagerApp || ScreenState.CurrentArea == Area.Emulators.TaskManagerRemove))
+                            {
+                                Controller.Instance.RestartEmulator(this);
+                                Login(Emulator.LastKnownAccount);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    failed = true;
+                }
+            }
+            else
+            {
+                failed = true;
+            }
+
+            if (!AbortThread && failed)
+            {
+                if (this != null && EmulatorProcess != null)
+                {
+                    Controller.CaptureApplication(this);
+
+                    if (ScreenState.CurrentArea != Area.StateMaps.Main && ScreenState.CurrentArea != Area.StateMaps.FullScreen && ScreenState.CurrentArea != Area.MainBases.Main && !(ScreenState.CurrentArea == Area.Others.Login || ScreenState.CurrentArea == Area.Emulators.Android || ScreenState.CurrentArea == Area.Emulators.Loading || ScreenState.CurrentArea == Area.Others.Splash || ScreenState.CurrentArea == Area.Emulators.Crash || ScreenState.CurrentArea == Area.Emulators.TaskManager || ScreenState.CurrentArea == Area.Emulators.TaskManagerApp || ScreenState.CurrentArea == Area.Emulators.TaskManagerRemove))
+                    {
+                        TimeoutFactor = 1.0;
+                    }
+                }
+            }
+
+            tmrRun.Stop();
+        }
+
+        public void AutoActionsLoop()
+        {
+            //12x78x10 0x746e check if building upgrading
+
+            while (!AbortThread)
+            {
+                Thread.Sleep(1000);
+
+                try
+                {
+                    if ((EmulatorProcess == null || EmulatorProcess.HasExited) && Emulator != null)
+                    {
+                        Controller.Instance.StartEmulator(this);
+                        //Controller.Instance.RefreshWindows();
+                    }
+                    else
+                    {
+                        Controller.CaptureApplication(this);
+
+                        if (IsFucked)
+                        {
+                            BotDatabase.InsertLog(2, String.Format("Emulator frozen: {0}", Emulator.WindowName), LastChecksum.ToString("X4"), new byte[1] { 0x0 });
+                            System.IO.Directory.CreateDirectory(String.Format("{0}\\auto", Controller.Instance.GetFullScreenshotDir()));
+                            SuperBitmap.Bitmap.Save(String.Format("{0}\\crash{1}.bmp", Controller.Instance.GetFullScreenshotDir(), LastChecksum.ToString("X4")), ImageFormat.Bmp);
+                            Controller.Instance.RestartEmulator(this, false);
+                            Controller.Instance.Login(this, Emulator.LastKnownAccount);
+                        }
+
+                        if (ScreenState != null)
+                        {
+                            if (DateTime.Now.Subtract(TimeSinceChecksumChanged).TotalSeconds > 70)
+                            {
+                                if (DateTime.Now.Subtract(TimeSinceChecksumChanged).TotalSeconds > 150)
+                                {
+                                    if (ScreenState.CurrentArea != Area.StateMaps.FullScreen && ScreenState.CurrentArea != Area.Others.Login && ScreenState.CurrentArea != Area.Others.Chat)
+                                    {
+                                        BotDatabase.InsertLog(2, String.Format("Emulator frozen: {0}", Emulator.WindowName), LastChecksum.ToString("X4"), new byte[1] { 0x0 });
+                                        System.IO.Directory.CreateDirectory(String.Format("{0}\\auto", Controller.Instance.GetFullScreenshotDir()));
+                                        SuperBitmap.Bitmap.Save(String.Format("{0}\\crash{1}.bmp", Controller.Instance.GetFullScreenshotDir(), LastChecksum.ToString("X4")), ImageFormat.Bmp);
+                                        Controller.Instance.RestartEmulator(this, false);
+                                        Controller.Instance.Login(this, Emulator.LastKnownAccount);
+
+                                        Controller.CaptureApplication(this);
+                                    }
+                                }
+                                else if (ScreenState.CurrentArea != Area.StateMaps.FullScreen && ScreenState.CurrentArea != Area.Others.Login && ScreenState.CurrentArea != Area.Others.Chat)
+                                {
+                                    ClickHome(5000);
+                                    Controller.CaptureApplication(this);
+                                }
+                            }
+                        }
+
+                        //TODO Slow mode
+                        if (TimeoutFactor > 5.0)
+                        {
+                            BotDatabase.InsertLog(2, String.Format("Emulator slow: {0}", Emulator.WindowName), LastChecksum.ToString("X4"), new byte[1] { 0x0 });
+                            Controller.Instance.RestartEmulator(this, false);
+                            Controller.Instance.Login(this, Emulator.LastKnownAccount);
+                        }
+
+                        ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 190, 115, 20);
+
+                        if (chksum == 0x6b07) //Updates are available
+                        {
+                            ClickBack(300); //click Back
+                        }
+
+                        if (chksum == 0x3b17) //Notice
+                        {
+                            chksum = ScreenState.GetScreenChecksum(SuperBitmap, 190, 115, 20);
+                            //s.ClickBack(300); //click Back
+                            //TODO: Finish later
+                        }
+
+                        if (ScreenState != null && !ScreenState.Overlays.Contains(Overlay.Statuses.Loading))
+                        {
+                            if (!PreventFromOpening && ScreenState.CurrentArea == Area.Emulators.Android)
+                            {
+                                Controller.Instance.StartApp(this);
+                            }
+                            else if (Emulator.LastKnownAccount != null && Emulator.LastKnownAccount.Id != 0 && ScreenState.CurrentArea == Area.Others.Login)
+                            {
+                                Controller.Instance.Login(this, Emulator.LastKnownAccount);
+                            }
+                            else if (ScreenState.CurrentArea == Area.Others.SessionTimeout)
+                            {
+                                PreventFromOpening = true;
+                                Emulator.LastKnownAccount = null;
+                                Controller.SendClick(this, 200, 205, 5000); //click
+                            }
+                            else if (ScreenState.CurrentArea == Area.Others.Quit)
+                            {
+                                //s.ClickBack(800); //click Back
+                                //Controller.SendClick(s, 145, 480, 3000); //DIFF
+                                Controller.SendClick(this, 254, 393, 1000); //DIFF ff
+                            }
+                            else if (ScreenState.CurrentArea == Area.Emulators.Crash)
+                            {
+                                System.Threading.Thread.Sleep(5000);
+                                Controller.CaptureApplication(this);
+
+                                if (ScreenState.CurrentArea == Area.Emulators.Crash)
+                                {
+                                    Controller.Instance.RestartEmulator(this, false);
+                                    Controller.Instance.Login(Emulator.LastKnownAccount);
+                                }
+                            }
+                            else if (ScreenState.CurrentArea == Area.Others.Ad)
+                            {
+                                ClickBack();
+                            }
+                            else if (ScreenState.CurrentArea == Area.Unknown)
+                            {
+                                System.Threading.Thread.Sleep((int)(10000 * TimeoutFactor));
+                                Controller.CaptureApplication(this);
+
+                                if (ScreenState.CurrentArea == Area.Unknown)
+                                {
+                                    ClickBack();
+                                }
+                            }
+
+                            /*if (s.ScreenState.Overlays.Contains(Overlay.Widgets.SecretGift))
+                            {
+                                System.Threading.Thread.Sleep(5000);
+                                Controller.CaptureApplication(s);
+
+                                if (s.ScreenState.Overlays.Contains(Overlay.Widgets.SecretGift))
+                                {
+                                    Controller.SendClick(s, 90, 575, 1000);
+                                }
+                            }
+
+                            if (s.ScreenState.Overlays.Contains(Overlay.Widgets.GlobalGift))
+                            {
+                                System.Threading.Thread.Sleep(5000);
+                                Controller.CaptureApplication(s);
+
+                                if (s.ScreenState.Overlays.Contains(Overlay.Widgets.GlobalGift))
+                                {
+                                    Controller.SendClick(s, 30, 575, 1000);
+                                }
+                            }*/
+
+                            /* TODO: Fix
+                             * if ((ScreenState.Overlays.Contains(Overlay.Incomings.Attack) || ScreenState.Overlays.Contains(Overlay.Incomings.Rally)))
+                            {
+                                BotDatabase.InsertLog(3, String.Format("Incoming {0} at {1}", (ScreenState.Overlays.Contains(Overlay.Incomings.Attack) ? "Attack" : "Rally"), Emulator.LastKnownAccount.ToString()), "", new byte[1] { 0x0 });
+
+                                if (tmrAttackNotify.ElapsedMilliseconds > 300000)
+                                {
+                                    tmrAttackNotify.Restart();
+
+                                    if (ScreenState.Overlays.Contains(Overlay.Incomings.Attack))
+                                    {
+                                        //ctrl.SendNotification(String.Format("Incoming Attack at {1}", s.Emulator.LastKnownAccount.ToString()), NotificationType.IncomingAttack);
+                                    }
+
+                                    if (ScreenState.Overlays.Contains(Overlay.Incomings.Rally))
+                                    {
+                                        Controller.Instance.SendNotification(String.Format("Incoming Rally at {1}", Emulator.LastKnownAccount.ToString()), NotificationType.IncomingRally);
+                                    }
+                                }
+                            }*/
+
+                            if (ScreenState.Overlays.Contains(Overlay.Widgets.AllianceHelp)
+                                || ScreenState.CurrentArea == Area.Menus.AllianceHelp
+                                || ScreenState.CurrentArea == Area.Menus.ShootingRanges.Main
+                                || ScreenState.CurrentArea == Area.Menus.ShootingRanges.NormalCrate
+                                || ScreenState.Overlays.Contains(Overlay.Widgets.GlobalGift)
+                                || ScreenState.Overlays.Contains(Overlay.Widgets.SecretGift)
+                                || ScreenState.CurrentArea == Area.MainBases.GlobalGiftCollect
+                                || ScreenState.CurrentArea == Area.MainBases.SecretGiftCollect)
+                            {
+                                RegularTasksStep();
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    BotDatabase.InsertLog(0, String.Format("{0} {1}", ex.GetType(), ex.Message), ex.StackTrace, new byte[1] { 0x0 });
+                    Controller.Instance.SendNotification(String.Format("Auto Actions Crash {0} {1} {2}", ex.GetType(), ex.Message, ex.StackTrace), NotificationType.Crash);
+                    
+                    System.Threading.Thread.Sleep(5000);
+                    Program.RestartApp();
+                }
+            }
         }
 
         public static Screen CreateScreen(DataObjects.EmulatorInstance emulator)
@@ -140,9 +640,15 @@ namespace CodeStrikeBot
             {
                 ret = EmulatorProcess.MainWindowTitle;
             }
+
             if (Emulator != null && Emulator.LastKnownAccount != null)
             {
                 ret += String.Format("[{0}]", Emulator.LastKnownAccount.Name);
+            }
+
+            if (Thread != null)
+            {
+                ret += String.Format("({0})", Thread.Name);
             }
 
             return ret;
@@ -1756,7 +2262,7 @@ namespace CodeStrikeBot
 
                             //if (chksum != 0x2995 && chksum != 0x1583) //missions available
                             //if (chksum != 0x3900 && chksum != 0x5f0f && chksum != 0xfc2d) //DIFF MS
-                            if (chksum != 0x3793) //DIFF FF
+                            if (chksum != 0x3793 && chksum != 0xd22c && chksum != 0x20c7) //DIFF FF //all three are zeros //TODO: find universal way to determine zeroes
                             {
                                 //c = SuperBitmap.GetPixel(101, (int)Math.Round(240 + 91.5 * m)); //DIFF MS
                                 c = SuperBitmap.GetPixel(330, 492 + 53 * m); //DIFF FF
@@ -1868,14 +2374,20 @@ namespace CodeStrikeBot
                                 Controller.SendClick(this, 350, 145 + 53 * m + vipOffset, 400);
                                 break;
                             }
-                            else if (chksum == 0xfe80) //loading
+                            else if (chksum == 0x0bd2 || chksum == 0x2a00) //loading and progress bar not loaded
                             {
                                 clicked = true;
                                 Thread.Sleep(50);
                                 break;
                             }
+                            else if (chksum == 0xac69) //no new quests
+                            {
+                                //shouldn't have clicked to get here, check 0's on main quests page
+                                break;
+                            }
                             else
                             {
+                                SuperBitmap.Bitmap.Save(String.Format("{0}\\quest{1}.bmp", Controller.Instance.GetFullScreenshotDir(), chksum.ToString("X4")), System.Drawing.Imaging.ImageFormat.Bmp);
                                 break;
                             }
                         }
@@ -2807,7 +3319,7 @@ namespace CodeStrikeBot
                         TimeoutFactor += 0.1;
                     }
 
-                    this.ClickBack(500); //click Back
+                    this.ClickBack(700); //click Back
                 }
             }
 
@@ -2954,34 +3466,41 @@ namespace CodeStrikeBot
                         Controller.SendClick(this, 110, 670, 200); //click Missions
                     }
                 }
-                else if (ScreenState.CurrentArea == Area.Menus.AllianceHelp && !ScreenState.Overlays.Contains(Overlay.Statuses.Loading))
+                else if (ScreenState.CurrentArea == Area.Menus.AllianceHelp)
                 {
                     tasksLeft = true;
 
-                    ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 290, 560, 10);
-                    
-                    //if (chksum == 0xe94d) //nox help //MS DIFF
-                    if (chksum == 0x2c1f) //ff DIFF
+                    if (ScreenState.Overlays.Contains(Overlay.Statuses.Loading))
                     {
-                        //Controller.SendClick(this, 365, 565, 50); //click Help All DIFF MS
-                        Controller.SendClick(this, 365, 568, 50); //click Help All DIFF ff
+                        Thread.Sleep(100);
                     }
                     else
                     {
-                        chksum = ScreenState.GetScreenChecksum(SuperBitmap, 150, 273, 10); //check if loading
-                        ushort chksum2 = ScreenState.GetScreenChecksum(SuperBitmap, 192, 273, 10); //check if loaded but help is needed
-                        //if (ScreenState.GetScreenChecksum(bmp, 150, 273, 10) == 0xe6f5 && ScreenState.GetScreenChecksum(bmp, 192, 273, 10) != 0xf143) //loading //f143 depricated?
-                        //if (chksum == 0xe6f5 && chksum2 != 0x4266)
-                        //if (chksum == 0xd923 && chksum2 != 0x4266) //nox, not true for some reason
-                        if (chksum == 0x3968 && chksum2 != 0xc3d1) //memu
+                        ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 290, 560, 10);
+                    
+                        //if (chksum == 0xe94d) //nox help //MS DIFF
+                        if (chksum == 0x2c1f) //ff DIFF
                         {
-                            Thread.Sleep((int)(50 * TimeoutFactor));
+                            //Controller.SendClick(this, 365, 565, 50); //click Help All DIFF MS
+                            Controller.SendClick(this, 365, 568, 50); //click Help All DIFF ff
                         }
-                        else //none
+                        else
                         {
-                            this.ClickBack(300);
+                            chksum = ScreenState.GetScreenChecksum(SuperBitmap, 150, 273, 10); //check if no help needed
+                            ushort chksum2 = ScreenState.GetScreenChecksum(SuperBitmap, 192, 273, 10); //check if loaded
+                            //SuperBitmap.Bitmap.Save(String.Format("{0}\\help.bmp", Controller.Instance.GetFullScreenshotDir()), ImageFormat.Bmp);
+                            //if (ScreenState.GetScreenChecksum(bmp, 150, 273, 10) == 0xe6f5 && ScreenState.GetScreenChecksum(bmp, 192, 273, 10) != 0xf143) //loading //f143 depricated?
+                            //if (chksum == 0xe6f5 && chksum2 != 0x4266)
+                            //if (chksum == 0xd923 && chksum2 != 0x4266) //nox, not true for some reason
+                            if (chksum == 0xbb0e && chksum2 != 0x9e76) //memu
+                            {
+                                Thread.Sleep((int)(50 * TimeoutFactor));
+                            }
+                            else //none
+                            {
+                                this.ClickBack(300);
+                            }
                         }
-
                     }
                 }
                 else if (ScreenState.CurrentArea == Area.MainBases.SecretGiftCollect)
@@ -3168,21 +3687,29 @@ namespace CodeStrikeBot
                 {
                     tasksLeft = this.CollectGiftsStep(); //Collect Gifts
                 }
-                else if ((ScreenState.CurrentArea == Area.Menus.Mission && !ScreenState.Overlays.Contains(Overlay.Statuses.Loading))
+                else if ((ScreenState.CurrentArea == Area.Menus.Mission)
                     || ScreenState.CurrentArea == Area.Menus.Missions.Daily || ScreenState.CurrentArea == Area.Menus.Missions.Alliance || ScreenState.CurrentArea == Area.Menus.Missions.VIP
                     || ScreenState.CurrentArea == Area.Menus.Missions.VIPStreak)
                 {
-                    if (ScreenState.CurrentArea == Area.Menus.Mission && !ScreenState.Overlays.Contains(Overlay.Statuses.Loading))
+                    if (ScreenState.Overlays.Contains(Overlay.Statuses.Loading))
                     {
-                        ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 125, 470, 20);
-                        if (chksum == 0x09ac || chksum == 0xccb2) //missions at 00:00
-                        {
-                            DataObjects.Account account = Emulator.LastKnownAccount;
-                            while (!this.Logout()) { }
-                            Emulator.LastKnownAccount = account;
-                        }
+                        tasksLeft = true;
+                        Thread.Sleep(100);
                     }
-                    tasksLeft = this.CompleteMissionsStep(); //Complete Missions
+                    else
+                    {
+                        if (ScreenState.CurrentArea == Area.Menus.Mission)
+                        {
+                            ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 125, 470, 20);
+                            if (chksum == 0x09ac || chksum == 0xccb2) //missions at 00:00
+                            {
+                                DataObjects.Account account = Emulator.LastKnownAccount;
+                                while (!this.Logout()) { }
+                                Emulator.LastKnownAccount = account;
+                            }
+                        }
+                        tasksLeft = this.CompleteMissionsStep(); //Complete Missions
+                    }
                 }
                 else if (ScreenState.CurrentArea == Area.Menus.Missions.ActivateVIP)
                 {

@@ -17,8 +17,14 @@ namespace CodeStrikeBot
         public MEmuScreen(DataObjects.EmulatorInstance emulator)
             : base(emulator)
         {
-            WINDOW_TITLEBAR_H = 34;
-            WINDOW_MARGIN_L = 4;
+            //MEmu 2.9.6.1
+            //WINDOW_TITLEBAR_H = 34;
+            //WINDOW_MARGIN_L = 4;
+
+            //MEmu 3.5.0.2
+            WINDOW_TITLEBAR_H = 31;
+            WINDOW_MARGIN_L = 1;
+
             WINDOW_MARGIN_R = 52;
 
             Emulator = emulator;
@@ -34,7 +40,7 @@ namespace CodeStrikeBot
             {
                 foreach (Process p in procs)
                 {
-                    if (p.MainWindowTitle.StartsWith(emulator.WindowName))
+                    if (p.MainWindowTitle.Contains(emulator.WindowName))
                     {
                         bool found = false;
                         
@@ -72,15 +78,21 @@ namespace CodeStrikeBot
             //TimeoutFactor = 5;
             TimeSinceChecksumChanged = DateTime.Now;
 
-            WINDOW_TITLEBAR_H = 44;
-            WINDOW_MARGIN_L = 4;
+            //MEmu 2.9.6.1
+            //WINDOW_TITLEBAR_H = 34;
+            //WINDOW_MARGIN_L = 4;
+
+            //MEmu 3.5.0.2
+            WINDOW_TITLEBAR_H = 31;
+            WINDOW_MARGIN_L = 1;
+
             WINDOW_MARGIN_R = 52;
 
             Process[] procs = Process.GetProcessesByName(PROCESSNAME);
 
             foreach (Process p in procs)
             {
-                if (p.MainWindowTitle.StartsWith(windowName))
+                if (p.MainWindowTitle.Contains(windowName))
                 {
                     EmulatorProcess = p;
                     Emulator = new DataObjects.EmulatorInstance(0, EmulatorType.Leapdroid, windowName, p.CommandLineArgs(EmulatorType.MEmu), new DataObjects.Account(0), new DataObjects.App(0));
@@ -103,6 +115,11 @@ namespace CodeStrikeBot
 
         public override void ClickBack(int timeout)
         {
+            if (this.ToString().Contains("2"))
+            {
+                timeout = timeout;
+            }
+
             if (ScreenState.CurrentArea == Area.Menus.Missions.ActivateVIP)
             {
                 Controller.SendClick(this, 348, 122, timeout);
@@ -168,7 +185,8 @@ namespace CodeStrikeBot
 
                 while (ScreenState.CurrentArea == Area.Emulators.Android && tmrRun.ElapsedMilliseconds < 8000)
                 {
-                    Controller.SendClick(this, 127, 115, 2000); //click app //DIFF ff
+                    //Controller.SendClick(this, 127, 115, 2000); //click app //DIFF ff MEmu 2.9.6.1
+                    Controller.SendClick(this, 60, 395, 2000); //click app //MEmu 3.0.5.2
 
                     Controller.CaptureApplication(this);
                 }
@@ -201,6 +219,11 @@ namespace CodeStrikeBot
                 }
 
                 tmrRun.Stop();
+            }
+
+            if (Emulator.LastKnownAccount == null)
+            {
+                Emulator.Save();
             }
 
             return success;

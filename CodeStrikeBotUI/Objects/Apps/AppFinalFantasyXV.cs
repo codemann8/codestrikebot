@@ -21,6 +21,7 @@ namespace CodeStrikeBot
             ushort chksum2 = 0, chksum3 = 0;
             bool enteredGeneric = false;
             Color c, c2, c3;
+            //bmp.Bitmap.Save(String.Format("{0}\\file.bmp", Controller.Instance.GetFullScreenshotDir()), System.Drawing.Imaging.ImageFormat.Bmp);
 
             switch (chksum)
             {
@@ -352,7 +353,7 @@ namespace CodeStrikeBot
                             break;
                         default:
                             chksum3 = ScreenState.GetScreenChecksum(bmp, 60, 120, 20);
-                            if (chksum3 == 0xf2c6)
+                            if (chksum3 == 0xf2c6) //proving grounds crate
                             {
                                 CurrentArea = Area.Menus.ShootingRanges.NormalCrate;
                             }
@@ -382,7 +383,8 @@ namespace CodeStrikeBot
                 case 0xcd83: //memu
                     CurrentArea = Area.Emulators.Loading;
                     break;
-                case 0x452e:
+                case 0x452e: //memu 2.9.6.1
+                case 0x8abe: //memu 3.0.5.2
                     CurrentArea = Area.Emulators.Android;
                     break;
                 case 0x3023:
@@ -656,28 +658,28 @@ namespace CodeStrikeBot
                         else
                         {
                             chksum = ScreenState.GetScreenChecksum(bmp, 23, 18, 10);
-                            if (chksum == 0x371b)
+                            if (chksum == 0x10f3)
                             {
                                 Overlays.Add(Overlay.Dialogs.Tiles.Rebel);
                             }
                             else
                             {
                                 chksum = ScreenState.GetScreenChecksum(bmp, 54, 128, 10);
-                                if (chksum == 0x1b93)
+                                if (chksum == 0x41c0)
                                 {
                                     Overlays.Add(Overlay.Dialogs.Tiles.Warzone);
                                 }
                                 else
                                 {
                                     chksum = ScreenState.GetScreenChecksum(bmp, 54, 128, 10);
-                                    if (chksum == 0x6b6e)
+                                    if (chksum == 0x5345)
                                     {
                                         Overlays.Add(Overlay.Dialogs.Tiles.ControlPoint);
                                     }
                                     else
                                     {
                                         chksum = ScreenState.GetScreenChecksum(bmp, 192, 120, 10);
-                                        if (chksum == 0xad61) //crystal no occupy allowed
+                                        if (chksum == 0x2111) //crystal no occupy allowed <-no longer true, its just a Blocked dialog
                                         {
                                             Overlays.Add(Overlay.Dialogs.Tiles.Blocked);
                                         }
@@ -690,6 +692,7 @@ namespace CodeStrikeBot
             }
             else if (CurrentArea == Area.Menus.Alliance || CurrentArea == Area.Menus.Mission || CurrentArea == Area.Menus.Account)
             {
+                //bmp.Bitmap.Save(String.Format("{0}\\help{0}.bmp", Controller.Instance.GetFullScreenshotDir(), System.Threading.Thread.CurrentThread.ManagedThreadId.ToString()), System.Drawing.Imaging.ImageFormat.Bmp);
                 chksum = ScreenState.GetScreenChecksum(bmp, 67, 16, 6);
                 if (chksum == 0x041e)
                 {
@@ -713,6 +716,8 @@ namespace CodeStrikeBot
                 {
                     case 0xf674:
                     case 0x0a72:
+                    case 0x41e4:
+                        //TODO: look into possible transparency issue with this dialog
                         // TODO: Remove, debugging
                         chksum = ScreenState.GetScreenChecksum(bmp, 67, 16, 4);
                         ushort chksum2 = ScreenState.GetScreenChecksum(bmp, 160, 16, 14);

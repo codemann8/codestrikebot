@@ -118,6 +118,8 @@ namespace CodeStrikeBot
             
             Database = new BotDatabase();
 
+            pclient = new PushoverClient.Pushover(Database.Settings.PushoverAPIKey);
+
             apps = DataObjects.App.GetApps();
             accounts = DataObjects.Account.GetAccounts(apps);
             emulators = DataObjects.EmulatorInstance.GetEmulators(accounts, apps);
@@ -132,15 +134,7 @@ namespace CodeStrikeBot
                     if (e.Id == Database.Settings.ActiveEmulators[i])
                     {
                         sc[i] = Screen.CreateScreen(e);
-                        if (sc[i].EmulatorProcess == null)
-                        {
-                            if (sc[i].Emulator != null)
-                            {
-                                StartEmulator(sc[i]);
-                                Login(sc[i], sc[i].Emulator.LastKnownAccount);
-                                //restart = true;
-                            }
-                        }
+                        sc[i].Thread.Start();
                         break;
                     }
                 }
@@ -151,23 +145,6 @@ namespace CodeStrikeBot
                 Program.RestartApp();
             }
 
-            /*if (sc[0] == null)
-            {
-                sc[0] = Screen.CreateScreen("Leapdroid");
-            }
-            if (sc[1] == null)
-            {
-                sc[1] = Screen.CreateScreen("Leapdroid");
-            }
-            if (sc[2] == null)
-            {
-                sc[2] = Screen.CreateScreen("Leapdroid");
-            }
-            if (sc[3] == null)
-            {
-                sc[3] = Screen.CreateScreen("Leapdroid");
-            }*/
-
             //Database.UpdateSettings(new EmulatorInstance[4] { sc[0].Emulator, sc[1].Emulator, sc[2].Emulator, sc[3].Emulator }, Database.ScreenshotDir, Database.MapDir);
 
             this.RefreshWindows();
@@ -175,8 +152,6 @@ namespace CodeStrikeBot
 
             ActiveWindow = 0;
             semaphore = new Semaphore(1, 1);
-
-            pclient = new PushoverClient.Pushover(Database.Settings.PushoverAPIKey);
         }
 
         public Screen ActiveScreen { get { return sc[ActiveWindow]; } }
@@ -255,7 +230,7 @@ namespace CodeStrikeBot
             return dir;
         }
 
-        public void BeginTask(int delay = 0)
+        /*public void BeginTask(int delay = 0)
         {
             semaphore.WaitOne();
             Thread.Sleep(delay);
@@ -272,7 +247,7 @@ namespace CodeStrikeBot
             {
                 BotDatabase.InsertLog(0, "Semaphore Kill", String.Format("{0}{1}", e.Message, e.StackTrace), new byte[1] { 0x0 });
             }
-        }
+        }*/
 
         public string GetStatusMessage()
         {
@@ -515,16 +490,19 @@ namespace CodeStrikeBot
         {
             bool success = false;
 
+            Screen screen = null;
+
             try
             {
-                BeginTask();
                 SpeedTest();
 
-                Screen screen = GetNextWindow(task);
+                screen = GetNextWindow(task);
                 Stopwatch tmrRun = new Stopwatch();
 
                 if (screen != null)
                 {
+                    screen.AbortRoutine();
+
                     tmrRun.Start();
 
                     if (screen.Emulator.LastKnownAccount != null && screen.Emulator.LastKnownAccount.Id == task.Account.Id && screen.PreventFromOpening)		
@@ -603,7 +581,11 @@ namespace CodeStrikeBot
             }
             finally
             {
-                EndTask();
+                if (screen != null)
+                {
+                    screen.CreateRoutine("AutoActions");
+                    screen.Thread.Start();
+                }
             }
 
             return success;
@@ -664,18 +646,31 @@ namespace CodeStrikeBot
                         args = s.Emulator.Command.Substring(prog.Length).Trim();
                     }
                     System.Diagnostics.Process.Start(prog, args);
-                    System.Threading.Thread.Sleep(6000);
-                    foreach (Process p in Process.GetProcessesByName(s.ProcessName))
+
+                    bool found = false;
+                    while (!found)
                     {
-                        if (p.CommandLineArgs(s.Emulator.Type) == s.Emulator.Command)
+                        foreach (Process p in Process.GetProcessesByName(s.ProcessName))
                         {
-                            s.EmulatorProcess = p;
-                            break;
+                            if (p.CommandLineArgs(s.Emulator.Type) == s.Emulator.Command)
+                            {
+                                found = true;
+                                s.EmulatorProcess = p;
+                                break;
+                            }
                         }
+                        Thread.Sleep(200);
                     }
+
+                    while (s.EmulatorProcess.MainWindowHandle.ToInt32() == 0)
+                    {
+                        Thread.Sleep(30);
+                    }
+                    
                     RefreshWindows();
                     UpdateWindowInfo();
                     Controller.CaptureApplication(s);
+
                     if (s.ScreenState != null)
                     {
                         using (Bitmap bmpScreenCapture = new Bitmap(System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height))
@@ -1899,6 +1894,8 @@ namespace CodeStrikeBot
 
                 while (tmrRun.ElapsedMilliseconds < 10000 && !s.EmulatorProcess.HasExited && GetWindowRect(s.EmulatorProcess.MainWindowHandle, ref rect) == (IntPtr)0) { }
 
+                //Controller.Instance.UpdateWindowInfo();
+                
                 if (tmrRun.ElapsedMilliseconds >= 10000)
                 {
                     Program.RestartApp();

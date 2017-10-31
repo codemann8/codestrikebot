@@ -60,8 +60,17 @@ namespace CodeStrikeBot
 
         private static void CatchUnhandledExceptions(object sender, UnhandledExceptionEventArgs e)
         {
-            BotDatabase.InsertLog(0, String.Format("Unhandled exception on {0}", e.ExceptionObject.GetType().ToString()), e.ToString(), e.ExceptionObject.ToByteArray());
-            Controller.Instance.SendNotification("Bot Crash Unhandled", NotificationType.Crash);
+            if (e.ExceptionObject is Exception)
+            {
+                Exception ex = (Exception)e.ExceptionObject;
+                BotDatabase.InsertLog(0, String.Format("{0} {1}", ex.GetType(), ex.Message), ex.StackTrace, new byte[1] { 0x0 });
+                Controller.Instance.SendNotification(String.Format("Bot Crash Unhandled {0} {1} {2}", ex.GetType(), ex.Message, ex.StackTrace), NotificationType.Crash);
+            }
+            else
+            {
+                BotDatabase.InsertLog(0, String.Format("Unhandled exception on {0}", e.ExceptionObject.GetType().ToString()), e.ToString(), e.ExceptionObject.ToByteArray());
+                Controller.Instance.SendNotification("Bot Crash Unhandled", NotificationType.Crash);
+            }
             System.Threading.Thread.Sleep(1000);
             Program.RestartApp();
         }
@@ -69,7 +78,7 @@ namespace CodeStrikeBot
         public static void RestartApp()
         {
             System.Threading.Thread.Sleep(5000);
-            Controller.Instance.SendNotification("Bot shutdown", NotificationType.General);
+            //Controller.Instance.SendNotification("Bot shutdown", NotificationType.General);
             System.Diagnostics.ProcessStartInfo Info = new System.Diagnostics.ProcessStartInfo();
             Info.Arguments = "/C ping 127.0.0.1 -n 2 && ping 127.0.0.1 -n 2 && \"" + Application.ExecutablePath + "\"";
             Info.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;

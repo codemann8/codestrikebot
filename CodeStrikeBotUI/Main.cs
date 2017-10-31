@@ -96,10 +96,22 @@ namespace CodeStrikeBot
             txtEmulator2.Text = ctrl.Database.Settings.Emulator2.ToString();
             txtEmulator3.Text = ctrl.Database.Settings.Emulator3.ToString();
             txtEmulator4.Text = ctrl.Database.Settings.Emulator4.ToString();
-            cboEmulator1.SelectedItem = ctrl.sc[0].Emulator.App;
-            cboEmulator2.SelectedItem = ctrl.sc[1].Emulator.App;
-            cboEmulator3.SelectedItem = ctrl.sc[2].Emulator.App;
-            cboEmulator4.SelectedItem = ctrl.sc[3].Emulator.App;
+            if (ctrl.sc[0] != null && ctrl.sc[0].Emulator != null)
+            {
+                cboEmulator1.SelectedItem = ctrl.sc[0].Emulator.App;
+            }
+            if (ctrl.sc[1] != null && ctrl.sc[1].Emulator != null)
+            {
+                cboEmulator2.SelectedItem = ctrl.sc[1].Emulator.App;
+            }
+            if (ctrl.sc[2] != null && ctrl.sc[2].Emulator != null)
+            {
+                cboEmulator3.SelectedItem = ctrl.sc[2].Emulator.App;
+            }
+            if (ctrl.sc[3] != null && ctrl.sc[3].Emulator != null)
+            {
+                cboEmulator4.SelectedItem = ctrl.sc[3].Emulator.App;
+            }
             txtSlackURL.Text = ctrl.Database.Settings.SlackURL;
             txtPushoverAPI.Text = ctrl.Database.Settings.PushoverAPIKey;
             txtPushoverUser.Text = ctrl.Database.Settings.PushoverUserKey;
@@ -160,7 +172,7 @@ namespace CodeStrikeBot
                 //System.Threading.Thread.Sleep(5000);
                 //Program.RestartApp();
             }
-            Controller.Instance.SendNotification("Bot start", NotificationType.General);
+            //Controller.Instance.SendNotification("Bot start", NotificationType.General);
 
             ReloadAccountList();
 
@@ -176,11 +188,6 @@ namespace CodeStrikeBot
                     if (s.Emulator != null && s.Emulator.Id == 0)
                     {
                         s.Emulator.Save();
-                    }
-
-                    if (s.EmulatorProcess == null)
-                    {
-                        s.Emulator = null;
                     }
                 }
             }
@@ -209,19 +216,22 @@ namespace CodeStrikeBot
 
         private void ReloadAccountList()
         {
-            cboAccountAppFilter.SelectedItem = ctrl.ActiveScreen.Emulator.App;
-            lstAccounts.Items.Clear();
-            bsAccount.Clear();
-
-            foreach (DataObjects.Account a in ctrl.accounts)
+            if (ctrl.ActiveScreen != null && ctrl.ActiveScreen.Emulator != null)
             {
-                if (a.App.Id == ctrl.ActiveScreen.Emulator.App.Id)
+                cboAccountAppFilter.SelectedItem = ctrl.ActiveScreen.Emulator.App;
+                lstAccounts.Items.Clear();
+                bsAccount.Clear();
+
+                foreach (DataObjects.Account a in ctrl.accounts)
                 {
-                    lstAccounts.Items.Add(a);
-                    bsAccount.Add(a);
+                    if (a.App.Id == ctrl.ActiveScreen.Emulator.App.Id)
+                    {
+                        lstAccounts.Items.Add(a);
+                        bsAccount.Add(a);
+                    }
                 }
+                bsAccount.Add(new DataObjects.Account(0, "", "", "", "", AccountPriority.NoMonitor, 0, new DateTime(), new DateTime(), ctrl.ActiveScreen.Emulator.App));
             }
-            bsAccount.Add(new DataObjects.Account(0, "", "", "", "", AccountPriority.NoMonitor, 0, new DateTime(), new DateTime(), ctrl.ActiveScreen.Emulator.App));
         }
 
         private void btnScreen_Click(object sender, EventArgs e)
@@ -241,11 +251,12 @@ namespace CodeStrikeBot
         {
             if (ctrl.ActiveScreen != null && ctrl.ActiveScreen.EmulatorProcess != null)
             {
-                ctrl.BeginTask(1000);
+                ctrl.ActiveScreen.AbortRoutine(1000);
                 ctrl.Logout();
                 ctrl.StartApp();
                 ctrl.Login((DataObjects.Account)lstAccounts.SelectedItem);
-                ctrl.EndTask();
+                ctrl.ActiveScreen.CreateRoutine("AutoActions");
+                ctrl.ActiveScreen.Thread.Start();
             }
         }
 
@@ -506,9 +517,10 @@ namespace CodeStrikeBot
         #region RegularTasks
         private void btnTasks_Click(object sender, EventArgs e)
         {
-            ctrl.BeginTask(1000);
+            ctrl.ActiveScreen.AbortRoutine(1000);
             ctrl.RegularTasks();
-            ctrl.EndTask();
+            ctrl.ActiveScreen.CreateRoutine("AutoActions");
+            ctrl.ActiveScreen.Thread.Start();
         }
 
         private void bckRegularTasks_DoWork(object sender, DoWorkEventArgs e)
@@ -537,11 +549,41 @@ namespace CodeStrikeBot
 
                 if (!bckRegularTasks.CancellationPending)
                 {
-                    ctrl.BeginTask();
-                    bckRegularTasks.ReportProgress(1);
                     ctrl.StartTasks = DateTime.Now;
-                    ctrl.RegularTasks();
-                    ctrl.EndTask();
+                    bckRegularTasks.ReportProgress(1);
+
+                    foreach (Screen s in ctrl.sc)
+                    {
+                        s.AbortRoutine();
+
+                        s.CreateRoutine("RegularTasks");
+                        s.Thread.Start();
+                    }
+
+                    List<Screen> screens = new List<Screen>();
+
+                    foreach (Screen s in ctrl.sc)
+                    {
+                        screens.Add(s);
+                    }
+
+                    while (screens.Count != 0)
+                    {
+                        foreach (Screen s in screens)
+                        {
+                            if (!s.Thread.IsAlive || DateTime.Now.Subtract(ctrl.StartTasks).TotalSeconds > 60)
+                            {
+                                screens.Remove(s);
+
+                                if (s.Thread.Name == "RegularTasks")
+                                {
+                                    s.CreateRoutine("AutoActions");
+                                    s.Thread.Start();
+                                }
+                                break;
+                            }
+                        }
+                    }
 
                     foreach (Screen s in ctrl.sc)
                     {
@@ -637,26 +679,23 @@ namespace CodeStrikeBot
 
                     if (!bckScheduler.CancellationPending)
                     {
-                        ctrl.BeginTask();
-                        ctrl.EndTask();
-
                         bckScheduler.ReportProgress(1);
 
-                        if (!bckScheduler.CancellationPending)
+                        ctrl.StartScheduler = DateTime.Now;
+
+                        Screen s = ctrl.GetNextWindow(task);
+
+                        s.AbortRoutine();
+
+                        s.CreateRoutine("ScheduledTask");
+                        s.Thread.Start(task);
+
+                        while (s.Thread.IsAlive && DateTime.Now.Subtract(ctrl.StartScheduler).TotalSeconds < 60) { }
+                        
+                        if (s.Thread.Name == "ScheduledTask")
                         {
-                            try
-                            {
-                                ctrl.StartScheduler = DateTime.Now;
-                                //BeginInvoke(new Action(() => ctrl.ExecuteTask(task)));
-                                if (ctrl.ExecuteTask(task))
-                                {
-                                    tmrLateSchedule.Restart();
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                ctrl.EndTask();
-                            }
+                            s.CreateRoutine("AutoActions");
+                            s.Thread.Start();
                         }
                     }
 
@@ -696,13 +735,11 @@ namespace CodeStrikeBot
             DataObjects.ScheduleTask task = ctrl.GetNextTask();
             if (task != null)
             {
-                ctrl.BeginTask(1000);
                 try
                 {
                     ctrl.ExecuteTask(task);
                 }
                 catch (Exception ex) { }
-                ctrl.EndTask();
             }
         }
 
@@ -1069,7 +1106,7 @@ namespace CodeStrikeBot
 
                                                     if (s != null)
                                                     {
-                                                        ctrl.BeginTask();
+                                                        s.AbortRoutine();
                                                         while (s.Emulator.LastKnownAccount == null || s.Emulator.LastKnownAccount.Id != a.Id)
                                                         {
                                                             ctrl.Logout(s);
@@ -1081,7 +1118,8 @@ namespace CodeStrikeBot
                                                             //success = s.ActivateBoost(ScheduleType.Shield, 3); //DIFF MS
                                                             success = s.ActivateBoost(ScheduleType.Shield, 8);
                                                         }
-                                                        ctrl.EndTask();
+                                                        s.CreateRoutine("AutoActions");
+                                                        s.Thread.Start();
                                                     }
                                                 }
 
@@ -1111,7 +1149,7 @@ namespace CodeStrikeBot
 
                                                 if (s != null)
                                                 {
-                                                    ctrl.BeginTask();
+                                                    s.AbortRoutine();
                                                     while (s.Emulator.LastKnownAccount == null || s.Emulator.LastKnownAccount.Id != a.Id)
                                                     {
                                                         ctrl.Logout(s);
@@ -1215,7 +1253,8 @@ namespace CodeStrikeBot
                                                             }
                                                         }
                                                     }
-                                                    ctrl.EndTask();
+                                                    s.CreateRoutine("AutoActions");
+                                                    s.Thread.Start();
                                                 }
                                             }
 
@@ -1327,13 +1366,14 @@ namespace CodeStrikeBot
 
                                     if (command == "chat")
                                     {
-                                        ctrl.BeginTask();
                                         Screen s = ctrl.GetFirstAbleWindow();
                                         if (s != null)
                                         {
+                                            s.AbortRoutine();
                                             s.SendChat(ctrl.GetStatusMessage(), 1);
+                                            s.CreateRoutine("AutoActions");
+                                            s.Thread.Start();
                                         }
-                                        ctrl.EndTask();
                                     }
                                     else
                                     {
@@ -1405,11 +1445,12 @@ namespace CodeStrikeBot
 
                                     if (acc != null && s != null && s.EmulatorProcess != null)
                                     {
-                                        ctrl.BeginTask();
+                                        s.AbortRoutine();
                                         ctrl.Logout(s);
                                         ctrl.StartApp(s);
                                         ctrl.Login(s, acc);
-                                        ctrl.EndTask();
+                                        s.CreateRoutine("AutoActions");
+                                        s.Thread.Start();
                                     }
                                 }
                                 else if (command.StartsWith("shield"))
@@ -1426,7 +1467,7 @@ namespace CodeStrikeBot
 
                                         if (s != null)
                                         {
-                                            ctrl.BeginTask();
+                                            s.AbortRoutine();
                                             while (s.Emulator.LastKnownAccount == null || s.Emulator.LastKnownAccount.Id != a.Id)
                                             {
                                                 ctrl.Logout(s);
@@ -1438,7 +1479,8 @@ namespace CodeStrikeBot
                                                 //success = s.ActivateBoost(ScheduleType.Shield, 3); //DIFF MS
                                                 success = s.ActivateBoost(ScheduleType.Shield, 8);
                                             }
-                                            ctrl.EndTask();
+                                            s.CreateRoutine("AutoActions");
+                                            s.Thread.Start();
                                         }
                                     }
 
@@ -1515,9 +1557,11 @@ namespace CodeStrikeBot
                                         System.Threading.Thread.Sleep(1000);
                                     }
 
-                                    ctrl.BeginTask();
-                                    ctrl.GetFirstAbleWindow().SendChat("Invalid command", 1);
-                                    ctrl.EndTask();
+                                    Screen s = ctrl.GetFirstAbleWindow();
+                                    s.AbortRoutine();
+                                    s.SendChat("Invalid command", 1);
+                                    s.CreateRoutine("AutoActions");
+                                    s.Thread.Start();
                                 }
 
                                 tmrSupressAction.Restart();
@@ -1665,9 +1709,10 @@ namespace CodeStrikeBot
         {
             if (ctrl.ActiveScreen != null && ctrl.ActiveScreen.EmulatorProcess != null)
             {
-                ctrl.BeginTask(1000);
+                ctrl.ActiveScreen.AbortRoutine(1000);
                 ctrl.CollectGifts();
-                ctrl.EndTask();
+                ctrl.ActiveScreen.CreateRoutine("AutoActions");
+                ctrl.ActiveScreen.Thread.Start();
             }
         }
 
@@ -1675,17 +1720,19 @@ namespace CodeStrikeBot
         {
             if (ctrl.ActiveScreen != null && ctrl.ActiveScreen.EmulatorProcess != null)
             {
-                ctrl.BeginTask(1000);
+                ctrl.ActiveScreen.AbortRoutine(1000);
                 ctrl.ActiveScreen.MissionXP();
-                ctrl.EndTask();
+                ctrl.ActiveScreen.CreateRoutine("AutoActions");
+                ctrl.ActiveScreen.Thread.Start();
             }
         }
 
         private void btnMissions_Click(object sender, EventArgs e)
         {
-            ctrl.BeginTask(1000);
+            ctrl.ActiveScreen.AbortRoutine(1000);
             ctrl.CollectMissions();
-            ctrl.EndTask();
+            ctrl.ActiveScreen.CreateRoutine("AutoActions");
+            ctrl.ActiveScreen.Thread.Start();
         }
 
         private void btnMap_Click(object sender, EventArgs e)
@@ -1694,9 +1741,10 @@ namespace CodeStrikeBot
             {
                 stsState.Text = System.DateTime.Now.ToLongTimeString();
 
-                ctrl.BeginTask(2000);
+                ctrl.ActiveScreen.AbortRoutine(2000);
                 ctrl.ActiveScreen.Map(Int32.Parse(txtSliceStartX.Text), Int32.Parse(txtSliceStartY.Text), Int32.Parse(txtRowStart.Text), Int32.Parse(txtColStart.Text));
-                ctrl.EndTask();
+                ctrl.ActiveScreen.CreateRoutine("AutoActions");
+                ctrl.ActiveScreen.Thread.Start(); ;
 
                 stsState.Text = stsState.Text + " - " + System.DateTime.Now.ToLongTimeString();
             }
@@ -1708,11 +1756,12 @@ namespace CodeStrikeBot
             {
                 stsState.Text = System.DateTime.Now.ToLongTimeString();
 
-                ctrl.BeginTask(2000);
+                ctrl.ActiveScreen.AbortRoutine(2000);
                 bckHeartBeat.RunWorkerAsync();
                 ctrl.ActiveScreen.SearchEnemies(Int32.Parse(txtSliceStartX.Text), Int32.Parse(txtSliceStartY.Text));
                 bckHeartBeat.CancelAsync();
-                ctrl.EndTask();
+                ctrl.ActiveScreen.CreateRoutine("AutoActions");
+                ctrl.ActiveScreen.Thread.Start();
 
                 stsState.Text = stsState.Text + " - " + System.DateTime.Now.ToLongTimeString();
             }
@@ -1722,9 +1771,10 @@ namespace CodeStrikeBot
         {
             if (ctrl.ActiveScreen != null && ctrl.ActiveScreen.EmulatorProcess != null)
             {
-                ctrl.BeginTask(1000);
+                ctrl.ActiveScreen.AbortRoutine(1000);
                 ctrl.ActiveScreen.GrowXP();
-                ctrl.EndTask();
+                ctrl.ActiveScreen.CreateRoutine("AutoActions");
+                ctrl.ActiveScreen.Thread.Start();
             }
         }
 
@@ -1840,7 +1890,7 @@ namespace CodeStrikeBot
 
                     if ((!chkScheduler.Checked || (ctrl.StartScheduler > DateTime.Today && DateTime.Now.Subtract(ctrl.StartScheduler).Minutes >= 1)) && (!chkTasks.Checked || (ctrl.StartTasks > DateTime.Today && DateTime.Now.Subtract(ctrl.StartTasks).Minutes >= 3)))
                     {
-                        ctrl.EndTask();
+                        //ctrl.EndTask();
                     }
 
                     if (chkScheduler.Checked)
@@ -1980,55 +2030,137 @@ namespace CodeStrikeBot
                         int StartMenuSizeOnLeft = 60;
                         for (int y = 50; y < Controller.SCREEN_H; y += 10)
                         {
-                            Color c1 = bmpScreenCapture.GetPixel(910 + StartMenuSizeOnLeft, y);
+                            //MEMU 2.9.6.1 //Color to find was 255,255,255, 3.0.5.2 is 17,34,34
 
-                            if (c1.Equals(255, 255, 255))
+                            Color c = bmpScreenCapture.GetPixel(457 + StartMenuSizeOnLeft, y);
+
+                            if (c.Equals(27, 39, 41))
+                            {
+                                Controller.SendClick(null, 457 + StartMenuSizeOnLeft, y, 300);
+                                foundMemuError = true;
+                                break;
+                            }
+
+                            c = bmpScreenCapture.GetPixel(910 + StartMenuSizeOnLeft, y);
+
+                            if (c.Equals(27, 39, 41))
                             {
                                 Controller.SendClick(null, 910 + StartMenuSizeOnLeft, y, 300);
                                 foundMemuError = true;
                                 break;
                             }
-                        }
 
-                        using (Graphics g = Graphics.FromImage(bmpScreenCapture))
-                        {
-                            g.CopyFromScreen(System.Windows.Forms.Screen.PrimaryScreen.Bounds.X, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Y, 0, 0, bmpScreenCapture.Size, CopyPixelOperation.SourceCopy);
-                        }
+                            c = bmpScreenCapture.GetPixel(1360 + StartMenuSizeOnLeft, y);
 
-                        for (int y = 50; y < Controller.SCREEN_H && foundMemuError; y += 10)
-                        {
-                            Color c1 = bmpScreenCapture.GetPixel(910 + StartMenuSizeOnLeft, y);
-
-                            if (c1.Equals(255, 255, 255))
+                            if (c.Equals(27, 39, 41))
                             {
-                                do
-                                {
-                                    y--;
-                                    c1 = bmpScreenCapture.GetPixel(910 + StartMenuSizeOnLeft, y);
-                                }
-                                while (c1.Equals(255, 255, 255));
-
-                                y++;
-
-                                int x = 910;
-
-                                do
-                                {
-                                    x--;
-                                    c1 = bmpScreenCapture.GetPixel(x + StartMenuSizeOnLeft, y);
-                                }
-                                while (c1.Equals(255, 255, 255));
-
-                                x++;
-
-                                Controller.SendClick(null, x + 460 + StartMenuSizeOnLeft, y + 160, 300);
+                                Controller.SendClick(null, 1360 + StartMenuSizeOnLeft, y, 300);
+                                foundMemuError = true;
                                 break;
                             }
                         }
 
+                        if (foundMemuError)
+                        {
+                            using (Graphics g = Graphics.FromImage(bmpScreenCapture))
+                            {
+                                g.CopyFromScreen(System.Windows.Forms.Screen.PrimaryScreen.Bounds.X, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Y, 0, 0, bmpScreenCapture.Size, CopyPixelOperation.SourceCopy);
+                            }
+
+                            for (int y = 50; y < Controller.SCREEN_H; y += 10)
+                            {
+                                Color c = bmpScreenCapture.GetPixel(457 + StartMenuSizeOnLeft, y);
+
+                                if (c.Equals(27, 39, 41))
+                                {
+                                    do
+                                    {
+                                        y--;
+                                        c = bmpScreenCapture.GetPixel(457 + StartMenuSizeOnLeft, y);
+                                    }
+                                    while (c.Equals(27, 39, 41));
+
+                                    y++;
+
+                                    int x = 457;
+
+                                    do
+                                    {
+                                        x--;
+                                        c = bmpScreenCapture.GetPixel(x + StartMenuSizeOnLeft, y);
+                                    }
+                                    while (c.Equals(27, 39, 41));
+
+                                    x++;
+
+                                    //Controller.SendClick(null, x + 460 + StartMenuSizeOnLeft, y + 160, 300);
+                                    Controller.SendClick(null, x + 350 + StartMenuSizeOnLeft, y + 160, 300);
+                                    break;
+                                }
+
+                                c = bmpScreenCapture.GetPixel(910 + StartMenuSizeOnLeft, y);
+
+                                if (c.Equals(27, 39, 41))
+                                {
+                                    do
+                                    {
+                                        y--;
+                                        c = bmpScreenCapture.GetPixel(910 + StartMenuSizeOnLeft, y);
+                                    }
+                                    while (c.Equals(27, 39, 41));
+
+                                    y++;
+
+                                    int x = 910;
+
+                                    do
+                                    {
+                                        x--;
+                                        c = bmpScreenCapture.GetPixel(x + StartMenuSizeOnLeft, y);
+                                    }
+                                    while (c.Equals(27, 39, 41));
+
+                                    x++;
+
+                                    //Controller.SendClick(null, x + 460 + StartMenuSizeOnLeft, y + 160, 300);
+                                    Controller.SendClick(null, x + 350 + StartMenuSizeOnLeft, y + 160, 300);
+                                    break;
+                                }
+
+                                c = bmpScreenCapture.GetPixel(1360 + StartMenuSizeOnLeft, y);
+
+                                if (c.Equals(27, 39, 41))
+                                {
+                                    do
+                                    {
+                                        y--;
+                                        c = bmpScreenCapture.GetPixel(1360 + StartMenuSizeOnLeft, y);
+                                    }
+                                    while (c.Equals(27, 39, 41));
+
+                                    y++;
+
+                                    int x = 1360;
+
+                                    do
+                                    {
+                                        x--;
+                                        c = bmpScreenCapture.GetPixel(x + StartMenuSizeOnLeft, y);
+                                    }
+                                    while (c.Equals(27, 39, 41));
+
+                                    x++;
+
+                                    //Controller.SendClick(null, x + 460 + StartMenuSizeOnLeft, y + 160, 300);
+                                    Controller.SendClick(null, x + 350 + StartMenuSizeOnLeft, y + 160, 300);
+                                    break;
+                                }
+                            }
+                        }
+
                         //check LINE update dialog
-                        Color c = bmpScreenCapture.GetPixel(970, 555);
-                        if (c.Equals(11, 178, 3))
+                        Color c3 = bmpScreenCapture.GetPixel(970, 555);
+                        if (c3.Equals(11, 178, 3))
                         {
                             Controller.SendClick(null, 965, 555, 10000);
                             Program.RestartApp();
@@ -2039,179 +2171,6 @@ namespace CodeStrikeBot
                         if (chksum == 0x9b7f)
                         {
                             Controller.SendClick(null, 1176, 600, 200);
-                        }
-                    }
-
-                    foreach (Screen s in ctrl.sc)
-                    {
-                        if (s != null)
-                        {
-                            if (s.EmulatorProcess != null && s.EmulatorProcess.HasExited)
-                            {
-                                Controller.Instance.RestartEmulator(s, false);
-                            }
-                            else
-                            {
-                                Controller.CaptureApplication(s);
-
-                                if (s.IsFucked)
-                                {
-                                    BotDatabase.InsertLog(2, String.Format("Emulator frozen: {0}", s.Emulator.WindowName), s.LastChecksum.ToString("X4"), new byte[1] { 0x0 });
-                                    System.IO.Directory.CreateDirectory(String.Format("{0}\\auto", Controller.Instance.GetFullScreenshotDir()));
-                                    s.SuperBitmap.Bitmap.Save(String.Format("{0}\\crash{1}.bmp", ctrl.GetFullScreenshotDir(), s.LastChecksum.ToString("X4")), ImageFormat.Bmp);
-                                    ctrl.RestartEmulator(s, false);
-                                    ctrl.Login(s, s.Emulator.LastKnownAccount);
-                                }
-
-                                if (DateTime.Now.Subtract(s.TimeSinceChecksumChanged).TotalSeconds > 65)
-                                {
-                                    if (DateTime.Now.Subtract(s.TimeSinceChecksumChanged).TotalSeconds > 120)
-                                    {
-                                        if (s.ScreenState.CurrentArea != Area.StateMaps.FullScreen && s.ScreenState.CurrentArea != Area.Others.Login && s.ScreenState.CurrentArea != Area.Others.Chat)
-                                        {
-                                            BotDatabase.InsertLog(2, String.Format("Emulator frozen: {0}", s.Emulator.WindowName), s.LastChecksum.ToString("X4"), new byte[1] { 0x0 });
-                                            System.IO.Directory.CreateDirectory(String.Format("{0}\\auto", Controller.Instance.GetFullScreenshotDir()));
-                                            s.SuperBitmap.Bitmap.Save(String.Format("{0}\\crash{1}.bmp", ctrl.GetFullScreenshotDir(), s.LastChecksum.ToString("X4")), ImageFormat.Bmp);
-                                            ctrl.RestartEmulator(s, false);
-                                            ctrl.Login(s, s.Emulator.LastKnownAccount); 
-                                            
-                                            Controller.CaptureApplication(s);
-                                        }
-                                    }
-                                    else if (s.ScreenState.CurrentArea != Area.StateMaps.FullScreen && s.ScreenState.CurrentArea != Area.Others.Login && s.ScreenState.CurrentArea != Area.Others.Chat)
-                                    {
-                                        s.ClickHome(5000);
-                                        Controller.CaptureApplication(s);
-                                    }
-                                }
-
-                                //TODO Slow mode
-                                if (s.TimeoutFactor > 5.0)
-                                {
-                                    BotDatabase.InsertLog(2, String.Format("Emulator slow: {0}", s.Emulator.WindowName), s.LastChecksum.ToString("X4"), new byte[1] { 0x0 });
-                                    ctrl.RestartEmulator(s, false);
-                                    ctrl.Login(s, s.Emulator.LastKnownAccount);
-                                }
-
-                                ushort chksum = ScreenState.GetScreenChecksum(s.SuperBitmap, 190, 115, 20);
-
-                                if (chksum == 0x6b07) //Updates are available
-                                {
-                                    s.ClickBack(300); //click Back
-                                }
-
-                                if (chksum == 0x3b17) //Notice
-                                {
-                                    chksum = ScreenState.GetScreenChecksum(s.SuperBitmap, 190, 115, 20);
-                                    //s.ClickBack(300); //click Back
-                                    //TODO: Finish later
-                                }
-
-                                if (s.ScreenState != null && !s.ScreenState.Overlays.Contains(Overlay.Statuses.Loading))
-                                {
-                                    if (!s.PreventFromOpening && s.ScreenState.CurrentArea == Area.Emulators.Android)
-                                    {
-                                        ctrl.StartApp(s);
-                                    }
-                                    else if (s.Emulator.LastKnownAccount != null && s.Emulator.LastKnownAccount.Id != 0 && s.ScreenState.CurrentArea == Area.Others.Login)
-                                    {
-                                        ctrl.Login(s, s.Emulator.LastKnownAccount);
-                                    }
-                                    else if (s.ScreenState.CurrentArea == Area.Others.SessionTimeout)
-                                    {
-                                        s.PreventFromOpening = true;
-                                        s.Emulator.LastKnownAccount = null;
-                                        Controller.SendClick(s, 200, 205, 5000); //click
-                                    }
-                                    else if (s.ScreenState.CurrentArea == Area.Others.Quit)
-                                    {
-                                        //s.ClickBack(800); //click Back
-                                        //Controller.SendClick(s, 145, 480, 3000); //DIFF
-                                        Controller.SendClick(s, 254, 393, 1000); //DIFF ff
-                                    }
-                                    else if (s.ScreenState.CurrentArea == Area.Emulators.Crash)
-                                    {
-                                        System.Threading.Thread.Sleep(5000);
-                                        Controller.CaptureApplication(s);
-
-                                        if (s.ScreenState.CurrentArea == Area.Emulators.Crash)
-                                        {
-                                            ctrl.RestartEmulator(s, false);
-                                            ctrl.Login(s.Emulator.LastKnownAccount);
-                                        }
-                                    }
-                                    else if (s.ScreenState.CurrentArea == Area.Others.Ad)
-                                    {
-                                        s.ClickBack();
-                                    }
-                                    else if (s.ScreenState.CurrentArea == Area.Unknown)
-                                    {
-                                        System.Threading.Thread.Sleep((int)(10000 * s.TimeoutFactor));
-                                        Controller.CaptureApplication(s);
-
-                                        if (s.ScreenState.CurrentArea == Area.Unknown)
-                                        {
-                                            s.ClickBack();
-                                        }
-                                    }
-
-                                    /*if (s.ScreenState.Overlays.Contains(Overlay.Widgets.SecretGift))
-                                    {
-                                        System.Threading.Thread.Sleep(5000);
-                                        Controller.CaptureApplication(s);
-
-                                        if (s.ScreenState.Overlays.Contains(Overlay.Widgets.SecretGift))
-                                        {
-                                            Controller.SendClick(s, 90, 575, 1000);
-                                        }
-                                    }
-
-                                    if (s.ScreenState.Overlays.Contains(Overlay.Widgets.GlobalGift))
-                                    {
-                                        System.Threading.Thread.Sleep(5000);
-                                        Controller.CaptureApplication(s);
-
-                                        if (s.ScreenState.Overlays.Contains(Overlay.Widgets.GlobalGift))
-                                        {
-                                            Controller.SendClick(s, 30, 575, 1000);
-                                        }
-                                    }*/
-
-                                    if ((s.ScreenState.Overlays.Contains(Overlay.Incomings.Attack) || s.ScreenState.Overlays.Contains(Overlay.Incomings.Rally)))
-                                    {
-                                        BotDatabase.InsertLog(3, String.Format("Incoming {0} at {1}", (s.ScreenState.Overlays.Contains(Overlay.Incomings.Attack) ? "Attack" : "Rally"), s.Emulator.LastKnownAccount.ToString()), "", new byte[1] { 0x0 });
-
-                                        if (tmrAttackNotify.ElapsedMilliseconds > 300000)
-                                        {
-                                            tmrAttackNotify.Restart();
-
-                                            if (s.ScreenState.Overlays.Contains(Overlay.Incomings.Attack))
-                                            {
-                                                //ctrl.SendNotification(String.Format("Incoming Attack at {1}", s.Emulator.LastKnownAccount.ToString()), NotificationType.IncomingAttack);
-                                            }
-
-                                            if (s.ScreenState.Overlays.Contains(Overlay.Incomings.Rally))
-                                            {
-                                                ctrl.SendNotification(String.Format("Incoming Rally at {1}", s.Emulator.LastKnownAccount.ToString()), NotificationType.IncomingRally);
-                                            }
-                                        }
-                                    }
-
-                                    if (s.ScreenState.Overlays.Contains(Overlay.Widgets.AllianceHelp)
-                                        || s.ScreenState.CurrentArea == Area.Menus.AllianceHelp
-                                        || s.ScreenState.CurrentArea == Area.Menus.ShootingRanges.Main
-                                        || s.ScreenState.CurrentArea == Area.Menus.ShootingRanges.NormalCrate
-                                        || s.ScreenState.Overlays.Contains(Overlay.Widgets.GlobalGift)
-                                        || s.ScreenState.Overlays.Contains(Overlay.Widgets.SecretGift)
-                                        || s.ScreenState.CurrentArea == Area.MainBases.GlobalGiftCollect
-                                        || s.ScreenState.CurrentArea == Area.MainBases.SecretGiftCollect)
-                                    {
-                                        ctrl.BeginTask();
-                                        s.RegularTasksStep();
-                                        ctrl.EndTask();
-                                    }
-                                }
-                            }
                         }
                     }
                 }
