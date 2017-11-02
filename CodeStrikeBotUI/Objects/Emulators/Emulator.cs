@@ -3701,7 +3701,7 @@ namespace CodeStrikeBot
                         if (ScreenState.CurrentArea == Area.Menus.Mission)
                         {
                             ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 125, 470, 20);
-                            if (chksum == 0x09ac || chksum == 0xccb2) //missions at 00:00
+                            if (chksum == 0xd957) //missions at 00:00
                             {
                                 DataObjects.Account account = Emulator.LastKnownAccount;
                                 while (!this.Logout()) { }
