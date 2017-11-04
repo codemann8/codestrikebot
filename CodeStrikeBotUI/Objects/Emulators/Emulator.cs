@@ -3618,8 +3618,17 @@ namespace CodeStrikeBot
                     }
                     else
                     {
-                        int r = new Random().Next(0, 2);
-                        Controller.SendClick(this, 75 + 120 * r, 295, 1500); //click Crate
+                        chksum = ScreenState.GetScreenChecksum(SuperBitmap, 188, 387, 20);
+                        if (chksum == 0x494e)
+                        {
+                            Controller.SendClick(this, 188, 390, 1000); //click Collect
+                            Controller.SendClick(this, 40, 680, 300); //Click Base
+                        }
+                        else
+                        {
+                            int r = new Random().Next(0, 2);
+                            Controller.SendClick(this, 75 + 120 * r, 295, 1500); //click Crate
+                        }
                     }
 
                     /* DIFF MS
