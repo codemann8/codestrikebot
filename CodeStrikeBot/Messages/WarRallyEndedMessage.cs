@@ -50,6 +50,8 @@ namespace CodeStrikeBot.Messages
                                         case "alliance_war_defense": this.shared_counts.AllianceWarDefenses = (int)kvp.Value; break;
                                         case "alliance_ac_war_attack": this.shared_counts.AllianceACWarAttacks = (int)kvp.Value; break;
                                         case "alliance_ac_war_defense": this.shared_counts.AllianceACWarDefenses = (int)kvp.Value; break;
+                                        case "alliance_group_war_attack": this.shared_counts.AllianceGroupWarAttacks = (int)kvp.Value; break;
+                                        case "alliance_group_war_defense": this.shared_counts.AllianceGroupWarDefenses = (int)kvp.Value; break;
                                         default: this.Error = true; break;
                                     }
                                 }

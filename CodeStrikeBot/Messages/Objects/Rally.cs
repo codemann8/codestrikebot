@@ -184,6 +184,8 @@ namespace CodeStrikeBot.Messages.Objects
             public int AllianceWarDefenses { get; set; }
             public int AllianceACWarAttacks { get; set; }
             public int AllianceACWarDefenses { get; set; }
+            public int AllianceGroupWarAttacks { get; set; }
+            public int AllianceGroupWarDefenses { get; set; }
         }
     }
 }
