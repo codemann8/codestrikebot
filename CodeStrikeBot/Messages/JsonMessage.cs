@@ -120,7 +120,13 @@ namespace CodeStrikeBot.Messages
                     catch (Newtonsoft.Json.JsonReaderException ex)
                     {
                         System.IO.Directory.CreateDirectory(String.Format(".\\output\\debug\\unknownJson"));
-                        System.IO.File.WriteAllText(String.Format(".\\output\\debug\\unknownJson\\-ERROR-{0}-{1}.txt", node.Attributes["node"].Value, ret.Id), Utilities.FormatJSON(ret.RawJson));
+                        string json = ret.RawJson;
+                        try
+                        {
+                            json = Utilities.FormatJSON(ret.RawJson);
+                        }
+                        catch (ArgumentOutOfRangeException e) { }
+                        System.IO.File.WriteAllText(String.Format(".\\output\\debug\\unknownJson\\-ERROR-{0}-{1}.txt", node.Attributes["node"].Value, ret.Id), json);
                     }
                 }
             }
