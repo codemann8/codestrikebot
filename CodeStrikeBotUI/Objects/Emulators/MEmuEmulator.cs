@@ -95,7 +95,7 @@ namespace CodeStrikeBot
                 if (p.MainWindowTitle.Contains(windowName))
                 {
                     EmulatorProcess = p;
-                    Emulator = new DataObjects.EmulatorInstance(0, EmulatorType.Leapdroid, windowName, p.CommandLineArgs(EmulatorType.MEmu), new DataObjects.Account(0), new DataObjects.App(0));
+                    Emulator = new DataObjects.EmulatorInstance(0, EmulatorType.MEmu, windowName, p.CommandLineArgs(EmulatorType.MEmu), new DataObjects.Account(0), new DataObjects.App(0));
                     break;
                 }
             }

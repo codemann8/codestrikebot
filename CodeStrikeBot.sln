@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeStrikeBotUI", "CodeStri
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeStrikeBot", "CodeStrikeBot\CodeStrikeBot.csproj", "{8938F60C-8EAB-4E35-AFB1-2EC53329EF9D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeStrikeBotDebugTool", "CodeStrikeBotDebugTool\CodeStrikeBotDebugTool.csproj", "{98C486CF-5580-44A5-92E3-87565A363E0E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,6 +50,18 @@ Global
 		{8938F60C-8EAB-4E35-AFB1-2EC53329EF9D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{8938F60C-8EAB-4E35-AFB1-2EC53329EF9D}.Release|x64.ActiveCfg = Release|Any CPU
 		{8938F60C-8EAB-4E35-AFB1-2EC53329EF9D}.Release|x86.ActiveCfg = Release|Any CPU
+		{98C486CF-5580-44A5-92E3-87565A363E0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98C486CF-5580-44A5-92E3-87565A363E0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98C486CF-5580-44A5-92E3-87565A363E0E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{98C486CF-5580-44A5-92E3-87565A363E0E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{98C486CF-5580-44A5-92E3-87565A363E0E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{98C486CF-5580-44A5-92E3-87565A363E0E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{98C486CF-5580-44A5-92E3-87565A363E0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98C486CF-5580-44A5-92E3-87565A363E0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98C486CF-5580-44A5-92E3-87565A363E0E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{98C486CF-5580-44A5-92E3-87565A363E0E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{98C486CF-5580-44A5-92E3-87565A363E0E}.Release|x64.ActiveCfg = Release|Any CPU
+		{98C486CF-5580-44A5-92E3-87565A363E0E}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
