@@ -35,6 +35,7 @@ namespace CodeStrikeBot.Messages
         public Objects.Rally.SharedCounts shared_counts { get; set; }
         public bool bypass_final_confirmation { get; set; }
         public bool war_commission_required { get; set; }
+        public string war_group_type { get; set; }
 
         public WarRallyMessage(JsonMessage message)
             : base(message)
@@ -93,6 +94,7 @@ namespace CodeStrikeBot.Messages
                             case "copy_leader_ratio_enabled": this.copy_leader_ratio_enabled = (bool)war.Value; break;
                             case "bypass_final_confirmation": this.bypass_final_confirmation = (bool)war.Value; break;
                             case "war_comission_required": this.war_commission_required = (bool)war.Value; break;
+                            case "war_group_type": this.war_group_type = war.Value.ToString(); break;
                             case "attacker":
                                 this.attacker = new Objects.Rally.Attacker();
 
