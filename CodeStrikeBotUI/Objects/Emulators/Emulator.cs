@@ -3492,14 +3492,14 @@ namespace CodeStrikeBot
                             //if (ScreenState.GetScreenChecksum(bmp, 150, 273, 10) == 0xe6f5 && ScreenState.GetScreenChecksum(bmp, 192, 273, 10) != 0xf143) //loading //f143 depricated?
                             //if (chksum == 0xe6f5 && chksum2 != 0x4266)
                             //if (chksum == 0xd923 && chksum2 != 0x4266) //nox, not true for some reason
-                            if (chksum == 0xbb0e && chksum2 != 0x9e76) //memu
+                            /*if (chksum == 0xbb0e && chksum2 != 0x9e76) //memu
                             {
                                 Thread.Sleep((int)(50 * TimeoutFactor));
                             }
                             else //none
-                            {
+                            {*/
                                 this.ClickBack(300);
-                            }
+                            //}
                         }
                     }
                 }

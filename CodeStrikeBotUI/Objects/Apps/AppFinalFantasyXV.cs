@@ -692,7 +692,7 @@ namespace CodeStrikeBot
             }
             else if (CurrentArea == Area.Menus.Alliance || CurrentArea == Area.Menus.Mission || CurrentArea == Area.Menus.Account)
             {
-                //bmp.Bitmap.Save(String.Format("{0}\\help{0}.bmp", Controller.Instance.GetFullScreenshotDir(), System.Threading.Thread.CurrentThread.ManagedThreadId.ToString()), System.Drawing.Imaging.ImageFormat.Bmp);
+                //bmp.Bitmap.Save(String.Format("{0}\\help{1}.bmp", Controller.Instance.GetFullScreenshotDir(), System.Threading.Thread.CurrentThread.ManagedThreadId.ToString()), System.Drawing.Imaging.ImageFormat.Bmp);
                 chksum = ScreenState.GetScreenChecksum(bmp, 67, 16, 6);
                 if (chksum == 0x041e)
                 {
@@ -701,8 +701,9 @@ namespace CodeStrikeBot
             }
             else if (CurrentArea == Area.Menus.AllianceHelp)
             {
+                //bmp.Bitmap.Save(String.Format("{0}\\help{1}.bmp", Controller.Instance.GetFullScreenshotDir(), System.Threading.Thread.CurrentThread.ManagedThreadId.ToString()), System.Drawing.Imaging.ImageFormat.Bmp);
                 chksum = ScreenState.GetScreenChecksum(bmp, 36, 225, 20);
-                if (chksum == 0xeeab)
+                if (chksum == 0xfb5e) //f534 loaded2 //fb5e loading
                 {
                     Overlays.Add(Overlay.Statuses.Loading);
                 }
