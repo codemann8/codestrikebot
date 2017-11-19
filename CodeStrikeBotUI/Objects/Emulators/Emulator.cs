@@ -2627,7 +2627,8 @@ namespace CodeStrikeBot
                                 {
                                     case ScheduleType.OilTransfer:
                                         //p = 120; //DIFF MS
-                                        p = 170;
+                                        //p = 170;
+                                        p = 240;
                                         break;
                                     case ScheduleType.CoinTransfer:
                                         //p = 195; //DIFF MS
