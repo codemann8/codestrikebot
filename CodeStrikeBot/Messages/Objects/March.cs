@@ -106,13 +106,15 @@ namespace CodeStrikeBot.Messages.Objects
 
         public override string ToString()
         {
+            TimeSpan eta = this.EndTime.Subtract(DateTime.UtcNow);
+            
             if (this.Watchtower != null)
             {
-                return String.Format("{6} {0}: {1}:{2}:{3} {4}->{5}", Enum.GetName(typeof(MarchType), this.Type).Replace("CodeStrikeBot.Messages.Data.MarchType", ""), this.DestCoordinate.Z, this.DestCoordinate.X, this.DestCoordinate.Y, this.FromName, this.DestName, this.Watchtower.ActualTotalUnits);
+                return String.Format("{9} {0}: {1}:{2}:{3} {4}:{5} {6}{7}{8}", Enum.GetName(typeof(MarchType), this.Type).Replace("CodeStrikeBot.Messages.Data.MarchType", ""), this.DestCoordinate.Z, this.DestCoordinate.X, this.DestCoordinate.Y, eta.Minutes, eta.Seconds, this.FromName, (this.State == MarchState.Returning ? "<-" : "->"), this.DestName, this.Watchtower.ActualTotalUnits);
             }
             else
             {
-                return String.Format("{0}: {1}:{2}:{3} {4}->{5}", Enum.GetName(typeof(MarchType), this.Type).Replace("CodeStrikeBot.Messages.Data.MarchType", ""), this.DestCoordinate.Z, this.DestCoordinate.X, this.DestCoordinate.Y, this.FromName, this.DestName);
+                return String.Format("{0}: {1}:{2}:{3} {4}:{5} {6}{7}{8}", Enum.GetName(typeof(MarchType), this.Type).Replace("CodeStrikeBot.Messages.Data.MarchType", ""), this.DestCoordinate.Z, this.DestCoordinate.X, this.DestCoordinate.Y, eta.Minutes, eta.Seconds, this.FromName, (this.State == MarchState.Returning ? "<-" : "->"), this.DestName);
             }
         }
 
