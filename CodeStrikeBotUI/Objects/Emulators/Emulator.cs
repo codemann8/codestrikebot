@@ -2998,7 +2998,7 @@ namespace CodeStrikeBot
             return ActivateBoost(task.Type, task.Amount);
         }
 
-        public bool ActivateBoost(ScheduleType type, int amount)
+        public bool ActivateBoost(ScheduleType type, int amount, bool replace = true)
         {
             bool success = false;
 
@@ -3047,6 +3047,7 @@ namespace CodeStrikeBot
                     while (!found && watch.ElapsedMilliseconds < 2500)
                     {
                         ushort chkType = 0, chkTypeOn = 0;
+
                         switch (type)
                         {
                             case ScheduleType.Shield:
@@ -3101,7 +3102,7 @@ namespace CodeStrikeBot
 
                             if (!found)
                             {
-                                Controller.SendClickDrag(this, 44, 400, 44, 118, 800, false, 500); //Scroll down
+                                Controller.SendClickDrag(this, 44, 400, 44, 118, 800, false, 800); //Scroll down
                             }
 
                             tries++;
@@ -3110,7 +3111,7 @@ namespace CodeStrikeBot
                     }
                     Color c = SuperBitmap.GetPixel(80, y + 20);
                     //if (found && ScreenState.CurrentArea == Area.Menus.Boost && SuperBitmap.GetPixel(312, y + 20).Within(49, 117, 148, 15)) //DIFF MS
-                    if (found && ScreenState.CurrentArea == Area.Menus.Boost && SuperBitmap.GetPixel(80, y + 15).Within(0, 0, 0, 5))
+                    if (found && ScreenState.CurrentArea == Area.Menus.Boost && SuperBitmap.GetPixel(330, y + 12).Within(0, 0, 0, 5))
                     {
                         success = true;
                     }
@@ -3175,8 +3176,16 @@ namespace CodeStrikeBot
                         //if (chksum == 0x4d8d || chksum == 0x3375) //Purchase Confirmation or Replace Boosts
                         if (ScreenState.Overlays.Contains(Overlay.Dialogs.Popups.ReplaceBoost))
                         {
-                            //Controller.SendClick(this, 275, 220, 300); //Click Yes //DIFF MS
-                            Controller.SendClick(this, 275, 280, 300); //Click Yes
+                            if (replace)
+                            {
+                                //Controller.SendClick(this, 275, 220, 300); //Click Yes //DIFF MS
+                                Controller.SendClick(this, 275, 280, 300); //Click Yes
+                            }
+                            else
+                            {
+                                success = true;
+                                ClickBack(500);
+                            }
                         }
                         else if (ScreenState.Overlays.Contains(Overlay.Dialogs.Popups.Unknown)) //TODO: remove this check after purchase confirm dialog box is tracked
                         {
@@ -3187,7 +3196,7 @@ namespace CodeStrikeBot
                         Controller.CaptureApplication(this);
 
                         //if (ScreenState.CurrentArea == Area.Menus.Boost && SuperBitmap.GetPixel(312, y + 20).Within(49, 117, 148, 15)) //DIFF MS
-                        if (ScreenState.CurrentArea == Area.Menus.Boost && SuperBitmap.GetPixel(80, y + 15).Within(0, 0, 0, 5))
+                        if (ScreenState.CurrentArea == Area.Menus.Boost && SuperBitmap.GetPixel(330, y + 12).Within(0, 0, 0, 5))
                         {
                             success = true;
                         }
