@@ -643,9 +643,17 @@ namespace CodeStrikeBot
                         {
                             Overlays.Add(Overlay.Dialogs.Tiles.PlayerFriend);
                         }
-                        else
+                        else 
                         {
-                            Overlays.Add(Overlay.Dialogs.Tiles.PlayerEnemy);
+                            c = bmp.GetPixel(195, 237); //if that player's VIP is active
+                            if (c.Equals(0, 186, 255))
+                            {
+                                Overlays.Add(Overlay.Dialogs.Tiles.PlayerFriend);
+                            }
+                            else
+                            {
+                                Overlays.Add(Overlay.Dialogs.Tiles.PlayerEnemy);
+                            }
                         }
                     }
                     else
