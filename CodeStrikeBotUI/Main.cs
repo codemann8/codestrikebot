@@ -1088,9 +1088,10 @@ namespace CodeStrikeBot
                                     switch (playerName)
                                     {
                                         case "codemann8":
+                                        case "coalmann8":
                                             ctrl.SendNotification(String.Format("Attack on {0}", march.DestName), NotificationType.IncomingAttack);
 
-                                            if (march.Watchtower != null && march.Watchtower.ActualTotalUnits != 0 && march.Watchtower.ActualTotalUnits < 15000)
+                                            /*if (march.Watchtower != null && march.Watchtower.ActualTotalUnits != 0 && march.Watchtower.ActualTotalUnits < 15000)
                                             {
                                                 ctrl.SendNotification(String.Format("Attack on {0}", march.DestName), NotificationType.IncomingAttack);
                                             }
@@ -1131,7 +1132,7 @@ namespace CodeStrikeBot
                                                 {
                                                     ctrl.SendNotification(String.Format("Failed to activate {0} on {1}", ScheduleType.Shield.ToString(), a.ToString()), NotificationType.BoostActivationFail);
                                                 }
-                                            }
+                                            }*/
                                             break;
                                         case "codelady8":
                                         case "codegirl8":
@@ -1261,6 +1262,53 @@ namespace CodeStrikeBot
                                             if (!success)
                                             {
                                                 ctrl.SendNotification(String.Format("Auto march failed, attack on {0}", march.DestName), NotificationType.IncomingAttack);
+                                            }
+                                            break;
+                                    }
+                                }
+                                else if (march.Type == Messages.Objects.March.MarchType.Scout && march.State != Messages.Objects.March.MarchState.Returning)
+                                {
+                                    string playerName = march.DestName.Substring(march.DestName.IndexOf(") ") + 1).Trim();
+
+                                    DataObjects.Account a;
+                                    bool success;
+
+                                    //TODO: Make this a checkbox parameter on Account record
+                                    switch (playerName)
+                                    {
+                                        case "codemann8":
+                                        case "coalmann8":
+                                            playerName = "codemann8";
+                                            a = ctrl.FindAccount(playerName);
+
+                                            success = false;
+
+                                            if (a != null)
+                                            {
+                                                Screen s = ctrl.GetNextWindow(a);
+
+                                                if (s != null)
+                                                {
+                                                    s.AbortRoutine();
+                                                    /*while (s.Emulator.LastKnownAccount == null || s.Emulator.LastKnownAccount.Id != a.Id)
+                                                    {
+                                                        ctrl.Logout(s);
+                                                        ctrl.StartApp(s);
+                                                        ctrl.Login(s, a);
+                                                    }*/
+                                                    if (s.Emulator.LastKnownAccount != null && s.Emulator.LastKnownAccount.Id == a.Id)
+                                                    {
+                                                        //success = s.ActivateBoost(ScheduleType.Shield, 3); //DIFF MS
+                                                        success = s.ActivateBoost(ScheduleType.AntiScout, 24, false);
+                                                    }
+                                                    s.CreateRoutine("AutoActions");
+                                                    s.Thread.Start();
+
+                                                    if (!success)
+                                                    {
+                                                        ctrl.SendNotification(String.Format("Scout on {0}", march.DestName), NotificationType.IncomingAttack);
+                                                    }
+                                                }
                                             }
                                             break;
                                     }
