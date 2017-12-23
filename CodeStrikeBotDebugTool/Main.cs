@@ -10,15 +10,22 @@ using System.Windows.Forms;
 using System.IO;
 using System.Diagnostics;
 using CodeStrikeBot;
+using System.ServiceModel;
 
 namespace CodeStrikeBot.Debug
 {
     public partial class Main : Form
     {
         private BotDatabase Database { get; set; }
+        private ChannelFactory<Services.ICodeBotService> CodeBotServiceFactory;
+
         public Main()
         {
             InitializeComponent();
+
+            CodeBotServiceFactory = new ChannelFactory<Services.ICodeBotService>(new NetTcpBinding(), "net.tcp://localhost:2633");
+            NetTcpBinding binding = CodeBotServiceFactory.Endpoint.Binding as NetTcpBinding;
+            binding.MaxReceivedMessageSize = 524288;
         }
 
         private void Main_Load(object sender, EventArgs e)
@@ -110,15 +117,25 @@ namespace CodeStrikeBot.Debug
         {
             if (dlgLoad.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                Bitmap bmp = new Bitmap(dlgLoad.FileName);
-                if (picScreen1.Image != null)
-                {
-                    picScreen1.Image.Dispose();
-                }
-
-                picScreen1.Image = bmp;
-                UpdateColorCheckTextboxes();
+                SetNewImage(new Bitmap(dlgLoad.FileName));
             }
+        }
+
+        private void SetNewImage(Bitmap bmp)
+        {
+            Bitmap converted;
+            using (bmp)
+            {
+                converted = Utilities.ChangePixelFormat(bmp, System.Drawing.Imaging.PixelFormat.Format16bppRgb565);
+            }
+
+            if (picScreen1.Image != null)
+            {
+                picScreen1.Image.Dispose();
+            }
+
+            picScreen1.Image = converted;
+            UpdateColorCheckTextboxes();
         }
 
         private void picScreen1_MouseMove(object sender, MouseEventArgs e)
@@ -133,22 +150,44 @@ namespace CodeStrikeBot.Debug
 
         private void btnScreen1_Click(object sender, EventArgs e)
         {
-
+            GetScreenServiceCall(0);
         }
 
         private void btnScreen2_Click(object sender, EventArgs e)
         {
-
+            GetScreenServiceCall(1);
         }
 
         private void btnScreen3_Click(object sender, EventArgs e)
         {
-
+            GetScreenServiceCall(2);
         }
 
         private void btnScreen4_Click(object sender, EventArgs e)
         {
-            
+            GetScreenServiceCall(3);
+        }
+
+        private void GetScreenServiceCall(int screenId)
+        {
+            bool success = false;
+
+            while (!success)
+            {
+                Services.ICodeBotService svc = CodeBotServiceFactory.CreateChannel();
+
+                try
+                {
+                    SetNewImage(svc.GetScreen(screenId));
+                    success = true;
+
+                    (svc as ICommunicationObject).Close();
+                }
+                catch (CommunicationException ex)
+                {
+                    (svc as ICommunicationObject).Abort();
+                }
+            }
         }
     }
 }

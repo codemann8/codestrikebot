@@ -127,6 +127,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Design" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.DataVisualization" />
     <Reference Include="System.Windows" />
     <Reference Include="System.Xml.Linq" />
@@ -157,6 +158,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Objects\Emulators\Emulator.cs" />
     <Compile Include="Objects\Apps\App.cs" />
+    <Compile Include="Services\CodeBotService.cs" />
     <Compile Include="Utilities\Extensions.cs" />
     <Compile Include="Utilities\ListBoxDialog.cs" />
     <Compile Include="Utilities\ReplaceThisPrompt.cs" />

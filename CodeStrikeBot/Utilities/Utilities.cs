@@ -4,11 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.UI.DataVisualization.Charting;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace CodeStrikeBot
 {
     public static class Utilities
     {
+        [System.Runtime.InteropServices.DllImport("kernel32.dll")]
+        public extern static void CopyMemory(IntPtr dest, IntPtr src, uint length);
+
         public static int ChunkId2XCoordinate(int chunkId)
         {
             return chunkId / 256 * 16;
@@ -85,6 +90,32 @@ namespace CodeStrikeBot
             }
 
             return json;
+        }
+
+        public static Bitmap ChangePixelFormat(Bitmap bitmap, PixelFormat pixelFormat)
+        {
+            Rectangle rect = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
+
+            BitmapData bitmapData = bitmap.LockBits(rect, ImageLockMode.ReadOnly, pixelFormat);
+            try
+            {
+                Bitmap convertedBitmap = new Bitmap(bitmap.Width, bitmap.Height, pixelFormat);
+                BitmapData convertedBitmapData = convertedBitmap.LockBits(rect, ImageLockMode.WriteOnly, pixelFormat);
+                try
+                {
+                    CopyMemory(convertedBitmapData.Scan0, bitmapData.Scan0, (uint)bitmapData.Stride * (uint)bitmapData.Height);
+                }
+                finally
+                {
+                    convertedBitmap.UnlockBits(convertedBitmapData);
+                }
+
+                return convertedBitmap;
+            }
+            finally
+            {
+                bitmap.UnlockBits(bitmapData);
+            }
         }
     }
 }

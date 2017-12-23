@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Drawing.Imaging;
 using System.Xml;
-using Microsoft.VisualBasic;
+using System.ServiceModel;
 
 namespace CodeStrikeBot
 {
@@ -212,6 +212,8 @@ namespace CodeStrikeBot
             bckKeepAlive.RunWorkerAsync();
 
             bckAutoActions.RunWorkerAsync();
+
+            bckService.RunWorkerAsync();
         }
 
         private void ReloadAccountList()
@@ -829,6 +831,28 @@ namespace CodeStrikeBot
             else
             {
                 e.Cancel = true;
+            }
+        }
+        #endregion
+
+        #region Service
+        private void bckService_DoWork(object sender, DoWorkEventArgs e)
+        {
+            while (true)
+            {
+                ServiceHost svch = new ServiceHost(typeof(Services.CodeBotService));
+                svch.AddServiceEndpoint(typeof(Services.ICodeBotService), new NetTcpBinding(), "net.tcp://localhost:2633");
+                //var svcep = new System.ServiceModel.Description.ServiceEndpoint(typeof(Services.ICodeBotService));//, new NetTcpBinding(), "net.tcp://localhost:2633");
+                //svch.AddServiceEndpoint(svcep);
+                //svch.OpenTimeout = new TimeSpan(0, 0, 3);
+                svch.Open();
+
+                while (!bckService.CancellationPending)
+                {
+                    System.Threading.Thread.Sleep(100);
+                }
+
+                svch.Close();
             }
         }
         #endregion
