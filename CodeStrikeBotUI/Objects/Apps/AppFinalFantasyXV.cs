@@ -114,7 +114,7 @@ namespace CodeStrikeBot
                         case 0x1ec8:
                             CurrentArea = Area.Menus.Missions.Alliance;
                             break;
-                        case 0x7333:
+                        case 0xa828:
                             CurrentArea = Area.Menus.Missions.VIP;
                             break;
                         case 0x25d:
@@ -460,7 +460,7 @@ namespace CodeStrikeBot
                         }
                     }
                     break;
-                case 0xdb15: //guild chat
+                case 0x2c55: //guild chat
                 case 0x59f8: //realm chat
                 case 0xcdf8: //contacts
                     CurrentArea = Area.Others.Chat;
