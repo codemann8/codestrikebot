@@ -1061,7 +1061,7 @@ namespace CodeStrikeBot
 
                                 if (warMessage.timer <= 900 && tmrSupressAction.ElapsedMilliseconds > 1000)
                                 {
-                                    if (warMessage.defender.AllianceTag == "(Bad4)") //TODO: Move this hard-coded value to user-defined Settings
+                                    if (warMessage.defender.AllianceTag == "(~InK)") //TODO: Move this hard-coded value to user-defined Settings
                                     {
                                         if (warMessage.timer == 60)
                                         {
