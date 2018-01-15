@@ -519,13 +519,37 @@ namespace CodeStrikeBot
                                 }
                             }*/
 
-                            if (ScreenState.Overlays.Contains(Overlay.Widgets.AllianceHelp)
+                            if (ScreenState.Overlays.Contains(Overlay.Widgets.GlobalGift))
+                            {
+                                if (Emulator.LastKnownAccount.Name == "code" || Emulator.LastKnownAccount.Name == "mouse")
+                                {
+                                    if (SwitchCommander(0))
+                                    {
+                                        RegularTasksStep();
+                                    }
+                                }
+                                else
+                                {
+                                    RegularTasksStep();
+                                }
+                            }
+                            else if (ScreenState.CurrentArea == Area.MainBases.GlobalGiftCollect)
+                            {
+                                if (Emulator.LastKnownAccount.Name == "code" || Emulator.LastKnownAccount.Name == "mouse")
+                                {
+                                    RegularTasksStep();
+                                    SwitchCommander(1);
+                                }
+                                else
+                                {
+                                    RegularTasksStep();
+                                }
+                            }
+                            else if (ScreenState.Overlays.Contains(Overlay.Widgets.AllianceHelp)
                                 || ScreenState.CurrentArea == Area.Menus.AllianceHelp
                                 || ScreenState.CurrentArea == Area.Menus.ShootingRanges.Main
                                 || ScreenState.CurrentArea == Area.Menus.ShootingRanges.NormalCrate
-                                || ScreenState.Overlays.Contains(Overlay.Widgets.GlobalGift)
                                 || ScreenState.Overlays.Contains(Overlay.Widgets.SecretGift)
-                                || ScreenState.CurrentArea == Area.MainBases.GlobalGiftCollect
                                 || ScreenState.CurrentArea == Area.MainBases.SecretGiftCollect)
                             {
                                 RegularTasksStep();
@@ -3285,6 +3309,70 @@ namespace CodeStrikeBot
                     Controller.CaptureApplication(this);
                 }
                 while (ScreenState.CurrentArea == Area.Menus.Alliance);
+            }
+        }
+
+        public bool SwitchCommander(int idx)
+        {
+            if (EmulatorProcess != null && Emulator.LastKnownAccount != null)
+            {
+                ushort chksum;
+                Stopwatch watch = new Stopwatch();
+                
+                watch.Start();
+
+                while (this.GoToBaseOrMapStep() && watch.ElapsedMilliseconds < 3000) { };
+
+                Controller.CaptureApplication(this);
+
+                watch.Restart();
+
+                while (ScreenState.CurrentArea != Area.MainBases.Main && watch.ElapsedMilliseconds < 3000)
+                {
+                    //go to base view
+                    Controller.SendClick(this, 40, 675, 300); //click Base
+                    Controller.CaptureApplication(this);
+                }
+
+                if (ScreenState.CurrentArea != Area.MainBases.Main)
+                {
+                    IsFucked = true;
+                    Emulator.LastKnownAccount = null;
+                    return;
+                }
+
+                watch.Restart();
+
+                while (ScreenState.CurrentArea != Area.Menus.Commander && watch.ElapsedMilliseconds < 2500)
+                {
+                    Controller.SendClick(this, 20, 20, 800); //Click Hero
+                    Controller.CaptureApplication(this);
+                }
+
+                watch.Restart();
+
+                while (ScreenState.CurrentArea != Area.Menus.Buildings.HallOfHeroes && watch.ElapsedMilliseconds < 2500)
+                {
+                    Controller.SendClick(this, 300, 580, 800); //Click Change Hero
+                    Controller.CaptureApplication(this);
+                }
+
+                watch.Restart();
+
+                chksum = ScreenState.GetScreenChecksum(SuperBitmap, 340, 305, 10);
+
+                do
+                {
+                    Controller.SendClick(this, 340, 310 + 112 * idx, 1500); //Click Activate
+                    Controller.CaptureApplication(this);
+                }
+                while (chksum == ScreenState.GetScreenChecksum(SuperBitmap, 340, 305, 10) && watch.ElapsedMilliseconds < 3500);
+
+                watch.Restart();
+
+                while (this.GoToBaseOrMapStep() && watch.ElapsedMilliseconds < 5000) { };
+
+                return true;
             }
         }
 
