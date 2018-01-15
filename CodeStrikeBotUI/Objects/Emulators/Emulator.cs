@@ -2287,7 +2287,7 @@ namespace CodeStrikeBot
 
                             //if (chksum != 0x2995 && chksum != 0x1583) //missions available
                             //if (chksum != 0x3900 && chksum != 0x5f0f && chksum != 0xfc2d) //DIFF MS
-                            if (chksum != 0x3793 && chksum != 0xd22c && chksum != 0x20c7) //DIFF FF //all three are zeros //TODO: find universal way to determine zeroes
+                            if (chksum != 0x3793 && chksum != 0xd22c && chksum != 0xde62) //DIFF FF //all three are zeros //TODO: find universal way to determine zeroes
                             {
                                 //c = SuperBitmap.GetPixel(101, (int)Math.Round(240 + 91.5 * m)); //DIFF MS
                                 c = SuperBitmap.GetPixel(330, 492 + 53 * m); //DIFF FF
