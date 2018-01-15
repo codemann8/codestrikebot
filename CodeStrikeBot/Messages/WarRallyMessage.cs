@@ -24,6 +24,10 @@ namespace CodeStrikeBot.Messages
         public int troop_count { get; set; }
         public Objects.Rally.HeroComposite hero_composite_id { get; set; }
         public int troop_max { get; set; }
+        public int super_troop_count { get; set; }
+        public int super_troop_max { get; set; }
+        public int total_super_troop_count { get; set; }
+        public int total_super_troop_max { get; set; }
         public int rallied_troop_count { get; set; }
         public int trap_max { get; set; }
         public int trap_count { get; set; }
@@ -87,6 +91,10 @@ namespace CodeStrikeBot.Messages
                                 }
                                 break;
                             case "troop_max": this.troop_max = (int)war.Value; break;
+                            case "super_troop_count": this.super_troop_count = (int)war.Value; break;
+                            case "super_troop_max": this.super_troop_max = (int)war.Value; break;
+                            case "total_super_troop_count": this.total_super_troop_count = (int)war.Value; break;
+                            case "total_super_troop_max": this.total_super_troop_max = (int)war.Value; break;
                             case "rallied_troop_count": this.rallied_troop_count = (int)war.Value; break;
                             case "trap_max": this.trap_max = (int)war.Value; break;
                             case "trap_count": this.troop_count = (int)war.Value; break;
@@ -234,6 +242,10 @@ namespace CodeStrikeBot.Messages
                                                 break;
                                             case "total_troop_count": slot.TotalTroopCount = (int)kvp.Value; break;
                                             case "total_troop_max": slot.TotalTroopMax = (int)kvp.Value; break;
+                                            case "super_troop_count": slot.SuperTroopCount = (int)kvp.Value; break;
+                                            case "super_troop_max": slot.SuperTroopMax = (int)kvp.Value; break;
+                                            case "total_super_troop_count": slot.TotalSuperTroopCount = (int)kvp.Value; break;
+                                            case "total_super_troop_max": slot.TotalSuperTroopMax = (int)kvp.Value; break;
                                             case "trap_count": slot.TrapCount = (int)kvp.Value; break;
                                             case "total_trap_count": slot.TotalTrapCount = (int)kvp.Value; break;
                                             case "total_trap_max": slot.TotalTrapMax = (int)kvp.Value; break;

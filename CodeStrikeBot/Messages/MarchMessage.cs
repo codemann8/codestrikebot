@@ -125,7 +125,20 @@ namespace CodeStrikeBot.Messages
                                 case "dest_name": this.dest_name = m.Value.ToString(); break;
                                 case "dest_name_need_localize": this.dest_name_need_localize = (bool)m.Value; break;
                                 case "from_name": this.from_name = m.Value.ToString(); break;
-                                case "companion_anims": this.companion_anims = null; if (((JValue)m.Value).Type != JTokenType.Null) this.Error = true; break;
+                                case "companion_anims":
+                                    if (((JValue)m.Value).Type == JTokenType.Null)
+                                    {
+                                        this.companion_anims = null;
+                                    }
+                                    else if (((JValue)m.Value).Type == JTokenType.String)
+                                    {
+                                        this.companion_anims = m.Value.ToString();
+                                    }
+                                    else
+                                    {
+                                        this.Error = true;
+                                    }
+                                    break;
                                 default: this.Error = true; break;
                             }
                         }

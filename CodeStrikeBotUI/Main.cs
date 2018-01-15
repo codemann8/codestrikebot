@@ -1103,7 +1103,16 @@ namespace CodeStrikeBot
                                 //notify attacks on specific users
                                 if (march.Type == Messages.Objects.March.MarchType.Attack && march.State != Messages.Objects.March.MarchState.Returning)
                                 {
-                                    string playerName = march.DestName.Substring(march.DestName.IndexOf(") ") + 1).Trim();
+                                    string playerName = "";
+
+                                    try
+                                    {
+                                        playerName = march.DestName.Substring(march.DestName.IndexOf(") ") + 1).Trim();
+                                    }
+                                    catch (NullReferenceException ex)
+                                    {
+                                        ctrl.SendNotification(String.Format("Null Crash: {0}x{1}->{2}x{3}", march.FromCoordinate.X, march.FromCoordinate.Y, march.DestCoordinate.X, march.DestCoordinate.Y), NotificationType.Crash);
+                                    }
 
                                     DataObjects.Account a;
                                     bool success;
@@ -1368,25 +1377,31 @@ namespace CodeStrikeBot
                             {
                                 foreach (Messages.TileUpdatedMessage.Tile t in c.tiles)
                                 {
-                                    System.Web.UI.DataVisualization.Charting.Point3D coord = Utilities.ProvinceChunkTile2Point3D(c.p_id, c.c_id, t.tile_id);
-
-                                    Messages.Objects.Tile tile = ctrl.tiles.Where(tl => tl.Coordinate.X == coord.X && tl.Coordinate.Y == coord.Y && tl.Coordinate.Z == coord.Z).FirstOrDefault();
-
-                                    if (tile == null)
+                                    try
                                     {
-                                        tile = new Messages.Objects.Tile(t, coord, tileMessage);
-                                        ctrl.tiles.Add(tile);
+                                        System.Web.UI.DataVisualization.Charting.Point3D coord = Utilities.ProvinceChunkTile2Point3D(c.p_id, c.c_id, t.tile_id);
+
+                                        Messages.Objects.Tile tile = ctrl.tiles.Where(tl => tl.Coordinate.X == coord.X && tl.Coordinate.Y == coord.Y && tl.Coordinate.Z == coord.Z).FirstOrDefault();
+
+                                        if (tile == null)
+                                        {
+                                            tile = new Messages.Objects.Tile(t, coord, tileMessage);
+                                            ctrl.tiles.Add(tile);
+                                        }
+                                        else
+                                        {
+                                            tile.Update(tileMessage);
+                                        }
+
+                                        /*foreach (Messages.Objects.Tile t in ctrl.tiles.Where(tl => tl.RCustomExpireTime <= DateTime.Now.ToUniversalTime()).ToList())
+                                        {
+                                            ctrl.tiles.Remove(t);
+                                        }*/
                                     }
-                                    else
+                                    catch (NullReferenceException ex)
                                     {
-                                        tile.Update(tileMessage);
+                                        //error
                                     }
-
-                                    /*foreach (Messages.Objects.Tile t in ctrl.tiles.Where(tl => tl.RCustomExpireTime <= DateTime.Now.ToUniversalTime()).ToList())
-                                    {
-                                        ctrl.tiles.Remove(t);
-                                    }*/
-
                                 }
                             }
 

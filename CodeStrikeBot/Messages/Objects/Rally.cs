@@ -23,6 +23,10 @@ namespace CodeStrikeBot.Messages.Objects
         public int TroopCount { get; set; }
         public HeroComposite HeroCompositeId { get; set; }
         public int TroopMax { get; set; }
+        public int SuperTroopCount { get; set; }
+        public int SuperTroopMax { get; set; }
+        public int TotalSuperTroopCount { get; set; }
+        public int TotalSuperTroopMax { get; set; }
         public int RalliedTroopCount { get; set; }
         public int TrapMax { get; set; }
         public int TrapCount { get; set; }
@@ -64,6 +68,10 @@ namespace CodeStrikeBot.Messages.Objects
                 this.TroopCount = message.troop_count;
                 this.HeroCompositeId = message.hero_composite_id;
                 this.TroopMax = message.troop_max;
+                this.SuperTroopCount = message.super_troop_count;
+                this.SuperTroopMax = message.super_troop_max;
+                this.TotalSuperTroopCount = message.total_super_troop_count;
+                this.TotalSuperTroopMax = message.total_super_troop_max;
                 this.RalliedTroopCount = message.rallied_troop_count;
                 this.TrapMax = message.trap_max;
                 this.TrapCount = message.trap_count;
@@ -166,6 +174,10 @@ namespace CodeStrikeBot.Messages.Objects
             public List<KeyValuePair<string, int>> TroopUnits { get; set; }
             public int TotalTroopCount { get; set; }
             public int TotalTroopMax { get; set; }
+            public int SuperTroopCount { get; set; }
+            public int SuperTroopMax { get; set; }
+            public int TotalSuperTroopCount { get; set; }
+            public int TotalSuperTroopMax { get; set; }
             public int TrapCount { get; set; }
             public int TotalTrapCount { get; set; }
             public int TotalTrapMax { get; set; }
