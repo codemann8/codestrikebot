@@ -3338,7 +3338,7 @@ namespace CodeStrikeBot
                 {
                     IsFucked = true;
                     Emulator.LastKnownAccount = null;
-                    return;
+                    return false;
                 }
 
                 watch.Restart();
@@ -3374,6 +3374,8 @@ namespace CodeStrikeBot
 
                 return true;
             }
+
+            return false;
         }
 
         public bool GoToBaseOrMapStep()
