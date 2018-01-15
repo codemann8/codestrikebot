@@ -2282,7 +2282,8 @@ namespace CodeStrikeBot
                         {
                             //Main.CurrentForm.UpdateBmpChk(SuperBitmap, 347, (int)Math.Round(292 + 91.5 * m), 8);
                             //chksum = ScreenState.GetScreenChecksum(SuperBitmap, 347, (int)Math.Round(292 + 91.5 * m), 8); //DIFF MS
-                            chksum = ScreenState.GetScreenChecksum(SuperBitmap, 355, 462 + 53 * m + (m == 2 ? 60 : 0), 8); //DIFF FF
+                            chksum = ScreenState.GetScreenChecksum(SuperBitmap, 355, 462 + 53 * m, 8); //DIFF FF
+                            // + (m == 2 ? 60 : 0)
 
                             //if (chksum != 0x2995 && chksum != 0x1583) //missions available
                             //if (chksum != 0x3900 && chksum != 0x5f0f && chksum != 0xfc2d) //DIFF MS
@@ -2339,80 +2340,85 @@ namespace CodeStrikeBot
 
                         for (int m = 0; m < 8; m++) //DIFF FF
                         {
-                            chksum = ScreenState.GetScreenChecksum(SuperBitmap, 363, (int)Math.Round(138.45 + 52.1 * m) + vipOffset, 10);
+                            c = SuperBitmap.GetPixel(352, (int)Math.Round(136.45 + 52.1 * m));
 
-                            if (chksum == 0x1a65) //quest in progress
+                            if (c.Equals(49, 56, 66)) //quest in progress
                             {
-                                break;
-                            }
-                            else if (chksum == 0x90ba)
-                            {
-                                //collect quest
-                                clicked = true;
-
-                                Controller.SendClick(this, 350, 145 + 53 * m + vipOffset, 500);
-                                break;
-                            }
-                            //else if (c.Equals(90, 89, 90))
-                            //{
-                            //    clicked = true;
-                            //    Thread.Sleep(50);
-                            //    break;
-                            //}
-                            else if (chksum == 0x0d86)
-                            {
-                                //start mission
-                                clicked = true;
-
-                                c = SuperBitmap.GetPixel(52, (int)Math.Round(144.45 + 52.1 * m) + vipOffset);
-
-                                if (c.Equals(8, 8, 8)) //black
-                                {
-
-                                }
-                                else if (c.Equals(0, 8, 57)) //blue
-                                {
-
-                                }
-                                else if (c.Equals(115, 117, 115)) //white
-                                {
-
-                                }
-                                /*else if (c.Equals(222, 182, 255)) //purple
-                                {
-
-                                }*/
-                                else if (c.Equals(0, 56, 0)) //green
-                                {
-
-                                }
-                                /*else if (c.Equals(255, 247, 189)) //orange
-                                {
-
-                                }*/
-                                else
-                                {
-                                    SuperBitmap.Bitmap.Save(String.Format("{0}\\{1}.bmp", Controller.Instance.GetFullScreenshotDir(), c.Name.Replace("#", "")), System.Drawing.Imaging.ImageFormat.Bmp);
-                                }
-
-                                Controller.SendClick(this, 350, 145 + 53 * m + vipOffset, 400);
-                                break;
-                            }
-                            else if (chksum == 0x0bd2 || chksum == 0x2a00) //loading and progress bar not loaded
-                            {
-                                clicked = true;
-                                Thread.Sleep(50);
-                                break;
-                            }
-                            else if (chksum == 0xac69) //no new quests
-                            {
-                                //shouldn't have clicked to get here, check 0's on main quests page
                                 break;
                             }
                             else
                             {
-                                SuperBitmap.Bitmap.Save(String.Format("{0}\\quest{1}.bmp", Controller.Instance.GetFullScreenshotDir(), chksum.ToString("X4")), System.Drawing.Imaging.ImageFormat.Bmp);
-                                break;
+                                c = SuperBitmap.GetPixel(352, (int)Math.Round(136.45 + 52.1 * m) + vipOffset);
+
+                                if (c.G == 255)
+                                {
+                                    //collect quest
+                                    clicked = true;
+
+                                    Controller.SendClick(this, 350, 145 + 53 * m + vipOffset, 500);
+                                    break;
+                                }
+                                //else if (c.Equals(90, 89, 90))
+                                //{
+                                //    clicked = true;
+                                //    Thread.Sleep(50);
+                                //    break;
+                                //}
+                                else if (c.B == 255)
+                                {
+                                    //start mission
+                                    clicked = true;
+
+                                    c = SuperBitmap.GetPixel(52, (int)Math.Round(144.45 + 52.1 * m) + vipOffset);
+
+                                    if (c.Equals(8, 8, 8)) //black
+                                    {
+
+                                    }
+                                    else if (c.Equals(0, 8, 57)) //blue
+                                    {
+
+                                    }
+                                    else if (c.Equals(115, 117, 115)) //white
+                                    {
+
+                                    }
+                                    /*else if (c.Equals(222, 182, 255)) //purple
+                                    {
+
+                                    }*/
+                                    else if (c.Equals(0, 56, 0)) //green
+                                    {
+
+                                    }
+                                    /*else if (c.Equals(255, 247, 189)) //orange
+                                    {
+
+                                    }*/
+                                    else
+                                    {
+                                        SuperBitmap.Bitmap.Save(String.Format("{0}\\{1}.bmp", Controller.Instance.GetFullScreenshotDir(), c.Name.Replace("#", "")), System.Drawing.Imaging.ImageFormat.Bmp);
+                                    }
+
+                                    Controller.SendClick(this, 350, 145 + 53 * m + vipOffset, 400);
+                                    break;
+                                }
+                                else if (c.Equals(173, 170, 173) || c.Equals(49, 56, 66)) //loading and progress bar not loaded
+                                {
+                                    clicked = true;
+                                    Thread.Sleep(50);
+                                    break;
+                                }
+                                else if (c.Equals(24, 24, 41)) //no new quests
+                                {
+                                    //shouldn't have clicked to get here, check 0's on main quests page
+                                    break;
+                                }
+                                else
+                                {
+                                    SuperBitmap.Bitmap.Save(String.Format("{0}\\quest{1}-{2}-{3}.bmp", Controller.Instance.GetFullScreenshotDir(), c.R.ToString(), c.G.ToString(), c.B.ToString()), System.Drawing.Imaging.ImageFormat.Bmp);
+                                    break;
+                                }
                             }
                         }
 
