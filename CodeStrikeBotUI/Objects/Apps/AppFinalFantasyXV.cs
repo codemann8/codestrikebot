@@ -323,7 +323,8 @@ namespace CodeStrikeBot
                         case 0x1477: //hero mastered
                             CurrentArea = Area.Menus.Buildings.Research;
                             break;
-                        case 0x84e5:
+                        case 0x84e5: //old?
+                        case 0xa973: //TODO check, demolish building dialog
                             CurrentArea = Area.Menus.Buildings.Farm;
                             break;
                         case 0x1fe2:
@@ -401,6 +402,10 @@ namespace CodeStrikeBot
                     {
                         CurrentArea = Area.Menus.ShootingRanges.NormalCrate;
                     }
+                    /*else if (chksum2 == 0xfe5a) //TODO: collision case: deconstruct farm dialog
+                    {
+                        CurrentArea = Area.Menus.Buildings.Farm;
+                    }*/
                     else
                     {
                         CurrentArea = Area.Others.Login;
@@ -718,7 +723,7 @@ namespace CodeStrikeBot
             }
 
             chksum = ScreenState.GetScreenChecksum(bmp, 190, 104, 10);
-            if (chksum == 0x7cf6) //popup
+            if (chksum == 0x7cf6 || chksum == 0x124a) //popup
             {
                 chksum = ScreenState.GetScreenChecksum(bmp, 190, 115, 20);
                 switch (chksum)
@@ -741,10 +746,10 @@ namespace CodeStrikeBot
                     case 0xdc05: //max limit
                         Overlays.Add(Overlay.Dialogs.Popups.MaxDeployments);
                         break;
-                    case 0x7a0f:
+                    case 0x1187:
                         Overlays.Add(Overlay.Dialogs.Popups.DemolishBuilding);
                         break;
-                    case 0xff64:
+                    case 0x4c4a:
                         Overlays.Add(Overlay.Dialogs.Popups.AreYouSure);
                         break;
                     case 0xfb47:
