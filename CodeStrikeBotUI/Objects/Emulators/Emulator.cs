@@ -2209,29 +2209,31 @@ namespace CodeStrikeBot
                                 }
                             }
                         }*/
-                        for (int p = 165; p < 586; p += 62)
+                        for (double g = 158.13; g < 589; g += 61.48)
                         {
-                            chksum = ScreenState.GetScreenChecksum(this.SuperBitmap, 344, p, 20);
+                            //chksum = ScreenState.GetScreenChecksum(this.SuperBitmap, 344, p, 20);
+                            Color c = SuperBitmap.GetPixel(349, (int)Math.Round(g));
 
-                            if (chksum == 0x5291)
+                            if (c.B == 255) //open
                             {
-                                //open
-                                Controller.SendClick(this, 335, p, 100);
-                                p = 586;
+                                Controller.SendClick(this, 335, (int)g + 2, 100);
+                                //p = 586;
                             }
-                            else if (chksum == 0xa6e4)
+                            else if (c.R == 247) { } //clear
+                            else if (c.Equals(173, 174, 173)) //loading
                             {
-                                //clear
-                            }
-                            else if (p > 540)
-                            {
-                                Controller.SendClick(this, 335, 105, 100); //click Clear all
-                            }
-                            else
-                            {
-                                //loading
                                 Thread.Sleep((int)(100 * TimeoutFactor));
-                                p = 550;
+                                g -= 61.48;
+                            }
+                            else if (c.Equals(16, 20, 33)) //no gifts left;
+                            {
+                                break;
+                            }
+                            else if (g > 500) { } //skip outputting bitmaps due to notifcation popup possibility
+                            else //unknown case
+                            {
+                                SuperBitmap.Bitmap.Save(String.Format("{0}\\gift{1}-{2}-{3}.bmp", Controller.Instance.GetFullScreenshotDir(), c.R.ToString(), c.G.ToString(), c.B.ToString()), System.Drawing.Imaging.ImageFormat.Bmp);
+                                break;
                             }
                         }
                     }
