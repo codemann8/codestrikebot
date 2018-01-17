@@ -2244,7 +2244,17 @@ namespace CodeStrikeBot
                             else if (g > 500) { } //skip outputting bitmaps due to notifcation popup possibility
                             else //unknown case
                             {
-                                SuperBitmap.Bitmap.Save(String.Format("{0}\\gift{1}-{2}-{3}.bmp", Controller.Instance.GetFullScreenshotDir(), c.R.ToString(), c.G.ToString(), c.B.ToString()), System.Drawing.Imaging.ImageFormat.Bmp);
+                                bool saved = false;
+
+                                while (!saved)
+                                {
+                                    try
+                                    {
+                                        SuperBitmap.Bitmap.Save(String.Format("{0}\\gift{1}-{2}-{3}.bmp", Controller.Instance.GetFullScreenshotDir(), c.R.ToString(), c.G.ToString(), c.B.ToString()), System.Drawing.Imaging.ImageFormat.Bmp);
+                                        saved = true;
+                                    }
+                                    catch (InvalidOperationException ex) { }
+                                }
                                 break;
                             }
                         }
@@ -2430,7 +2440,17 @@ namespace CodeStrikeBot
                                 }
                                 else
                                 {
-                                    SuperBitmap.Bitmap.Save(String.Format("{0}\\quest{1}-{2}-{3}.bmp", Controller.Instance.GetFullScreenshotDir(), c.R.ToString(), c.G.ToString(), c.B.ToString()), System.Drawing.Imaging.ImageFormat.Bmp);
+                                    bool saved = false;
+
+                                    while (!saved)
+                                    {
+                                        try
+                                        {
+                                            SuperBitmap.Bitmap.Save(String.Format("{0}\\quest{1}-{2}-{3}.bmp", Controller.Instance.GetFullScreenshotDir(), c.R.ToString(), c.G.ToString(), c.B.ToString()), System.Drawing.Imaging.ImageFormat.Bmp);
+                                            saved = true;
+                                        }
+                                        catch (InvalidOperationException ex) { }
+                                    }
                                     break;
                                 }
                             }
