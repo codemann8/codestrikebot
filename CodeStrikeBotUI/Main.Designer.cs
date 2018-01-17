@@ -83,11 +83,7 @@ namespace CodeStrikeBot
             this.tabActivity = new System.Windows.Forms.TabPage();
             this.contActivity = new System.Windows.Forms.SplitContainer();
             this.gridPacket = new System.Windows.Forms.DataGridView();
-            this.timestampDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.typeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.lengthDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Id = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.bsPacket = new System.Windows.Forms.BindingSource(this.components);
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.btnCopyText = new System.Windows.Forms.Button();
             this.btnExportHex = new System.Windows.Forms.Button();
@@ -102,30 +98,12 @@ namespace CodeStrikeBot
             this.cboAccountAppFilter = new System.Windows.Forms.ComboBox();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.gridAccounts = new System.Windows.Forms.DataGridView();
-            this.nameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.userNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.emailDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.passwordDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.priorityGridViewComboBoxColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.foodNegativeAmountDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.lastLoginDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.lastLogoutDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.bsAccount = new System.Windows.Forms.BindingSource(this.components);
             this.tabScreens = new System.Windows.Forms.TabPage();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.btnScheduleRun = new System.Windows.Forms.Button();
             this.gridSchedules = new System.Windows.Forms.DataGridView();
-            this.typeDataGridViewComboBoxColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.intervalDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.amountDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.countDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.xDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.yDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.BackupX = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.BackupY = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.lastActionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.nextActionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.bsScheduleTask = new System.Windows.Forms.BindingSource(this.components);
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.btnResize = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
@@ -171,6 +149,29 @@ namespace CodeStrikeBot
             this.btnExport = new System.Windows.Forms.Button();
             this.dataGridViewComboBoxColumn2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.bckService = new System.ComponentModel.BackgroundWorker();
+            this.typeDataGridViewComboBoxColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.intervalDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.amountDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.countDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.xDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.yDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.lastActionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.nextActionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.bsScheduleTask = new System.Windows.Forms.BindingSource(this.components);
+            this.bsAccount = new System.Windows.Forms.BindingSource(this.components);
+            this.timestampDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.typeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.lengthDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.bsPacket = new System.Windows.Forms.BindingSource(this.components);
+            this.nameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.userNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.emailDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.passwordDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.pinCodeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.priorityGridViewComboBoxColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.foodNegativeAmountDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.lastLoginDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.lastLogoutDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.stsStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bsColorCustom)).BeginInit();
             this.tabSettings.SuspendLayout();
@@ -184,7 +185,6 @@ namespace CodeStrikeBot
             this.contActivity.Panel2.SuspendLayout();
             this.contActivity.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridPacket)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bsPacket)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
@@ -200,11 +200,9 @@ namespace CodeStrikeBot
             this.splitContainer3.SuspendLayout();
             this.groupBox8.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridAccounts)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bsAccount)).BeginInit();
             this.tabScreens.SuspendLayout();
             this.groupBox7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridSchedules)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bsScheduleTask)).BeginInit();
             this.groupBox5.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -224,6 +222,9 @@ namespace CodeStrikeBot
             this.tabControlMonitor.SuspendLayout();
             this.tabMarches.SuspendLayout();
             this.tabTiles.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bsScheduleTask)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bsAccount)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bsPacket)).BeginInit();
             this.SuspendLayout();
             // 
             // stsStrip
@@ -722,36 +723,11 @@ namespace CodeStrikeBot
             this.gridPacket.Size = new System.Drawing.Size(270, 221);
             this.gridPacket.TabIndex = 17;
             // 
-            // timestampDataGridViewTextBoxColumn
-            // 
-            this.timestampDataGridViewTextBoxColumn.DataPropertyName = "Timestamp";
-            this.timestampDataGridViewTextBoxColumn.HeaderText = "Timestamp";
-            this.timestampDataGridViewTextBoxColumn.Name = "timestampDataGridViewTextBoxColumn";
-            // 
-            // typeDataGridViewTextBoxColumn
-            // 
-            this.typeDataGridViewTextBoxColumn.DataPropertyName = "Type";
-            this.typeDataGridViewTextBoxColumn.HeaderText = "Type";
-            this.typeDataGridViewTextBoxColumn.Name = "typeDataGridViewTextBoxColumn";
-            this.typeDataGridViewTextBoxColumn.Width = 60;
-            // 
-            // lengthDataGridViewTextBoxColumn
-            // 
-            this.lengthDataGridViewTextBoxColumn.DataPropertyName = "Length";
-            this.lengthDataGridViewTextBoxColumn.HeaderText = "Length";
-            this.lengthDataGridViewTextBoxColumn.Name = "lengthDataGridViewTextBoxColumn";
-            this.lengthDataGridViewTextBoxColumn.Width = 50;
-            // 
             // Id
             // 
             this.Id.DataPropertyName = "Id";
             this.Id.HeaderText = "Id";
             this.Id.Name = "Id";
-            // 
-            // bsPacket
-            // 
-            this.bsPacket.DataSource = typeof(CodeStrikeBot.Messages.Message);
-            this.bsPacket.CurrentChanged += new System.EventHandler(this.bsPacket_CurrentChanged);
             // 
             // splitContainer2
             // 
@@ -913,11 +889,13 @@ namespace CodeStrikeBot
             this.hexData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.hexData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.Dock = System.Windows.Forms.DockStyle.Fill;
             this.hexData.Location = new System.Drawing.Point(0, 0);
             this.hexData.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.hexData.Name = "hexData";
             this.hexData.RowCount = 1;
+            this.hexData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.hexData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -1070,6 +1048,7 @@ namespace CodeStrikeBot
             this.userNameDataGridViewTextBoxColumn,
             this.emailDataGridViewTextBoxColumn,
             this.passwordDataGridViewTextBoxColumn,
+            this.pinCodeDataGridViewTextBoxColumn,
             this.priorityGridViewComboBoxColumn,
             this.foodNegativeAmountDataGridViewTextBoxColumn,
             this.lastLoginDataGridViewTextBoxColumn,
@@ -1085,70 +1064,6 @@ namespace CodeStrikeBot
             this.gridAccounts.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridAccounts_CellLeave);
             this.gridAccounts.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.gridAccounts_EditingControlShowing);
             this.gridAccounts.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.gridAccounts_UserDeletingRow);
-            // 
-            // nameDataGridViewTextBoxColumn
-            // 
-            this.nameDataGridViewTextBoxColumn.DataPropertyName = "Name";
-            this.nameDataGridViewTextBoxColumn.HeaderText = "Name";
-            this.nameDataGridViewTextBoxColumn.Name = "nameDataGridViewTextBoxColumn";
-            this.nameDataGridViewTextBoxColumn.Width = 60;
-            // 
-            // userNameDataGridViewTextBoxColumn
-            // 
-            this.userNameDataGridViewTextBoxColumn.DataPropertyName = "UserName";
-            this.userNameDataGridViewTextBoxColumn.HeaderText = "UserName";
-            this.userNameDataGridViewTextBoxColumn.Name = "userNameDataGridViewTextBoxColumn";
-            this.userNameDataGridViewTextBoxColumn.Width = 82;
-            // 
-            // emailDataGridViewTextBoxColumn
-            // 
-            this.emailDataGridViewTextBoxColumn.DataPropertyName = "Email";
-            this.emailDataGridViewTextBoxColumn.HeaderText = "Email";
-            this.emailDataGridViewTextBoxColumn.Name = "emailDataGridViewTextBoxColumn";
-            this.emailDataGridViewTextBoxColumn.Width = 57;
-            // 
-            // passwordDataGridViewTextBoxColumn
-            // 
-            this.passwordDataGridViewTextBoxColumn.DataPropertyName = "Password";
-            this.passwordDataGridViewTextBoxColumn.HeaderText = "Password";
-            this.passwordDataGridViewTextBoxColumn.Name = "passwordDataGridViewTextBoxColumn";
-            this.passwordDataGridViewTextBoxColumn.Width = 78;
-            // 
-            // priorityGridViewComboBoxColumn
-            // 
-            this.priorityGridViewComboBoxColumn.DataPropertyName = "Priority";
-            this.priorityGridViewComboBoxColumn.HeaderText = "Priority";
-            this.priorityGridViewComboBoxColumn.Name = "priorityGridViewComboBoxColumn";
-            this.priorityGridViewComboBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.priorityGridViewComboBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.priorityGridViewComboBoxColumn.Width = 63;
-            // 
-            // foodNegativeAmountDataGridViewTextBoxColumn
-            // 
-            this.foodNegativeAmountDataGridViewTextBoxColumn.DataPropertyName = "FoodNegativeAmount";
-            this.foodNegativeAmountDataGridViewTextBoxColumn.HeaderText = "FoodNegativeAmount";
-            this.foodNegativeAmountDataGridViewTextBoxColumn.Name = "foodNegativeAmountDataGridViewTextBoxColumn";
-            this.foodNegativeAmountDataGridViewTextBoxColumn.Width = 135;
-            // 
-            // lastLoginDataGridViewTextBoxColumn
-            // 
-            this.lastLoginDataGridViewTextBoxColumn.DataPropertyName = "LastLogin";
-            this.lastLoginDataGridViewTextBoxColumn.HeaderText = "LastLogin";
-            this.lastLoginDataGridViewTextBoxColumn.Name = "lastLoginDataGridViewTextBoxColumn";
-            this.lastLoginDataGridViewTextBoxColumn.ReadOnly = true;
-            this.lastLoginDataGridViewTextBoxColumn.Width = 78;
-            // 
-            // lastLogoutDataGridViewTextBoxColumn
-            // 
-            this.lastLogoutDataGridViewTextBoxColumn.DataPropertyName = "LastLogout";
-            this.lastLogoutDataGridViewTextBoxColumn.HeaderText = "LastLogout";
-            this.lastLogoutDataGridViewTextBoxColumn.Name = "lastLogoutDataGridViewTextBoxColumn";
-            this.lastLogoutDataGridViewTextBoxColumn.ReadOnly = true;
-            this.lastLogoutDataGridViewTextBoxColumn.Width = 85;
-            // 
-            // bsAccount
-            // 
-            this.bsAccount.DataSource = typeof(CodeStrikeBot.DataObjects.Account);
             // 
             // tabScreens
             // 
@@ -1214,56 +1129,6 @@ namespace CodeStrikeBot
             this.gridSchedules.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridSchedules_CellLeave);
             this.gridSchedules.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.gridSchedules_UserDeletingRow);
             // 
-            // typeDataGridViewComboBoxColumn
-            // 
-            this.typeDataGridViewComboBoxColumn.DataPropertyName = "Type";
-            this.typeDataGridViewComboBoxColumn.HeaderText = "Type";
-            this.typeDataGridViewComboBoxColumn.Name = "typeDataGridViewComboBoxColumn";
-            this.typeDataGridViewComboBoxColumn.Width = 37;
-            // 
-            // intervalDataGridViewTextBoxColumn
-            // 
-            this.intervalDataGridViewTextBoxColumn.DataPropertyName = "Interval";
-            this.intervalDataGridViewTextBoxColumn.HeaderText = "Interval";
-            this.intervalDataGridViewTextBoxColumn.MaxInputLength = 9;
-            this.intervalDataGridViewTextBoxColumn.Name = "intervalDataGridViewTextBoxColumn";
-            this.intervalDataGridViewTextBoxColumn.Width = 67;
-            // 
-            // amountDataGridViewTextBoxColumn
-            // 
-            this.amountDataGridViewTextBoxColumn.DataPropertyName = "Amount";
-            this.amountDataGridViewTextBoxColumn.HeaderText = "Amount";
-            this.amountDataGridViewTextBoxColumn.MaxInputLength = 9;
-            this.amountDataGridViewTextBoxColumn.Name = "amountDataGridViewTextBoxColumn";
-            this.amountDataGridViewTextBoxColumn.Width = 68;
-            // 
-            // countDataGridViewTextBoxColumn
-            // 
-            this.countDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.countDataGridViewTextBoxColumn.DataPropertyName = "Count";
-            this.countDataGridViewTextBoxColumn.HeaderText = "Count";
-            this.countDataGridViewTextBoxColumn.MaxInputLength = 9;
-            this.countDataGridViewTextBoxColumn.Name = "countDataGridViewTextBoxColumn";
-            this.countDataGridViewTextBoxColumn.Width = 35;
-            // 
-            // xDataGridViewTextBoxColumn
-            // 
-            this.xDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.xDataGridViewTextBoxColumn.DataPropertyName = "X";
-            this.xDataGridViewTextBoxColumn.HeaderText = "X";
-            this.xDataGridViewTextBoxColumn.MaxInputLength = 4;
-            this.xDataGridViewTextBoxColumn.Name = "xDataGridViewTextBoxColumn";
-            this.xDataGridViewTextBoxColumn.Width = 35;
-            // 
-            // yDataGridViewTextBoxColumn
-            // 
-            this.yDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.yDataGridViewTextBoxColumn.DataPropertyName = "Y";
-            this.yDataGridViewTextBoxColumn.HeaderText = "Y";
-            this.yDataGridViewTextBoxColumn.MaxInputLength = 4;
-            this.yDataGridViewTextBoxColumn.Name = "yDataGridViewTextBoxColumn";
-            this.yDataGridViewTextBoxColumn.Width = 35;
-            // 
             // BackupX
             // 
             this.BackupX.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
@@ -1281,25 +1146,6 @@ namespace CodeStrikeBot
             this.BackupY.MaxInputLength = 4;
             this.BackupY.Name = "BackupY";
             this.BackupY.Width = 60;
-            // 
-            // lastActionDataGridViewTextBoxColumn
-            // 
-            this.lastActionDataGridViewTextBoxColumn.DataPropertyName = "LastAction";
-            this.lastActionDataGridViewTextBoxColumn.HeaderText = "LastAction";
-            this.lastActionDataGridViewTextBoxColumn.Name = "lastActionDataGridViewTextBoxColumn";
-            this.lastActionDataGridViewTextBoxColumn.Width = 82;
-            // 
-            // nextActionDataGridViewTextBoxColumn
-            // 
-            this.nextActionDataGridViewTextBoxColumn.DataPropertyName = "NextAction";
-            this.nextActionDataGridViewTextBoxColumn.HeaderText = "NextAction";
-            this.nextActionDataGridViewTextBoxColumn.Name = "nextActionDataGridViewTextBoxColumn";
-            this.nextActionDataGridViewTextBoxColumn.ReadOnly = true;
-            this.nextActionDataGridViewTextBoxColumn.Width = 84;
-            // 
-            // bsScheduleTask
-            // 
-            this.bsScheduleTask.DataSource = typeof(CodeStrikeBot.DataObjects.ScheduleTask);
             // 
             // groupBox5
             // 
@@ -1843,6 +1689,171 @@ namespace CodeStrikeBot
             this.bckService.WorkerSupportsCancellation = true;
             this.bckService.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bckService_DoWork);
             // 
+            // typeDataGridViewComboBoxColumn
+            // 
+            this.typeDataGridViewComboBoxColumn.DataPropertyName = "Type";
+            this.typeDataGridViewComboBoxColumn.HeaderText = "Type";
+            this.typeDataGridViewComboBoxColumn.Name = "typeDataGridViewComboBoxColumn";
+            this.typeDataGridViewComboBoxColumn.Width = 39;
+            // 
+            // intervalDataGridViewTextBoxColumn
+            // 
+            this.intervalDataGridViewTextBoxColumn.DataPropertyName = "Interval";
+            this.intervalDataGridViewTextBoxColumn.HeaderText = "Interval";
+            this.intervalDataGridViewTextBoxColumn.MaxInputLength = 9;
+            this.intervalDataGridViewTextBoxColumn.Name = "intervalDataGridViewTextBoxColumn";
+            this.intervalDataGridViewTextBoxColumn.Width = 67;
+            // 
+            // amountDataGridViewTextBoxColumn
+            // 
+            this.amountDataGridViewTextBoxColumn.DataPropertyName = "Amount";
+            this.amountDataGridViewTextBoxColumn.HeaderText = "Amount";
+            this.amountDataGridViewTextBoxColumn.MaxInputLength = 9;
+            this.amountDataGridViewTextBoxColumn.Name = "amountDataGridViewTextBoxColumn";
+            this.amountDataGridViewTextBoxColumn.Width = 68;
+            // 
+            // countDataGridViewTextBoxColumn
+            // 
+            this.countDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.countDataGridViewTextBoxColumn.DataPropertyName = "Count";
+            this.countDataGridViewTextBoxColumn.HeaderText = "Count";
+            this.countDataGridViewTextBoxColumn.MaxInputLength = 9;
+            this.countDataGridViewTextBoxColumn.Name = "countDataGridViewTextBoxColumn";
+            this.countDataGridViewTextBoxColumn.Width = 35;
+            // 
+            // xDataGridViewTextBoxColumn
+            // 
+            this.xDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.xDataGridViewTextBoxColumn.DataPropertyName = "X";
+            this.xDataGridViewTextBoxColumn.HeaderText = "X";
+            this.xDataGridViewTextBoxColumn.MaxInputLength = 4;
+            this.xDataGridViewTextBoxColumn.Name = "xDataGridViewTextBoxColumn";
+            this.xDataGridViewTextBoxColumn.Width = 35;
+            // 
+            // yDataGridViewTextBoxColumn
+            // 
+            this.yDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.yDataGridViewTextBoxColumn.DataPropertyName = "Y";
+            this.yDataGridViewTextBoxColumn.HeaderText = "Y";
+            this.yDataGridViewTextBoxColumn.MaxInputLength = 4;
+            this.yDataGridViewTextBoxColumn.Name = "yDataGridViewTextBoxColumn";
+            this.yDataGridViewTextBoxColumn.Width = 35;
+            // 
+            // lastActionDataGridViewTextBoxColumn
+            // 
+            this.lastActionDataGridViewTextBoxColumn.DataPropertyName = "LastAction";
+            this.lastActionDataGridViewTextBoxColumn.HeaderText = "LastAction";
+            this.lastActionDataGridViewTextBoxColumn.Name = "lastActionDataGridViewTextBoxColumn";
+            this.lastActionDataGridViewTextBoxColumn.Width = 82;
+            // 
+            // nextActionDataGridViewTextBoxColumn
+            // 
+            this.nextActionDataGridViewTextBoxColumn.DataPropertyName = "NextAction";
+            this.nextActionDataGridViewTextBoxColumn.HeaderText = "NextAction";
+            this.nextActionDataGridViewTextBoxColumn.Name = "nextActionDataGridViewTextBoxColumn";
+            this.nextActionDataGridViewTextBoxColumn.ReadOnly = true;
+            this.nextActionDataGridViewTextBoxColumn.Width = 84;
+            // 
+            // bsScheduleTask
+            // 
+            this.bsScheduleTask.DataSource = typeof(CodeStrikeBot.DataObjects.ScheduleTask);
+            // 
+            // bsAccount
+            // 
+            this.bsAccount.DataSource = typeof(CodeStrikeBot.DataObjects.Account);
+            // 
+            // timestampDataGridViewTextBoxColumn
+            // 
+            this.timestampDataGridViewTextBoxColumn.DataPropertyName = "Timestamp";
+            this.timestampDataGridViewTextBoxColumn.HeaderText = "Timestamp";
+            this.timestampDataGridViewTextBoxColumn.Name = "timestampDataGridViewTextBoxColumn";
+            // 
+            // typeDataGridViewTextBoxColumn
+            // 
+            this.typeDataGridViewTextBoxColumn.DataPropertyName = "Type";
+            this.typeDataGridViewTextBoxColumn.HeaderText = "Type";
+            this.typeDataGridViewTextBoxColumn.Name = "typeDataGridViewTextBoxColumn";
+            this.typeDataGridViewTextBoxColumn.Width = 60;
+            // 
+            // lengthDataGridViewTextBoxColumn
+            // 
+            this.lengthDataGridViewTextBoxColumn.DataPropertyName = "Length";
+            this.lengthDataGridViewTextBoxColumn.HeaderText = "Length";
+            this.lengthDataGridViewTextBoxColumn.Name = "lengthDataGridViewTextBoxColumn";
+            this.lengthDataGridViewTextBoxColumn.Width = 50;
+            // 
+            // bsPacket
+            // 
+            this.bsPacket.DataSource = typeof(CodeStrikeBot.Messages.Message);
+            this.bsPacket.CurrentChanged += new System.EventHandler(this.bsPacket_CurrentChanged);
+            // 
+            // nameDataGridViewTextBoxColumn
+            // 
+            this.nameDataGridViewTextBoxColumn.DataPropertyName = "Name";
+            this.nameDataGridViewTextBoxColumn.HeaderText = "Name";
+            this.nameDataGridViewTextBoxColumn.Name = "nameDataGridViewTextBoxColumn";
+            this.nameDataGridViewTextBoxColumn.Width = 60;
+            // 
+            // userNameDataGridViewTextBoxColumn
+            // 
+            this.userNameDataGridViewTextBoxColumn.DataPropertyName = "UserName";
+            this.userNameDataGridViewTextBoxColumn.HeaderText = "UserName";
+            this.userNameDataGridViewTextBoxColumn.Name = "userNameDataGridViewTextBoxColumn";
+            this.userNameDataGridViewTextBoxColumn.Width = 82;
+            // 
+            // emailDataGridViewTextBoxColumn
+            // 
+            this.emailDataGridViewTextBoxColumn.DataPropertyName = "Email";
+            this.emailDataGridViewTextBoxColumn.HeaderText = "Email";
+            this.emailDataGridViewTextBoxColumn.Name = "emailDataGridViewTextBoxColumn";
+            this.emailDataGridViewTextBoxColumn.Width = 57;
+            // 
+            // passwordDataGridViewTextBoxColumn
+            // 
+            this.passwordDataGridViewTextBoxColumn.DataPropertyName = "Password";
+            this.passwordDataGridViewTextBoxColumn.HeaderText = "Password";
+            this.passwordDataGridViewTextBoxColumn.Name = "passwordDataGridViewTextBoxColumn";
+            this.passwordDataGridViewTextBoxColumn.Width = 78;
+            // 
+            // pinCodeDataGridViewTextBoxColumn
+            // 
+            this.pinCodeDataGridViewTextBoxColumn.DataPropertyName = "PinCode";
+            this.pinCodeDataGridViewTextBoxColumn.HeaderText = "Pin Code";
+            this.pinCodeDataGridViewTextBoxColumn.Name = "pinCodeDataGridViewTextBoxColumn";
+            this.pinCodeDataGridViewTextBoxColumn.Width = 75;
+            // 
+            // priorityGridViewComboBoxColumn
+            // 
+            this.priorityGridViewComboBoxColumn.DataPropertyName = "Priority";
+            this.priorityGridViewComboBoxColumn.HeaderText = "Priority";
+            this.priorityGridViewComboBoxColumn.Name = "priorityGridViewComboBoxColumn";
+            this.priorityGridViewComboBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.priorityGridViewComboBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.priorityGridViewComboBoxColumn.Width = 63;
+            // 
+            // foodNegativeAmountDataGridViewTextBoxColumn
+            // 
+            this.foodNegativeAmountDataGridViewTextBoxColumn.DataPropertyName = "FoodNegativeAmount";
+            this.foodNegativeAmountDataGridViewTextBoxColumn.HeaderText = "FoodNegativeAmount";
+            this.foodNegativeAmountDataGridViewTextBoxColumn.Name = "foodNegativeAmountDataGridViewTextBoxColumn";
+            this.foodNegativeAmountDataGridViewTextBoxColumn.Width = 135;
+            // 
+            // lastLoginDataGridViewTextBoxColumn
+            // 
+            this.lastLoginDataGridViewTextBoxColumn.DataPropertyName = "LastLogin";
+            this.lastLoginDataGridViewTextBoxColumn.HeaderText = "LastLogin";
+            this.lastLoginDataGridViewTextBoxColumn.Name = "lastLoginDataGridViewTextBoxColumn";
+            this.lastLoginDataGridViewTextBoxColumn.ReadOnly = true;
+            this.lastLoginDataGridViewTextBoxColumn.Width = 78;
+            // 
+            // lastLogoutDataGridViewTextBoxColumn
+            // 
+            this.lastLogoutDataGridViewTextBoxColumn.DataPropertyName = "LastLogout";
+            this.lastLogoutDataGridViewTextBoxColumn.HeaderText = "LastLogout";
+            this.lastLogoutDataGridViewTextBoxColumn.Name = "lastLogoutDataGridViewTextBoxColumn";
+            this.lastLogoutDataGridViewTextBoxColumn.ReadOnly = true;
+            this.lastLogoutDataGridViewTextBoxColumn.Width = 85;
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1872,7 +1883,6 @@ namespace CodeStrikeBot
             ((System.ComponentModel.ISupportInitialize)(this.contActivity)).EndInit();
             this.contActivity.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gridPacket)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bsPacket)).EndInit();
             this.splitContainer2.Panel1.ResumeLayout(false);
             this.splitContainer2.Panel1.PerformLayout();
             this.splitContainer2.Panel2.ResumeLayout(false);
@@ -1890,11 +1900,9 @@ namespace CodeStrikeBot
             this.splitContainer3.ResumeLayout(false);
             this.groupBox8.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gridAccounts)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bsAccount)).EndInit();
             this.tabScreens.ResumeLayout(false);
             this.groupBox7.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gridSchedules)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bsScheduleTask)).EndInit();
             this.groupBox5.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
@@ -1918,6 +1926,9 @@ namespace CodeStrikeBot
             this.tabControlMonitor.ResumeLayout(false);
             this.tabMarches.ResumeLayout(false);
             this.tabTiles.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.bsScheduleTask)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bsAccount)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bsPacket)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1982,14 +1993,6 @@ namespace CodeStrikeBot
         private System.Windows.Forms.TabPage tabAccounts;
         private System.Windows.Forms.GroupBox groupBox8;
         private System.Windows.Forms.DataGridView gridAccounts;
-        private System.Windows.Forms.DataGridViewTextBoxColumn nameDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn userNameDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn emailDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn passwordDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewComboBoxColumn priorityGridViewComboBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn foodNegativeAmountDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn lastLoginDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn lastLogoutDataGridViewTextBoxColumn;
         private System.Windows.Forms.TabPage tabScreens;
         private System.Windows.Forms.GroupBox groupBox7;
         private System.Windows.Forms.Button btnScheduleRun;
@@ -2063,6 +2066,15 @@ namespace CodeStrikeBot
         private System.Windows.Forms.TabPage tabTiles;
         private System.Windows.Forms.ListBox lstTiles;
         private System.ComponentModel.BackgroundWorker bckService;
+        private System.Windows.Forms.DataGridViewTextBoxColumn nameDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn userNameDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn emailDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn passwordDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn pinCodeDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewComboBoxColumn priorityGridViewComboBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn foodNegativeAmountDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn lastLoginDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn lastLogoutDataGridViewTextBoxColumn;
     }
 }
 

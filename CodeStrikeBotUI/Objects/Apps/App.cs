@@ -494,6 +494,7 @@ namespace CodeStrikeBot
             public static readonly ID Chat = Other[6];
             public static readonly ID Quit = Other[7];
             public static readonly ID SessionTimeout = Other[8];
+            public static readonly ID LoginPincode = Other[9];
         }
 
         public static readonly ID Unknown = 254;

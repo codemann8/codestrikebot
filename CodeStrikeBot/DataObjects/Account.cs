@@ -17,6 +17,8 @@ namespace CodeStrikeBot.DataObjects
         public string Email { get; set; }
         [Column(Name = "password")]
         public string Password { get; set; }
+        [Column(Name = "pinCode")]
+        public int PinCode { get; set; }
         [Column(Name = "priority")]
         public AccountPriority Priority { get; set; }
         [Column(Name = "foodNegativeAmount")]
@@ -30,13 +32,14 @@ namespace CodeStrikeBot.DataObjects
 
         public App App { get; set; }
 
-        public Account(int id, string Name, string UserName, string Email, string Password, AccountPriority Priority, int FoodNegativeAmount, DateTime lastLogin, DateTime lastLogout, App app)
+        public Account(int id, string Name, string UserName, string Email, string Password, int PinCode, AccountPriority Priority, int FoodNegativeAmount, DateTime lastLogin, DateTime lastLogout, App app)
         {
             this.Id = id;
             this.Name = Name;
             this.UserName = UserName;
             this.Email = Email;
             this.Password = Password;
+            this.PinCode = PinCode;
             this.Priority = Priority;
             this.FoodNegativeAmount = FoodNegativeAmount;
             this.LastLogin = lastLogin;

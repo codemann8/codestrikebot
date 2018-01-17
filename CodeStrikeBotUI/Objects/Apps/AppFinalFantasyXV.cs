@@ -464,6 +464,10 @@ namespace CodeStrikeBot
                             CurrentArea = Area.Others.SessionTimeout;
                         }
                     }
+                    else if (chksum2 == 0x88e3)
+                    {
+                        CurrentArea = Area.Others.LoginPincode;
+                    }
                     break;
                 case 0x2c55: //guild chat
                 case 0x59f8: //realm chat

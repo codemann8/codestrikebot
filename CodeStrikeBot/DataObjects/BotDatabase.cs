@@ -57,7 +57,7 @@ namespace CodeStrikeBot
 
             int version = 0;
 
-            while (version != 1)
+            while (version != 5)
             {
                 try
                 {
@@ -66,10 +66,10 @@ namespace CodeStrikeBot
 
                     reader.Read();
 
-                    int versionCheck = (int)reader["version"];
+                    version = (int)reader["version"];
                     reader.Dispose();
 
-                    switch (versionCheck)
+                    switch (version)
                     {
                         case 0:
                             command = new SqlCeCommand("CREATE TABLE accounts (id INTEGER PRIMARY KEY IDENTITY, name NVARCHAR(20) NOT NULL, username NVARCHAR(30) NOT NULL, email NVARCHAR(60) NOT NULL, password NVARCHAR(30) NOT NULL, priority INT DEFAULT 0, foodNegativeAmt INT DEFAULT 0, lastLogin DATETIME DEFAULT 0, lastLogout DATETIME DEFAULT 0)", Connection);
@@ -84,18 +84,21 @@ namespace CodeStrikeBot
                             command.ExecuteNonQuery();
                             command = new SqlCeCommand("UPDATE settings SET version = 1, emulatorId1 = 0, emulatorId2 = 0, emulatorId3 = 0, emulatorId4 = 0, screenshotDir = 'output\\ss', mapDir = 'output\\map'", Connection);
                             command.ExecuteNonQuery();
+                            version = 1;
                             break;
                         case 1:
                             command = new SqlCeCommand("ALTER TABLE schedules ADD backupX INTEGER DEFAULT 0, backupY INTEGER DEFAULT 0", Connection);
                             command.ExecuteNonQuery();
                             command = new SqlCeCommand("UPDATE settings SET version = 2", Connection);
                             command.ExecuteNonQuery();
+                            version = 2;
                             break;
                         case 2:
                             command = new SqlCeCommand("ALTER TABLE settings ADD slackURL NVARCHAR(100) NOT NULL DEFAULT '', pushoverAPIKey NVARCHAR(30) NOT NULL DEFAULT '', pushoverUserKey NVARCHAR(30) NOT NULL DEFAULT ''", Connection);
                             command.ExecuteNonQuery();
                             command = new SqlCeCommand("UPDATE settings SET version = 3", Connection);
                             command.ExecuteNonQuery();
+                            version = 3;
                             break;
                         case 3:
                             command = new SqlCeCommand("CREATE TABLE apps (id INTEGER PRIMARY KEY IDENTITY, name NVARCHAR(30), shortName NVARCHAR(6))", Connection);
@@ -122,6 +125,14 @@ namespace CodeStrikeBot
                             command.ExecuteNonQuery();
                             command = new SqlCeCommand("UPDATE settings SET version = 4", Connection);
                             command.ExecuteNonQuery();
+                            version = 4;
+                            break;
+                        case 4:
+                            command = new SqlCeCommand("ALTER TABLE accounts ADD pinCode INTEGER NOT NULL DEFAULT 0", Connection);
+                            command.ExecuteNonQuery();
+                            command = new SqlCeCommand("UPDATE settings SET version = 5", Connection);
+                            command.ExecuteNonQuery();
+                            version = 5;
                             break;
                     }
                 }
@@ -131,11 +142,10 @@ namespace CodeStrikeBot
                     {
                         //name already in use
                     }*/
+                    version = 99;
                 }
 
                 command.Dispose();
-
-                version++;
             }
         }
 
@@ -154,14 +164,14 @@ namespace CodeStrikeBot
 
                     if (account.Id == 0)
                     {
-                        command = new SqlCeCommand("INSERT INTO accounts (name, username, email, password, priority, foodNegativeAmt, lastLogin, lastLogout, appId) VALUES (@name, @username, @email, @password, @priority, @foodNegAmt, @lastLogin, @lastLogout, @appId)", con);
+                        command = new SqlCeCommand("INSERT INTO accounts (name, username, email, password, pinCode, priority, foodNegativeAmt, lastLogin, lastLogout, appId) VALUES (@name, @username, @email, @password, @pinCode, @priority, @foodNegAmt, @lastLogin, @lastLogout, @appId)", con);
                         command.Parameters.AddWithValue("@lastLogin", new DateTime().AddYears(1972));
                         command.Parameters.AddWithValue("@lastLogout", new DateTime().AddYears(1972));
                         command.Parameters.AddWithValue("@appId", account.App.Id);
                     }
                     else
                     {
-                        command = new SqlCeCommand("UPDATE accounts SET name = @name, username = @username, email = @email, password = @password, priority = @priority, foodNegativeAmt = @foodNegAmt, lastLogin = @lastLogin, lastLogout = @lastLogout WHERE id = @id", con);
+                        command = new SqlCeCommand("UPDATE accounts SET name = @name, username = @username, email = @email, password = @password, pinCode = @pinCode, priority = @priority, foodNegativeAmt = @foodNegAmt, lastLogin = @lastLogin, lastLogout = @lastLogout WHERE id = @id", con);
                         command.Parameters.AddWithValue("@lastLogin", account.LastLogin);
                         command.Parameters.AddWithValue("@lastLogout", account.LastLogout);
                         command.Parameters.AddWithValue("@id", account.Id);
@@ -171,6 +181,7 @@ namespace CodeStrikeBot
                     command.Parameters.AddWithValue("@username", account.UserName);
                     command.Parameters.AddWithValue("@email", account.Email);
                     command.Parameters.AddWithValue("@password", account.Password);
+                    command.Parameters.AddWithValue("@pinCode", account.PinCode);
                     command.Parameters.AddWithValue("@priority", (int)account.Priority);
                     command.Parameters.AddWithValue("@foodNegAmt", account.FoodNegativeAmount);
                     command.ExecuteNonQuery();
@@ -386,12 +397,12 @@ namespace CodeStrikeBot
                 }
                 else if (typeof(T) == typeof(Account))
                 {
-                    command = new SqlCeCommand("SELECT id, name, username, email, password, priority, foodNegativeAmt, lastLogin, lastLogout, appId FROM accounts", con);
+                    command = new SqlCeCommand("SELECT id, name, username, email, password, pinCode, priority, foodNegativeAmt, lastLogin, lastLogout, appId FROM accounts", con);
                     reader = command.ExecuteReader();
 
                     while (reader.Read())
                     {
-                        Account account = new Account(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), (AccountPriority)reader.GetInt32(5), reader.GetInt32(6), reader.GetDateTime(7), reader.GetDateTime(8), new App(reader.GetInt32(9)));
+                        Account account = new Account(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), reader.GetInt32(5), (AccountPriority)reader.GetInt32(6), reader.GetInt32(7), reader.GetDateTime(8), reader.GetDateTime(9), new App(reader.GetInt32(10)));
                         list.Add(account);
                     }
                 }

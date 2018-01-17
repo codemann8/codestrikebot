@@ -1432,12 +1432,24 @@ namespace CodeStrikeBot
                 //wait for ad
                 while (CheckPause() && ScreenState.CurrentArea != Area.Others.Ad && tmrRun.ElapsedMilliseconds < 20000)
                 {
-                    Thread.Sleep(100);
+                    if (ScreenState.CurrentArea == Area.Others.LoginPincode && account.PinCode != 0)
+                    {
+                        Controller.SendClick(this, 90, 110, 300);
+                        Controller.SendKey(this, account.PinCode.ToString());
+                        tmrRun.Restart();
+                    }
+                    else if (ScreenState.CurrentArea == Area.Others.LoginPincode)
+                    {
+                        success = false;
+                        Controller.Instance.SendNotification("Pin code missing", NotificationType.General);
+                        break;
+                    }
 
+                    Thread.Sleep(100);
                     Controller.CaptureApplication(this);
                 }
 
-                if (tmrRun.ElapsedMilliseconds < 20000)
+                if (ScreenState.CurrentArea == Area.Others.Ad)
                 {
                     Controller.SendClick(this, 390, 10, 200); //exit ad
                 }

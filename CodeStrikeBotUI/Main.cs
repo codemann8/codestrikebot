@@ -232,7 +232,7 @@ namespace CodeStrikeBot
                         bsAccount.Add(a);
                     }
                 }
-                bsAccount.Add(new DataObjects.Account(0, "", "", "", "", AccountPriority.NoMonitor, 0, new DateTime(), new DateTime(), ctrl.ActiveScreen.Emulator.App));
+                bsAccount.Add(new DataObjects.Account(0, "", "", "", "", 0, AccountPriority.NoMonitor, 0, new DateTime(), new DateTime(), ctrl.ActiveScreen.Emulator.App));
             }
         }
 
