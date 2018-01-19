@@ -10,6 +10,7 @@ namespace CodeStrikeBot.Messages
     public class SyncedDataMessage : JsonMessage
     {
         public List<Objects.Watchtower> Watchtowers { get; private set; }
+        public bool empireinappsale { get; private set; }
 
         public SyncedDataMessage(JsonMessage message)
             : base(message)
@@ -17,6 +18,7 @@ namespace CodeStrikeBot.Messages
             this.Type = MessageType.SyncedData;
 
             this.Watchtowers = new List<Objects.Watchtower>();
+            this.empireinappsale = false;
 
             try
             {
@@ -45,6 +47,9 @@ namespace CodeStrikeBot.Messages
 
                                     this.Watchtowers.Add(watch);
                                 }
+                                break;
+                            case "empireinappsale":
+                                this.empireinappsale = true;
                                 break;
                             default:
                                 //other synceddata types

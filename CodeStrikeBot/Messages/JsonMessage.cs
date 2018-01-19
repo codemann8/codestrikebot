@@ -72,6 +72,11 @@ namespace CodeStrikeBot.Messages
                                     System.IO.Directory.CreateDirectory(String.Format(".\\output\\debug\\synceddata\\_watchtower"));
                                     System.IO.File.WriteAllText(String.Format(".\\output\\debug\\synceddata\\_watchtower\\{0}.txt", (ret.Error ? "ERROR_" : "") + ret.Id), Utilities.FormatJSON(ret.RawJson));
                                 }
+                                else if (((SyncedDataMessage)ret).empireinappsale)
+                                {
+                                    System.IO.Directory.CreateDirectory(String.Format(".\\output\\debug\\synceddata\\_empireinappsale"));
+                                    System.IO.File.WriteAllText(String.Format(".\\output\\debug\\synceddata\\_empireinappsale\\{0}.txt", (ret.Error ? "ERROR_" : "") + ret.Id), Utilities.FormatJSON(ret.RawJson));
+                                }
                                 else
                                 {
                                     System.IO.Directory.CreateDirectory(String.Format(".\\output\\debug\\synceddata"));
@@ -104,9 +109,23 @@ namespace CodeStrikeBot.Messages
                             case "EVENT_TILE_UPDATED":
                                 ret = new TileUpdatedMessage(ret);
                                 break;
+                            case "EVENT_INVENTORY_CHEST_SCHEDULE_CHANGED":
+                            case "EVENT_ALLIANCE_RANSOM_MEMBERS":
+                            case "EVENT_BLOG_UPDATED":
+                            case "EVENT_PROVINCE_TITLE_ISSUED":
+                            case "EVENT_ALLIANCE_HELP_OWNER_COMPLETE":
+                            case "EVENT_ALLIANCE_HELP_OWNER_REQUEST_HELP":
+                            case "EVENT_FORMING_RESOLVED":
+                            case "EVENT_LOGIN_OTHER_DEVICE":
+                            case "EVENT_BONUS_CUSTOM_TEXT_READY":
+                            case "GAME_EVENT_STARTED":
+                            case "GAME_EVENT_ENDED":
+                            case "RATE_US_ACTIVATE":
+                                //TODO: Revisit, but too many of these are being outputted
+                                break;
                             default:
-                                System.IO.Directory.CreateDirectory(String.Format(".\\output\\debug\\unknownJson"));
-                                System.IO.File.WriteAllText(String.Format(".\\output\\debug\\unknownJson\\{0}-{1}.txt", node.Attributes["node"].Value, ret.Id), Utilities.FormatJSON(ret.RawJson));
+                                System.IO.Directory.CreateDirectory(String.Format(".\\output\\debug\\unknownJson\\{0}", node.Attributes["node"].Value));
+                                System.IO.File.WriteAllText(String.Format(".\\output\\debug\\unknownJson\\{0}\\{0}-{1}.txt", node.Attributes["node"].Value, ret.Id), Utilities.FormatJSON(ret.RawJson));
                                 break;
                         }
 
