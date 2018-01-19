@@ -33,6 +33,25 @@ namespace CodeStrikeBot
             return chksum;
         }
 
+        public static void Save(this SuperBitmap bitmap, string fileName, int tries = 100)
+        {
+            while (tries > 0)
+            {
+                try
+                {
+                    tries--;
+                    bitmap.Bitmap.Save(fileName, System.Drawing.Imaging.ImageFormat.Bmp);
+                    return;
+                }
+                catch (InvalidOperationException ex)
+                {
+                    System.Threading.Thread.Sleep(50);
+                }
+            }
+
+            bitmap.Bitmap.Save(fileName, System.Drawing.Imaging.ImageFormat.Bmp);
+        }
+
         public static ushort Checksum(this Bitmap bitmap, int x, int y, int w, int h)
         {
 

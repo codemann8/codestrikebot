@@ -376,7 +376,7 @@ namespace CodeStrikeBot
                         {
                             BotDatabase.InsertLog(2, String.Format("Emulator frozen: {0}", Emulator.WindowName), LastChecksum.ToString("X4"), new byte[1] { 0x0 });
                             System.IO.Directory.CreateDirectory(String.Format("{0}\\auto", Controller.Instance.GetFullScreenshotDir()));
-                            SuperBitmap.Bitmap.Save(String.Format("{0}\\crash{1}.bmp", Controller.Instance.GetFullScreenshotDir(), LastChecksum.ToString("X4")), ImageFormat.Bmp);
+                            SuperBitmap.Save(String.Format("{0}\\crash{1}.bmp", Controller.Instance.GetFullScreenshotDir(), LastChecksum.ToString("X4")));
                             Controller.Instance.RestartEmulator(this, false);
                             Controller.Instance.Login(this, Emulator.LastKnownAccount);
                         }
@@ -391,7 +391,7 @@ namespace CodeStrikeBot
                                     {
                                         BotDatabase.InsertLog(2, String.Format("Emulator frozen: {0}", Emulator.WindowName), LastChecksum.ToString("X4"), new byte[1] { 0x0 });
                                         System.IO.Directory.CreateDirectory(String.Format("{0}\\auto", Controller.Instance.GetFullScreenshotDir()));
-                                        SuperBitmap.Bitmap.Save(String.Format("{0}\\crash{1}.bmp", Controller.Instance.GetFullScreenshotDir(), LastChecksum.ToString("X4")), ImageFormat.Bmp);
+                                        SuperBitmap.Save(String.Format("{0}\\crash{1}.bmp", Controller.Instance.GetFullScreenshotDir(), LastChecksum.ToString("X4")));
                                         Controller.Instance.RestartEmulator(this, false);
                                         Controller.Instance.Login(this, Emulator.LastKnownAccount);
 
@@ -865,7 +865,7 @@ namespace CodeStrikeBot
 
             if (false)
             {
-                SuperBitmap.Bitmap.Save(String.Format("{0}\\loading.bmp", Controller.Instance.GetFullScreenshotDir()), ImageFormat.Bmp);
+                SuperBitmap.Save(String.Format("{0}\\loading.bmp", Controller.Instance.GetFullScreenshotDir()));
             }
             //bmp = new Bitmap(String.Format("{0}\\title.bmp", Controller.Instance.GetFullScreenshotDir()));
             int count = 0;
@@ -1013,7 +1013,7 @@ namespace CodeStrikeBot
                 }
                 else
                 {
-                    SuperBitmap.Bitmap.Save(String.Format("{0}\\{1}.bmp", Controller.Instance.GetFullScreenshotDir(), text), ImageFormat.Bmp);
+                    SuperBitmap.Save(String.Format("{0}\\{1}.bmp", Controller.Instance.GetFullScreenshotDir(), text));
                 }
             }
 
@@ -1664,7 +1664,7 @@ namespace CodeStrikeBot
 
                                     for (int line = 0; line <= 18; line++)
                                     {
-                                        SuperBitmap.Bitmap.Save(String.Format("{0}\\file.bmp", Controller.Instance.GetFullScreenshotDir()), ImageFormat.Bmp);
+                                        SuperBitmap.Save(String.Format("{0}\\file.bmp", Controller.Instance.GetFullScreenshotDir()));
                                         int firstX = 0, lastX = 0;
                                         int pY = Convert.ToInt32(line * 33.35 + 77);
 
@@ -1876,7 +1876,7 @@ namespace CodeStrikeBot
                                                 else
                                                 {
                                                     bmp2.Save(String.Format("{0}\\file.bmp", Controller.Instance.GetFullScreenshotDir()), ImageFormat.Bmp);
-                                                    SuperBitmap.Bitmap.Save(String.Format("{0}\\file2.bmp", Controller.Instance.GetFullScreenshotDir()), ImageFormat.Bmp); 
+                                                    SuperBitmap.Save(String.Format("{0}\\file2.bmp", Controller.Instance.GetFullScreenshotDir())); 
                                                     
                                                     Main.CurrentForm.SetLastMapParameters(sX, sY, y, x);
 
@@ -2244,17 +2244,7 @@ namespace CodeStrikeBot
                             else if (g > 500) { } //skip outputting bitmaps due to notifcation popup possibility
                             else //unknown case
                             {
-                                bool saved = false;
-
-                                while (!saved)
-                                {
-                                    try
-                                    {
-                                        SuperBitmap.Bitmap.Save(String.Format("{0}\\gift{1}-{2}-{3}.bmp", Controller.Instance.GetFullScreenshotDir(), c.R.ToString(), c.G.ToString(), c.B.ToString()), System.Drawing.Imaging.ImageFormat.Bmp);
-                                        saved = true;
-                                    }
-                                    catch (InvalidOperationException ex) { }
-                                }
+                                SuperBitmap.Save(String.Format("{0}\\gift{1}-{2}-{3}.bmp", Controller.Instance.GetFullScreenshotDir(), c.R.ToString(), c.G.ToString(), c.B.ToString()));
                                 break;
                             }
                         }
@@ -2266,7 +2256,7 @@ namespace CodeStrikeBot
                 }
                 else if (ScreenState.CurrentArea == Area.Menus.Alliance || ScreenState.CurrentArea == Area.Menus.Gifts)
                 {
-                    SuperBitmap.Bitmap.Save(String.Format("{0}\\-save.bmp", Controller.Instance.GetFullScreenshotDir()), System.Drawing.Imaging.ImageFormat.Bmp);
+                    SuperBitmap.Save(String.Format("{0}\\-save.bmp", Controller.Instance.GetFullScreenshotDir()));
 
                     //if (ScreenState.CurrentArea == Area.Menus.Gifts && SuperBitmap.GetPixel(335, 175).Equals(57, 121, 140)) //clear gifts button is available //DIFF MS
                     if (ScreenState.CurrentArea == Area.Menus.Gifts && ScreenState.GetScreenChecksum(this.SuperBitmap, 190, 98, 20) == 0xa788) //clear gifts button is available
@@ -2421,7 +2411,7 @@ namespace CodeStrikeBot
                                     }*/
                                     else
                                     {
-                                        SuperBitmap.Bitmap.Save(String.Format("{0}\\{1}.bmp", Controller.Instance.GetFullScreenshotDir(), c.Name.Replace("#", "")), System.Drawing.Imaging.ImageFormat.Bmp);
+                                        SuperBitmap.Save(String.Format("{0}\\{1}.bmp", Controller.Instance.GetFullScreenshotDir(), c.Name.Replace("#", "")));
                                     }
 
                                     Controller.SendClick(this, 350, 145 + 53 * m + vipOffset, 400);
@@ -2440,17 +2430,7 @@ namespace CodeStrikeBot
                                 }
                                 else
                                 {
-                                    bool saved = false;
-
-                                    while (!saved)
-                                    {
-                                        try
-                                        {
-                                            SuperBitmap.Bitmap.Save(String.Format("{0}\\quest{1}-{2}-{3}.bmp", Controller.Instance.GetFullScreenshotDir(), c.R.ToString(), c.G.ToString(), c.B.ToString()), System.Drawing.Imaging.ImageFormat.Bmp);
-                                            saved = true;
-                                        }
-                                        catch (InvalidOperationException ex) { }
-                                    }
+                                    SuperBitmap.Save(String.Format("{0}\\quest{1}-{2}-{3}.bmp", Controller.Instance.GetFullScreenshotDir(), c.R.ToString(), c.G.ToString(), c.B.ToString()));
                                     break;
                                 }
                             }
@@ -2903,7 +2883,7 @@ namespace CodeStrikeBot
                                         }
                                         else if (ScreenState.Overlays.Contains(Overlay.Dialogs.Popups.Unknown))
                                         {
-                                            SuperBitmap.Bitmap.Save(String.Format("{0}{1}\\rss{2}.bmp", AppDomain.CurrentDomain.BaseDirectory, "output\\ss\\unknown", chksum.ToString("X4")), ImageFormat.Bmp);
+                                            SuperBitmap.Save(String.Format("{0}{1}\\rss{2}.bmp", AppDomain.CurrentDomain.BaseDirectory, "output\\ss\\unknown", chksum.ToString("X4")));
                                             Controller.Instance.SendNotification(String.Format("Rss Transfer Unknown dialog {0}", chksum.ToString("X4")), NotificationType.General);
 
                                             this.ClickBack(300);

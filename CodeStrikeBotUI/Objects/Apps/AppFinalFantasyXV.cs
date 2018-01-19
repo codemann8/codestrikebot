@@ -528,7 +528,7 @@ namespace CodeStrikeBot
                     //chksum3 = ScreenState.GetScreenChecksum(bmp, 190, 115, 20);
                     if (!System.IO.File.Exists(String.Format("{0}\\unknown\\unknown{1}-{2}.bmp", Controller.Instance.GetFullScreenshotDir(), chksum.ToString("X4"), chksum2.ToString("X4"))))
                     {
-                        bmp.Bitmap.Save(String.Format("{0}\\unknown\\unknown{1}-{2}.bmp", Controller.Instance.GetFullScreenshotDir(), chksum.ToString("X4"), chksum2.ToString("X4")), System.Drawing.Imaging.ImageFormat.Bmp);
+                        bmp.Save(String.Format("{0}\\unknown\\unknown{1}-{2}.bmp", Controller.Instance.GetFullScreenshotDir(), chksum.ToString("X4"), chksum2.ToString("X4")));
                     }
                     /*if (CurrentArea == Area.Menu)
                     {
@@ -539,7 +539,7 @@ namespace CodeStrikeBot
                 {
                     if (!System.IO.File.Exists(String.Format("{0}\\unknown\\genericCase-{1}-{2}-{3}.bmp", Controller.Instance.GetFullScreenshotDir(), this.ToString(), chksum.ToString("X4"), chksum2.ToString("X4"))))
                     {
-                        bmp.Bitmap.Save(String.Format("{0}\\unknown\\genericCase-{1}-{2}-{3}.bmp", Controller.Instance.GetFullScreenshotDir(), this.ToString(), chksum.ToString("X4"), chksum2.ToString("X4")), System.Drawing.Imaging.ImageFormat.Bmp);
+                        bmp.Save(String.Format("{0}\\unknown\\genericCase-{1}-{2}-{3}.bmp", Controller.Instance.GetFullScreenshotDir(), this.ToString(), chksum.ToString("X4"), chksum2.ToString("X4")));
                     }
                     //Controller.Instance.SendNotification(string.Format("ScreenState found but missed above\n{0}-{1}-{2}", this.ToString(), chksum.ToString("X4"), chksum2.ToString("X4")), NotificationType.General);
                 }
@@ -743,7 +743,7 @@ namespace CodeStrikeBot
 
                         if (!System.IO.File.Exists(String.Format("{0}\\unknown\\rss{1}-{2}-{3}.bmp", Controller.Instance.GetFullScreenshotDir(), chksum.ToString("X4"), chksum2.ToString("X4"), chksum3.ToString("X4"))))
                         {
-                            bmp.Bitmap.Save(String.Format("{0}\\unknown\\rss{1}-{2}-{3}.bmp", Controller.Instance.GetFullScreenshotDir(), chksum.ToString("X4"), chksum2.ToString("X4"), chksum3.ToString("X4")), System.Drawing.Imaging.ImageFormat.Bmp);
+                            bmp.Save(String.Format("{0}\\unknown\\rss{1}-{2}-{3}.bmp", Controller.Instance.GetFullScreenshotDir(), chksum.ToString("X4"), chksum2.ToString("X4"), chksum3.ToString("X4")));
                         }
                         Overlays.Add(Overlay.Dialogs.Popups.TransferConfirmation);
                         break;
@@ -844,39 +844,35 @@ namespace CodeStrikeBot
             //        break;
             }
 
-            try
+            if (Overlays.Count == 0 && CurrentArea != Area.Unknown && CurrentArea != Area.MainBases.Main
+                && CurrentArea != Area.StateMaps.Main && CurrentArea != Area.StateMaps.FullScreen
+                && CurrentArea != Area.Emulators.Loading && CurrentArea != Area.Emulators.Android
+                && CurrentArea != Area.Others.Login && CurrentArea != Area.Others.Splash && CurrentArea != Area.Others.Ad
+                && CurrentArea != Area.Others.Chat && CurrentArea != Area.Others.SessionTimeout)
             {
-                if (Overlays.Count == 0 && CurrentArea != Area.Unknown && CurrentArea != Area.MainBases.Main
-                    && CurrentArea != Area.StateMaps.Main && CurrentArea != Area.StateMaps.FullScreen
-                    && CurrentArea != Area.Emulators.Loading && CurrentArea != Area.Emulators.Android
-                    && CurrentArea != Area.Others.Login && CurrentArea != Area.Others.Splash && CurrentArea != Area.Others.Ad
-                    && CurrentArea != Area.Others.Chat && CurrentArea != Area.Others.SessionTimeout)
+                chksum = ScreenState.GetScreenChecksum(bmp, 67, 16, 4);
+                ushort chksum2 = ScreenState.GetScreenChecksum(bmp, 160, 16, 14);
+                ushort chksum3 = ScreenState.GetScreenChecksum(bmp, 190, 115, 20);
+
+                if (chksum == 0x0cde || chksum == 0x57ca) //modal or double modal on a menu
                 {
-                    chksum = ScreenState.GetScreenChecksum(bmp, 67, 16, 4);
-                    ushort chksum2 = ScreenState.GetScreenChecksum(bmp, 160, 16, 14);
-                    ushort chksum3 = ScreenState.GetScreenChecksum(bmp, 190, 115, 20);
-
-                    if (chksum == 0x0cde || chksum == 0x57ca) //modal or double modal on a menu
+                    if (!System.IO.File.Exists(String.Format("{0}\\unknown\\unknown{1}-{2}-{3}.bmp", Controller.Instance.GetFullScreenshotDir(), chksum.ToString("X4"), chksum2.ToString("X4"), chksum3.ToString("X4"))))
                     {
-                        if (!System.IO.File.Exists(String.Format("{0}\\unknown\\unknown{1}-{2}-{3}.bmp", Controller.Instance.GetFullScreenshotDir(), chksum.ToString("X4"), chksum2.ToString("X4"), chksum3.ToString("X4"))))
-                        {
-                            bmp.Bitmap.Save(String.Format("{0}\\unknown\\unknown{1}-{2}-{3}.bmp", Controller.Instance.GetFullScreenshotDir(), chksum.ToString("X4"), chksum2.ToString("X4"), chksum3.ToString("X4")), System.Drawing.Imaging.ImageFormat.Bmp);
-                        }
-                    }
-                }
-
-                if (Overlays.Contains(Overlay.Dialogs.Popups.Unknown))
-                {
-                    chksum = ScreenState.GetScreenChecksum(bmp, 190, 115, 20);
-                    ushort chksum2 = ScreenState.GetScreenChecksum(bmp, 190, 150, 20);
-
-                    if (!System.IO.File.Exists(String.Format("{0}\\unknown\\popup{1}-{2}.bmp", Controller.Instance.GetFullScreenshotDir(), chksum.ToString("X4"), chksum2.ToString("X4"))))
-                    {
-                        bmp.Bitmap.Save(String.Format("{0}\\unknown\\popup{1}-{2}.bmp", Controller.Instance.GetFullScreenshotDir(), chksum.ToString("X4"), chksum2.ToString("X4")), System.Drawing.Imaging.ImageFormat.Bmp);
+                        bmp.Save(String.Format("{0}\\unknown\\unknown{1}-{2}-{3}.bmp", Controller.Instance.GetFullScreenshotDir(), chksum.ToString("X4"), chksum2.ToString("X4"), chksum3.ToString("X4")));
                     }
                 }
             }
-            catch (InvalidOperationException e) { }
+
+            if (Overlays.Contains(Overlay.Dialogs.Popups.Unknown))
+            {
+                chksum = ScreenState.GetScreenChecksum(bmp, 190, 115, 20);
+                ushort chksum2 = ScreenState.GetScreenChecksum(bmp, 190, 150, 20);
+
+                if (!System.IO.File.Exists(String.Format("{0}\\unknown\\popup{1}-{2}.bmp", Controller.Instance.GetFullScreenshotDir(), chksum.ToString("X4"), chksum2.ToString("X4"))))
+                {
+                    bmp.Save(String.Format("{0}\\unknown\\popup{1}-{2}.bmp", Controller.Instance.GetFullScreenshotDir(), chksum.ToString("X4"), chksum2.ToString("X4")));
+                }
+            }
         }
     }
 }

@@ -2410,11 +2410,11 @@ namespace CodeStrikeBot
                     chksum2 = ScreenState.GetScreenChecksum(ctrl.ActiveScreen.SuperBitmap, 290, 249, 20);
                     if (!System.IO.File.Exists(String.Format("{0}\\boost\\mult\\{1}.bmp", ctrl.GetFullScreenshotDir(), chksum.ToString("X4"))))
                     {
-                        ctrl.ActiveScreen.SuperBitmap.Bitmap.Save(String.Format("{0}\\boost\\mult\\{1}.bmp", ctrl.GetFullScreenshotDir(), chksum.ToString("X4")));
+                        ctrl.ActiveScreen.SuperBitmap.Save(String.Format("{0}\\boost\\mult\\{1}.bmp", ctrl.GetFullScreenshotDir(), chksum.ToString("X4")));
                     }
                     if (!System.IO.File.Exists(String.Format("{0}\\boost\\percent\\{1}.bmp", ctrl.GetFullScreenshotDir(), chksum2.ToString("X4"))))
                     {
-                        ctrl.ActiveScreen.SuperBitmap.Bitmap.Save(String.Format("{0}\\boost\\percent\\{1}.bmp", ctrl.GetFullScreenshotDir(), chksum2.ToString("X4")));
+                        ctrl.ActiveScreen.SuperBitmap.Save(String.Format("{0}\\boost\\percent\\{1}.bmp", ctrl.GetFullScreenshotDir(), chksum2.ToString("X4")));
                     }
 
                     while (ctrl.ActiveScreen.ScreenState.CurrentArea == Area.Menus.BuildingBoost && !ctrl.ActiveScreen.SuperBitmap.GetPixel(244, 546).Equals(33, 142, 82))

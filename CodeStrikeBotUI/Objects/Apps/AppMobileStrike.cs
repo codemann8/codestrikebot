@@ -461,7 +461,7 @@ namespace CodeStrikeBot
                                     {
                                         try
                                         {
-                                            bmp.Bitmap.Save(String.Format("{0}\\-save.bmp", Controller.Instance.GetFullScreenshotDir()), System.Drawing.Imaging.ImageFormat.Bmp);
+                                            bmp.Save(String.Format("{0}\\-save.bmp", Controller.Instance.GetFullScreenshotDir()));
                                         }
                                         catch (System.Runtime.InteropServices.ExternalException e) { }
                                     }
