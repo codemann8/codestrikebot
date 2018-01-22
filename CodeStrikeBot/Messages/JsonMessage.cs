@@ -79,8 +79,8 @@ namespace CodeStrikeBot.Messages
                                 }
                                 else
                                 {
-                                    System.IO.Directory.CreateDirectory(String.Format(".\\output\\debug\\synceddata"));
-                                    System.IO.File.WriteAllText(String.Format(".\\output\\debug\\synceddata\\{0}.txt", ret.Id), Utilities.FormatJSON(ret.RawJson));
+                                    //System.IO.Directory.CreateDirectory(String.Format(".\\output\\debug\\synceddata"));
+                                    //System.IO.File.WriteAllText(String.Format(".\\output\\debug\\synceddata\\{0}.txt", ret.Id), Utilities.FormatJSON(ret.RawJson));
                                 }
                                 break;
                             case "EVENT_ALLIANCE_UPDATE":
