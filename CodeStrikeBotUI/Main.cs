@@ -1121,7 +1121,7 @@ namespace CodeStrikeBot
                                     switch (playerName)
                                     {
                                         case "codemann8":
-                                        case "coalmann8":
+                                        case "1TroopWonder":
                                             ctrl.SendNotification(String.Format("Attack on {0}", march.DestName), NotificationType.IncomingAttack);
 
                                             /*if (march.Watchtower != null && march.Watchtower.ActualTotalUnits != 0 && march.Watchtower.ActualTotalUnits < 15000)
