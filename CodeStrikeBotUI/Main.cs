@@ -1100,6 +1100,18 @@ namespace CodeStrikeBot
                                 march = new Messages.Objects.March(marchMessage);
                                 ctrl.marches.Add(march);
 
+                                //output info on KOS players
+                                if (march.State == Messages.Objects.March.MarchState.Advancing && march.FromName.Substring(march.FromName.IndexOf(") ") + 1).Trim() == "ShaeKitty")
+                                {
+                                    TimeSpan duration = march.EndTime.Subtract(march.StartTime);
+                                    int distance = Utilities.DistanceSquared(march.FromCoordinate, march.DestCoordinate);
+
+                                    double speed = (distance * 1000) / duration.TotalMilliseconds;
+
+                                    System.IO.Directory.CreateDirectory(String.Format(".\\output\\debug\\shae"));
+                                    System.IO.File.WriteAllText(String.Format(".\\output\\debug\\shae\\{0}.txt", marchMessage.Id), String.Format("Tile {0}:{1}\nSpeed = {2}\nDuration = {3}\nDistanceSq = {4}\nStart: {5}\nEnd: {6}", march.DestCoordinate.X, march.DestCoordinate.Y, speed, duration.TotalSeconds, distance, march.StartTime.ToLongTimeString(), march.EndTime.ToLongTimeString()));
+                                }
+
                                 //notify attacks on specific users
                                 if (march.Type == Messages.Objects.March.MarchType.Attack && march.State != Messages.Objects.March.MarchState.Returning)
                                 {

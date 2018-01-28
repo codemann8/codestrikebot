@@ -49,6 +49,14 @@ namespace CodeStrikeBot
             return new Point3D(ChunkTileId2XCoordinate(chunkId, tileId), ChunkTileId2YCoordinate(chunkId, tileId), provinceId);
         }
 
+        public static int DistanceSquared(Point3D from, Point3D to)
+        {
+            int valueX = (int)from.X - (int)to.X, valueY = (int)from.Y - (int)to.Y;
+            valueX *= valueX;
+            valueY *= valueY;
+            return valueX + valueY;
+        }
+
         public static string FormatJSON(string json)
         {
             int indentLevel = 0, offset = 0;
