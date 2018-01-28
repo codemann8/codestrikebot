@@ -109,6 +109,10 @@ namespace CodeStrikeBot.Messages
                             case "EVENT_TILE_UPDATED":
                                 ret = new TileUpdatedMessage(ret);
                                 break;
+                            case "EVENT_GAMEEVENT_ANNOUNCEMENT":
+                                System.IO.Directory.CreateDirectory(String.Format(".\\output\\debug\\unknownJson\\{0}", node.Attributes["node"].Value));
+                                System.IO.File.WriteAllText(String.Format(".\\output\\debug\\unknownJson\\{0}\\{0}-{1}.txt", node.Attributes["node"].Value, ret.Id), Utilities.FormatJSON(ret.RawJson));
+                                break;
                             case "EVENT_INVENTORY_CHEST_SCHEDULE_CHANGED":
                             case "EVENT_ALLIANCE_RANSOM_MEMBERS":
                             case "EVENT_BLOG_UPDATED":

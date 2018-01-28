@@ -1660,6 +1660,31 @@ namespace CodeStrikeBot
                                 ctrl.SendNotification("Alliance tile appeared", NotificationType.AllianceTile);
                             }
                         }
+                        else if (message.GetType() == typeof(Messages.JsonMessage))
+                        {
+                            Messages.JsonMessage json = (Messages.JsonMessage)message;
+
+                            if (json.RawJson.Contains("AdventurersDayGatheringEvent"))
+                            {
+                                Controller.Instance.SendNotification("Gather Event", NotificationType.Status);
+                            }
+                            else if (json.RawJson.Contains("AdventurersDayTrainingEvent"))
+                            {
+                                Controller.Instance.SendNotification("Training Event", NotificationType.Status);
+                            }
+                            else if (json.RawJson.Contains("AdventurersDayMonsterHuntEvent"))
+                            {
+                                Controller.Instance.SendNotification("Monster Event", NotificationType.Status);
+                            }
+                            else if (json.RawJson.Contains("AdventurersDayQuestCompleteEvent"))
+                            {
+                                Controller.Instance.SendNotification("Hero Quest Event", NotificationType.Status);
+                            }
+                            else if (json.RawJson.Contains("Empire41AscensionFlashCityGuardian"))
+                            {
+                                //Controller.Instance.SendNotification("Event", NotificationType.Status);
+                            }
+                        }
                     }
                 }
             }
