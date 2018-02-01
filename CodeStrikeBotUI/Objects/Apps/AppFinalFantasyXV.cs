@@ -366,6 +366,7 @@ namespace CodeStrikeBot
                     }
                     break;
                 case 0xfa80:
+                case 0x5aae: //update? 1/31/18
                 case 0x0: //syncing/loading
                     CurrentArea = Area.MainBases.Main;
                     break;
@@ -412,6 +413,7 @@ namespace CodeStrikeBot
                     }
                     break;
                 case 0x8b68: //main base modal
+                case 0x3ad2: //update? 1/31/18
                     chksum2 = ScreenState.GetScreenChecksum(bmp, 190, 115, 20);
                     switch (chksum2)
                     {
