@@ -536,7 +536,7 @@ namespace CodeStrikeBot
 
                                             while (ScreenState.CurrentArea == Area.MainBases.GlobalGiftCollect)
                                             {
-                                                Controller.SendClick(this, 140, 440, 500); //click Collect
+                                                Controller.SendClick(this, 140, 440, 800); //click Collect
                                                 Controller.CaptureApplication(this);
                                             }
                                         }
