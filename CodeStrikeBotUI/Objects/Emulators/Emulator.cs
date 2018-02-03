@@ -2998,29 +2998,64 @@ namespace CodeStrikeBot
 
                 if (targetSelected)
                 {
-                    if (!this.ClickUntil(280, 298, Area.Menus.March, 400, 2000))
+                    //click Attack or Rally
+                    if (delay == RallyDelay.None)
                     {
-                        Controller.CaptureApplication(this);
-                        if (this.ScreenState.Overlays.Contains(Overlay.Dialogs.Popups.WarningOutsideAttack))
+                        if (!this.ClickUntil(280, 298, Area.Menus.March, 400, 2000))
                         {
-                            this.ClickBack(400);
+                            Controller.CaptureApplication(this);
+                            if (this.ScreenState.Overlays.Contains(Overlay.Dialogs.Popups.WarningOutsideAttack))
+                            {
+                                this.ClickBack(400);
+                            }
                         }
+                    }
+                    else
+                    {
+                        //TODO: click Rally and select rally duration
                     }
 
                     if (this.ScreenState.CurrentArea == Area.Menus.March)
                     {
-                        chksum = ScreenState.GetScreenChecksum(this.SuperBitmap, 250, 270, 20);
-                        if (chksum == 0x6a26) //commander is present
+                        //select troops
+                        bool selected = false;
+                        while (!selected)
                         {
-                            if (this.ClickUntil(20, 590, 300, 265, 20, 0xa3e1, 100, 2000)) //click Queue Max until com is selected
+                            if (numberOfTroops == 0)
                             {
-                                if (this.ClickUntil(250, 590, Area.StateMaps.Main, 1000, 4300))
+                                if (this.ClickUntil(20, 590, 230, 585, 10, 0xe528, 100, 800)) //click Queue Max until com is selected
                                 {
-                                    success = true;
+                                    selected = true;
                                 }
                             }
+                            else
+                            {
+                                //TODO: click and manually enter troops
+                            }
                         }
-                        else
+
+                        //select hero
+                        selected = false;
+                        while (!selected)
+                        {
+                            Controller.CaptureApplication(this);
+                            chksum = ScreenState.GetScreenChecksum(this.SuperBitmap, 350, 255, 20);
+
+                            bool heroPresent = chksum == 0x08f6, heroSelected = chksum == 0xf6e4;
+
+                            if ((includeHero && (heroSelected || !heroPresent)) || !(includeHero || heroSelected))
+                            {
+                                selected = true;
+                            }
+
+                            if (!selected)
+                            {
+                                Controller.SendClick(this, 355, 260, 500);
+                            }
+                        }
+
+                        //click March
+                        if (this.ClickUntil(250, 590, Area.StateMaps.Main, 1000, 4300))
                         {
                             success = true;
                         }

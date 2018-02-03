@@ -1821,6 +1821,7 @@ namespace CodeStrikeBot
         {
             if (ctrl.ActiveScreen != null && ctrl.ActiveScreen.EmulatorProcess != null)
             {
+                ctrl.ActiveScreen.AttackEnemy(261, 445, 261, 445, RallyDelay.None, true);
                 //System.Threading.Thread.Sleep(1000);
                 //sc.ResizeWindow();
                 //sc.SendClickDrag(30, 400, 30, 340, 100, true, 500);
@@ -1828,7 +1829,7 @@ namespace CodeStrikeBot
                 //Controller.CaptureApplicationNew(ctrl.ActiveScreen);
 
                 //Controller.SendKeyTest(ctrl.sc[0], "ok");
-
+                
                 //ctrl.sc[0].KillApp();
 
                 //ctrl.sc[0].GoToCoordinate(50, 78);
