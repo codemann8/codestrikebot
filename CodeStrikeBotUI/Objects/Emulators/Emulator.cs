@@ -523,22 +523,26 @@ namespace CodeStrikeBot
                             {
                                 if (Emulator.LastKnownAccount.Name == "code" || Emulator.LastKnownAccount.Name == "mouse")
                                 {
-                                    if (SwitchCommander(0))
+                                    if (SwitchCommander(1))
                                     {
-                                        RegularTasksStep();
+                                        while (ScreenState.Overlays.Contains(Overlay.Widgets.GlobalGift))
+                                        {
+                                            do
+                                            {
+                                                Controller.SendClick(this, 30, 575, 200); //click Global Gift
+                                                Controller.CaptureApplication(this);
+                                            }
+                                            while (ScreenState.Overlays.Contains(Overlay.Widgets.GlobalGift));
+
+                                            while (ScreenState.CurrentArea == Area.MainBases.GlobalGiftCollect)
+                                            {
+                                                Controller.SendClick(this, 140, 440, 500); //click Collect
+                                                Controller.CaptureApplication(this);
+                                            }
+                                        }
+
+                                        SwitchCommander(0);
                                     }
-                                }
-                                else
-                                {
-                                    RegularTasksStep();
-                                }
-                            }
-                            else if (ScreenState.CurrentArea == Area.MainBases.GlobalGiftCollect)
-                            {
-                                if (Emulator.LastKnownAccount.Name == "code" || Emulator.LastKnownAccount.Name == "mouse")
-                                {
-                                    RegularTasksStep();
-                                    SwitchCommander(1);
                                 }
                                 else
                                 {
@@ -550,7 +554,8 @@ namespace CodeStrikeBot
                                 || ScreenState.CurrentArea == Area.Menus.ShootingRanges.Main
                                 || ScreenState.CurrentArea == Area.Menus.ShootingRanges.NormalCrate
                                 || ScreenState.Overlays.Contains(Overlay.Widgets.SecretGift)
-                                || ScreenState.CurrentArea == Area.MainBases.SecretGiftCollect)
+                                || ScreenState.CurrentArea == Area.MainBases.SecretGiftCollect
+                                || ScreenState.CurrentArea == Area.MainBases.GlobalGiftCollect)
                             {
                                 RegularTasksStep();
                             }
