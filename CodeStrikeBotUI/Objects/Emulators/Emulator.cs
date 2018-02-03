@@ -2929,6 +2929,108 @@ namespace CodeStrikeBot
             return success;
         }
 
+        public bool AttackEnemy(int x, int y, int backupX, int backupY, RallyDelay delay, bool includeHero, int numberOfTroops = 0)
+        {
+            bool success = false;
+            int retryCount = 0;
+
+            System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch(), tmrRun = new System.Diagnostics.Stopwatch();
+            watch.Start();
+
+            while (this.GoToBaseOrMapStep() && watch.ElapsedMilliseconds < 3000) { };
+
+            Controller.CaptureApplication(this);
+
+            if (this.ScreenState.CurrentArea == Area.Unknown)
+            {
+                this.IsFucked = true;
+                return false;
+            }
+
+            watch.Restart();
+
+            while (this.ScreenState.CurrentArea == Area.MainBases.Main && watch.ElapsedMilliseconds < 2600)
+            {
+                Controller.SendClick(this, 20, 680, 1200);
+                Controller.CaptureApplication(this);
+            }
+
+            if (this.ScreenState.CurrentArea == Area.StateMaps.Main || this.ScreenState.CurrentArea == Area.StateMaps.FullScreen)
+            {
+                int tries = 0;
+                bool targetSelected = false;
+                Color c;
+                ushort chksum;
+
+                do
+                {
+                    tries++;
+
+                    bool coordSuccess;
+                    if (tries > 2)
+                    {
+                        coordSuccess = this.GoToCoordinate(x, y);
+                    }
+                    else
+                    {
+                        coordSuccess = this.GoToCoordinate(backupX, backupY);
+                    }
+
+                    if (coordSuccess)
+                    {
+                        System.Threading.Thread.Sleep((int)(400 * this.TimeoutFactor));
+
+                        watch.Restart();
+                        do
+                        {
+                            Controller.SendClick(this, 196, 382, 1000); //click on destination base
+                            Controller.CaptureApplication(this);
+                        }
+                        while (!this.ScreenState.Overlays.Contains(Overlay.Dialogs.Tiles.PlayerEnemy) && watch.ElapsedMilliseconds < 2500);
+
+                        if (this.ScreenState.Overlays.Contains(Overlay.Dialogs.Tiles.PlayerEnemy))
+                        {
+                            targetSelected = true;
+                        }
+                    }
+                }
+                while (!targetSelected && tries < 5);
+
+                if (targetSelected)
+                {
+                    if (!this.ClickUntil(280, 298, Area.Menus.March, 400, 2000))
+                    {
+                        Controller.CaptureApplication(this);
+                        if (this.ScreenState.Overlays.Contains(Overlay.Dialogs.Popups.WarningOutsideAttack))
+                        {
+                            this.ClickBack(400);
+                        }
+                    }
+
+                    if (this.ScreenState.CurrentArea == Area.Menus.March)
+                    {
+                        chksum = ScreenState.GetScreenChecksum(this.SuperBitmap, 250, 270, 20);
+                        if (chksum == 0x6a26) //commander is present
+                        {
+                            if (this.ClickUntil(20, 590, 300, 265, 20, 0xa3e1, 100, 2000)) //click Queue Max until com is selected
+                            {
+                                if (this.ClickUntil(250, 590, Area.StateMaps.Main, 1000, 4300))
+                                {
+                                    success = true;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            success = true;
+                        }
+                    }
+                }
+            }
+
+            return success;
+        }
+
         public bool ActivateVIP(int amount)
         {
             bool success = false;

@@ -1101,15 +1101,23 @@ namespace CodeStrikeBot
                                 ctrl.marches.Add(march);
 
                                 //output info on KOS players
-                                if (march.State == Messages.Objects.March.MarchState.Advancing && march.FromName.Substring(march.FromName.IndexOf(") ") + 1).Trim() == "ShaeKitty")
+                                try
                                 {
-                                    TimeSpan duration = march.EndTime.Subtract(march.StartTime);
-                                    int distance = Utilities.DistanceSquared(march.FromCoordinate, march.DestCoordinate);
+                                    if (march.State == Messages.Objects.March.MarchState.Advancing && march.FromName.Substring(march.FromName.IndexOf(") ") + 1).Trim() == "ShaeKitty")
+                                    {
+                                        TimeSpan duration = march.EndTime.Subtract(march.StartTime);
+                                        double distance = Math.Sqrt(Utilities.DistanceSquared(march.FromCoordinate, march.DestCoordinate));
 
-                                    double speed = (distance * 1000) / duration.TotalMilliseconds;
+                                        double speed = (distance * 1000) / duration.TotalMilliseconds;
 
-                                    System.IO.Directory.CreateDirectory(String.Format(".\\output\\debug\\shae"));
-                                    System.IO.File.WriteAllText(String.Format(".\\output\\debug\\shae\\{0}.txt", marchMessage.Id), String.Format("Tile {0}:{1}\nSpeed = {2}\nDuration = {3}\nDistanceSq = {4}\nStart: {5}\nEnd: {6}", march.DestCoordinate.X, march.DestCoordinate.Y, speed, duration.TotalSeconds, distance, march.StartTime.ToLongTimeString(), march.EndTime.ToLongTimeString()));
+                                        System.IO.Directory.CreateDirectory(String.Format(".\\output\\debug\\kos"));
+                                        System.IO.File.WriteAllText(String.Format(".\\output\\debug\\kos\\{0}.txt", marchMessage.Id), String.Format("Tile {0}:{1}\nSpeed = {2}\nDuration = {3}\nDistance = {4}\nStart: {5}\nEnd: {6}", march.DestCoordinate.X, march.DestCoordinate.Y, speed, duration.TotalSeconds, distance, march.StartTime.ToLongTimeString(), march.EndTime.ToLongTimeString()));
+                                    }
+                                }
+                                catch (NullReferenceException ex)
+                                {
+                                    System.IO.Directory.CreateDirectory(String.Format(".\\output\\debug\\marches"));
+                                    System.IO.File.WriteAllText(String.Format(".\\output\\debug\\marches\\NULL-{0}.txt", marchMessage.Id), marchMessage.RawJson);
                                 }
 
                                 //notify attacks on specific users
@@ -1204,100 +1212,7 @@ namespace CodeStrikeBot
                                                     }
                                                     if (s.Emulator.LastKnownAccount != null && s.Emulator.LastKnownAccount.Id == a.Id)
                                                     {
-                                                        System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch(), tmrRun = new System.Diagnostics.Stopwatch();
-                                                        watch.Start();
-
-                                                        while (s.GoToBaseOrMapStep() && watch.ElapsedMilliseconds < 3000) { };
-
-                                                        Controller.CaptureApplication(s);
-
-                                                        if (s.ScreenState.CurrentArea == Area.Unknown)
-                                                        {
-                                                            s.IsFucked = true;
-                                                            break;
-                                                        }
-
-                                                        watch.Restart();
-
-                                                        while (s.ScreenState.CurrentArea == Area.MainBases.Main && watch.ElapsedMilliseconds < 2600)
-                                                        {
-                                                            Controller.SendClick(s, 20, 680, 1200);
-                                                            Controller.CaptureApplication(s);
-                                                        }
-
-                                                        if (s.ScreenState.CurrentArea == Area.StateMaps.Main || s.ScreenState.CurrentArea == Area.StateMaps.FullScreen)
-                                                        {
-                                                            int tries = 0;
-                                                            bool targetSelected = false;
-                                                            Color c;
-                                                            ushort chksum;
-
-                                                            do
-                                                            {
-                                                                tries++;
-
-                                                                bool coordSuccess;
-                                                                if (tries > 2)
-                                                                {
-                                                                    coordSuccess = s.GoToCoordinate(163, 185);
-                                                                }
-                                                                else
-                                                                {
-                                                                    coordSuccess = s.GoToCoordinate(220, 346);
-                                                                }
-
-                                                                if (coordSuccess)
-                                                                {
-                                                                    System.Threading.Thread.Sleep((int)(400 * s.TimeoutFactor));
-
-                                                                    watch.Restart();
-                                                                    do
-                                                                    {
-                                                                        Controller.SendClick(s, 196, 382, 1000); //click on destination base
-                                                                        Controller.CaptureApplication(s);
-                                                                    }
-                                                                    while (!s.ScreenState.Overlays.Contains(Overlay.Dialogs.Tiles.PlayerEnemy) && watch.ElapsedMilliseconds < 2500);
-
-                                                                    if (s.ScreenState.Overlays.Contains(Overlay.Dialogs.Tiles.PlayerEnemy))
-                                                                    {
-                                                                        targetSelected = true;
-                                                                    }
-                                                                }
-                                                            }
-                                                            while (!targetSelected && tries < 5);
-
-                                                            if (targetSelected)
-                                                            {
-                                                                if (!s.ClickUntil(280, 298, Area.Menus.March, 400, 2000))
-                                                                {
-                                                                    Controller.CaptureApplication(s);
-                                                                    if (s.ScreenState.Overlays.Contains(Overlay.Dialogs.Popups.WarningOutsideAttack))
-                                                                    {
-                                                                        s.ClickBack(400);
-                                                                    }
-                                                                }
-
-                                                                if (s.ScreenState.CurrentArea == Area.Menus.March)
-                                                                {
-                                                                    chksum = ScreenState.GetScreenChecksum(s.SuperBitmap, 250, 270, 20);
-                                                                    if (chksum == 0x6a26) //commander is present
-                                                                    {
-                                                                        if (s.ClickUntil(20, 590, 300, 265, 20, 0xa3e1, 100, 2000)) //click Queue Max until com is selected
-                                                                        {
-                                                                            if (s.ClickUntil(250, 590, Area.StateMaps.Main, 1000, 4300))
-                                                                            {
-                                                                                success = true;
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        success = true;
-                                                                    }
-                                                                    
-                                                                }
-                                                            }
-                                                        }
+                                                        s.AttackEnemy(163, 185, 220, 346, RallyDelay.None, true);
                                                     }
                                                     s.CreateRoutine("AutoActions");
                                                     s.Thread.Start();
@@ -1322,7 +1237,7 @@ namespace CodeStrikeBot
                                     switch (playerName)
                                     {
                                         case "codemann8":
-                                        case "coalmann8":
+                                        case "1TroopWonder":
                                             playerName = "codemann8";
                                             a = ctrl.FindAccount(playerName);
 
@@ -1344,7 +1259,7 @@ namespace CodeStrikeBot
                                                     if (s.Emulator.LastKnownAccount != null && s.Emulator.LastKnownAccount.Id == a.Id)
                                                     {
                                                         //success = s.ActivateBoost(ScheduleType.Shield, 3); //DIFF MS
-                                                        success = s.ActivateBoost(ScheduleType.AntiScout, 24, false);
+                                                        //success = s.ActivateBoost(ScheduleType.AntiScout, 24, false);
                                                     }
                                                     s.CreateRoutine("AutoActions");
                                                     s.Thread.Start();
