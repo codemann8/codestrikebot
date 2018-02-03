@@ -608,6 +608,16 @@ namespace CodeStrikeBot
         }
     }
 
+    public enum RallyDelay : ushort
+    {
+        None = 0,
+        FiveMinute = 1,
+        FifteenMinute = 2,
+        ThirtyMinute = 3,
+        OneHour = 4,
+        EightHour = 5
+    }
+
     /*internal enum ScreenState : short
         {
             Coordinate = 0,
