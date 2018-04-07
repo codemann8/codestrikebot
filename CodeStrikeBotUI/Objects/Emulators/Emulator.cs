@@ -2179,7 +2179,7 @@ namespace CodeStrikeBot
                     giftsLeft = true;
 
                     //Color c = SuperBitmap.GetPixel(335, 175); //DIFF MS
-                    ushort chksum = ScreenState.GetScreenChecksum(this.SuperBitmap, 190, 98, 20);
+                    ushort chksum = ScreenState.GetScreenChecksum(this.SuperBitmap, 190, 95, 20);
 
                     if (ScreenState.CurrentArea == Area.Menus.Alliance)
                     {
@@ -2187,7 +2187,7 @@ namespace CodeStrikeBot
                         Controller.SendClick(this, 345, 250, 600); //click gifts
                     }
                     //else if (ScreenState.CurrentArea == Area.Menus.Gifts && c.Equals(57, 121, 140)) //clear gifts button is available //DIFF MS
-                    else if (ScreenState.CurrentArea == Area.Menus.Gifts && chksum == 0xa788) //clear gifts button is available
+                    else if (ScreenState.CurrentArea == Area.Menus.Gifts && chksum == 0x888c) //clear gifts button is available
                     {
                         /* //DIFF MS
                         c = SuperBitmap.GetPixel(200, 175);
