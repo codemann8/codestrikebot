@@ -3525,7 +3525,8 @@ namespace CodeStrikeBot
 
                 do
                 {
-                    Controller.SendClick(this, 340, 310 + 112 * idx, 1500); //Click Activate
+                    //TODO: Figure out smarter way to select the correct hero as the hero order changes over time
+                    Controller.SendClick(this, 340, 310 + 112 * (idx + 1), 1500); //Click Activate
                     Controller.CaptureApplication(this);
                 }
                 while (chksum == ScreenState.GetScreenChecksum(SuperBitmap, 340, 305, 10) && watch.ElapsedMilliseconds < 3500);
