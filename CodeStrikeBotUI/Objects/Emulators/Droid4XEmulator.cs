@@ -13,12 +13,36 @@ namespace CodeStrikeBot
     public class Droid4XScreen : Screen
     {
         public static new string PROCESSNAME = "Droid4X";
+        public static new int WINDOW_TITLEBAR_H = 0;
+        public static new int WINDOW_MARGIN_L = 0;
+        public static new int WINDOW_MARGIN_R = 0;
+        public static new int WINDOW_GAP = 0;
 
         public Droid4XScreen(DataObjects.EmulatorInstance emulator) : base(emulator) { }
 
         public override string ProcessName
         {
             get { return Droid4XScreen.PROCESSNAME; }
+        }
+
+        public override int WindowTitlebarH
+        {
+            get { return Droid4XScreen.WINDOW_TITLEBAR_H; }
+        }
+
+        public override int WindowMarginL
+        {
+            get { return Droid4XScreen.WINDOW_MARGIN_L; }
+        }
+
+        public override int WindowMarginR
+        {
+            get { return Droid4XScreen.WINDOW_MARGIN_R; }
+        }
+
+        public override int WindowGap
+        {
+            get { return Droid4XScreen.WINDOW_GAP; }
         }
 
         public override void ClickBack(int timeout)

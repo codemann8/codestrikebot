@@ -480,6 +480,7 @@ namespace CodeStrikeBot
             public static readonly ID TaskManager = Emulator[3];
             public static readonly ID TaskManagerApp = Emulator[4];
             public static readonly ID TaskManagerRemove = Emulator[5];
+            public static readonly ID ProcessStopped = Emulator[6];
         }
 
         public static readonly ID Other = 99;

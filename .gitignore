@@ -154,3 +154,12 @@ $RECYCLE.BIN/
 
 # Mac desktop service store files
 .DS_Store
+/.vs/CodeStrikeBot/v15/Server/sqlite3
+/packages/ServiceStack.Text.3.9.71
+/packages/Slack.Webhooks.0.1.7
+/packages/SharpPcap.4.2.0
+/packages/Tesseract.3.0.2.0
+/packages/RestSharp.104.4.0
+/packages/Newtonsoft.Json.10.0.2
+/packages
+/CodeStrikeBot/x86

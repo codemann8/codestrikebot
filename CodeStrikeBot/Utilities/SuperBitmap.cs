@@ -72,7 +72,23 @@ namespace CodeStrikeBot
 
         public ushort Checksum(int x, int y, int w, int h)
         {
-            byte[] bytes;
+            Bitmap bmp = SubBitmap(x, y, w, h);
+
+            //ret = icon.Checksum();
+            byte [] bytes = (byte[])(new ImageConverter()).ConvertTo(bmp, typeof(byte[]));
+            bmp.Dispose();
+            /*bytes = new byte[w * h * 2];
+            for (int r = 0; r < h; r++)
+            {
+                System.Buffer.BlockCopy(bitmap.Bits, (y + r) * bitmap.Bitmap.Width * 2 + x * 2, bytes, r * w * 2, w * 2);
+            }*/
+            return CRC16.ComputeChecksum(bytes);
+
+            //return CRC16.ComputeChecksum((byte[])(new ImageConverter()).ConvertTo(bmp, typeof(byte[])));
+        }
+
+        public Bitmap SubBitmap(int x, int y, int w, int h)
+        {
             Bitmap bmp = new Bitmap(w, h);
 
             using (Graphics g = Graphics.FromImage(bmp))
@@ -93,17 +109,7 @@ namespace CodeStrikeBot
                 while (!success);
             }
 
-            //ret = icon.Checksum();
-            bytes = (byte[])(new ImageConverter()).ConvertTo(bmp, typeof(byte[]));
-            bmp.Dispose();
-            /*bytes = new byte[w * h * 2];
-            for (int r = 0; r < h; r++)
-            {
-                System.Buffer.BlockCopy(bitmap.Bits, (y + r) * bitmap.Bitmap.Width * 2 + x * 2, bytes, r * w * 2, w * 2);
-            }*/
-            return CRC16.ComputeChecksum(bytes);
-
-            //return CRC16.ComputeChecksum((byte[])(new ImageConverter()).ConvertTo(bmp, typeof(byte[])));
+            return bmp;
         }
 
         public void Dispose()

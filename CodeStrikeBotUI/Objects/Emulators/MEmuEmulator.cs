@@ -13,20 +13,20 @@ namespace CodeStrikeBot
     public class MEmuScreen : Screen
     {
         public static new string PROCESSNAME = "MEmu";
+        
+        //MEmu 2.9.6.1
+        //WINDOW_TITLEBAR_H = 34;
+        //WINDOW_MARGIN_L = 4;
+
+        //MEmu 3.5.0.2
+        public static new int WINDOW_TITLEBAR_H = 32;
+        public static new int WINDOW_MARGIN_L = 2;
+        public static new int WINDOW_MARGIN_R = 38;
+        public static new int WINDOW_GAP = 14;
 
         public MEmuScreen(DataObjects.EmulatorInstance emulator)
             : base(emulator)
         {
-            //MEmu 2.9.6.1
-            //WINDOW_TITLEBAR_H = 34;
-            //WINDOW_MARGIN_L = 4;
-
-            //MEmu 3.5.0.2
-            WINDOW_TITLEBAR_H = 31;
-            WINDOW_MARGIN_L = 1;
-
-            WINDOW_MARGIN_R = 52;
-
             Emulator = emulator;
             ClipboardFailed = false;
             PreventFromOpening = false;
@@ -44,7 +44,7 @@ namespace CodeStrikeBot
                     {
                         bool found = false;
                         
-                        if (p.CommandLineArgs(EmulatorType.MEmu) == emulator.Command)
+                        if (p.CommandLineArgs(EmulatorType.MEmu).Trim() == emulator.Command.Trim())
                         {
                             EmulatorProcess = p;
                             found = true;
@@ -78,16 +78,6 @@ namespace CodeStrikeBot
             //TimeoutFactor = 5;
             TimeSinceChecksumChanged = DateTime.Now;
 
-            //MEmu 2.9.6.1
-            //WINDOW_TITLEBAR_H = 34;
-            //WINDOW_MARGIN_L = 4;
-
-            //MEmu 3.5.0.2
-            WINDOW_TITLEBAR_H = 31;
-            WINDOW_MARGIN_L = 1;
-
-            WINDOW_MARGIN_R = 52;
-
             Process[] procs = Process.GetProcessesByName(PROCESSNAME);
 
             foreach (Process p in procs)
@@ -113,6 +103,26 @@ namespace CodeStrikeBot
             get { return MEmuScreen.PROCESSNAME; }
         }
 
+        public override int WindowTitlebarH
+        {
+            get { return MEmuScreen.WINDOW_TITLEBAR_H; }
+        }
+
+        public override int WindowMarginL
+        {
+            get { return MEmuScreen.WINDOW_MARGIN_L; }
+        }
+
+        public override int WindowMarginR
+        {
+            get { return MEmuScreen.WINDOW_MARGIN_R; }
+        }
+
+        public override int WindowGap
+        {
+            get { return MEmuScreen.WINDOW_GAP; }
+        }
+
         public override void ClickBack(int timeout)
         {
             if (this.ToString().Contains("2"))
@@ -132,17 +142,25 @@ namespace CodeStrikeBot
             {
                 Controller.SendClick(this, 255, 390, timeout);
             }
+            else if (ScreenState.CurrentArea == Area.Emulators.ProcessStopped)
+            {
+                Controller.SendClick(this, 335, 380, timeout);
+            }
             else
             {
-                ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 15, 4, 20);
+                if (ScreenState.CurrentArea == Area.MainBases.Main)
+                {
+                    timeout = timeout;
+                }
 
+                ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 15, 4, 20);
                 if (chksum == 0x133d) //if screen is a menu
                 {
                     Controller.SendClick(this, 25, 14, timeout);
                 }
                 else
                 {
-                    Controller.SendClick(this, 420, 582, timeout);
+                    Controller.SendClick(this, Controller.SCREEN_W + WINDOW_MARGIN_L + WINDOW_MARGIN_R / 2, 582, timeout);
                 }
             }
         }

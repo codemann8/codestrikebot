@@ -13,13 +13,13 @@ namespace CodeStrikeBot
     public class NoxScreen : Screen
     {
         public static new string PROCESSNAME = "Nox";
+        public static new int WINDOW_TITLEBAR_H = 36;
+        public static new int WINDOW_MARGIN_L = 2;
+        public static new int WINDOW_MARGIN_R = 36;
+        public static new int WINDOW_GAP = 5;
 
         public NoxScreen(DataObjects.EmulatorInstance emulator) : base(emulator)
         {
-            WINDOW_TITLEBAR_H = 36;
-            WINDOW_MARGIN_L = 2;
-            WINDOW_MARGIN_R = 36;
-
             Emulator = emulator;
             ClipboardFailed = false;
             PreventFromOpening = false;
@@ -57,10 +57,6 @@ namespace CodeStrikeBot
             TimeoutFactor = 1.0;
             TimeSinceChecksumChanged = DateTime.Now;
 
-            WINDOW_TITLEBAR_H = 36;
-            WINDOW_MARGIN_L = 2;
-            WINDOW_MARGIN_R = 36;
-
             Process[] procs = Process.GetProcessesByName(PROCESSNAME);
 
             foreach (Process p in procs)
@@ -84,6 +80,26 @@ namespace CodeStrikeBot
         public override string ProcessName
         {
             get { return NoxScreen.PROCESSNAME; }
+        }
+
+        public override int WindowTitlebarH
+        {
+            get { return NoxScreen.WINDOW_TITLEBAR_H; }
+        }
+
+        public override int WindowMarginL
+        {
+            get { return NoxScreen.WINDOW_MARGIN_L; }
+        }
+
+        public override int WindowMarginR
+        {
+            get { return NoxScreen.WINDOW_MARGIN_R; }
+        }
+
+        public override int WindowGap
+        {
+            get { return NoxScreen.WINDOW_GAP; }
         }
 
         public override void ClickBack(int timeout)

@@ -13,14 +13,14 @@ namespace CodeStrikeBot
     public class LeapdroidScreen : Screen
     {
         public static new string PROCESSNAME = "LeapdroidVM";
+        public static new int WINDOW_TITLEBAR_H = 30;
+        public static new int WINDOW_MARGIN_L = 8;
+        public static new int WINDOW_MARGIN_R = 79;
+        public static new int WINDOW_GAP = 5;
 
         public LeapdroidScreen(DataObjects.EmulatorInstance emulator)
             : base(emulator)
         {
-            WINDOW_TITLEBAR_H = 30;
-            WINDOW_MARGIN_L = 8;
-            WINDOW_MARGIN_R = 79;
-
             Emulator = emulator;
             ClipboardFailed = false;
             PreventFromOpening = false;
@@ -69,10 +69,6 @@ namespace CodeStrikeBot
             TimeoutFactor = 1.0;
             TimeSinceChecksumChanged = DateTime.Now;
 
-            WINDOW_TITLEBAR_H = 30;
-            WINDOW_MARGIN_L = 8;
-            WINDOW_MARGIN_R = 79;
-
             Process[] procs = Process.GetProcessesByName(PROCESSNAME);
 
             foreach (Process p in procs)
@@ -96,6 +92,26 @@ namespace CodeStrikeBot
         public override string ProcessName
         {
             get { return LeapdroidScreen.PROCESSNAME; }
+        }
+
+        public override int WindowTitlebarH
+        {
+            get { return LeapdroidScreen.WINDOW_TITLEBAR_H; }
+        }
+
+        public override int WindowMarginL
+        {
+            get { return LeapdroidScreen.WINDOW_MARGIN_L; }
+        }
+
+        public override int WindowMarginR
+        {
+            get { return LeapdroidScreen.WINDOW_MARGIN_R; }
+        }
+
+        public override int WindowGap
+        {
+            get { return LeapdroidScreen.WINDOW_GAP; }
         }
 
         public override void ClickBack(int timeout)

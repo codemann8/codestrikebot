@@ -378,7 +378,7 @@ namespace CodeStrikeBot
 		
             foreach (Screen s in ctrl.sc)		
             {		
-                ctrl.KillEmulator(s, false);		
+                ctrl.KillEmulator(s);		
             }		
 		
             Program.RestartApp();
@@ -443,9 +443,9 @@ namespace CodeStrikeBot
                 Rect r = ctrl.ActiveScreen.WindowRect;
 
                 p.X -= r.left;
-                p.X -= s.WINDOW_MARGIN_L;
+                p.X -= s.WindowMarginL;
                 p.Y -= r.top;
-                p.Y -= s.WINDOW_TITLEBAR_H;
+                p.Y -= s.WindowTitlebarH;
 
                 int value;
                 Int32.TryParse(txtBmpSize.Text, out value);
@@ -589,15 +589,15 @@ namespace CodeStrikeBot
 
                     foreach (Screen s in ctrl.sc)
                     {
-                        if (s.ScreenState.CurrentArea == Area.Unknown)
+                        if (s.ScreenState != null && s.ScreenState.CurrentArea == Area.Unknown)
                         {
                             System.Threading.Thread.Sleep((int)(1000 * s.TimeoutFactor));
                             Controller.CaptureApplication(s);
 
-                            if (s.ScreenState.CurrentArea == Area.Unknown)
+                            if (s.ScreenState != null && s.ScreenState.CurrentArea == Area.Unknown)
                             {
                                 //TODO: Change to Kill and Reopen app instead of killing emulator
-                                ctrl.RestartEmulator(s, false);
+                                ctrl.RestartEmulator(s);
                             }
                         }
                     }
@@ -792,10 +792,10 @@ namespace CodeStrikeBot
                     case ScheduleType.IronTransfer:
                     case ScheduleType.FoodTransfer:
                     case ScheduleType.CoinTransfer:
-                    case ScheduleType.WheatTransfer:
-                    case ScheduleType.EssenseTransfer:
-                    case ScheduleType.GraniteTransfer:
-                    case ScheduleType.LeadTransfer:
+                    case ScheduleType.FoodT2Transfer:
+                    case ScheduleType.OilT2Transfer:
+                    case ScheduleType.StoneT2Transfer:
+                    case ScheduleType.IronT2Transfer:
                     case ScheduleType.CoinT2Transfer:
                         shouldSave = task.X > 0 && task.Y > 0 && task.Amount > 0 && task.Count > 0;
                         break;
@@ -1131,7 +1131,7 @@ namespace CodeStrikeBot
                                     }
                                     catch (NullReferenceException ex)
                                     {
-                                        ctrl.SendNotification(String.Format("Null Crash: {0}x{1}->{2}x{3}", march.FromCoordinate.X, march.FromCoordinate.Y, march.DestCoordinate.X, march.DestCoordinate.Y), NotificationType.Crash);
+                                        //ctrl.SendNotification(String.Format("Null Crash: {0}x{1}->{2}x{3}", march.FromCoordinate.X, march.FromCoordinate.Y, march.DestCoordinate.X, march.DestCoordinate.Y), NotificationType.Crash);
                                     }
 
                                     DataObjects.Account a;
@@ -1548,7 +1548,7 @@ namespace CodeStrikeBot
                                     {
                                         if (ctrl.sc[window - 1] != null)
                                         {
-                                            ctrl.KillEmulator(ctrl.sc[window - 1], false);
+                                            ctrl.KillEmulator(ctrl.sc[window - 1]);
                                         }
                                     }
                                     else
@@ -1557,7 +1557,7 @@ namespace CodeStrikeBot
                                         {
                                             if (s != null)
                                             {
-                                                ctrl.KillEmulator(s, false);
+                                                ctrl.KillEmulator(s);
                                             }
                                         }
 
@@ -1910,7 +1910,7 @@ namespace CodeStrikeBot
                                 }
                                 else if (tmrLateSchedule.ElapsedMilliseconds > 660000)
                                 {
-                                    ctrl.KillEmulator(ctrl.GetNextWindow(task), false);
+                                    ctrl.KillEmulator(ctrl.GetNextWindow(task));
                                 }
                                 else if (tmrLateSchedule.ElapsedMilliseconds > 480000)
                                 {
@@ -2007,7 +2007,7 @@ namespace CodeStrikeBot
         {
             if (System.Threading.Thread.CurrentThread.Name == null)
             {
-                System.Threading.Thread.CurrentThread.Name = "AutomaticActions";
+                System.Threading.Thread.CurrentThread.Name = "WholeScreenActions";
             }
 
             System.Threading.Thread.Sleep(10000);
@@ -2056,7 +2056,7 @@ namespace CodeStrikeBot
 
                                         if (chksum == 0x94f9 || chksum == 0xa5de)
                                         {
-                                            Controller.SendClick(null, x + 5, y + 6, 1000);
+                                            Controller.SendClick(Screen.WholeScreen, x + 5, y + 6, 1000);
                                             shouldContinue = false;
                                         }
                                     }
@@ -2064,39 +2064,26 @@ namespace CodeStrikeBot
                             }
                         }
 
-                        //check MEmu failed to start
+                        //check MEmu error
                         bool foundMemuError = false;
-                        //TODO: Should programmatically find the start menu width instead
-                        int StartMenuSizeOnLeft = 60;
-                        for (int y = 50; y < Controller.SCREEN_H; y += 10)
+                        int taskbarLeftOffset = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Left;
+                        int taskbarTopOffset = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Top;
+                        Color errorFormColor = Color.FromArgb(27, 39, 41); //MEMU 2.9.6.1 //Color to find was 255,255,255, 3.0.5.2 is 17,34,34, 3.5.0.2-5.1.1.1 is 27,39,41
+
+                        for (int y = taskbarTopOffset + 50; y < Controller.SCREEN_H; y += 10)
                         {
-                            //MEMU 2.9.6.1 //Color to find was 255,255,255, 3.0.5.2 is 17,34,34
-
-                            Color c = bmpScreenCapture.GetPixel(457 + StartMenuSizeOnLeft, y);
-
-                            if (c.Equals(27, 39, 41))
+                            for (int s = 1; s < Controller.Instance.sc.Length; s++)
                             {
-                                Controller.SendClick(null, 457 + StartMenuSizeOnLeft, y, 300);
-                                foundMemuError = true;
-                                break;
-                            }
+                                int x = Controller.FORM_X + taskbarLeftOffset + s * (2 + Controller.SCREEN_W + 38 + 14 + 5 + 3) - 11;
 
-                            c = bmpScreenCapture.GetPixel(910 + StartMenuSizeOnLeft, y);
+                                Color c = bmpScreenCapture.GetPixel(x, y);
 
-                            if (c.Equals(27, 39, 41))
-                            {
-                                Controller.SendClick(null, 910 + StartMenuSizeOnLeft, y, 300);
-                                foundMemuError = true;
-                                break;
-                            }
-
-                            c = bmpScreenCapture.GetPixel(1360 + StartMenuSizeOnLeft, y);
-
-                            if (c.Equals(27, 39, 41))
-                            {
-                                Controller.SendClick(null, 1360 + StartMenuSizeOnLeft, y, 300);
-                                foundMemuError = true;
-                                break;
+                                if (c.Equals(errorFormColor.R, errorFormColor.G, errorFormColor.B))
+                                {
+                                    Controller.SendClick(Screen.WholeScreen, x + 1, y, 300);
+                                    foundMemuError = true;
+                                    break;
+                                }
                             }
                         }
 
@@ -2107,93 +2094,72 @@ namespace CodeStrikeBot
                                 g.CopyFromScreen(System.Windows.Forms.Screen.PrimaryScreen.Bounds.X, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Y, 0, 0, bmpScreenCapture.Size, CopyPixelOperation.SourceCopy);
                             }
 
-                            for (int y = 50; y < Controller.SCREEN_H; y += 10)
+                            //debug
+                            //bmpScreenCapture.Save(String.Format("{0}\\memuerror.bmp", ctrl.GetFullScreenshotDir()), ImageFormat.Bmp);
+                            //ctrl.SendNotification("MEmu error Unable to database", NotificationType.Offline);
+                            //System.Threading.Thread.Sleep(10000);
+
+                            for (int y = taskbarTopOffset + 50; y < Controller.SCREEN_H; y += 10)
                             {
-                                Color c = bmpScreenCapture.GetPixel(457 + StartMenuSizeOnLeft, y);
-
-                                if (c.Equals(27, 39, 41))
+                                for (int s = 1; s < Controller.Instance.sc.Length; s++)
                                 {
-                                    do
+                                    int x = Controller.FORM_X + taskbarLeftOffset + s * (2 + Controller.SCREEN_W + 38 + 14 + 5 + 3) - 11;
+
+                                    Color c = bmpScreenCapture.GetPixel(x, y);
+
+                                    if (c.Equals(errorFormColor.R, errorFormColor.G, errorFormColor.B))
                                     {
-                                        y--;
-                                        c = bmpScreenCapture.GetPixel(457 + StartMenuSizeOnLeft, y);
-                                    }
-                                    while (c.Equals(27, 39, 41));
+                                        do
+                                        {
+                                            y--;
+                                            c = bmpScreenCapture.GetPixel(x, y);
+                                        }
+                                        while (c.Equals(errorFormColor.R, errorFormColor.G, errorFormColor.B));
 
-                                    y++;
+                                        y++;
 
-                                    int x = 457;
+                                        do
+                                        {
+                                            x++;
+                                            c = bmpScreenCapture.GetPixel(x, y);
+                                        }
+                                        while (c.Equals(errorFormColor.R, errorFormColor.G, errorFormColor.B));
 
-                                    do
-                                    {
                                         x--;
-                                        c = bmpScreenCapture.GetPixel(x + StartMenuSizeOnLeft, y);
-                                    }
-                                    while (c.Equals(27, 39, 41));
 
-                                    x++;
+                                        do
+                                        {
+                                            y++;
+                                            c = bmpScreenCapture.GetPixel(x, y);
+                                        }
+                                        while (c.Equals(errorFormColor.R, errorFormColor.G, errorFormColor.B));
 
-                                    //Controller.SendClick(null, x + 460 + StartMenuSizeOnLeft, y + 160, 300);
-                                    Controller.SendClick(null, x + 350 + StartMenuSizeOnLeft, y + 160, 300);
-                                    break;
-                                }
-
-                                c = bmpScreenCapture.GetPixel(910 + StartMenuSizeOnLeft, y);
-
-                                if (c.Equals(27, 39, 41))
-                                {
-                                    do
-                                    {
                                         y--;
-                                        c = bmpScreenCapture.GetPixel(910 + StartMenuSizeOnLeft, y);
+
+                                        c = bmpScreenCapture.GetPixel(x - 20, y - 30);
+
+                                        if (c.Equals(errorFormColor.R, errorFormColor.G, errorFormColor.B)) //button not there, memu failed to start
+                                        {
+                                            int xLeft = x;
+
+                                            do
+                                            {
+                                                xLeft--;
+                                                c = bmpScreenCapture.GetPixel(xLeft, y);
+                                            }
+                                            while (c.Equals(errorFormColor.R, errorFormColor.G, errorFormColor.B));
+
+                                            xLeft++;
+
+                                            Controller.SendClick(Screen.WholeScreen, (x + xLeft) / 2, y - 30, 300);
+                                        }
+                                        else //"Unable to database" error
+                                        {
+                                            Controller.SendClick(Screen.WholeScreen, x - 20, y - 30, 300);
+                                        }
+                                        
+                                        break;
                                     }
-                                    while (c.Equals(27, 39, 41));
-
-                                    y++;
-
-                                    int x = 910;
-
-                                    do
-                                    {
-                                        x--;
-                                        c = bmpScreenCapture.GetPixel(x + StartMenuSizeOnLeft, y);
-                                    }
-                                    while (c.Equals(27, 39, 41));
-
-                                    x++;
-
-                                    //Controller.SendClick(null, x + 460 + StartMenuSizeOnLeft, y + 160, 300);
-                                    Controller.SendClick(null, x + 350 + StartMenuSizeOnLeft, y + 160, 300);
-                                    break;
-                                }
-
-                                c = bmpScreenCapture.GetPixel(1360 + StartMenuSizeOnLeft, y);
-
-                                if (c.Equals(27, 39, 41))
-                                {
-                                    do
-                                    {
-                                        y--;
-                                        c = bmpScreenCapture.GetPixel(1360 + StartMenuSizeOnLeft, y);
-                                    }
-                                    while (c.Equals(27, 39, 41));
-
-                                    y++;
-
-                                    int x = 1360;
-
-                                    do
-                                    {
-                                        x--;
-                                        c = bmpScreenCapture.GetPixel(x + StartMenuSizeOnLeft, y);
-                                    }
-                                    while (c.Equals(27, 39, 41));
-
-                                    x++;
-
-                                    //Controller.SendClick(null, x + 460 + StartMenuSizeOnLeft, y + 160, 300);
-                                    Controller.SendClick(null, x + 350 + StartMenuSizeOnLeft, y + 160, 300);
-                                    break;
                                 }
                             }
                         }
@@ -2202,7 +2168,7 @@ namespace CodeStrikeBot
                         Color c3 = bmpScreenCapture.GetPixel(970, 555);
                         if (c3.Equals(11, 178, 3))
                         {
-                            Controller.SendClick(null, 965, 555, 10000);
+                            Controller.SendClick(Screen.WholeScreen, 965, 555, 10000);
                             Program.RestartApp();
                         }
 
@@ -2210,7 +2176,7 @@ namespace CodeStrikeBot
                         chksum = bmpScreenCapture.Checksum(768, 505, 20, 20);
                         if (chksum == 0x9b7f)
                         {
-                            Controller.SendClick(null, 1176, 600, 200);
+                            Controller.SendClick(Screen.WholeScreen, 1176, 600, 1000);
                         }
                     }
                 }

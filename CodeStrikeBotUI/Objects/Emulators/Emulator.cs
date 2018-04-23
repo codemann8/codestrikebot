@@ -13,9 +13,10 @@ namespace CodeStrikeBot
     public abstract class Screen
     {
         public static string PROCESSNAME;
-        public int WINDOW_TITLEBAR_H = 0;
-        public int WINDOW_MARGIN_L = 0;
-        public int WINDOW_MARGIN_R = 0;
+        public static int WINDOW_TITLEBAR_H = 0;
+        public static int WINDOW_MARGIN_L = 0;
+        public static int WINDOW_MARGIN_R = 0;
+        public static int WINDOW_GAP = 0;
 
         public Process EmulatorProcess { get; set; }
         public Rect WindowRect { get; set; }
@@ -149,10 +150,10 @@ namespace CodeStrikeBot
                         case ScheduleType.IronTransfer:
                         case ScheduleType.FoodTransfer:
                         case ScheduleType.CoinTransfer:
-                        case ScheduleType.WheatTransfer:
-                        case ScheduleType.EssenseTransfer:
-                        case ScheduleType.GraniteTransfer:
-                        case ScheduleType.LeadTransfer:
+                        case ScheduleType.FoodT2Transfer:
+                        case ScheduleType.OilT2Transfer:
+                        case ScheduleType.StoneT2Transfer:
+                        case ScheduleType.IronT2Transfer:
                         case ScheduleType.CoinT2Transfer:
                             success = ResourceTransfer(task);
                             break;
@@ -321,7 +322,7 @@ namespace CodeStrikeBot
 
                             if (ScreenState.CurrentArea != Area.MainBases.Main && !(ScreenState.CurrentArea == Area.Others.Login || ScreenState.CurrentArea == Area.Emulators.Android || ScreenState.CurrentArea == Area.Emulators.Loading || ScreenState.CurrentArea == Area.Others.Splash || ScreenState.CurrentArea == Area.Emulators.Crash || ScreenState.CurrentArea == Area.Emulators.TaskManager || ScreenState.CurrentArea == Area.Emulators.TaskManagerApp || ScreenState.CurrentArea == Area.Emulators.TaskManagerRemove))
                             {
-                                Controller.Instance.RestartEmulator(this);
+                                Controller.Instance.RestartEmulator(this);//, true);
                                 Login(Emulator.LastKnownAccount);
                             }
                         }
@@ -377,7 +378,7 @@ namespace CodeStrikeBot
                             BotDatabase.InsertLog(2, String.Format("Emulator frozen: {0}", Emulator.WindowName), LastChecksum.ToString("X4"), new byte[1] { 0x0 });
                             System.IO.Directory.CreateDirectory(String.Format("{0}\\auto", Controller.Instance.GetFullScreenshotDir()));
                             SuperBitmap.Save(String.Format("{0}\\crash{1}.bmp", Controller.Instance.GetFullScreenshotDir(), LastChecksum.ToString("X4")));
-                            Controller.Instance.RestartEmulator(this, false);
+                            Controller.Instance.RestartEmulator(this);
                             Controller.Instance.Login(this, Emulator.LastKnownAccount);
                         }
 
@@ -392,7 +393,7 @@ namespace CodeStrikeBot
                                         BotDatabase.InsertLog(2, String.Format("Emulator frozen: {0}", Emulator.WindowName), LastChecksum.ToString("X4"), new byte[1] { 0x0 });
                                         System.IO.Directory.CreateDirectory(String.Format("{0}\\auto", Controller.Instance.GetFullScreenshotDir()));
                                         SuperBitmap.Save(String.Format("{0}\\crash{1}.bmp", Controller.Instance.GetFullScreenshotDir(), LastChecksum.ToString("X4")));
-                                        Controller.Instance.RestartEmulator(this, false);
+                                        Controller.Instance.RestartEmulator(this);
                                         Controller.Instance.Login(this, Emulator.LastKnownAccount);
 
                                         Controller.CaptureApplication(this);
@@ -410,7 +411,7 @@ namespace CodeStrikeBot
                         if (TimeoutFactor > 5.0)
                         {
                             BotDatabase.InsertLog(2, String.Format("Emulator slow: {0}", Emulator.WindowName), LastChecksum.ToString("X4"), new byte[1] { 0x0 });
-                            Controller.Instance.RestartEmulator(this, false);
+                            Controller.Instance.RestartEmulator(this);
                             Controller.Instance.Login(this, Emulator.LastKnownAccount);
                         }
 
@@ -444,11 +445,9 @@ namespace CodeStrikeBot
                                 Emulator.LastKnownAccount = null;
                                 Controller.SendClick(this, 200, 205, 5000); //click
                             }
-                            else if (ScreenState.CurrentArea == Area.Others.Quit)
+                            else if (ScreenState.CurrentArea == Area.Others.Quit || ScreenState.CurrentArea == Area.Emulators.ProcessStopped)
                             {
-                                //s.ClickBack(800); //click Back
-                                //Controller.SendClick(s, 145, 480, 3000); //DIFF
-                                Controller.SendClick(this, 254, 393, 1000); //DIFF ff
+                                ClickBack(1000);
                             }
                             else if (ScreenState.CurrentArea == Area.Emulators.Crash)
                             {
@@ -457,7 +456,7 @@ namespace CodeStrikeBot
 
                                 if (ScreenState.CurrentArea == Area.Emulators.Crash)
                                 {
-                                    Controller.Instance.RestartEmulator(this, false);
+                                    Controller.Instance.RestartEmulator(this);
                                     Controller.Instance.Login(Emulator.LastKnownAccount);
                                 }
                             }
@@ -467,7 +466,16 @@ namespace CodeStrikeBot
                             }
                             else if (ScreenState.CurrentArea == Area.Unknown)
                             {
-                                System.Threading.Thread.Sleep((int)(10000 * TimeoutFactor));
+                                for (int i = 0; i < 100; i++)
+                                {
+                                    System.Threading.Thread.Sleep((int)(100 * TimeoutFactor));
+                                    System.Windows.Forms.Application.DoEvents();
+
+                                    if (ScreenState.CurrentArea != Area.Unknown)
+                                    {
+                                        break;
+                                    }
+                                }
                                 Controller.CaptureApplication(this);
 
                                 if (ScreenState.CurrentArea == Area.Unknown)
@@ -573,6 +581,8 @@ namespace CodeStrikeBot
             }
         }
 
+        public static Screen WholeScreen { get { return new NullScreen(""); } }
+
         public static Screen CreateScreen(DataObjects.EmulatorInstance emulator)
         {
             Screen s = null;
@@ -652,6 +662,14 @@ namespace CodeStrikeBot
         }
 
         public abstract string ProcessName { get; }
+
+        public abstract int WindowTitlebarH { get; }
+
+        public abstract int WindowMarginL { get; }
+
+        public abstract int WindowMarginR { get; }
+
+        public abstract int WindowGap { get; }
 
         public abstract void ClickBack(int timeout = 0);
 
@@ -1064,7 +1082,7 @@ namespace CodeStrikeBot
 
                     if (ScreenState.CurrentArea == Area.StateMaps.Main)
                     {
-                        Controller.SendClick(this, 10, 10, 500); //go to your base
+                        Controller.SendClick(this, 10, 10, 1000); //go to your base
 
                         ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 32, 90, 20);
 
@@ -1184,7 +1202,7 @@ namespace CodeStrikeBot
                             //TODO: Revisit why this is Unknown, screenshot, probably loading More menu
                             if (!KillApp())
                             {
-                                Controller.Instance.RestartEmulator(this);
+                                Controller.Instance.RestartEmulator(this, true);
                             }
                             return false;
                         }
@@ -1261,7 +1279,7 @@ namespace CodeStrikeBot
                     {
                         if (!KillApp())
                         {
-                            Controller.Instance.RestartEmulator(this);
+                            Controller.Instance.RestartEmulator(this, true);
                         }
                         success = false;
                     }
@@ -1306,7 +1324,7 @@ namespace CodeStrikeBot
                     Controller.CaptureApplication(this);
 
                     ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 88, 216, 20);//DIFF ff
-                    if (chksum != 0xaaf6 && chksum != 0xf8de) //nox, if email has been previously entered
+                    if (chksum != 0xaaf6 && chksum != 0xf8de && chksum != 0xcc8a) //nox, if email has been previously entered
                     {
                         while (!KillApp()) { }
                         {
@@ -1317,7 +1335,7 @@ namespace CodeStrikeBot
                     }
 
                     chksum = ScreenState.GetScreenChecksum(SuperBitmap, 88, 263, 20);//DIFF ff
-                    if (chksum != 0xaaf6 && chksum != 0xe48d) //nox, if password has been previously entered
+                    if (chksum != 0xaaf6 && chksum != 0xe48d && chksum != 0x756e) //nox, if password has been previously entered
                     {
                         while (!KillApp()) { }
                         {
@@ -1332,26 +1350,26 @@ namespace CodeStrikeBot
                     //enter email
                     do
                     {
-                        Controller.SendClick(this, 300, 226, (int)(300 * (tries / 2.0 + 1)));//DIFF ff
+                        Controller.SendClick(this, 300, 226, (int)(800 * (tries / 2.0 + 1)));//DIFF ff
                         Controller.SendKey(this, account.Email);
                         Thread.Sleep((int)((500 * (tries / 2.0 + 1)) * TimeoutFactor));
                         Controller.CaptureApplication(this);
                         chksum = ScreenState.GetScreenChecksum(SuperBitmap, 88, 216, 20);//DIFF ff
                     }
-                    while ((chksum == 0xaaf6 || chksum == 0xf8de) && tmrRun.ElapsedMilliseconds < 50000);//DIFF ff
+                    while ((chksum == 0xaaf6 || chksum == 0xcc8a) && tmrRun.ElapsedMilliseconds < 50000);//DIFF ff
                     
                     tmrRun.Restart();
 
                     //enter password
                     do
                     {
-                        Controller.SendClick(this, 300, 273, (int)(600 * (tries / 2.0 + 1)));//DIFF ff
+                        Controller.SendClick(this, 300, 273, (int)(800 * (tries / 2.0 + 1)));//DIFF ff
                         Controller.SendKey(this, account.Password);
                         Thread.Sleep((int)((500 * (tries / 2.0 + 1)) * TimeoutFactor));
                         Controller.CaptureApplication(this);
                         chksum = ScreenState.GetScreenChecksum(SuperBitmap, 88, 263, 20);//DIFF ff
                     }
-                    while ((chksum == 0xaaf6 || chksum == 0xe48d) && tmrRun.ElapsedMilliseconds < 50000);//DIFF ff
+                    while ((chksum == 0xaaf6 || chksum == 0x756e) && tmrRun.ElapsedMilliseconds < 50000);//DIFF ff
 
                     Controller.CaptureApplication(this);
                     chksum = ScreenState.GetScreenChecksum(SuperBitmap, 188, 304, 20);
@@ -1396,7 +1414,7 @@ namespace CodeStrikeBot
                             {
                                 if (!KillApp())
                                 {
-                                    Controller.Instance.RestartEmulator(this);
+                                    Controller.Instance.RestartEmulator(this, true);
                                 }
                                 this.StartApp();
 
@@ -1458,7 +1476,7 @@ namespace CodeStrikeBot
                 {
                     Controller.SendClick(this, 390, 10, 200); //exit ad
                 }
-                else
+                else if (ScreenState.CurrentArea != Area.MainBases.Main)
                 {
                     this.ClickBack(200); //click back
                 }
@@ -2179,7 +2197,7 @@ namespace CodeStrikeBot
                     giftsLeft = true;
 
                     //Color c = SuperBitmap.GetPixel(335, 175); //DIFF MS
-                    ushort chksum = ScreenState.GetScreenChecksum(this.SuperBitmap, 190, 95, 20);
+                    ushort chksum = ScreenState.GetScreenChecksum(this.SuperBitmap, 195, 88, 10);
 
                     if (ScreenState.CurrentArea == Area.Menus.Alliance)
                     {
@@ -2187,7 +2205,7 @@ namespace CodeStrikeBot
                         Controller.SendClick(this, 345, 250, 600); //click gifts
                     }
                     //else if (ScreenState.CurrentArea == Area.Menus.Gifts && c.Equals(57, 121, 140)) //clear gifts button is available //DIFF MS
-                    else if (ScreenState.CurrentArea == Area.Menus.Gifts && chksum == 0x888c) //clear gifts button is available
+                    else if (ScreenState.CurrentArea == Area.Menus.Gifts && chksum == 0xc15d) //clear gifts button is available
                     {
                         /* //DIFF MS
                         c = SuperBitmap.GetPixel(200, 175);
@@ -2226,7 +2244,7 @@ namespace CodeStrikeBot
                                 }
                             }
                         }*/
-                        for (double g = 158.13; g < 589; g += 61.48)
+                        for (double g = 155.13; g < 589; g += 61.48)
                         {
                             //chksum = ScreenState.GetScreenChecksum(this.SuperBitmap, 344, p, 20);
                             Color c = SuperBitmap.GetPixel(349, (int)Math.Round(g));
@@ -2236,7 +2254,7 @@ namespace CodeStrikeBot
                                 Controller.SendClick(this, 335, (int)g + 2, 100);
                                 //p = 586;
                             }
-                            else if (c.R == 247) { } //clear
+                            else if (c.R == 255) { } //clear
                             else if (c.Equals(173, 174, 173)) //loading
                             {
                                 Thread.Sleep((int)(100 * TimeoutFactor));
@@ -2264,7 +2282,7 @@ namespace CodeStrikeBot
                     SuperBitmap.Save(String.Format("{0}\\-save.bmp", Controller.Instance.GetFullScreenshotDir()));
 
                     //if (ScreenState.CurrentArea == Area.Menus.Gifts && SuperBitmap.GetPixel(335, 175).Equals(57, 121, 140)) //clear gifts button is available //DIFF MS
-                    if (ScreenState.CurrentArea == Area.Menus.Gifts && ScreenState.GetScreenChecksum(this.SuperBitmap, 190, 98, 20) == 0xa788) //clear gifts button is available
+                    if (ScreenState.CurrentArea == Area.Menus.Gifts && ScreenState.GetScreenChecksum(this.SuperBitmap, 195, 88, 10) == 0xa788) //clear gifts button is available
                     {
                         giftsLeft = true;
                         Controller.SendClick(this, 335, 105, 100); //click Clear all
@@ -2306,8 +2324,9 @@ namespace CodeStrikeBot
 
                             //if (chksum != 0x2995 && chksum != 0x1583) //missions available
                             //if (chksum != 0x3900 && chksum != 0x5f0f && chksum != 0xfc2d) //DIFF MS
-                            if (chksum != 0x3793 && chksum != 0xd22c && chksum != 0xde62) //DIFF FF //all three are zeros //TODO: find universal way to determine zeroes
-                            {
+                            if (chksum != 0x3793 && chksum != 0xd22c && chksum != 0xde62 //DIFF FF //all three are zeros //TODO: find universal way to determine zeroes
+                                && chksum != 0x8ddb && chksum != 0xa88d && chksum != 0x92de) //memu 5.1.1.1
+                                {
                                 //c = SuperBitmap.GetPixel(101, (int)Math.Round(240 + 91.5 * m)); //DIFF MS
                                 c = SuperBitmap.GetPixel(330, 492 + 53 * m); //DIFF FF
 
@@ -2649,9 +2668,9 @@ namespace CodeStrikeBot
 
                             if (c.Equals(0, 186, 255))
                             {
-                                chksum = ScreenState.GetScreenChecksum(SuperBitmap, 195, i + 5, 20);
+                                chksum = ScreenState.GetScreenChecksum(SuperBitmap, 195, i, 10);
 
-                                if (chksum == 0x65be)
+                                if (chksum == 0x97cc)
                                 {
                                     offset = i + 10;
                                 }
@@ -2665,8 +2684,7 @@ namespace CodeStrikeBot
                         {
                             int p = 0;
 
-                            Color coinColor = Color.FromArgb(115, 117, 115); //coin color
-                            //Color foodColor = Color.FromArgb(198, 125, 16);
+                            Color rssColor = Color.FromArgb(0, 0, 0); ;
 
                             watch.Restart();
 
@@ -2677,43 +2695,26 @@ namespace CodeStrikeBot
                                     case ScheduleType.OilTransfer:
                                         //p = 120; //DIFF MS
                                         //p = 170;
-                                        p = 240;
+                                        //p = 240;
+                                        rssColor = Color.FromArgb(115, 182, 255);
                                         break;
                                     case ScheduleType.CoinTransfer:
                                         //p = 195; //DIFF MS
-                                        bool found = false;
-
-                                        do
-                                        {
-                                            for (p = 80; p < 420; p++)
-                                            {
-                                                c = SuperBitmap.GetPixel(40, p);
-
-                                                if (c.Equals(coinColor.R, coinColor.G, coinColor.B))
-                                                {
-                                                    found = true;
-                                                    break;
-                                                }
-                                            }
-
-                                            if (!found)
-                                            {
-                                                Controller.SendClickDrag(this, 40, 400, 40, 140, 800, false, 1200);
-                                                Controller.CaptureApplication(this);
-                                            }
-                                        }
-                                        while (!found && watch.ElapsedMilliseconds < 7000);
+                                        rssColor = Color.FromArgb(115, 117, 115);
                                         break;
                                     case ScheduleType.StoneTransfer:
                                         //p = 270; //DIFF MS
-                                        p = 105;
+                                        //p = 105;
+                                        rssColor = Color.FromArgb(41, 44, 33);
                                         break;
                                     case ScheduleType.IronTransfer:
                                         //p = 350; //DIFF MS
                                         //p = 240;
-                                        p = 310; //adjusting for lv16
+                                        //p = 310; //adjusting for lv16
+                                        rssColor = Color.FromArgb(123, 162, 198);
                                         break;
                                     case ScheduleType.FoodTransfer:
+                                        rssColor = Color.FromArgb(115, 12, 16);
                                         /* DIFF MS
                                          * Controller.SendClickDrag(this, 20, 400, 20, 340, 100, false, 1200);
                                         Controller.CaptureApplication(this);
@@ -2728,11 +2729,46 @@ namespace CodeStrikeBot
                                             }
                                         }*/
                                         //p = 310;
-                                        p = 386; //adjusting for lv16
+                                        //p = 386; //adjusting for lv16
                                         break;
-                                    case ScheduleType.WheatTransfer:
-                                        p = 386;
+                                    case ScheduleType.FoodT2Transfer:
+                                        //p = 386;
+                                        rssColor = Color.FromArgb(107, 97, 107);
                                         break;
+                                    case ScheduleType.StoneT2Transfer:
+                                        rssColor = Color.FromArgb(66, 48, 0);
+                                        break;
+                                    case ScheduleType.OilT2Transfer:
+                                        rssColor = Color.FromArgb(255, 199, 24);
+                                        break;
+                                    case ScheduleType.IronT2Transfer:
+                                        rssColor = Color.FromArgb(66, 89, 90);
+                                        break;
+                                    case ScheduleType.CoinT2Transfer:
+                                        rssColor = Color.FromArgb(123, 77, 33);
+                                        break;
+                                }
+
+                                bool found = p != 0;
+
+                                while (!found && watch.ElapsedMilliseconds < 7000)
+                                {
+                                    for (p = 80; p < 420; p++)
+                                    {
+                                        c = SuperBitmap.GetPixel(40, p);
+
+                                        if (c.Equals(rssColor.R, rssColor.G, rssColor.B))
+                                        {
+                                            found = true;
+                                            break;
+                                        }
+                                    }
+
+                                    if (!found)
+                                    {
+                                        Controller.SendClickDrag(this, 40, 400, 40, 140, 800, false, 1200);
+                                        Controller.CaptureApplication(this);
+                                    }
                                 }
                             }
                             while (p >= 419 && p == 0 && watch.ElapsedMilliseconds < 5000);
@@ -2797,7 +2833,7 @@ namespace CodeStrikeBot
                                                     {
                                                         //Controller.SendClick(this, 280, 675, 650);
                                                         Controller.SendKey(this, amount.ToString());
-                                                        Thread.Sleep((int)((450 + (350 * tries)) * TimeoutFactor));
+                                                        Thread.Sleep((int)((250 + (350 * tries)) * TimeoutFactor));
 
                                                         tries++;
 
@@ -2805,9 +2841,11 @@ namespace CodeStrikeBot
                                                         chksum = ScreenState.GetScreenChecksum(SuperBitmap, 14, 662, 20);
                                                     }
                                                     //while ((chksum == 0x58c8 || chksum == 0xbd90 || chksum == 0x174f) && watch.ElapsedMilliseconds < 7000); //DIFF MS
-                                                    while ((chksum == 0x12a2 || chksum == 0xa5b2 || chksum == 0xaaf6) && watch.ElapsedMilliseconds < 7000);
+                                                    while ((chksum == 0x12a2 || chksum == 0xa5b2 || chksum == 0xaaf6 
+                                                        || chksum == 0x0148 || chksum == 0x1c41) //memu 5.1.1.1
+                                                        && watch.ElapsedMilliseconds < 7000);
 
-                                                    Thread.Sleep((int)(600 * TimeoutFactor));
+                                                    Thread.Sleep((int)(800 * TimeoutFactor));
 
                                                     Controller.CaptureApplication(this);
                                                     //if (type == ScheduleType.CoinTransfer)
@@ -2823,12 +2861,12 @@ namespace CodeStrikeBot
                                                     if (chksum == 0xaaf6) //less than 10k rss
                                                     {
                                                         //SuperBitmap.Bitmap.Save(String.Format("{0}{1}\\rss{2}.bmp", AppDomain.CurrentDomain.BaseDirectory, "output\\ss", LastChecksum.ToString("X4")), ImageFormat.Bmp);
-                                                        Controller.SendClick(this, 345, 680, 400); //click Done
+                                                        Controller.SendClick(this, 345, 680, 200); //click Done
                                                         this.ClickBack(300); //click Back
                                                         return true;
                                                     }
 
-                                                    Controller.SendClick(this, 345, 680, 400); //click Done
+                                                    Controller.SendClick(this, 345, 680, 200); //click Done
                                                 }
                                             }
 
@@ -3550,11 +3588,30 @@ namespace CodeStrikeBot
                 Controller.CaptureApplication(this);
 
                 //back out of any popups
-                while (ScreenState.CurrentArea == Area.StateMaps.FullScreen
-                    && ScreenState.Overlays.Count > 0)
+                while ((ScreenState.CurrentArea == Area.StateMaps.FullScreen || ScreenState.CurrentArea == Area.StateMaps.Main)
+                    && ScreenState.Overlays.Contains(Overlay.Dialogs.Popups.Unknown))
                 {
                     this.ClickBack(400);
                     Controller.CaptureApplication(this);
+                }
+
+                while (ScreenState.CurrentArea == Area.MainBases.Main
+                    && ScreenState.Overlays.Contains(Overlay.Dialogs.Popups.Unknown))
+                {
+                    this.ClickBack(400);
+                    Controller.CaptureApplication(this);
+                }
+
+                if (ScreenState.CurrentArea == Area.Others.Quit)
+                {
+                    this.ClickBack(400);
+                    Controller.CaptureApplication(this);
+                }
+
+                //exit monster screen
+                if (ScreenState.Overlays.Contains(Overlay.Dialogs.Tiles.Rebel))
+                {
+                    this.ClickBack(300);
                 }
 
                 //Exit fullscreen
@@ -3562,12 +3619,6 @@ namespace CodeStrikeBot
                 {
                     tasksLeft = false;
                     Controller.SendClick(this, 375, 10, 200); //click Fullscreen
-                }
-
-                //exit monster screen
-                if (ScreenState.Overlays.Contains(Overlay.Dialogs.Tiles.Rebel))
-                {
-                    this.ClickBack(300);
                 }
 
                 Controller.CaptureApplication(this);
@@ -3588,93 +3639,6 @@ namespace CodeStrikeBot
 
             return tasksLeft;
         }
-
-        /*public void GoToBaseOrMap()
-        {
-            bool tasksLeft = true;
-
-            int curActiveWindow = this.ActiveWindow;
-
-            Bitmap bmp = new Bitmap(1, 1);
-            ScreenState state;
-
-            while (tasksLeft)
-            {
-                tasksLeft = false;
-
-                for (int i = 0; i < procs.Length; i++)
-                {
-                    ActiveWindow = i;
-
-                    if (procs[ActiveWindow] != null)
-                    {
-                        bmp = this.CaptureApplication();
-                        state = ScreenState.GetScreenState(bmp);
-
-                        //Exit fullscreen
-                        if (state.CurrentArea == Area.StateMaps.FullScreen)
-                        {
-                            tasksLeft = true;
-
-                            this.SendClick(375, 10, 100); //click Fullscreen
-                        }
-                        //TODO: Move this check to active monitor
-                        else if (state.CurrentArea == Area.Others.SessionTimeout)
-                        {
-                            tasksLeft = true;
-
-                            this.KillApp();
-
-                            Thread.Sleep(100);
-                        }
-
-                        bmp.Dispose();
-                    }
-                }
-            }
-
-            tasksLeft = true;
-            int limit = 25;
-
-            while (tasksLeft && limit > 0)
-            {
-                tasksLeft = false;
-
-                for (int i = 0; i < procs.Length; i++)
-                {
-                    ActiveWindow = i;
-
-                    if (procs[ActiveWindow] != null)
-                    {
-                        bmp = this.CaptureApplication();
-                        state = ScreenState.GetScreenState(bmp);
-
-                        //get back until base or map screen
-                        if (!(state.CurrentArea == Area.StateMaps.Main || state.CurrentArea == Area.MainBases.Main || state.CurrentArea == Area.Others.Login || state.CurrentArea == Area.Others.Android || state.CurrentArea == Area.Others.Splash || state.CurrentArea == Area.Others.Crash || state.CurrentArea == Area.Others.TaskManager || state.CurrentArea == Area.Others.TaskManagerApp || state.CurrentArea == Area.Others.TaskManagerRemove))
-                        {
-                            tasksLeft = true;
-
-                            if (state.CurrentArea == Area.Others.Quit)
-                            {
-                                this.timeoutFactor += 10;
-                            }
-
-                            limit--;
-
-                            this.ClickBack(500); //click Back
-                        }
-
-                        bmp.Dispose();
-                    }
-                }
-            }
-
-            this.timeoutFactor = 100;
-
-            this.ActiveWindow = curActiveWindow;
-
-            bmp.Dispose();
-        }*/
 
         public bool RegularTasksStep()
         {
@@ -3812,7 +3776,7 @@ namespace CodeStrikeBot
                     else
                     {
                         ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 192, 394, 20);
-                        if (chksum == 0x9574) //Free Spin
+                        if (chksum == 0xb215) //Free Spin
                         {
                             Controller.SendClick(this, 200, 405, 5000);
                         }
@@ -3874,15 +3838,15 @@ namespace CodeStrikeBot
 
                     //ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 185, 225, 10);
                     ushort chksum = ScreenState.GetScreenChecksum(SuperBitmap, 188, 486, 20); //DIFF ff
-                    if (chksum == 0xe78f) //if shooting range Collect Button (doesn't account for animated button)
+                    if (chksum == 0x8de9) //if shooting range Collect Button (doesn't account for animated button)
                     {
                         Controller.SendClick(this, 188, 488, 1000); //click Collect
                         Controller.SendClick(this, 40, 680, 300); //Click Base
                     }
                     else
                     {
-                        chksum = ScreenState.GetScreenChecksum(SuperBitmap, 188, 387, 20);
-                        if (chksum == 0x494e)
+                        chksum = ScreenState.GetScreenChecksum(SuperBitmap, 188, 398, 20);
+                        if (chksum == 0x42c2)
                         {
                             Controller.SendClick(this, 188, 390, 1000); //click Collect
                             Controller.SendClick(this, 40, 680, 300); //Click Base
@@ -4031,21 +3995,30 @@ namespace CodeStrikeBot
                     return;
             }
 
-            state.CurrentArea = Area.Unknown;
+            state.CurrentArea = Area.Null;
 
             int failure = 100;
             do
             {
-                if (!state.UpdateScreenState(SuperBitmap))
+                if (EmulatorProcess != null && !EmulatorProcess.HasExited)
                 {
-                    failure--;
-                }
-                else
-                {
-                    failure = 0;
+                    if (!state.UpdateScreenState(SuperBitmap))
+                    {
+                        failure--;
+                    }
+                    else
+                    {
+                        failure = 0;
+                    }
                 }
             }
             while (failure > 0);
+
+            if (state.CurrentArea == Area.Unknown && (EmulatorProcess == null || (EmulatorProcess != null && EmulatorProcess.HasExited)))
+            {
+                state.CurrentArea = Area.Null;
+                state.Overlays.Clear();
+            }
 
             if (ScreenState != null && ScreenState.CurrentArea != state.CurrentArea)
             {

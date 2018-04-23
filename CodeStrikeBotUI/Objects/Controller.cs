@@ -12,13 +12,14 @@ namespace CodeStrikeBot
 {
     class Controller
     {
-        private const int FORM_X = 5;
+        public const int FORM_X = 5;
         private const int FORM_Y = 5;
         //private const int BLUESTACKS_TITLEBAR_H = 37;
         //public const int DROID4X_TITLEBAR_H = 38;
         //public const int DROID4X_LEFTMARGIN = 63;
         public const int SCREEN_W = 394;//468;
         public const int SCREEN_H = 702;//830;
+        public const int SCREEN_GAP = 5;
         private const int TIMEOUT_CLICK = 200;
         private const int TIMEOUT_KEY = 300;
         private const int TIMEOUT_SCRCAP = 100;
@@ -536,10 +537,10 @@ namespace CodeStrikeBot
                             case ScheduleType.IronTransfer:
                             case ScheduleType.FoodTransfer:
                             case ScheduleType.CoinTransfer:
-                            case ScheduleType.WheatTransfer:
-                            case ScheduleType.EssenseTransfer:
-                            case ScheduleType.GraniteTransfer:
-                            case ScheduleType.LeadTransfer:
+                            case ScheduleType.FoodT2Transfer:
+                            case ScheduleType.OilT2Transfer:
+                            case ScheduleType.StoneT2Transfer:
+                            case ScheduleType.IronT2Transfer:
                             case ScheduleType.CoinT2Transfer:
                                 success = screen.ResourceTransfer(task);
                                 break;
@@ -591,9 +592,9 @@ namespace CodeStrikeBot
             return success;
         }
 
-        public void RestartEmulator(Screen s, bool restart = true)
+        public void RestartEmulator(Screen s, bool restart = false)
         {
-            KillEmulator(s, false);
+            KillEmulator(s);
             StartEmulator(s);
 
             if (restart)
@@ -602,7 +603,7 @@ namespace CodeStrikeBot
             }
         }
 
-        public void KillEmulator(Screen s, bool restart = true)
+        public void KillEmulator(Screen s, bool restart = false)
         {
             if (s != null)
             {
@@ -612,8 +613,10 @@ namespace CodeStrikeBot
                 {
                     s.EmulatorProcess.Kill();
                     s.EmulatorProcess.WaitForExit();
+                    while (!s.EmulatorProcess.HasExited) { }
                 }
-                Thread.Sleep(7000);
+                s.EmulatorProcess = null;
+                Thread.Sleep(500);
                 //TODO Slow mode
                 s.TimeoutFactor = 1.0;
 
@@ -652,7 +655,7 @@ namespace CodeStrikeBot
                     {
                         foreach (Process p in Process.GetProcessesByName(s.ProcessName))
                         {
-                            if (p.CommandLineArgs(s.Emulator.Type) == s.Emulator.Command)
+                            if (p.CommandLineArgs(s.Emulator.Type).Trim() == s.Emulator.Command.Trim())
                             {
                                 found = true;
                                 s.EmulatorProcess = p;
@@ -692,7 +695,7 @@ namespace CodeStrikeBot
                                 chksum = bmpScreenCapture.Checksum(510, 442, 20, 20);
                                 if (chksum == 0x0474)
                                 {
-                                    Controller.SendClick(null, 980, 620, 1000);
+                                    Controller.SendClick(Screen.WholeScreen, 980, 620, 1000);
                                     success = false;
                                 }
                             }
@@ -850,7 +853,7 @@ namespace CodeStrikeBot
 
                                 if (s.ScreenState.CurrentArea != Area.MainBases.Main && !(s.ScreenState.CurrentArea == Area.Others.Login || s.ScreenState.CurrentArea == Area.Emulators.Android || s.ScreenState.CurrentArea == Area.Emulators.Loading || s.ScreenState.CurrentArea == Area.Others.Splash || s.ScreenState.CurrentArea == Area.Emulators.Crash || s.ScreenState.CurrentArea == Area.Emulators.TaskManager || s.ScreenState.CurrentArea == Area.Emulators.TaskManagerApp || s.ScreenState.CurrentArea == Area.Emulators.TaskManagerRemove))
                                 {
-                                    RestartEmulator(s);
+                                    RestartEmulator(s);//, true);
                                     s.Login(s.Emulator.LastKnownAccount);
                                 }
                             }
@@ -1064,9 +1067,15 @@ namespace CodeStrikeBot
 
                 Thread.Sleep((int)(timeout * s.TimeoutFactor));
             }
-            else if (s == null)
+            else if (s is NullScreen)
             {
                 SendClickRaw(s, x, y, hold);
+                Thread.Sleep(timeout);
+            }
+            else if (s == null)
+            {
+                Controller.Instance.SendNotification(String.Format("Mouse Failure at {0}", System.Environment.StackTrace), NotificationType.Offline);
+                Program.RestartApp();
             }
             //SendClickTest(s, x, y, hold);
         }
@@ -1083,9 +1092,9 @@ namespace CodeStrikeBot
 
         private static void SendClickBackground(Screen s, int x, int y, int hold = 0)
         {
-            int wparam = s.WINDOW_TITLEBAR_H + y;
+            int wparam = s.WindowTitlebarH + y;
             wparam = wparam << 16;
-            wparam += s.WINDOW_MARGIN_L + x;
+            wparam += s.WindowMarginL + x;
 
             SendMessage(s.EmulatorProcess.MainWindowHandle, (uint)MESSAGEF.WM_LBUTTONDOWN, 0x1, wparam);
             SendMessage(s.EmulatorProcess.MainWindowHandle, (uint)MESSAGEF.WM_LBUTTONUP, 0x0, wparam);
@@ -1102,8 +1111,8 @@ namespace CodeStrikeBot
             Thread.Sleep(5);
             if (s != null)
             {
-                x = s.WindowRect.left + s.WINDOW_MARGIN_L + x;
-                y = s.WindowRect.top + s.WINDOW_TITLEBAR_H + y;
+                x = s.WindowRect.left + s.WindowMarginL + x;
+                y = s.WindowRect.top + s.WindowTitlebarH + y;
             }
             SetCursorPos(x, y);
             mouse_event((uint)MOUSEEVENTF.LEFTDOWN, (uint)x, (uint)y, 0, 0);
@@ -1165,9 +1174,9 @@ namespace CodeStrikeBot
 
         private static void SendClickDragBackground(Screen s, int fromX, int fromY, int toX, int toY, int dragTime, bool slide = false)
         {
-            int wparam = s.WINDOW_TITLEBAR_H + fromY;
+            int wparam = s.WindowTitlebarH + fromY;
             wparam = wparam << 16;
-            wparam += s.WINDOW_MARGIN_L + fromX;
+            wparam += s.WindowMarginL + fromX;
             SendMessage(s.EmulatorProcess.MainWindowHandle, (uint)MESSAGEF.WM_LBUTTONDOWN, 0x1, wparam);
 
             Stopwatch watch = new Stopwatch();
@@ -1177,17 +1186,17 @@ namespace CodeStrikeBot
             {
                 int newX = 30 + ((toX - fromX) * (int)watch.ElapsedMilliseconds / dragTime), newY = 400 + ((toY - fromY) * (int)watch.ElapsedMilliseconds / dragTime);
 
-                wparam = s.WINDOW_TITLEBAR_H + newY;
+                wparam = s.WindowTitlebarH + newY;
                 wparam = wparam << 16;
-                wparam += s.WINDOW_MARGIN_L + newX;
+                wparam += s.WindowMarginL + newX;
                 SendMessage(s.EmulatorProcess.MainWindowHandle, (uint)MESSAGEF.WM_MOUSEMOVE, 0x1, wparam);
 
                 Thread.Sleep((int)(5 * s.TimeoutFactor));
             }
 
-            wparam = s.WINDOW_TITLEBAR_H + toY;
+            wparam = s.WindowTitlebarH + toY;
             wparam = wparam << 16;
-            wparam += s.WINDOW_MARGIN_L + toX;
+            wparam += s.WindowMarginL + toX;
             SendMessage(s.EmulatorProcess.MainWindowHandle, (uint)MESSAGEF.WM_MOUSEMOVE, 0x1, wparam);
 
             watch.Stop();
@@ -1209,7 +1218,7 @@ namespace CodeStrikeBot
                 }
                 else
                 {
-                    if (keys.All(c => "1234567890".Contains(c)))
+                    if (keys.All(c => "`1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./\n".Contains(c)))
                     {
                         if (Main.CurrentForm.InvokeRequired)
                         {
@@ -1229,17 +1238,6 @@ namespace CodeStrikeBot
                         else
                         {
                             SendKeyPaste(s, keys);
-                        }
-                    }
-                    else if (keys.All(c => "`1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./\n".Contains(c)))
-                    {
-                        if (Main.CurrentForm.InvokeRequired)
-                        {
-                            Main.CurrentForm.Invoke(new Action(() => SendKeyDirect(s, keys)));
-                        }
-                        else
-                        {
-                            SendKeyDirect(s, keys);
                         }
                     }
                     else
@@ -1265,10 +1263,22 @@ namespace CodeStrikeBot
                 if (!s.ClipboardFailed)
                 {
                     IntPtr curWindow = GetForegroundWindow();
-                    SetForegroundWindow(s.EmulatorProcess.MainWindowHandle);
+
+                    do
+                    {
+                        SetForegroundWindow(s.EmulatorProcess.MainWindowHandle);
+                    }
+                    while (GetForegroundWindow() != s.EmulatorProcess.MainWindowHandle);
+
                     System.Windows.Forms.Clipboard.SetText(keys);
                     System.Windows.Forms.SendKeys.SendWait("^v");
-                    SetForegroundWindow(curWindow);
+
+                    do
+                    {
+                        SetForegroundWindow(curWindow);
+                    }
+                    while (GetForegroundWindow() != curWindow);
+
                     Thread.Sleep((int)(300 * s.TimeoutFactor));
                 }
                 else
@@ -1767,11 +1777,11 @@ namespace CodeStrikeBot
                 Inputs[0] = Input;
                 SendInput(1, Inputs, INPUT.Size);
 
-                System.Windows.Forms.Cursor.Position = new Point(s.WindowRect.left + s.WINDOW_MARGIN_L + 150, s.WindowRect.top + s.WINDOW_TITLEBAR_H + 400);
+                System.Windows.Forms.Cursor.Position = new Point(s.WindowRect.left + s.WindowMarginL + 150, s.WindowRect.top + s.WindowTitlebarH + 400);
                 Thread.Sleep((int)(20 * s.TimeoutFactor));
-                mouse_event((uint)MOUSEEVENTF.WHEEL, (uint)(s.WindowRect.left + s.WINDOW_MARGIN_L + 150), (uint)(s.WindowRect.top + s.WINDOW_TITLEBAR_H + 400), -120, 0);
+                mouse_event((uint)MOUSEEVENTF.WHEEL, (uint)(s.WindowRect.left + s.WindowMarginL + 150), (uint)(s.WindowRect.top + s.WindowTitlebarH + 400), -120, 0);
                 Thread.Sleep((int)(1200 * s.TimeoutFactor));
-                mouse_event((uint)MOUSEEVENTF.WHEEL, (uint)(s.WindowRect.left + s.WINDOW_MARGIN_L + 150), (uint)(s.WindowRect.top + s.WINDOW_TITLEBAR_H + 400), -120, 0);
+                mouse_event((uint)MOUSEEVENTF.WHEEL, (uint)(s.WindowRect.left + s.WindowMarginL + 150), (uint)(s.WindowRect.top + s.WindowTitlebarH + 400), -120, 0);
                 Thread.Sleep((int)(300 * s.TimeoutFactor));
 
                 Input.U.ki.dwFlags = KEYEVENTF.SCANCODE | KEYEVENTF.KEYUP;
@@ -1895,6 +1905,7 @@ namespace CodeStrikeBot
                 while (tmrRun.ElapsedMilliseconds < 10000 && !s.EmulatorProcess.HasExited && GetWindowRect(s.EmulatorProcess.MainWindowHandle, ref rect) == (IntPtr)0) { }
 
                 //Controller.Instance.UpdateWindowInfo();
+                s.WindowRect = rect;
                 
                 if (tmrRun.ElapsedMilliseconds >= 10000)
                 {
@@ -1912,7 +1923,7 @@ namespace CodeStrikeBot
                             int taskbarTopOffset = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Top;
 
                             Size sz = System.Windows.Forms.SystemInformation.BorderSize;
-                            g.CopyFromScreen(s.WindowRect.left + s.WINDOW_MARGIN_L, s.WindowRect.top + s.WINDOW_TITLEBAR_H, 0, 0, new Size(SCREEN_W, SCREEN_H), CopyPixelOperation.SourceCopy);
+                            g.CopyFromScreen(s.WindowRect.left + s.WindowMarginL, s.WindowRect.top + s.WindowTitlebarH, 0, 0, new Size(SCREEN_W, SCREEN_H), CopyPixelOperation.SourceCopy);
                         }
 
                         s.GetScreenState();
@@ -2010,7 +2021,9 @@ namespace CodeStrikeBot
                         SetForegroundWindow(sc[s].EmulatorProcess.MainWindowHandle);
                         ShowWindow(sc[s].EmulatorProcess.MainWindowHandle, SW_RESTORE);
                         GetWindowRect(sc[s].EmulatorProcess.MainWindowHandle, ref r);
-                        MoveWindow(sc[s].EmulatorProcess.MainWindowHandle, FORM_X + taskbarLeftOffset + (s * (SCREEN_W + sc[s].WINDOW_MARGIN_L + sc[s].WINDOW_MARGIN_R + 5)), FORM_Y + taskbarTopOffset, r.right - r.left, r.bottom - r.top, true);
+                        int moveToX = FORM_X + taskbarLeftOffset + (s * (SCREEN_W + sc[s].WindowMarginL + sc[s].WindowMarginR + sc[s].WindowGap + SCREEN_GAP));
+                        int moveToY = FORM_Y + taskbarTopOffset;
+                        MoveWindow(sc[s].EmulatorProcess.MainWindowHandle, moveToX, moveToY, r.right - r.left, r.bottom - r.top, true);
                         Thread.Sleep(TIMEOUT_SCRCAP);
                     }
                 }
@@ -2060,7 +2073,7 @@ namespace CodeStrikeBot
                 }
             }
 
-            DataObjects.EmulatorInstance emulator = new DataObjects.EmulatorInstance(0, type, (p.MainWindowTitle.Contains(' ') ? p.MainWindowTitle.Substring(0, p.MainWindowTitle.IndexOf(' ')) : p.MainWindowTitle), command, new DataObjects.Account(0), new DataObjects.App(0));
+            DataObjects.EmulatorInstance emulator = new DataObjects.EmulatorInstance(0, type, (p.MainWindowTitle.Trim().Contains(' ') ? p.MainWindowTitle.Trim().Substring(0, p.MainWindowTitle.Trim().IndexOf(' ')) : p.MainWindowTitle.Trim()), command, new DataObjects.Account(0), new DataObjects.App(0));
             emulator.Save();
 
             return emulator;

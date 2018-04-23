@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Web.UI.DataVisualization.Charting;
 using System.Drawing;
 using System.Drawing.Imaging;
+using Tesseract;
 
 namespace CodeStrikeBot
 {
@@ -123,6 +124,25 @@ namespace CodeStrikeBot
             finally
             {
                 bitmap.UnlockBits(bitmapData);
+            }
+        }
+
+        public static string GetTextFromImage(SuperBitmap bmp, int x, int y, int w, int h)
+        {
+            using (Bitmap bmp2 = bmp.SubBitmap(x, y, w, h))
+            {
+                return GetTextFromImage(bmp2);
+            }
+        }
+
+        public static string GetTextFromImage(Bitmap bmp)
+        {
+            using (TesseractEngine ocr = new TesseractEngine(@"./tessdata", "eng"))
+            {
+                using (Page page = ocr.Process(bmp))
+                {
+                    return page.GetText().Trim();
+                }
             }
         }
     }
